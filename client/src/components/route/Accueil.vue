@@ -1,11 +1,23 @@
 <template>
  <div>
-   <Carousel id="carous"></Carousel>
+   <v-content>
+     <section>
+       <Carousel id="carous"></Carousel>
+     </section>
+     <section>
+       <v-container fluid>
+         <v-layout row>
+
+         </v-layout>
+       </v-container>
+     </section>
+   </v-content>
+
  </div>
 </template>
 
 <script>
-import Carousel from './Carousel'
+import Carousel from '../part/Carousel'
 export default {
   name: 'HelloWorld',
   components: {

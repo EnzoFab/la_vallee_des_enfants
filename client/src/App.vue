@@ -1,25 +1,25 @@
 <template>
   <div id="app">
-    <v-toolbar fixed tabs>
-      <v-tabs icons-and-text centered dark color="teal lighten-3" >
-        <v-tabs-slider color="red"></v-tabs-slider>
-        <v-tab href="#tab-1" color="yellow">
-          Recents
-          <v-icon>phone</v-icon>
-        </v-tab>
-        <v-tab href="#tab-2">
-          Contact
-          <v-icon>favorite</v-icon>
-        </v-tab>
-        <v-tab href="#tab-3">
-          Nearby
-          <v-icon>account_box</v-icon>
-        </v-tab>
-      </v-tabs>
-    </v-toolbar>
-    <v-container fluid>
+    <v-app light>
+      <v-toolbar fixed tabs>
+        <v-tabs icons-and-text centered dark color="teal lighten-3" >
+          <v-tabs-slider color="red"></v-tabs-slider>
+          <v-tab href="#tab-1" color="yellow">
+            Recents
+            <v-icon>phone</v-icon>
+          </v-tab>
+          <v-tab href="#tab-2">
+            Contact
+            <v-icon>favorite</v-icon>
+          </v-tab>
+          <v-tab href="#tab-3">
+            Nearby
+            <v-icon>account_box</v-icon>
+          </v-tab>
+        </v-tabs>
+      </v-toolbar>
       <router-view/>
-    </v-container>
+    </v-app>
   </div>
 </template>
 

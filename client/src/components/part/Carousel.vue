@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'Carousel',
+  name: '../part/Carousel',
   data () {
     return {
       items: [
