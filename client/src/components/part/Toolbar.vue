@@ -48,7 +48,7 @@ export default {
     return {
       menus: [
         {id: 1, icon: 'face', iconClass: 'transparent grey--text', title: 'Assistante maternelle', route: '/assistante/connexion'},
-        {id: 2, icon: 'wc', iconClass: 'transparent lighten-1 grey--text', title: 'Parents', route: 'parent/connexion'}
+        {id: 2, icon: 'wc', iconClass: 'transparent lighten-1 grey--text', title: 'Parents', route: '/parent/connexion'}
       ]
     }
   },

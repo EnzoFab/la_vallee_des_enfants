@@ -5,10 +5,14 @@
    </section>
 
    <section>
+     <v-container>
+       <img src="/static/logo.jpg"/>
+     </v-container>
+
      <v-layout column wrap class="my-5" align-center>
-       <v-flex xs12 sm4 class="my-3">
+       <v-flex xs6>
          <div class="text-xs-center">
-           <h2 class="headline">La vallée des enfants</h2>
+           <h2 class="headline">En attente de punchline</h2>
            <span class="subheading">
                 en attente d'une punchline
               </span>
@@ -55,8 +59,8 @@
    <section>
      <v-parallax src="/static/toy.jpg" height="400">
        <v-layout column align-center justify-center>
-         <div class="headline white--text mb-3 text-xs-center">Web development has never been easier</div>
-         <em>Kick-start your application today</em>
+         <div class="headline white--text mb-3 text-xs-center">Phrase generer contrat</div>
+         <em>Astuce </em>
          <v-btn class="blue-grey darken-1" dark large href="/pre-made-themes">
            Simulation de contrat
            <v-icon right dark>send</v-icon>
@@ -122,5 +126,8 @@ a {
 }
   .lightOpcity{
     opacity: 0.8;
+  }
+  img{
+    width: 95vh;
   }
 </style>

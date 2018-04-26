@@ -8,6 +8,7 @@ import ConnexionPA from '@/components/route/ConnexionParent'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -21,14 +22,6 @@ export default new Router({
       component: Contact,
       meta: {title: 'Contact'}
     },
-    { path: '/404',
-      name: '404',
-      component: NotFound
-    },
-    {
-      path: '*',
-      redirect: '/404'
-    },
     {
       path: '/assistante/connexion',
       name: 'ConnexionAM',
@@ -40,7 +33,14 @@ export default new Router({
       name: 'ConnexionPA',
       component: ConnexionPA,
       meta: {title: 'ConnexionPA'}
+    },
+    { path: '/404',
+      name: '404',
+      component: NotFound
+    },
+    {
+      path: '*',
+      redirect: '/404'
     }
-
   ]
 })
