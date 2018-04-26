@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-container grid-list-xl>
+    <v-container mt-5>
       <section>
-        <login id="palogin"></login>
+        <login id="palogin" type="parent"></login>
       </section>
     </v-container>
   </div>

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-container grid-list-xl>
+    <v-container mt-5>
       <section>
-        <login id="amlogin"></login>
+        <login id="amlogin" type="assMat"></login>
       </section>
     </v-container>
   </div>

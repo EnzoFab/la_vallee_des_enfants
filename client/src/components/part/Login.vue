@@ -1,35 +1,63 @@
 <template>
- <div
+  <div
     id="e3"
-    style="max-width: 600px; margin: auto;"
-  >
+    style="max-width: 600px; margin: auto;">
     <v-app>
       <v-card>
         <v-container grid-list-md text-xs-center>
-          <form>
-            <v-text-field
-              box="true"
-              label="E-mail"
-              v-model="email"
-              :error-messages="emailErrors"
-              @blur="$v.email.$touch()"
-              required
-            ></v-text-field>
-            <v-text-field
-              box
-              label="Mot de passe"
-              type="password"
-              v-model="mdp"
-              :error-messages="mdpErrors"
-              @blur="$v.mdp.$touch()"
-              required
-            ></v-text-field>
-            <br>
-            <div class="error" v-html="error" />
-            <br>
-            <v-btn round @click="login" color="pink darken-1">Se connecter</v-btn>
-            <v-btn round @click="clear" color="pink darken-1">Retour</v-btn>
-          </form>
+          <div v-if="estAssMat">
+            <form>
+              <v-text-field
+                box="true"
+                label="Login"
+                v-model="logAssMat"
+                :error-messages="loginErrors"
+                @blur="$v.login.$touch()"
+                required
+              ></v-text-field>
+              <v-text-field
+                box
+                label="Mot de passe"
+                type="password"
+                v-model="mdpAM"
+                :error-messages="mdpErrors"
+                @blur="$v.mdpAM.$touch()"
+                required
+              ></v-text-field>
+              <br>
+              <div class="error" v-html="error" />
+              <br>
+              <v-btn round @click="loginAssMat" color="pink darken-1">Se connecter</v-btn>
+              <v-btn round @click="clearAssMat" color="pink darken-1">Retour</v-btn>
+            </form>
+          </div>
+          <div v-else>
+            <form>
+              <v-text-field
+                box="true"
+                label="E-mail"
+                v-model="email"
+                :error-messages="emailErrors"
+                @blur="$v.email.$touch()"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                box
+                label="Mot de passe"
+                type="password"
+                v-model="mdpPa"
+                :error-messages="mdpErrors"
+                @blur="$v.mdpPa.$touch()"
+                required
+              ></v-text-field>
+              <br>
+              <div class="error" v-html="error" />
+              <br>
+              <v-btn round @click="loginParent" color="pink darken-1">Se connecter</v-btn>
+              <v-btn round @click="clearParent" color="pink darken-1">Retour</v-btn>
+            </form>
+          </div>
         </v-container>
       </v-card>
     </v-app>
@@ -45,13 +73,16 @@ export default {
   mixins: [validationMixin],
   validations: {
     email: { required },
-    mdp: { required }
+    mdp: { required },
+    login: { required }
+  },
+  props: {
+    type: String
   },
   data: () => ({
-    email: '',
+    login: '',
     mdp: '',
-    error: null,
-    items: [
+     items: [
       'Item 1',
       'Item 2',
       'Item 3',
@@ -59,6 +90,9 @@ export default {
     ]
   }),
   computed: {
+    estAssMat () {
+      return this.type === 'assMat'
+    },
     emailErrors () {
       const errors = []
       if (!this.$v.email.$dirty) return errors
@@ -70,33 +104,43 @@ export default {
       if (!this.$v.mdp.$dirty) return errors
       !this.$v.mdp.required && errors.push('Veuillez rentrer un mot de passe')
       return errors
+    },
+    loginErrors () {
+      const errors = []
+      if (!this.$v.mdp.$dirty) return errors
+      !this.$v.mdp.required && errors.push('Veuillez rentrer un login')
+      return errors
     }
   },
   methods: {
     submit () {
       this.$v.$touch()
     },
-    clear () {
+    clearParent () {
       this.$v.$reset()
-      this.email = ''
+      this.login = ''
       this.mdp = ''
     },
-    async login () {
-      try {
-        await AuthentificationService.login({
-          email: this.email,
-          mdp: this.mdp
-        })
-      } catch (error) {
-        this.error = error.response.data.error
-      }
+    async loginParent () {
+      await AuthentificationService.login({
+        email: this.login,
+        mdpPa: this.mdp
+      })
+    },
+    clearAssMat () {
+      this.$v.$reset()
+      this.login = ''
+      this.mdp = ''
+    },
+    async loginAssMat () {
+      await AuthentificationService.login({
+        logAssMat: this.login,
+        mdp: this.mdp
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-  .error {
-    color: red;
-  }
 </style>
