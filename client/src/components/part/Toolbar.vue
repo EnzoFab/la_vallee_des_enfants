@@ -6,24 +6,24 @@
     <v-spacer></v-spacer>
 
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
-      <v-tabs-slider color="grey darken-1"></v-tabs-slider>
+      <v-tabs-slider color="blue"></v-tabs-slider>
       <router-link to="/" tag="v-tab">
-        Accueil
-        <v-icon x-large>fa-home</v-icon>
+        <h4 color="green"> Accueil </h4>
+        <v-icon x-large color="pink">fa-home</v-icon>
       </router-link>
       <router-link to="/evenement" tag="v-tab">
-        Evénement
-        <v-icon x-large>event</v-icon>
+        <h4 color="green"> Événements </h4>
+        <v-icon x-large color="light-green">event</v-icon>
       </router-link>
       <router-link to="/contact" tag="v-tab">
-        Contact
-        <v-icon x-large>contact_mail</v-icon>
+        <h4 color="green"> Contact </h4>
+        <v-icon x-large color="light-blue">contact_mail</v-icon>
       </router-link>
 
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
-          Connexion
-          <v-icon x-large>account_box</v-icon>
+          <h4 color="green"> Connexion </h4>
+          <v-icon x-large color="indigo">account_box</v-icon>
         </a>
         <v-list class="grey lighten-3" >
           <router-link avatar v-for="menu in menus" :key="menu.id" :to="menu.route" tag="v-list-tile">
