@@ -2,27 +2,27 @@
   <v-toolbar app fixed tabs clipped-left light dense color="blue-grey lighten-5">
     <v-toolbar-side-icon  @click.stop="emitEvent()"></v-toolbar-side-icon>
     <v-spacer></v-spacer>
-    <v-toolbar-title><i>La vallée des enfants</i></v-toolbar-title>
+    <v-toolbar-title><h3 class="teal--text">La vallée des enfants</h3></v-toolbar-title>
     <v-spacer></v-spacer>
 
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
       <v-tabs-slider color="blue"></v-tabs-slider>
       <router-link to="/" tag="v-tab">
-        <h4 color="green"> Accueil </h4>
+        <h4 class="pink--text"> Accueil </h4>
         <v-icon x-large color="pink">fa-home</v-icon>
       </router-link>
       <router-link to="/evenement" tag="v-tab">
-        <h4 color="green"> Événements </h4>
+        <h4 class="light-green--text"> Événements </h4>
         <v-icon x-large color="light-green">event</v-icon>
       </router-link>
       <router-link to="/contact" tag="v-tab">
-        <h4 color="green"> Contact </h4>
+        <h4 class="light-blue--text"> Contact </h4>
         <v-icon x-large color="light-blue">contact_mail</v-icon>
       </router-link>
 
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
-          <h4 color="green"> Connexion </h4>
+          <h4 class="indigo--text"> Connexion </h4>
           <v-icon x-large color="indigo">account_box</v-icon>
         </a>
         <v-list class="grey lighten-3" >
