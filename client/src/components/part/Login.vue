@@ -115,10 +115,12 @@ export default {
     },
     async loginParent () {
       try {
-        await AuthentificationService.login({
+        const response = await AuthentificationService.login({
           email: this.email,
           mdp: this.mdp
         })
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setParent', response.data.parent)
       } catch (error) {
         this.error = error.response.data.error
       }
@@ -130,7 +132,7 @@ export default {
     },
     async loginAssMat () {
       try {
-        await AuthentificationService.login({
+       await AuthentificationService.login({
           logAssMat: this.email,
           mdp: this.mdp
         })
