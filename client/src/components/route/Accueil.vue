@@ -61,7 +61,7 @@
        <v-layout column align-center justify-center>
          <div class="headline white--text mb-3 text-xs-center">Phrase generer contrat</div>
          <em>Astuce </em>
-         <v-btn class="blue-grey darken-1" dark large href="/pre-made-themes">
+         <v-btn class="blue-grey darken-1" dark large to="/contrat/simulation">
            Simulation de contrat
            <v-icon right dark>send</v-icon>
          </v-btn>

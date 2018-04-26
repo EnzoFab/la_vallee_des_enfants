@@ -7,6 +7,8 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/fonts/material-icons.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import { sync } from 'vuex-router-sync'
+import store from '../store/store'
 
 Vue.use(VueGoogleMaps, {
   load: {
