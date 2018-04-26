@@ -1,8 +1,10 @@
 <template>
   <div>
-    <section>
-      <login id="amlogin"></login>
-    </section>
+    <v-container grid-list-xl>
+      <section>
+        <login id="palogin"></login>
+      </section>
+    </v-container>
   </div>
 </template>
 
