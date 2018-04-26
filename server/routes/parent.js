@@ -8,4 +8,5 @@ const AuthentificationControllerPolicy = require('../policies/AuthentificationCo
 
 router.post('/login', AuthentificationControllerPolicy.login, AuthentificationController.login)
 
+
 module.exports = router;

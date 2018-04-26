@@ -2,7 +2,6 @@ const Joi = require('joi')
 
 module.exports = {
     login(req, res, next) {
-        console.log('La')
         const schema = {
             // On va vérifier grâce au framework Joi que l'email est bien un email
             email: Joi.string().email(),
@@ -15,6 +14,7 @@ module.exports = {
         const {error} = Joi.validate(req.body, schema)
 
         if (error) {
+            console.log(error)
             switch(error.details[0].context.key) { // retourne la clé d'où provient l'erreur (email ou mdp)
                 case 'email':
                     res.status(400).send({
@@ -34,6 +34,7 @@ module.exports = {
                     })
             }
         } else {
+            console.log('La')
             next()
         }
 

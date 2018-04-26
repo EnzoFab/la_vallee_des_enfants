@@ -1,66 +1,51 @@
 <template>
   <v-container align-start fluid>
     <v-layout row wrap>
-      <v-flex xs12 md8 offset-md2 class="my-5">
+      <v-flex  xs12 md6 offset-md3 class="my-5">
         <v-card>
-          <v-toolbar color="pink darken-1" dark>
+          <v-toolbar :color="toolbarColor" dark>
             <v-spacer></v-spacer>
-            <v-toolbar-title>Se connecter</v-toolbar-title>
+            <v-toolbar-title>{{titre}}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
-          <div v-if="estAssMat">
-            <v-card-text>
-              <v-form>
-                <v-text-field
-                  box="true"
-                  label="Login"
-                  v-model="logAssMat"
-                  :error-messages="loginErrors"
-                  @blur="$v.login.$touch()"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  box
-                  label="Mot de passe"
-                  type="password"
-                  v-model="mdpAM"
-                  :error-messages="mdpErrors"
-                  @blur="$v.mdpAM.$touch()"
-                  required
-                ></v-text-field>
-                <div class="error" v-html="error" />
-                <v-btn round @click="loginAssMat" color="pink darken-1" class="white--text">Se connecter</v-btn>
-                <v-btn round @click="clearAssMat" color="pink darken-1" class="white--text">Retour</v-btn>
-              </v-form>
-            </v-card-text>
-          </div>
-          <div v-else>
-            <v-card-text>
-              <v-form>
-                <v-text-field
-                  box="true"
-                  label="E-mail"
-                  v-model="email"
-                  :error-messages="emailErrors"
-                  @blur="$v.email.$touch()"
-                  required
-                ></v-text-field>
+          <v-card-text>
+            <v-form v-model="estValide" ref="form">
+              <v-text-field v-if="estAssMat"
+                label="login"
+                color="light-blue darken-4"
+                v-model.trim="login"
+                :rules="loginRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                label="E-mail" v-else
+                v-model="email"
+                :rules="emailRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                name="input-10-2"
+                label="Mot de passe"
+                min="8"
+                :append-icon="visible ? 'visibility_off' : 'visibility'"
+                :append-icon-cb="() => (visible = !visible)"
+                v-model="mdp"
+                class="input-group--focused"
+                :type="visible ? 'text' : 'password'"
+                :rules="pwdRules"
+              ></v-text-field>
 
-                <v-text-field
-                  box
-                  label="Mot de passe"
-                  type="password"
-                  v-model="mdp"
-                  :error-messages="mdpErrors"
-                  @blur="$v.mdp.$touch()"
-                  required
-                ></v-text-field>
-                <div class="error" v-html="error" />
-                <v-btn round @click="loginParent" color="pink darken-1" class="white--text">Se connecter</v-btn>
-                <v-btn round @click="clearParent" color="pink darken-1" class="white--text">Retour</v-btn>
-              </v-form>
-            </v-card-text>
-          </div>
+              <v-btn
+                :color="btnColor"
+                depressed large round
+                :dark="estValide"
+                @click="envoyer"
+                :disabled="!estValide"
+              >
+                Envoyer
+              </v-btn>
+            </v-form>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -77,20 +62,40 @@ export default {
   validations: {
     email: { required },
     mdp: { required },
-    login: { required }
+    connexion: { required }
+
   },
   props: {
-    type: String
+    type: {String, required},
+    toolbarColor: String,
+    btnColor: String,
+    titre: {String, required}
   },
   data: () => ({
     email: '',
     mdp: '',
-    error: null
+    connexion: '',
+    login: '',
+    visible: false,
+    pwdRules: [
+      v => !!v || 'Veuillez remplir le mot de passe'
+    ],
+    emailRules: [
+      v => !!v || 'Veuillez remplir l\'email',
+      v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'email n\'est pas valide '
+    ],
+    loginRules: [
+      v => !!v || 'Veuillez remplir le connexion'
+    ],
+    estValide: false
   }),
   computed: {
     estAssMat () {
       return this.type === 'assMat'
-    },
+    }, /*
+    toutes les fonction d'erreurs sont à deplacer dans les composants père
+    d'ailleurs les fonctions ne sont pas forcement utiles
+    */
     emailErrors () {
       const errors = []
       if (!this.$v.email.$dirty) return errors
@@ -106,35 +111,29 @@ export default {
     loginErrors () {
       const errors = []
       if (!this.$v.mdp.$dirty) return errors
-      !this.$v.mdp.required && errors.push('Veuillez rentrer un login')
+      !this.$v.mdp.required && errors.push('Veuillez rentrer un connexion')
       return errors
     }
   },
   methods: {
-    clearParent () {
-      this.$v.$reset()
-      this.email = ''
-      this.mdp = ''
-    },
-    async loginParent () {
-      try {
-        const response = await AuthentificationService.login({
-          email: this.email,
-          mdp: this.mdp
-        })
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setParent', response.data.parent)
-      } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
+    envoyer () {
+      this.clearForm()
+      if (this.estAssMat) { // si c'est une assatt on passe le connexion et le mot de passe
+        const data = {login: this.login, mdp: this.mdp}
+        this.$emit('formSubmitted', data)
+        // on envoie un evenement
+      } else { // sinon on passe le mail et le mot de passe
+        const data = {email: this.email, mdp: this.mdp}
+        this.$emit('formSubmitted', data)
+        // on envoie un evenement
       }
     },
-    clearAssMat () {
-      this.$v.$reset()
-      this.email = ''
-      this.mdp = ''
+    clearForm () {
+      console.log(' Field cleard')
+      // TODO A completer
     },
     async loginAssMat () {
+      // TODO une fois que la methode sera deplacée dans connexionAssMat la supprimer
       try {
         await AuthentificationService.login({
           logAssMat: this.email,
