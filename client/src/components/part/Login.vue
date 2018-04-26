@@ -1,5 +1,5 @@
 <template>
-  <div
+  </v-flex><div
     id="e3"
     style="max-width: 600px; margin: auto;"
   >
