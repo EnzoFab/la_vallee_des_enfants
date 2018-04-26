@@ -122,11 +122,10 @@ export default {
       } catch (error) {
         this.error = error.response.data.error
       }
-
     },
     clearAssMat () {
       this.$v.$reset()
-      this.email= ''
+      this.email = ''
       this.mdp = ''
     },
     async loginAssMat () {
@@ -138,7 +137,6 @@ export default {
       } catch (error) {
         this.error = error.response.data.error
       }
-
     }
   }
 }
