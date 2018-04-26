@@ -34,50 +34,57 @@
 </template>
 
 <script>
-  import { validationMixin } from 'vuelidate'
-  import { required } from 'vuelidate/lib/validators'
-  export default {
-    name: 'Login',
-    mixins: [validationMixin],
-    validations: {
-      email: { required },
-      mdp: { required }
+import AuthentificationService from '@/services/AuthentificationService'
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
+export default {
+  name: 'Login',
+  mixins: [validationMixin],
+  validations: {
+    email: { required },
+    mdp: { required }
+  },
+  data: () => ({
+    email: '',
+    mdp: '',
+    items: [
+      'Item 1',
+      'Item 2',
+      'Item 3',
+      'Item 4'
+    ]
+  }),
+  computed: {
+    emailErrors () {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.required && errors.push('Veuillez rentrer votre email')
+      return errors
     },
-    data: () => ({
-      email: '',
-      mdp: '',
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
-      ]
-    }),
-    computed: {
-      emailErrors () {
-        const errors = []
-        if (!this.$v.email.$dirty) return errors
-        !this.$v.email.required && errors.push('Veuillez rentrer votre email')
-        return errors
-      },
-      mdpErrors () {
-        const errors = []
-        if (!this.$v.mdp.$dirty) return errors
-        !this.$v.mdp.required && errors.push('Veuillez rentrer un mot de passe')
-        return errors
-      }
+    mdpErrors () {
+      const errors = []
+      if (!this.$v.mdp.$dirty) return errors
+      !this.$v.mdp.required && errors.push('Veuillez rentrer un mot de passe')
+      return errors
+    }
+  },
+  methods: {
+    submit () {
+      this.$v.$touch()
     },
-    methods: {
-      submit () {
-        this.$v.$touch()
-      },
-      clear () {
-        this.$v.$reset()
-        this.email = ''
-        this.mdp = ''
-      }
+    clear () {
+      this.$v.$reset()
+      this.email = ''
+      this.mdp = ''
+    },
+    async login () {
+      await AuthentificationService.login({
+        email: this.email,
+        mdp: this.mdp
+      })
     }
   }
+}
 </script>
 
 <style scoped>

@@ -7,13 +7,14 @@
 </template>
 
 <script>
-  import Login from '../part/Login'
-  export default {
-    name: "ConnexionAM",
-    components: {
-      Login
-    }
+
+import Login from '../part/Login'
+export default {
+  name: 'ConnexionAM',
+  components: {
+    Login
   }
+}
 </script>
 
 <style scoped>
