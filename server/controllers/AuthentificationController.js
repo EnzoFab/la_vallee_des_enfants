@@ -1,7 +1,14 @@
+let Parent = require('../models/parent')
+
 module.exports = {
     login (req, res) {
-        res.send({
-            message: 'Your user was registered!'
-        })
+        try {
+            const parent = Parent.create(req.body)
+            res.send(parent.toJSON())
+        } catch(err) {
+            res.status(400).send({
+                error: 'ça bugue sa mère'
+            })
+        }
     }
 }
