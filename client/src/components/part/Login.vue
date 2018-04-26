@@ -24,6 +24,9 @@
               @blur="$v.mdp.$touch()"
               required
             ></v-text-field>
+            <br>
+            <div class="error" v-html="error" />
+            <br>
             <v-btn round @click="login" color="pink darken-1">Se connecter</v-btn>
             <v-btn round @click="clear" color="pink darken-1">Retour</v-btn>
           </form>
@@ -93,4 +96,7 @@ export default {
 </script>
 
 <style scoped>
+  .error {
+    color: red;
+  }
 </style>
