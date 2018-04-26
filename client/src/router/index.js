@@ -5,6 +5,7 @@ import Contact from '@/components/route/Contact'
 import NotFound from '@/components/route/NotFound'
 import ConnexionAM from '@/components/route/ConnexionAssMat'
 import ConnexionPA from '@/components/route/ConnexionParent'
+import SimulationContrat from '@/components/route/Simulation'
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +33,12 @@ export default new Router({
       path: '/parent/connexion',
       name: 'ConnexionPA',
       component: ConnexionPA,
+      meta: {title: 'ConnexionPA'}
+    },
+    {
+      path: '/contrat/simulation',
+      name: 'Simulation',
+      component: SimulationContrat,
       meta: {title: 'ConnexionPA'}
     },
     { path: '/404',
