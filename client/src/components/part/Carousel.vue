@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: '../part/Carousel',
+  name: 'Carousel',
   data () {
     return {
       items: [
@@ -17,7 +17,7 @@ export default {
           src: '/static/carousel_image/5.jpg'
         },
         {
-          src: '/static/carousel_image/6.png'
+          src: '/static/carousel_image/6.jpg'
         },
         {
           src: '/static/carousel_image/3.jpg'
