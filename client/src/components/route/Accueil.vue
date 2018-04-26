@@ -84,7 +84,7 @@
 <script>
 import Carousel from '../part/Carousel'
 import Drawer from '../part/Drawer'
-import Map from '../part/Map'
+import Map from '../part/map'
 export default {
   name: 'HelloWorld',
   components: {
