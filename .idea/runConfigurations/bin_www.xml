@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin\www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="server/bin/www" working-dir="$PROJECT_DIR$/../la vallee des enfants">
+  <configuration default="false" name="bin\www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="$PROJECT_DIR$/server/bin/www" working-dir="$PROJECT_DIR$/server">
     <envs>
       <env name="DEBUG" value="untitled5:*" />
     </envs>

@@ -1,8 +1,8 @@
 let client = require('../config/db')
 
 class Parent {
-    static existsParent(cb) {
-        client.query('SELECT * FROM Parent WHERE mail= ?', [mail], (err, res) => {
+    static findOne(cb) {
+        client.query('SELECT * FROM public."Parent" P, public."Disposer" D, public."Compte" C WHERE P.id_parent=D.id_parent AND D.id_compte=C.id_compte AND P.mail= ?', [email], (err, res) => {
             if (err) {
                 console.log(err.stack)
             } else {

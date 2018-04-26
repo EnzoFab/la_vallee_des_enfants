@@ -1,10 +1,20 @@
-// configuration bd locale
-var localParam = {
-    user: 'postgres', //env var: PGUSER
-    database: 'LaValleeDesEnfants', //env var: PGDATABASE
-    password: 'pgadmin', //env var: PGPASSWORD
-    host: 'localhost', // Server hosting the postgres database
-    port: 5432, //env var: PGPORT
-};
 
-module.exports.bd_conf_locale = localParam;
+const { Client } = require('pg')
+
+const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'LaValleeDesEnfants',
+    password: '123456',
+    port: 5433,
+})
+client.connect()
+
+module.exports = {
+    authentification: {
+        //  On assigne au jwt token un string secret seulement connu par le serveur pour vérifier si le jwt token est valide
+        jwtSecret: process.env.JWT_SECRET || 'secret'
+    }
+}
+
+module.exports = client
