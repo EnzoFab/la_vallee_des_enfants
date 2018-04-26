@@ -39,11 +39,12 @@ export default new Router({
       path: '/contrat/simulation',
       name: 'Simulation',
       component: SimulationContrat,
-      meta: {title: 'ConnexionPA'}
+      meta: {title: 'Simulation'}
     },
     { path: '/404',
       name: '404',
-      component: NotFound
+      component: NotFound,
+      meta: {title: 'Erreur'}
     },
     {
       path: '*',

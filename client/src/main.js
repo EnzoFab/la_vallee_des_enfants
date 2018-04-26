@@ -7,8 +7,8 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/fonts/material-icons.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
-import { sync } from 'vuex-router-sync'
-import store from '../store/store'
+// import { sync } from 'vuex-router-sync'
+// import store from '../store/store'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -17,19 +17,23 @@ Vue.use(VueGoogleMaps, {
   }
 }) // utiliser google map
 
-Vue.directive('pageTitre', {
+/* Vue.directive('pageTitre', {
   inserted: function (el, binding) {
     document.title = binding.value
   },
   update: function (el, binding) {
     document.title = binding.value
   }
-})
+}) */
 // creation d'une directive permettant de changer le titre de la page
 
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false
+// in init router file
+router.afterEach(route => {
+  document.title = route.meta.title
+})
 
 /* eslint-disable no-new */
 new Vue({
