@@ -36,14 +36,13 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-
   export default {
+    name: 'Login',
     mixins: [validationMixin],
     validations: {
       email: { required },
       mdp: { required }
     },
-
     data: () => ({
       email: '',
       mdp: '',
@@ -54,7 +53,6 @@
         'Item 4'
       ]
     }),
-
     computed: {
       emailErrors () {
         const errors = []
@@ -69,7 +67,6 @@
         return errors
       }
     },
-
     methods: {
       submit () {
         this.$v.$touch()
@@ -84,5 +81,4 @@
 </script>
 
 <style scoped>
-
 </style>
