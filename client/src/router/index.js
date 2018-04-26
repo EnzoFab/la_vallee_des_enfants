@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Accueil from '@/components/route/Accueil'
 import Contact from '@/components/route/Contact'
 import NotFound from '@/components/route/NotFound'
+import ConnexionAM from '@/components/route/ConnexionAssMat'
+import ConnexionPA from '@/components/route/ConnexionParent'
 Vue.use(Router)
 
 export default new Router({
@@ -26,6 +28,19 @@ export default new Router({
     {
       path: '*',
       redirect: '/404'
+    },
+    {
+      path: '/assistante/connexion',
+      name: 'ConnexionAM',
+      component: ConnexionAM,
+      meta: {title: 'ConnexionAM'}
+    },
+    {
+      path: '/parent/connexion',
+      name: 'ConnexionPA',
+      component: ConnexionPA,
+      meta: {title: 'ConnexionPA'}
     }
+
   ]
 })
