@@ -6,7 +6,3 @@ export default {
   }
 }
 
-/* AuthentificationService.register({
-  mail: 'marion.mary@hotmail.fr',
-  pwd: '123456'
-}) */

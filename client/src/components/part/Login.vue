@@ -24,7 +24,7 @@
               @blur="$v.mdp.$touch()"
               required
             ></v-text-field>
-            <v-btn round @click="submit" color="pink darken-1">Se connecter</v-btn>
+            <v-btn round @click="login" color="pink darken-1">Se connecter</v-btn>
             <v-btn round @click="clear" color="pink darken-1">Retour</v-btn>
           </form>
         </v-container>
@@ -47,6 +47,7 @@ export default {
   data: () => ({
     email: '',
     mdp: '',
+    error: null,
     items: [
       'Item 1',
       'Item 2',
@@ -78,10 +79,14 @@ export default {
       this.mdp = ''
     },
     async login () {
-      await AuthentificationService.login({
-        email: this.email,
-        mdp: this.mdp
-      })
+      try {
+        await AuthentificationService.login({
+          email: this.email,
+          mdp: this.mdp
+        })
+      } catch (error) {
+        this.error = error.response.data.error
+      }
     }
   }
 }
