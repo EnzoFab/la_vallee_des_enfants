@@ -8,7 +8,7 @@
           <div v-if="estAssMat">
             <form>
               <v-text-field
-                box="true"
+                :box="true"
                 label="Login"
                 v-model="logAssMat"
                 :error-messages="loginErrors"
@@ -16,7 +16,7 @@
                 required
               ></v-text-field>
               <v-text-field
-                box
+                :box="true"
                 label="Mot de passe"
                 type="password"
                 v-model="mdpAM"
@@ -34,7 +34,7 @@
           <div v-else>
             <form>
               <v-text-field
-                box="true"
+                :box="true"
                 label="E-mail"
                 v-model="email"
                 :error-messages="emailErrors"
@@ -43,12 +43,12 @@
               ></v-text-field>
 
               <v-text-field
-                box
+                :box="true"
                 label="Mot de passe"
                 type="password"
-                v-model="mdpPa"
+                v-model="mdp"
                 :error-messages="mdpErrors"
-                @blur="$v.mdpPa.$touch()"
+                @blur="$v.mdp.$touch()"
                 required
               ></v-text-field>
               <br>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import AuthentificationService from '@/services/AuthentificationService'
+import AuthentificationService from '../../services/AuthentificationService'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 export default {
@@ -80,14 +80,9 @@ export default {
     type: String
   },
   data: () => ({
-    login: '',
+    email: '',
     mdp: '',
-     items: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4'
-    ]
+    error: null
   }),
   computed: {
     estAssMat () {
@@ -113,34 +108,44 @@ export default {
     }
   },
   methods: {
-    submit () {
-      this.$v.$touch()
-    },
     clearParent () {
       this.$v.$reset()
-      this.login = ''
+      this.email = ''
       this.mdp = ''
     },
     async loginParent () {
-      await AuthentificationService.login({
-        email: this.login,
-        mdpPa: this.mdp
-      })
+      try {
+        await AuthentificationService.login({
+          email: this.email,
+          mdp: this.mdp
+        })
+      } catch (error) {
+        this.error = error.response.data.error
+      }
+
     },
     clearAssMat () {
       this.$v.$reset()
-      this.login = ''
+      this.email= ''
       this.mdp = ''
     },
     async loginAssMat () {
-      await AuthentificationService.login({
-        logAssMat: this.login,
-        mdp: this.mdp
-      })
+      try {
+        await AuthentificationService.login({
+          logAssMat: this.email,
+          mdp: this.mdp
+        })
+      } catch (error) {
+        this.error = error.response.data.error
+      }
+
     }
   }
 }
 </script>
 
 <style scoped>
+  .error {
+    color: red;
+  }
 </style>
