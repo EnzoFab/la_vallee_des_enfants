@@ -24,7 +24,13 @@ export default {
   methods: {
     async connexion (data) {
       console.log(AuthentificationService)
-      // TODO faire la connexion du coté assMatt
+      try {
+        const response = await AuthentificationService.login(data)
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setAssMat', response.data.assMat)
+      } catch (error) {
+        this.error = error.response.data.error
+      }
     }
   }
 }

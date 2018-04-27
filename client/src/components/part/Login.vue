@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import AuthentificationService from '../../services/AuthentificationService'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 export default {
@@ -77,6 +76,7 @@ export default {
     connexion: '',
     login: '',
     visible: false,
+    error: null,
     pwdRules: [
       v => !!v || 'Veuillez remplir le mot de passe'
     ],
@@ -92,33 +92,12 @@ export default {
   computed: {
     estAssMat () {
       return this.type === 'assMat'
-    }, /*
-    toutes les fonction d'erreurs sont à deplacer dans les composants père
-    d'ailleurs les fonctions ne sont pas forcement utiles
-    */
-    emailErrors () {
-      const errors = []
-      if (!this.$v.email.$dirty) return errors
-      !this.$v.email.required && errors.push('Veuillez rentrer votre email')
-      return errors
-    },
-    mdpErrors () {
-      const errors = []
-      if (!this.$v.mdp.$dirty) return errors
-      !this.$v.mdp.required && errors.push('Veuillez rentrer un mot de passe')
-      return errors
-    },
-    loginErrors () {
-      const errors = []
-      if (!this.$v.mdp.$dirty) return errors
-      !this.$v.mdp.required && errors.push('Veuillez rentrer un connexion')
-      return errors
     }
   },
   methods: {
     envoyer () {
       this.clearForm()
-      if (this.estAssMat) { // si c'est une assatt on passe le connexion et le mot de passe
+      if (this.estAssMat) { // si c'est une assmatt on passe le connexion et le mot de passe
         const data = {login: this.login, mdp: this.mdp}
         this.$emit('formSubmitted', data)
         // on envoie un evenement
@@ -129,18 +108,13 @@ export default {
       }
     },
     clearForm () {
-      console.log(' Field cleard')
-      // TODO A completer
-    },
-    async loginAssMat () {
-      // TODO une fois que la methode sera deplacée dans connexionAssMat la supprimer
-      try {
-        await AuthentificationService.login({
-          logAssMat: this.email,
-          mdp: this.mdp
-        })
-      } catch (error) {
-        this.error = error.response.data.error
+      if (this.estAssMat) {
+        this.login = ''
+        this.mdp = ''
+      } else {
+        this.$v.$reset()
+        this.email = ''
+        this.mdp = ''
       }
     }
   }

@@ -7,7 +7,8 @@ export default new Vuex.Store({
   strict: true,
   state: {
     token: null,
-    parent: null
+    parent: null,
+    assMat: null
   },
   mutation: {
     setToken (state, token) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     setParent ({commit}, parent) {
       state.parent = parent
+    },
+    setAssMat ({commit}, assMat) {
+      state.assMat = assMat
     }
   },
   actions: {
@@ -23,6 +27,9 @@ export default new Vuex.Store({
     },
     setParent ({commit}, parent) {
       commit('setParent', parent)
+    },
+    setAssMat ({commit}, assMat) {
+      commit('setAssMat', assMat)
     }
   }
 
