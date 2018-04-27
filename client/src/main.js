@@ -7,8 +7,8 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/fonts/material-icons.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
-// import { sync } from 'vuex-router-sync'
-// import store from '../store/store'
+import { sync } from 'vuex-router-sync'
+import store from '@/store/store'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -29,6 +29,8 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(Vuetify)
 
+sync(store, router)
+
 Vue.config.productionTip = false
 // in init router file
 router.afterEach(route => {
@@ -39,6 +41,7 @@ router.afterEach(route => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

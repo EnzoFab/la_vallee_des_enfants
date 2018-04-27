@@ -7,6 +7,7 @@ import ConnexionAM from '@/components/route/ConnexionAssMat'
 import ConnexionPA from '@/components/route/ConnexionParent'
 import SimulationContrat from '@/components/route/Simulation'
 import ToolbarParent from '@/components/part/ToolbarParent'
+import ToolbarAssMat from '@/components/part/ToolbarAssMat'
 Vue.use(Router)
 
 export default new Router({
@@ -23,6 +24,12 @@ export default new Router({
       name: 'AccueilParent',
       component: ToolbarParent,
       meta: {title: 'AccueilParent'}
+    },
+    {
+      path: '/assMat/accueil',
+      name: 'AccueilAssMat',
+      component: ToolbarAssMat,
+      meta: {title: 'AccueilAssMat'}
     },
     {
       path: '/contact',

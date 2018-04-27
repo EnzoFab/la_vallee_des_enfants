@@ -68,11 +68,9 @@
           </v-list>
         </v-menu>
       </v-tab>
-      <v-tab align="right">
-        <router-link to="/assistante/deconnexion" tag="v-tab">
+      <v-tab align="right" @click="logout">
           <h4 class="teal--text">Se déconnecter</h4>
           <v-icon x-large color="teal">exit_to_app</v-icon>
-        </router-link>
       </v-tab>
     </v-tabs>
   </v-toolbar>
@@ -84,18 +82,69 @@ export default {
   data () {
     return {
       menusPresence: [
-        {id: 'p1', icon: 'event_note', iconClass: 'transparent grey--text', title: 'Consulter le planning', route: '/assistante/presence/consulter'},
-        {id: 'p2', icon: 'alarm_on', iconClass: 'transparent lighten-1 grey--text', title: 'Pointer', route: '/assistante/presence/pointer'}
+        {
+          id: 'p1',
+          icon: 'event_note',
+          iconClass: 'transparent grey--text',
+          title: 'Consulter le planning',
+          route: '/assistante/presence/consulter'
+        },
+        {
+          id: 'p2',
+          icon: 'alarm_on',
+          iconClass: 'transparent lighten-1 grey--text',
+          title: 'Pointer',
+          route: '/assistante/presence/pointer'
+        }
       ],
       menusContrat: [
-        {id: 'c1', icon: 'edit', iconClass: 'transparent grey--text', title: 'Créer un contrat', route: '/assistante/contrat/creer'},
-        {id: 'c2', icon: 'visibility', iconClass: 'transparent lighten-1 grey--text', title: 'Consulter mes contrats', route: '/assistante/contrat/consulter'},
-        {id: 'c3', icon: 'border_color', iconClass: 'transparent lighten-1 grey--text', title: 'Modifier un contrat', route: '/assistante/contrat/modifier'}
+        {
+          id: 'c1',
+          icon: 'edit',
+          iconClass: 'transparent grey--text',
+          title: 'Créer un contrat',
+          route: '/assistante/contrat/creer'
+        },
+        {
+          id: 'c2',
+          icon: 'visibility',
+          iconClass: 'transparent lighten-1 grey--text',
+          title: 'Consulter mes contrats',
+          route: '/assistante/contrat/consulter'
+        },
+        {
+          id: 'c3',
+          icon: 'border_color',
+          iconClass: 'transparent lighten-1 grey--text',
+          title: 'Modifier un contrat',
+          route: '/assistante/contrat/modifier'
+        }
       ],
       menusPost: [
-        {id: 'po1', icon: 'edit', iconClass: 'transparent grey--text', title: 'Éditer un post', route: '/assistante/post/creer'},
-        {id: 'po2', icon: 'event', iconClass: 'transparent lighten-1 grey--text', title: 'Mes posts', route: '/assistante/post/consulter'}
+        {
+          id: 'po1',
+          icon: 'edit',
+          iconClass: 'transparent grey--text',
+          title: 'Éditer un post',
+          route: '/assistante/post/creer'
+        },
+        {
+          id: 'po2',
+          icon: 'event',
+          iconClass: 'transparent lighten-1 grey--text',
+          title: 'Mes posts',
+          route: '/assistante/post/consulter'
+        }
       ]
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setAssMat', null)
+      this.$router.push({
+        name: 'Accueil'
+      })
     }
   }
 }

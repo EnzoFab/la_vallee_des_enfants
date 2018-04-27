@@ -26,11 +26,9 @@
           <v-icon x-large color="green">library_books</v-icon>
         </router-link>
       </v-tab>
-      <v-tab align="right">
-        <router-link to="/assistante/deconnexion" tag="v-tab">
+      <v-tab align="right" @click="logout">
           <h4 class="teal--text">Se déconnecter</h4>
           <v-icon x-large color="teal">exit_to_app</v-icon>
-        </router-link>
       </v-tab>
     </v-tabs>
   </v-toolbar>
@@ -38,7 +36,17 @@
 
 <script>
 export default {
-  name: 'ToolbarAssMat'
+  name: 'ToolbarAssMat',
+  methods: {
+    logout () {
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setParent', null)
+      this.$router.push({
+        name: 'Accueil'
+      })
+    }
+  }
+
 }
 </script>
 
