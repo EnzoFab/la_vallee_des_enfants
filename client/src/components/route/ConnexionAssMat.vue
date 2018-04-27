@@ -18,6 +18,9 @@ import AuthentificationService from '../../services/AuthentificationService'
 import Login from '../part/Login'
 export default {
   name: 'ConnexionAM',
+  data: () => ({
+    error: null
+  }),
   components: {
     Login
   },
@@ -28,6 +31,9 @@ export default {
         const response = await AuthentificationService.login(data)
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setAssMat', response.data.assMat)
+        this.$router.push({
+          name: 'Accueil'
+        })
       } catch (error) {
         this.error = error.response.data.error
       }

@@ -26,7 +26,6 @@
               <v-text-field
                 name="input-10-2"
                 label="Mot de passe"
-                min="8"
                 :append-icon="visible ? 'visibility_off' : 'visibility'"
                 :append-icon-cb="() => (visible = !visible)"
                 v-model="mdp"
@@ -35,7 +34,7 @@
                 :rules="pwdRules"
               ></v-text-field>
               <br>
-              <div class="error" v-html="error" />
+              <div :class="error" v-html="error" />
               <br>
               <v-btn
                 :color="btnColor"
@@ -78,7 +77,7 @@ export default {
     connexion: '',
     login: '',
     visible: false,
-    error: null,
+    error: '',
     pwdRules: [
       v => !!v || 'Veuillez remplir le mot de passe'
     ],
@@ -98,7 +97,6 @@ export default {
   },
   methods: {
     envoyer () {
-      this.clearForm()
       if (this.estAssMat) { // si c'est une assmatt on passe le connexion et le mot de passe
         const data = {login: this.login, mdp: this.mdp}
         this.$emit('formSubmitted', data)
@@ -124,7 +122,4 @@ export default {
 </script>
 
 <style scoped>
-  .error {
-    color: red;
-  }
 </style>
