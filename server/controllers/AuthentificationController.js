@@ -41,7 +41,7 @@ module.exports = {
                     }
                     else {
                         res.status(204).send({
-                            error: 'Email and mdp doenst match'
+                            error: 'Le mail et le mot de passe ne corresponent pas'
                         })
                     }
                 }
@@ -57,6 +57,7 @@ module.exports = {
         var login = req.body.login
         var mdp = req.body.mdp
         client.query('SELECT * FROM public."AssMat" WHERE login= $1', [login], (err, result) => {
+            console.log('LE RESULTAAAAAT EST', result)
             const assMat = result
             if (err) {
                 console.log('Erreur', err)
@@ -76,7 +77,7 @@ module.exports = {
                     }
                     else {
                         res.status(204).send({
-                            error: 'Email and mdp doenst match'
+                            error: 'Le mail et le mot de passe ne corresponent pas'
                         })
                     }
                 }

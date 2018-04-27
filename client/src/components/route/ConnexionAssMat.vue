@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     async connexion (data) {
-      console.log(AuthentificationService)
       try {
         const response = await AuthentificationService.loginAssMat(data)
         this.$store.dispatch('setToken', response.data.token)
