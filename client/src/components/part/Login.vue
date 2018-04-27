@@ -34,7 +34,7 @@
                 :rules="pwdRules"
               ></v-text-field>
               <br>
-              <div class="error" v-html="error" />
+              <div :class="error" v-html="error" />
               <br>
               <v-btn
                 :color="btnColor"
@@ -77,7 +77,7 @@ export default {
     connexion: '',
     login: '',
     visible: false,
-    error: null,
+    error: '',
     pwdRules: [
       v => !!v || 'Veuillez remplir le mot de passe'
     ],
@@ -122,7 +122,4 @@ export default {
 </script>
 
 <style scoped>
-  .error {
-    color: red;
-  }
 </style>

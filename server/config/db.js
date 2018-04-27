@@ -6,7 +6,7 @@ const client = new Client({
     host: 'localhost',
     database: 'LaValleeDesEnfants',
     password: '123456',
-    port: 5433,
+    port: 5433
 })
 client.connect()
 

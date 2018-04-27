@@ -18,6 +18,9 @@ import AuthentificationService from '../../services/AuthentificationService'
 import Login from '../part/Login'
 export default {
   name: 'ConnexionAM',
+  data: () => ({
+    error: null
+  }),
   components: {
     Login
   },

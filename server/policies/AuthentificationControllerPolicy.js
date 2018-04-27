@@ -11,7 +11,7 @@ module.exports = {
             )
         }
 
-        const {error} = Joi.validate(req.body, schema)
+        const {error, value} = Joi.validate(req.body, schema)
 
         if (error) {
             console.log(error)
@@ -34,7 +34,6 @@ module.exports = {
                     })
             }
         } else {
-            console.log('La')
             next()
         }
 
