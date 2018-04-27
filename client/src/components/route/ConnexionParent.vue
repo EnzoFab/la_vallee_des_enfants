@@ -12,6 +12,7 @@
 
 <script>
 import Login from '../part/Login'
+import store from '../../store/store'
 import AuthentificationService from '../../services/AuthentificationService'
 export default {
   name: 'ConnexionPa',
@@ -27,8 +28,8 @@ export default {
       console.log(data)
       try {
         const response = await AuthentificationService.login(data)
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setParent', response.data.parent)
+        store.dispatch('setToken', response.data.token)
+        store.dispatch('setParent', response.data.parent)
         this.$router.push({
           name: 'Accueil'
         })

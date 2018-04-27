@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const conf = require('../config/db')
 let client = require('../config/db')
 
+
 function jwtSignParent(parent) {
     // Durée du token
     const ONE_WEEK = 60 * 60 * 24 * 7
@@ -17,15 +18,17 @@ module.exports = {
         var mdp = req.body.mdp
         client.query('SELECT * FROM public."Parent" P, public."Disposer" D, public."Compte" C WHERE P.id_parent=D.id_parent AND D.id_compte=C.id_compte AND P.mail= $1', [email], (err, result) => {
             console.log('LE RESULTAT ESSSSSST', result)
+            const parent = result
             if (err) {
                 console.log('Erreur', err)
                 res.status(403).send({
                     error: 'Les informations sont incorrectes'
                 })
             } else {
-                if (result != null) {
-                    if ([0].mot_de_passe == mdp) {
+                if (result.length != 0) {
+                    if (result.rows[0].mot_de_passe == mdp) {
                         const parentJson = parent.toJSON()
+                        console.log('PARENNNNNNNT JSON', parentJson)
                         res.send({
                             parent: parentJson,
                             // On assigne le token
