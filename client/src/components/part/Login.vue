@@ -34,7 +34,9 @@
                 :type="visible ? 'text' : 'password'"
                 :rules="pwdRules"
               ></v-text-field>
-
+              <br>
+              <div class="error" v-html="error" />
+              <br>
               <v-btn
                 :color="btnColor"
                 depressed large round
