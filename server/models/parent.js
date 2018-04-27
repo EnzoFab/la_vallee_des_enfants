@@ -8,7 +8,7 @@ class Parent {
             if (err) {
                 console.log(err.stack)
             } else {
-               console.log("Connexionr réussie !")
+               console.log("Connexionr réussie !", res)
             }
         })
     }
