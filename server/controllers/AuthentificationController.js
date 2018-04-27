@@ -56,6 +56,7 @@ module.exports = {
     loginAssMat(req, res) {
         var login = req.body.login
         var mdp = req.body.mdp
+        console.log('OKKKKK')
         client.query('SELECT * FROM public."AssMat" WHERE login= $1', [login], (err, result) => {
             console.log('LE RESULTAAAAAT EST', result)
             const assMat = result

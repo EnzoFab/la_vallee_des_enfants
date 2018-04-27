@@ -1,4 +1,4 @@
-let client = require('../config/db')
+/* let client = require('../config/db')
 const Promise = require('bluebird')
 const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
 
@@ -19,3 +19,4 @@ class Parent {
 }
 
 module.exports = Parent
+*/

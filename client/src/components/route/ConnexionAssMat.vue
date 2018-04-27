@@ -28,12 +28,14 @@ export default {
     async connexion (data) {
       try {
         const response = await AuthentificationService.loginAssMat(data)
+        console.log('OK VOYONS', response)
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setAssMat', response.data.assMat)
         this.$router.push({
           name: 'AccueilAssMat'
         })
       } catch (error) {
+        console.log(error)
         this.error = error.response.data.error
       }
     }
