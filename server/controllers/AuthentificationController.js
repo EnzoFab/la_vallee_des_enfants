@@ -15,7 +15,6 @@ module.exports = {
         var email = req.body.email
         var mdp = req.body.mdp
         client.query('SELECT * FROM public."Parent" P, public."Disposer" D, public."Compte" C WHERE P.id_parent=D.id_parent AND D.id_compte=C.id_compte AND P.mail= $1', [email], (err, result) => {
-            console.log('LE RESULTAT ESSSSSST', result)
             const parent = result
             if (err) {
                 console.log('Erreur', err)
@@ -26,8 +25,7 @@ module.exports = {
                 if (result.length != 0) {
                     if (result.rows[0].mot_de_passe == mdp) {
                         const parentJson = JSON.stringify(parent)
-                        const parentDef = JSON.parse(parentJson)
-                        console.log('PARENNNNNNNT JSON', parentJson)
+                        const parentDef = JSON.parse(parentJson) // Je met en objet car la fonction jwtSignParent n'accepte que des objets
                         res.send({
                             parent: parentJson,
                             // On assigne le token

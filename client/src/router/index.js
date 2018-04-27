@@ -6,6 +6,7 @@ import NotFound from '@/components/route/NotFound'
 import ConnexionAM from '@/components/route/ConnexionAssMat'
 import ConnexionPA from '@/components/route/ConnexionParent'
 import SimulationContrat from '@/components/route/Simulation'
+import ToolbarParent from '@/components/part/ToolbarParent'
 Vue.use(Router)
 
 export default new Router({
@@ -16,6 +17,12 @@ export default new Router({
       name: 'Accueil',
       component: Accueil,
       meta: {title: 'Accueil'}
+    },
+    {
+      path: '/parent/accueil',
+      name: 'AccueilParent',
+      component: ToolbarParent,
+      meta: {title: 'AccueilParent'}
     },
     {
       path: '/contact',

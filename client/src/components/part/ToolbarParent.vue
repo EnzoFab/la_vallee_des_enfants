@@ -37,9 +37,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'ToolbarAssMat'
-  }
+export default {
+  name: 'ToolbarAssMat'
+}
 </script>
 
 <style scoped>

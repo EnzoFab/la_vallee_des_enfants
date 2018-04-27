@@ -31,7 +31,7 @@ export default {
         store.dispatch('setToken', response.data.token)
         store.dispatch('setParent', response.data.parent)
         this.$router.push({
-          name: 'Accueil'
+          name: 'AccueilParent'
         })
       } catch (error) {
         console.log(error)
