@@ -10,14 +10,14 @@ export default new Vuex.Store({
     parent: null,
     assMat: null
   },
-  mutation: {
+  mutations: {
     setToken (state, token) {
       state.token = token
     },
-    setParent ({commit}, parent) {
+    setParent (state, parent) {
       state.parent = parent
     },
-    setAssMat ({commit}, assMat) {
+    setAssMat (state, assMat) {
       state.assMat = assMat
     }
   },

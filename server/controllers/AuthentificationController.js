@@ -14,11 +14,7 @@ module.exports = {
     async login (req, res) {
         try {
             const {email, mdp} = req.body
-            const parent = await Parent.findOne({
-                where: {
-                    email: email
-                }
-            })
+            const parent = await Parent.findParent(req.body.email)
             if(!parent) {
                 res.status(403).send({
                     error: 'Les informations sont incorrectes'
