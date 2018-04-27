@@ -29,6 +29,9 @@ export default {
         const response = await AuthentificationService.login(data)
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setParent', response.data.parent)
+        this.$router.push({
+          name: 'Accueil'
+        })
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error
