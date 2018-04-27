@@ -1,7 +1,8 @@
-let Parent = require('../models/parent')
 const jwt = require('jsonwebtoken')
 const conf = require('../config/db')
 let client = require('../config/db')
+const Promise = require('bluebird')
+const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
 
 
 function jwtSignParent(parent) {
