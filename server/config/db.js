@@ -10,11 +10,6 @@ const client = new Client({
 })
 client.connect()
 
-module.exports = {
-    authentification: {
-        //  On assigne au jwt token un string secret seulement connu par le serveur pour vérifier si le jwt token est valide
-        jwtSecret: process.env.JWT_SECRET || 'secret'
-    }
-}
-
 module.exports = client
+
+

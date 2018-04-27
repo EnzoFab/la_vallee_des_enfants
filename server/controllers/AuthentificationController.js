@@ -6,10 +6,8 @@ let client = require('../config/db')
 
 function jwtSignParent(parent) {
     // Durée du token
-    const ONE_WEEK = 60 * 60 * 24 * 7
-    return jwt.sign(parent, conf.authentification.jwtSecret, {
-        expiresIn: ONE_WEEK
-    })
+    const ON_WEEK = 60 * 60 * 24 * 7
+    return jwt.sign(parent, process.env.JWT_SECRET, {expiresIn: ON_WEEK})
 }
 
 module.exports = {
@@ -27,12 +25,13 @@ module.exports = {
             } else {
                 if (result.length != 0) {
                     if (result.rows[0].mot_de_passe == mdp) {
-                        const parentJson = parent.toJSON()
+                        const parentJson = JSON.stringify(parent)
+                        const parentDef = JSON.parse(parentJson)
                         console.log('PARENNNNNNNT JSON', parentJson)
                         res.send({
                             parent: parentJson,
                             // On assigne le token
-                            token: jwtSignParent(parentJson)
+                            token: jwtSignParent(parentDef)
                         })
                     }
                     else {
