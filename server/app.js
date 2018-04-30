@@ -4,13 +4,26 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+
+var app = express();
+var server = require('http').Server(app);
+
+var io = require('socket.io').listen(server); // chargement de socket io qui permet le temps réel
+
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var parentRouter = require('./routes/parent')
+var parentRouter = require('./routes/parent');
+var evenementRouter = require('./routes/evenement');
 
-var app = express();
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/parents', parentRouter);
+app.use('/evenements', evenementRouter);
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,16 +35,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// use it before all route definitions
+// use it before all view definitions
 app.use(cors({origin: '*'}))
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/parents', parentRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+// rends socket io accessible a toutes les routes
+app.use(function(req,res,next){
+    req.io = io;
+    next();
 });
 
 
@@ -46,4 +62,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+
+
+module.exports = {app: app, server: server};

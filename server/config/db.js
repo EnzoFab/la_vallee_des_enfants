@@ -1,15 +1,13 @@
 
 const { Client } = require('pg')
-
+// TODO penser à modiifier le .env
 const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'LaValleeDesEnfants',
-    password: '123456',
-    port: 5433
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PWD,
+    port: 5432,
 })
 client.connect()
 
-module.exports = client
-
-
+module.exports = client;

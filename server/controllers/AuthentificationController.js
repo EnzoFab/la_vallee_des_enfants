@@ -3,6 +3,7 @@ const conf = require('../config/db')
 let client = require('../config/db')
 const Promise = require('bluebird')
 const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
+const modelParent = require('../models/parent');
 
 
 function jwtSignParent(parent) {
@@ -18,8 +19,10 @@ function jwtSignAssMat(assmat) {
 }
 
 module.exports = {
-    login(req, res) {
-        var email = req.body.email
+    // TODO modifier la connexion parents voir s'il faut deplacer la fonction dans la route
+    loginParent(req, res) {
+        // var email = req.body.email
+        var login = req.body.login
         var mdp = req.body.mdp
         client.query('SELECT * FROM public."Parent" P, public."Disposer" D, public."Compte" C WHERE P.id_parent=D.id_parent AND D.id_compte=C.id_compte AND P.mail= $1', [email], (err, result) => {
             const parent = result
@@ -41,7 +44,7 @@ module.exports = {
                     }
                     else {
                         res.status(204).send({
-                            error: 'Le mail et le mot de passe ne corresponent pas'
+                            error: 'Le login et le mot de passe ne corresponent pas'
                         })
                     }
                 }

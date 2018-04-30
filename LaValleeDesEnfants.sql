@@ -171,7 +171,7 @@ WITH (
 CREATE TABLE public."Compte"
 (
     id_compte character varying(5) NOT NULL,
-    mot_de_passe character varying NOT NULL,
+    identifiant_connexion character varying NOT NULL,
     CONSTRAINT "Compte_pkey" PRIMARY KEY (id_compte)
 )
 WITH (
@@ -186,6 +186,7 @@ CREATE TABLE public."Disposer"
 (
     id_parent character varying NOT NULL,
     id_compte character varying NOT NULL,
+    mot_de_passe character varying NOT NULL,
     CONSTRAINT "Disposer_pkey" PRIMARY KEY (id_compte, id_parent),
     CONSTRAINT "Disposer_id_compte_fkey" FOREIGN KEY (id_compte)
         REFERENCES public."Compte" (id_compte) MATCH SIMPLE

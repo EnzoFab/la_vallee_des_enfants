@@ -5,7 +5,9 @@ var router = express.Router();
 const AuthentificationController = require('../controllers/AuthentificationController')
 const AuthentificationControllerPolicy = require('../policies/AuthentificationControllerPolicy')
 
-router.post('/login', AuthentificationControllerPolicy.login, AuthentificationController.login)
+router.post('/login',
+   // AuthentificationControllerPolicy.login,
+    AuthentificationController.loginParent)
 
 
 module.exports = router;

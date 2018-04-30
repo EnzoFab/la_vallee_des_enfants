@@ -28,7 +28,6 @@
             </v-card-media>
           </v-card>
         </v-flex>
-
       </v-layout>
     </v-container>
   </section>

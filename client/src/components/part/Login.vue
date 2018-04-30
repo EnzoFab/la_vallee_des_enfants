@@ -10,26 +10,25 @@
           </v-toolbar>
           <v-card-text>
             <v-form v-model="estValide" ref="form">
-              <v-text-field v-if="estAssMat"
+              <v-text-field
                 label="login"
                 color="light-blue darken-4"
                 v-model.trim="login"
                 :rules="loginRules"
                 required
               ></v-text-field>
-              <v-text-field
+              <!--<v-text-field
                 label="E-mail" v-else
                 v-model="email"
                 :rules="emailRules"
                 required
-              ></v-text-field>
+              ></v-text-field> -->
               <v-text-field
                 name="input-10-2"
                 label="Mot de passe"
                 :append-icon="visible ? 'visibility_off' : 'visibility'"
                 :append-icon-cb="() => (visible = !visible)"
                 v-model="mdp"
-                class="input-group--focused"
                 :type="visible ? 'text' : 'password'"
                 :rules="pwdRules"
               ></v-text-field>
@@ -97,7 +96,9 @@ export default {
   },
   methods: {
     envoyer () {
-      if (this.estAssMat) { // si c'est une assmatt on passe le connexion et le mot de passe
+      const data = {login: this.login, mdp: this.mdp}
+      this.$emit('formSubmitted', data)
+      /* if (this.estAssMat) { // si c'est une assmatt on passe le connexion et le mot de passe
         const data = {login: this.login, mdp: this.mdp}
         this.$emit('formSubmitted', data)
         // on envoie un evenement
@@ -105,17 +106,19 @@ export default {
         const data = {email: this.email, mdp: this.mdp}
         this.$emit('formSubmitted', data)
         // on envoie un evenement
-      }
+      } */
     },
     clearForm () {
-      if (this.estAssMat) {
+      this.login = ''
+      this.mdp = ''
+      /* if (this.estAssMat) {
         this.login = ''
         this.mdp = ''
       } else {
         this.$v.$reset()
         this.email = ''
         this.mdp = ''
-      }
+      } */
     }
   }
 }

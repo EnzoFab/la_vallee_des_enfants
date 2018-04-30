@@ -9,6 +9,9 @@ import 'material-design-icons-iconfont/dist/fonts/material-icons.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
+import VueSocketIO from 'vue-socket.io'
+
+Vue.use(VueSocketIO, 'http://localhost:3000/evenements/')
 
 Vue.use(VueGoogleMaps, {
   load: {

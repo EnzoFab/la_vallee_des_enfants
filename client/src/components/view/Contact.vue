@@ -9,6 +9,9 @@
     >
       <span>{{snackbarMessage}}</span>
       <v-icon dark>check_circle</v-icon>
+      <v-btn dark flat fab @click.native="snackbar = false">
+        <v-icon small dark>fa-times</v-icon>
+      </v-btn>
     </v-snackbar>
     <v-layout row wrap>
       <v-flex xs12 md6 offset-md3 class="my-5">
@@ -61,6 +64,7 @@
 </template>
 
 <script>
+const nameLength = 20
 export default {
   name: 'Contact',
   data () {
@@ -79,7 +83,7 @@ export default {
       nameLenght: 20, // au maximum 20 characters pour le nom
       nameRules: [
         v => !!v || 'Name is required',
-        v => v.length <= this.nameLenght || 'Il ne peut pas y avoir plus de 20 characteres'
+        v => v.length <= nameLength || 'Il ne peut pas y avoir plus de 20 characteres'
       ],
       email: '',
       emailRules: [

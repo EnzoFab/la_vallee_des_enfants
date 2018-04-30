@@ -1,9 +1,7 @@
 <template>
-  <v-carousel hide-controls dark hide-delimiters
-              transition="fade"
-              reverse-transition="fade"
-  >
-    <v-carousel-item v-for="(item,i) in items" :src="item.src" :key="i"></v-carousel-item>
+  <v-carousel hide-controls hide-delimiters>
+    <v-carousel-item v-for="(item,i) in items" :src="item.src" :key="i">
+    </v-carousel-item>
   </v-carousel>
 </template>
 
