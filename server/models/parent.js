@@ -22,30 +22,10 @@ module.exports = Parent
 */
 
 let db = require('../config/db');
+let helper = require('../helpers/helper');
 const bcrypt = require('bcrypt');
 
-function handleError(e, rst){
-    if(e){
-        return {
-            statut: 500,
-            erreur: {
-                texte: e.toString()
-            }
-        }
-    }else if(rst.rows == undefined  || rst.rows.length == 0){
-        return {
-            statut: 404, // bad request
-            erreur: {
-                texte: 'Identifiants de connexion non valides'
-            }
-        }
-    }else{
-        return {
-            statut: null,
-            erreur:null
-        }
-    }
-}
+
 
 let Parents = {
 
@@ -63,7 +43,7 @@ let Parents = {
                     parent: null,
                     statut: null
                 };
-               let e = handleError(err, rst);
+               let e = helper.handleError(err, rst,'Le parent demandé n\'existe pas');
                 retour.erreur = e.erreur
                 retour.statut = e.statut
                 if(retour.erreur == null){
@@ -99,7 +79,7 @@ let Parents = {
                     parent: null,
                     statut: null
                 };
-                let e = handleError(err, rst);
+                let e = helper.handleError(err, rst,'Identifiants de connexion non valides');
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
@@ -149,12 +129,12 @@ let Parents = {
                 parents: null,
                 statut: null
             };
-            let e = handleError(err, rst);
+            let e = helper.handleError(err, rst,'Aucun parents');
             retour.erreur = e.erreur;
             retour.statut = e.statut;
             if(retour.erreur == null){
                 var array = []
-                for(var i; i < rslt.rows.length; i++){
+                for(var i = 0; i < rslt.rows.length; i++){
                     array.push({
                         id : rst.rows[i].id_parent, // peut etre qu'il faut pas le renvoyer
                         nom_naissance: rst.rows[i].nom_de_naissance,

@@ -7,7 +7,7 @@
     </v-toolbar>
     <v-form v-model="estValide" ref="form" class="pa-3">
       <v-flex>
-      </v-flex>
+    </v-flex>
       <v-flex xs12>
         <v-menu
           ref="menu"

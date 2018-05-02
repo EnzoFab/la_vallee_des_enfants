@@ -1,12 +1,12 @@
 
 const { Client } = require('pg')
-// TODO penser à modiifier le .env
+// TODO penser à modifier le .env
 const client = new Client({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     password: process.env.DB_PWD,
-    port: 5432,
+    port: process.env.DB_PORT,
 })
 client.connect()
 
