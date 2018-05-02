@@ -283,7 +283,6 @@ with (
 CREATE TABLE public.contrat
 (
     id_contrat character varying COLLATE "default".pg_catalog NOT NULL,
-    date_paiement date,
     date_debut date,
     nb_semaines_conges_parents integer,
     tarif numeric,
@@ -295,6 +294,7 @@ CREATE TABLE public.contrat
     id_mode_paiement integer,
     id_am integer NOT NULL,
     id_compte integer,
+    jour_paiement integer,
     CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat),
     CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
         REFERENCES public.assmat (id_am) MATCH SIMPLE
