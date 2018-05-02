@@ -1,3 +1,27 @@
+drop table if exists disposer cascade;
+drop table if exists apourparent cascade;
+drop table if exists apourtuteur cascade;
+drop table if exists parent cascade;
+drop table if exists assmat cascade;
+drop table if exists compte cascade;
+drop table if exists contrat cascade;
+drop table if exists employeur cascade;
+drop table if exists enfant cascade;
+drop table if exists etreenconges cascade;
+drop table if exists evenement cascade;
+drop table if exists facturemensuelle cascade;
+drop table if exists periodeconges cascade;
+drop table if exists post cascade;
+drop table if exists presencereelle cascade;
+drop table if exists presencetheorique cascade;
+drop table if exists tuteur cascade;
+drop table if exists typecontrat cascade;
+drop table if exists typejour cascade;
+drop table if exists typetuteur cascade;
+
+
+
+
 
 create table public."enfant"
 (
@@ -11,6 +35,63 @@ with (
     oids = false
 );
 
+-- Table: public.typetuteur
+
+-- DROP TABLE public.typetuteur;
+
+CREATE TABLE public.typetuteur
+(
+    id_type_tuteur integer NOT NULL DEFAULT nextval('typetuteur_id_type_tuteur_seq'::regclass),
+    "nom_type-_tuteur" character varying COLLATE "default".pg_catalog NOT NULL,
+    CONSTRAINT typetuteur_pkey PRIMARY KEY (id_type_tuteur)
+)
+WITH (
+    OIDS = FALSE
+);
+
+-- Table: public.tuteur
+
+-- DROP TABLE public.tuteur;
+
+CREATE TABLE public.tuteur
+(
+    id_tuteur integer NOT NULL DEFAULT nextval('parent_id_parent_seq'::regclass),
+    nom_tuteur character varying COLLATE "default".pg_catalog NOT NULL,
+    prenom_tuteur character varying COLLATE "default".pg_catalog NOT NULL,
+    telephone character varying(10) COLLATE "default".pg_catalog NOT NULL,
+    profession character varying(255) COLLATE "default".pg_catalog,
+    id_type_tuteur integer NOT NULL,
+    CONSTRAINT parent_pkey PRIMARY KEY (id_tuteur),
+    CONSTRAINT tuteur_id_type_tuteur_fkey FOREIGN KEY (id_type_tuteur)
+        REFERENCES public.typetuteur (id_type_tuteur) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+);
+
+-- Table: public.apourtuteur
+
+-- DROP TABLE public.apourtuteur;
+
+CREATE TABLE public.apourtuteur
+(
+    id_enfant integer NOT NULL,
+    id_tuteur integer NOT NULL,
+    CONSTRAINT apourparent_id_enfant_fkey FOREIGN KEY (id_enfant)
+        REFERENCES public.enfant (id_enfant) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT apourtuteur_id_tuteur_fkey FOREIGN KEY (id_tuteur)
+        REFERENCES public.tuteur (id_tuteur) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+
 create table public."evenement"
 (
     id_evenement serial primary key,
@@ -18,24 +99,6 @@ create table public."evenement"
     date_debut date not null,
     date_fin date not null
 )with (
-    oids = false
-);
-
--- table: public."parent"
-
--- drop table public."parent";
-
-create table public."parent"
-(
-    id_parent serial primary key,
-    nom_de_naissance character varying(255) not null,
-    nom_d_usage character varying(255) not null,
-    prenom_parent character varying(255) not null,
-    telephone character varying(10) not null,
-    mail character varying(255) not null,
-    profession character varying(255)
-)
-with (
     oids = false
 );
 
@@ -146,62 +209,24 @@ with (
     oids = false
 );
 
--- table: public."apourparent"
+-- Table: public.compte
 
--- drop table public."apourparent";
+-- DROP TABLE public.compte;
 
-create table public."apourparent"
+CREATE TABLE public.compte
 (
-    id_enfant integer not null,
-    id_parent integer not null,
-    constraint "apourparent_pkey" primary key (id_enfant, id_parent),
-    constraint "apourparent_id_enfant_fkey" foreign key (id_enfant)
-        references public."enfant" (id_enfant) match simple
-        on update no action
-        on delete no action,
-    constraint "apourparent_id_parent_fkey" foreign key (id_parent)
-        references public."parent" (id_parent) match simple
-        on update no action
-        on delete no action
+    id_compte integer NOT NULL DEFAULT nextval('compte_id_compte_seq'::regclass),
+    identifiant_connexion character varying COLLATE "default".pg_catalog NOT NULL,
+    mot_de_passe character varying COLLATE "default".pg_catalog NOT NULL,
+    id_employeur integer,
+    CONSTRAINT compte_pkey PRIMARY KEY (id_compte),
+    CONSTRAINT compte_id_employeur_fkey FOREIGN KEY (id_employeur)
+        REFERENCES public.employeur (id_employeur) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-with (
-    oids = false
-);
-
--- table: public."compte"
-
--- drop table public."compte";
-
-create table public."compte"
-(
-    id_compte serial primary key,
-    identifiant_connexion character varying not null
-)
-with (
-    oids = false
-);
-
--- table: public."disposer"
-
--- drop table public."disposer";
-
-create table public."disposer"
-(
-    id_parent integer not null,
-    id_compte integer not null,
-    mot_de_passe character varying not null,
-    constraint "disposer_pkey" primary key (id_compte, id_parent),
-    constraint "disposer_id_compte_fkey" foreign key (id_compte)
-        references public."compte" (id_compte) match simple
-        on update no action
-        on delete no action,
-    constraint "disposer_id_parent_fkey" foreign key (id_parent)
-        references public."parent" (id_parent) match simple
-        on update no action
-        on delete no action
-)
-with (
-    oids = false
+WITH (
+    OIDS = FALSE
 );
 
 -- table: public."modedepaiement"
@@ -231,13 +256,13 @@ with (
     oids = false
 );
 
--- table: public."contrat"
+-- Table: public.contrat
 
--- drop table public."contrat";
+-- DROP TABLE public.contrat;
 
-create table public."contrat"
+CREATE TABLE public.contrat
 (
-    id_contrat character varying primary key,
+    id_contrat character varying COLLATE "default".pg_catalog NOT NULL,
     date_paiement date,
     date_debut date,
     nb_semaines_conges_parents integer,
@@ -246,26 +271,31 @@ create table public."contrat"
     taux_majore numeric,
     date_deb_periode_adaptation date,
     date_fin_periode_adaptation date,
-    id_enfant integer not null,
+    id_enfant integer,
     id_mode_paiement integer,
-    id_am integer not null,
-    constraint "contrat_id_am_fkey" foreign key (id_am)
-        references public."assmat" (id_am) match simple
-        on update no action
-        on delete no action,
-    constraint "contrat_id_enfant_fkey" foreign key (id_enfant)
-        references public."enfant" (id_enfant) match simple
-        on update no action
-        on delete no action,
-    constraint "contrat_id_mode_paiement_fkey" foreign key (id_mode_paiement)
-        references public."modedepaiement" (id_mode) match simple
-        on update no action
-        on delete no action
+    id_am integer NOT NULL,
+    id_compte integer,
+    CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat),
+    CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
+        REFERENCES public.assmat (id_am) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT contrat_id_compte_fkey FOREIGN KEY (id_compte)
+        REFERENCES public.compte (id_compte) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT contrat_id_enfant_fkey FOREIGN KEY (id_enfant)
+        REFERENCES public.enfant (id_enfant) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT contrat_id_mode_paiement_fkey FOREIGN KEY (id_mode_paiement)
+        REFERENCES public.modedepaiement (id_mode) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-with (
-    oids = false
+WITH (
+    OIDS = FALSE
 );
-
 -- table: public."presencetheorique"
 
 -- drop table public."presencetheorique";
