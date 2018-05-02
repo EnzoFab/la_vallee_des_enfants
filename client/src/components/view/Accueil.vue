@@ -122,12 +122,13 @@ a {
   color: #42b983;
 }
 #carous{
-  height: 100vh;
+  height: 95vh;
+  width: 90%;
 }
   .lightOpcity{
     opacity: 0.8;
   }
   img{
-    width: 95vh;
+    width: 95%;
   }
 </style>

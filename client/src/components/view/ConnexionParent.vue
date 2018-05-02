@@ -1,12 +1,17 @@
 <template>
   <div>
-    <login id="palogin"
-           type="parent"
-           @formSubmitted="connexion"
-           toolbarColor="teal lighten-2"
-           btnColor="teal accent-2"
-           titre="Connexion parent"
-    ></login>
+    <v-container align-start fluid>
+      <v-alert type="error" dismissible v-model="alert">
+        {{error}}
+      </v-alert>
+      <login id="palogin"
+             type="parent"
+             @formSubmitted="connexion"
+             toolbarColor="teal lighten-2"
+             btnColor="teal accent-2"
+             titre="Connexion parent"
+      ></login>
+    </v-container>
   </div>
 </template>
 
@@ -16,7 +21,8 @@ import AuthentificationService from '../../services/AuthentificationService'
 export default {
   name: 'ConnexionPa',
   data: () => ({
-    error: null
+    error: '',
+    alert: false
   }),
   components: {
     Login
@@ -27,15 +33,24 @@ export default {
       console.log(data)
       try {
         const response = await AuthentificationService.login(data)
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setParent', response.data.parent)
-        this.$router.push({
-          name: 'AccueilParent'
-        })
+        if (response.data.erreur == null) { // connexion reussie
+          this.$store.dispatch('setToken', response.data.token)
+          this.$store.dispatch('setParent', response.data.parent)
+          this.$router.push({
+            name: 'AccueilParent'
+          })
+        } else {
+          this.showError(response.data.erreur.texte)
+        }
+        /*  */
       } catch (error) {
         console.log(error)
-        this.error = error.response.data.error
+        this.showError(error.response.data.error)
       }
+    },
+    showError (erreur) { // affiche l'erreur
+      this.error = erreur
+      this.alert = true
     }
   }
 }

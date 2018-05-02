@@ -1,12 +1,17 @@
 <template>
   <div>
-    <login id="amlogin"
-           type="assMat"
-           @formSubmitted="connexion"
-           titre="Connexion assistante maternelle"
-           toolbar-color="pink lighten-1"
-           btnColor="pink lighten-2"
-    ></login>
+    <v-container align-start fluid>
+      <v-alert type="error" dismissible v-model="alert">
+        {{error}}
+      </v-alert>
+      <login id="amlogin"
+             type="assMat"
+             @formSubmitted="connexion"
+             titre="Connexion assistante maternelle"
+             toolbar-color="pink lighten-1"
+             btnColor="pink lighten-2"
+      ></login>
+    </v-container>
     <!-- formSubmitted est un evenement envoyé par le composant login
      on appelle une fonction  lorsque l'evenement intervient et ça
      peut être n'importe qu'elle fonction-->
@@ -19,7 +24,8 @@ import Login from '../part/Login'
 export default {
   name: 'ConnexionAM',
   data: () => ({
-    error: null
+    error: '',
+    alert: false
   }),
   components: {
     Login
@@ -38,6 +44,10 @@ export default {
         console.log(error)
         this.error = error.response.data.error
       }
+    },
+    showError (erreur) { // affiche l'erreur
+      this.error = erreur
+      this.alert = true
     }
   }
 }

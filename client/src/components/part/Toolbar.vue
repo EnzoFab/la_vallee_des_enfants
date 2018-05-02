@@ -7,15 +7,15 @@
 
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab to="/"  ripple>
+      <v-tab to="/" class="d-inline-block" ripple>
         <h4 class="pink--text"> Accueil </h4>
         <v-icon x-large color="pink">fa-home</v-icon>
       </v-tab>
-      <v-tab to="/evenements" ripple>
+      <v-tab to="/evenements" class="d-inline-block" ripple>
         <h4 class="light-green--text"> Événements </h4>
         <v-icon x-large color="light-green">event</v-icon>
       </v-tab>
-      <v-tab to="/contact"  ripple>
+      <v-tab to="/contact"  ripple class="d-inline-block">
         <h4 class="light-blue--text"> Contact </h4>
         <v-icon x-large color="light-blue">contact_mail</v-icon>
       </v-tab>

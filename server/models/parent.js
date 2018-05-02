@@ -22,20 +22,28 @@ module.exports = Parent
 */
 
 let db = require('../config/db');
+const bcrypt = require('bcrypt');
 
 function handleError(e, rst){
     if(e){
         return {
-            staut: 500,
-            texte: e.toString()
+            statut: 500,
+            erreur: {
+                texte: e.toString()
+            }
         }
-    }else if(rst.rows == undefined  || rst.rows.length > 0){
+    }else if(rst.rows == undefined  || rst.rows.length == 0){
         return {
-            statut: 400, // bad
-            texte: 'Erreur le parent demandé n\'exsite pas'
+            statut: 404, // bad request
+            erreur: {
+                texte: 'Identifiants de connexion non valides'
+            }
         }
     }else{
-        return null
+        return {
+            statut: null,
+            erreur:null
+        }
     }
 }
 
@@ -52,9 +60,12 @@ let Parents = {
             function (err, rst) {
                 retour = {
                     erreur: null,
-                    parent: null
+                    parent: null,
+                    statut: null
                 };
-                retour.erreur = handleError(err, rst);
+               let e = handleError(err, rst);
+                retour.erreur = e.erreur
+                retour.statut = e.statut
                 if(retour.erreur == null){
                     retour.parent = {
                         id : rst.rows[0].id_parent, // peut etre qu'il faut pas le renvoyer
@@ -65,6 +76,7 @@ let Parents = {
                         email: rst.rows[0].mail,
                         profession: rst.rows[0].profession
                     }
+                    retour.statut = 200
                 }
                 callback(retour); // on passe en parametre l'objet retour
                 // il faudra verifier si une erreur existe ou non
@@ -79,27 +91,30 @@ let Parents = {
      */
     match: function(login, pwd, callback){
         db.query(
-            'SELECT * FROM public.Parent, public.Disposer D, public.Compte C WHERE C.identifiant_connexion=$1 and D.id_compte=C.id_compte and P.id_parent=D.id_parent',
+            'SELECT * FROM public.Parent P, public.Disposer D, public.Compte C WHERE C.identifiant_connexion=$1 and D.id_compte=C.id_compte and P.id_parent=D.id_parent',
             [login],
             function (err, rst) {
                 retour = {
                     erreur: null,
-                    parent: null
+                    parent: null,
+                    statut: null
                 };
-                retour.erreur = handleError(err, rst);
+                let e = handleError(err, rst);
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
                 if(retour.erreur == null){
                     // Load hash from your password DB.
                     bcrypt.compare(pwd, rst.rows[0].mot_de_passe, function(e, res) {
                         if(e){
                             retour.erreur = {
-                                statut: 500,
                                 texte: e.toString()
                             }
+                            retour.statut = 500
                         }else if(!res){
                             retour.erreur = {
-                                statut: 500,
                                 texte: 'Identifiants de connexion non valides'
                             }
+                            retour.statut = 500
                         }else{
                             retour.parent = {
                                 id : rst.rows[0].id_parent, // peut etre qu'il faut pas le renvoyer
@@ -110,6 +125,7 @@ let Parents = {
                                 email: rst.rows[0].mail,
                                 profession: rst.rows[0].profession
                             }
+                            retour.statut = 200
                         }
                         callback(retour);
                     });
@@ -130,9 +146,12 @@ let Parents = {
         db.query('SELECT * FROM public.Parent','', function (err, rslt) {
             retour = {
                 erreur: null,
-                parents: null
+                parents: null,
+                statut: null
             };
-            retour.erreur = handleError(err, rst);
+            let e = handleError(err, rst);
+            retour.erreur = e.erreur;
+            retour.statut = e.statut;
             if(retour.erreur == null){
                 var array = []
                 for(var i; i < rslt.rows.length; i++){
@@ -146,6 +165,8 @@ let Parents = {
                         profession: rst.rows[i].profession
                     })
                 }
+                retour.parents = array;
+                retour.statut = 200
             }
             callback(retour); // on passe en parametre l'objet retour
             // il faudra verifier si une erreur existe ou non
@@ -158,7 +179,11 @@ let Parents = {
      * @param callback
      */
     create: function (parent, callback) {
-
+        db.query("INSERT INTO public.parent(id_parent, nom_de_naissance, nom_d_usage, prenom_parent, telephone, mail, profession) VALUES ('', $1, $2, $3, $4, $5, $6)",
+            [],
+            function () {
+                
+            })
     }
 };
 

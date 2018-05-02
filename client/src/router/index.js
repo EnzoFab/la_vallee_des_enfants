@@ -17,7 +17,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Accueil',
+      name: 'index',
       component: Accueil,
       meta: {title: 'Accueil'}
     },
@@ -29,7 +29,7 @@ export default new Router({
     },
     {
       path: '/home',
-      name: 'Accueil',
+      name: 'home',
       component: Accueil,
       meta: {title: 'Accueil'}
     },

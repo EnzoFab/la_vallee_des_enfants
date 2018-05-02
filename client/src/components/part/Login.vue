@@ -1,55 +1,55 @@
 <template>
-  <v-container align-start fluid>
-    <v-layout row wrap>
-      <v-flex  xs12 md6 offset-md3 class="my-5">
-        <v-card>
-          <v-toolbar :color="toolbarColor" dark>
-            <v-spacer></v-spacer>
-            <v-toolbar-title>{{titre}}</v-toolbar-title>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-          <v-card-text>
-            <v-form v-model="estValide" ref="form">
-              <v-text-field
-                label="login"
-                color="light-blue darken-4"
-                v-model.trim="login"
-                :rules="loginRules"
-                required
-              ></v-text-field>
-              <!--<v-text-field
-                label="E-mail" v-else
-                v-model="email"
-                :rules="emailRules"
-                required
-              ></v-text-field> -->
-              <v-text-field
-                name="input-10-2"
-                label="Mot de passe"
-                :append-icon="visible ? 'visibility_off' : 'visibility'"
-                :append-icon-cb="() => (visible = !visible)"
-                v-model="mdp"
-                :type="visible ? 'text' : 'password'"
-                :rules="pwdRules"
-              ></v-text-field>
-              <br>
-              <div :class="error" v-html="error" />
-              <br>
-              <v-btn
-                :color="btnColor"
-                depressed large round
-                :dark="estValide"
-                @click="envoyer"
-                :disabled="!estValide"
-              >
-                Envoyer
-              </v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-layout row wrap>
+  <v-flex  xs12 md6 offset-md3 class="my-5">
+    <v-card>
+      <v-toolbar :color="toolbarColor" dark>
+        <v-spacer></v-spacer>
+        <v-toolbar-title>{{titre}}</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
+      <v-card-text>
+        <v-form v-model="estValide" ref="form">
+          <v-text-field
+            label="login"
+            color="light-blue darken-4"
+            v-model.trim="login"
+            :rules="loginRules"
+            required
+            prepend-icon="assignment_ind"
+          ></v-text-field>
+          <!--<v-text-field
+            label="E-mail" v-else
+            v-model="email"
+            :rules="emailRules"
+            required
+          ></v-text-field> -->
+          <v-text-field
+            name="input-10-2"
+            label="Mot de passe"
+            :append-icon="visible ? 'visibility_off' : 'visibility'"
+            :append-icon-cb="() => (visible = !visible)"
+            v-model="mdp"
+            :type="visible ? 'text' : 'password'"
+            :rules="pwdRules"
+            required
+            prepend-icon="vpn_key"
+          ></v-text-field>
+          <br>
+          <br>
+          <v-btn
+            :color="btnColor"
+            depressed large round
+            :dark="estValide"
+            @click="envoyer"
+            :disabled="!estValide"
+          >
+            Envoyer
+          </v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-flex>
+</v-layout>
 </template>
 
 <script>
@@ -76,7 +76,6 @@ export default {
     connexion: '',
     login: '',
     visible: false,
-    error: '',
     pwdRules: [
       v => !!v || 'Veuillez remplir le mot de passe'
     ],
@@ -85,7 +84,7 @@ export default {
       v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'email n\'est pas valide '
     ],
     loginRules: [
-      v => !!v || 'Veuillez remplir le connexion'
+      v => !!v || 'Veuillez remplir le login'
     ],
     estValide: false
   }),
@@ -109,8 +108,7 @@ export default {
       } */
     },
     clearForm () {
-      this.login = ''
-      this.mdp = ''
+      this.$refs.form.reset()
       /* if (this.estAssMat) {
         this.login = ''
         this.mdp = ''

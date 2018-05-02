@@ -1,242 +1,243 @@
 
-CREATE TABLE public."Enfant"
+create table public."enfant"
 (
-    id_enfant character varying NOT NULL,
-    nom_enfant character varying(255) NOT NULL,
-    prenom_enfant character varying(255) NOT NULL,
-    date_naissance_enfant date NOT NULL,
-    sexe character varying(1) NOT NULL,
-    CONSTRAINT "Enfant_pkey" PRIMARY KEY (id_enfant)
+    id_enfant serial primary key,
+    nom_enfant character varying(255) not null,
+    prenom_enfant character varying(255) not null,
+    date_naissance_enfant date not null,
+    sexe character varying(1) not null
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."Parent"
-
--- DROP TABLE public."Parent";
-
-CREATE TABLE public."Parent"
+create table public."evenement"
 (
-    id_parent character varying NOT NULL,
-    nom_de_naissance character varying(255) NOT NULL,
-    nom_d_usage character varying(255) NOT NULL,
-    prenom_parent character varying(255) NOT NULL,
-    telephone character varying(10) NOT NULL,
-    mail character varying(255) NOT NULL,
-    profession character varying(255),
-    CONSTRAINT "Parent_pkey" PRIMARY KEY (id_parent)
-)
-WITH (
-    OIDS = FALSE
+    id_evenement serial primary key,
+    libelle_evenement character varying (255) not null,
+    date_debut date not null,
+    date_fin date not null
+)with (
+    oids = false
 );
 
--- Table: public."AssMat"
+-- table: public."parent"
 
--- DROP TABLE public."AssMat";
+-- drop table public."parent";
 
-CREATE TABLE public."AssMat"
+create table public."parent"
 (
-    id_am character varying NOT NULL,
-    nom_naissance_am character varying(255) NOT NULL,
-    prenom_am character varying(255) NOT NULL,
-    tel_am character varying(10) NOT NULL,
-    nb_semaines_conges integer NOT NULL,
-    date_naissance_am date NOT NULL,
-    ville_naissance_am character varying(255) NOT NULL,
-    numero_ss character varying NOT NULL,
-    date_agrement date NOT NULL,
-    reference_agrement character varying NOT NULL,
-    assurance_resp_civile character varying NOT NULL,
-    num_police character varying NOT NULL,
-    login character varying(255) NOT NULL,
-    mot_de_passe_am character varying NOT NULL,
-    CONSTRAINT "AssMat_pkey" PRIMARY KEY (id_am)
+    id_parent serial primary key,
+    nom_de_naissance character varying(255) not null,
+    nom_d_usage character varying(255) not null,
+    prenom_parent character varying(255) not null,
+    telephone character varying(10) not null,
+    mail character varying(255) not null,
+    profession character varying(255)
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."TypeContrat"
+-- table: public."assmat"
 
--- DROP TABLE public."TypeContrat";
+-- drop table public."assmat";
 
-CREATE TABLE public."TypeContrat"
+create table public."assmat"
 (
-    id_type character varying(5) NOT NULL,
-    nom_type character varying(255) NOT NULL,
-    CONSTRAINT "TypeContrat_pkey" PRIMARY KEY (id_type)
+    id_am serial primary key,
+    nom_naissance_am character varying(255) not null,
+    prenom_am character varying(255) not null,
+    tel_am character varying(10) not null,
+    nb_semaines_conges integer not null,
+    date_naissance_am date not null,
+    ville_naissance_am character varying(255) not null,
+    numero_ss character varying not null,
+    date_agrement date not null,
+    reference_agrement character varying not null,
+    assurance_resp_civile character varying not null,
+    num_police character varying not null,
+    login character varying(255) not null,
+    mot_de_passe_am character varying not null
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."TypeJour"
+-- table: public."typecontrat"
 
--- DROP TABLE public."TypeJour";
+-- drop table public."typecontrat";
 
-CREATE TABLE public."TypeJour"
+create table public."typecontrat"
 (
-    id_type character varying NOT NULL,
-    libelle character varying NOT NULL,
-    CONSTRAINT "TypeJour_pkey" PRIMARY KEY (id_type)
+    id_type serial primary key,
+    nom_type character varying(255) not null
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."Post"
+-- table: public."typejour"
 
--- DROP TABLE public."Post";
+-- drop table public."typejour";
 
-CREATE TABLE public."Post"
+create table public."typejour"
 (
-    id_post character varying NOT NULL,
-    date_post date NOT NULL,
-    texte text NOT NULL,
-    image bytea NOT NULL,
-    id_am character varying NOT NULL,
-    CONSTRAINT "Post_pkey" PRIMARY KEY (id_post),
-    CONSTRAINT "Post_id_am_fkey" FOREIGN KEY (id_am)
-        REFERENCES public."AssMat" (id_am) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_type serial primary key,
+    libelle character varying not null
 )
-WITH (
-    OIDS = FALSE
-);
--- Table: public."PeriodeConges"
-
--- DROP TABLE public."PeriodeConges";
-
-CREATE TABLE public."PeriodeConges"
-(
-    "dateDebut" date NOT NULL,
-    "dateFin" date NOT NULL,
-    id_periode character varying NOT NULL,
-    CONSTRAINT "PeriodeConges_pkey" PRIMARY KEY (id_periode)
-)
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."EtreEnConges"
+-- table: public."post"
 
--- DROP TABLE public."EtreEnConges";
+-- drop table public."post";
 
-CREATE TABLE public."EtreEnConges"
+create table public."post"
 (
-    id_am character varying NOT NULL,
-    id_periode character varying NOT NULL,
-    CONSTRAINT "EtreEnConges_pkey" PRIMARY KEY (id_am, id_periode),
-    CONSTRAINT "EtreEnConges_id_am_fkey" FOREIGN KEY (id_am)
-        REFERENCES public."AssMat" (id_am) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "EtreEnConges_id_periode_fkey" FOREIGN KEY (id_periode)
-        REFERENCES public."PeriodeConges" (id_periode) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_post serial primary key,
+    date_post date not null,
+    texte text not null,
+    image bytea not null,
+    id_am integer not null,
+    constraint "post_id_am_fkey" foreign key (id_am)
+        references public."assmat" (id_am) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
+);
+-- table: public."periodeconges"
+
+-- drop table public."periodeconges";
+
+create table public."periodeconges"
+(
+    "datedebut" date not null,
+    "datefin" date not null,
+    id_periode serial primary key
+
+)
+with (
+    oids = false
 );
 
--- Table: public."APourParent"
+-- table: public."etreenconges"
 
--- DROP TABLE public."APourParent";
+-- drop table public."etreenconges";
 
-CREATE TABLE public."APourParent"
+create table public."etreenconges"
 (
-    id_enfant character varying NOT NULL,
-    id_parent character varying NOT NULL,
-    CONSTRAINT "APourParent_pkey" PRIMARY KEY (id_enfant, id_parent),
-    CONSTRAINT "APourParent_id_enfant_fkey" FOREIGN KEY (id_enfant)
-        REFERENCES public."Enfant" (id_enfant) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "APourParent_id_parent_fkey" FOREIGN KEY (id_parent)
-        REFERENCES public."Parent" (id_parent) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_am integer not null,
+    id_periode integer not null,
+    constraint "etreenconges_pkey" primary key (id_am, id_periode),
+    constraint "etreenconges_id_am_fkey" foreign key (id_am)
+        references public."assmat" (id_am) match simple
+        on update no action
+        on delete no action,
+    constraint "etreenconges_id_periode_fkey" foreign key (id_periode)
+        references public."periodeconges" (id_periode) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."Compte"
+-- table: public."apourparent"
 
--- DROP TABLE public."Compte";
+-- drop table public."apourparent";
 
-CREATE TABLE public."Compte"
+create table public."apourparent"
 (
-    id_compte character varying(5) NOT NULL,
-    identifiant_connexion character varying NOT NULL,
-    CONSTRAINT "Compte_pkey" PRIMARY KEY (id_compte)
+    id_enfant integer not null,
+    id_parent integer not null,
+    constraint "apourparent_pkey" primary key (id_enfant, id_parent),
+    constraint "apourparent_id_enfant_fkey" foreign key (id_enfant)
+        references public."enfant" (id_enfant) match simple
+        on update no action
+        on delete no action,
+    constraint "apourparent_id_parent_fkey" foreign key (id_parent)
+        references public."parent" (id_parent) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."Disposer"
+-- table: public."compte"
 
--- DROP TABLE public."Disposer";
+-- drop table public."compte";
 
-CREATE TABLE public."Disposer"
+create table public."compte"
 (
-    id_parent character varying NOT NULL,
-    id_compte character varying NOT NULL,
-    mot_de_passe character varying NOT NULL,
-    CONSTRAINT "Disposer_pkey" PRIMARY KEY (id_compte, id_parent),
-    CONSTRAINT "Disposer_id_compte_fkey" FOREIGN KEY (id_compte)
-        REFERENCES public."Compte" (id_compte) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "Disposer_id_parent_fkey" FOREIGN KEY (id_parent)
-        REFERENCES public."Parent" (id_parent) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_compte serial primary key,
+    identifiant_connexion character varying not null
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."ModeDePaiement"
+-- table: public."disposer"
 
--- DROP TABLE public."ModeDePaiement";
+-- drop table public."disposer";
 
-CREATE TABLE public."ModeDePaiement"
+create table public."disposer"
 (
-    id_mode character varying NOT NULL,
-    nom_mode character varying(255) NOT NULL,
-    CONSTRAINT "ModeDePaiement_pkey" PRIMARY KEY (id_mode)
+    id_parent integer not null,
+    id_compte integer not null,
+    mot_de_passe character varying not null,
+    constraint "disposer_pkey" primary key (id_compte, id_parent),
+    constraint "disposer_id_compte_fkey" foreign key (id_compte)
+        references public."compte" (id_compte) match simple
+        on update no action
+        on delete no action,
+    constraint "disposer_id_parent_fkey" foreign key (id_parent)
+        references public."parent" (id_parent) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."Frais"
+-- table: public."modedepaiement"
 
--- DROP TABLE public."Frais";
+-- drop table public."modedepaiement";
 
-CREATE TABLE public."Frais"
+create table public."modedepaiement"
 (
-    id_frais character varying NOT NULL,
-    nom_frais character varying NOT NULL,
-    tarif numeric NOT NULL,
-    CONSTRAINT "Frais_pkey" PRIMARY KEY (id_frais)
+    id_mode serial primary key,
+    nom_mode character varying(255) not null
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."Contrat"
+-- table: public."frais"
 
--- DROP TABLE public."Contrat";
+-- drop table public."frais";
 
-CREATE TABLE public."Contrat"
+create table public."frais"
 (
-    id_contrat character varying NOT NULL,
+    id_frais serial primary key,
+    nom_frais character varying not null,
+    tarif numeric not null
+)
+with (
+    oids = false
+);
+
+-- table: public."contrat"
+
+-- drop table public."contrat";
+
+create table public."contrat"
+(
+    id_contrat character varying primary key,
     date_paiement date,
     date_debut date,
     nb_semaines_conges_parents integer,
@@ -245,99 +246,96 @@ CREATE TABLE public."Contrat"
     taux_majore numeric,
     date_deb_periode_adaptation date,
     date_fin_periode_adaptation date,
-    id_enfant character varying NOT NULL,
-    id_mode_paiement character varying,
-    id_am character varying NOT NULL,
-    CONSTRAINT "Contrat_pkey" PRIMARY KEY (id_contrat),
-    CONSTRAINT "Contrat_id_am_fkey" FOREIGN KEY (id_am)
-        REFERENCES public."AssMat" (id_am) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "Contrat_id_enfant_fkey" FOREIGN KEY (id_enfant)
-        REFERENCES public."Enfant" (id_enfant) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "Contrat_id_mode_paiement_fkey" FOREIGN KEY (id_mode_paiement)
-        REFERENCES public."ModeDePaiement" (id_mode) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_enfant integer not null,
+    id_mode_paiement integer,
+    id_am integer not null,
+    constraint "contrat_id_am_fkey" foreign key (id_am)
+        references public."assmat" (id_am) match simple
+        on update no action
+        on delete no action,
+    constraint "contrat_id_enfant_fkey" foreign key (id_enfant)
+        references public."enfant" (id_enfant) match simple
+        on update no action
+        on delete no action,
+    constraint "contrat_id_mode_paiement_fkey" foreign key (id_mode_paiement)
+        references public."modedepaiement" (id_mode) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."PresenceTheorique"
+-- table: public."presencetheorique"
 
--- DROP TABLE public."PresenceTheorique";
+-- drop table public."presencetheorique";
 
-CREATE TABLE public."PresenceTheorique"
+create table public."presencetheorique"
 (
-    heure_arrivee time without time zone NOT NULL,
-    heure_depart time without time zone NOT NULL,
-    prend_gouter boolean NOT NULL,
-    id_contrat character varying NOT NULL,
-    id_type_jour character varying NOT NULL,
-    id_presence_theorique character varying NOT NULL,
-    CONSTRAINT "PresenceTheorique_pkey" PRIMARY KEY (id_presence_theorique),
-    CONSTRAINT "PresenceTheorique_id_contrat_fkey" FOREIGN KEY (id_contrat)
-        REFERENCES public."Contrat" (id_contrat) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "PresenceTheorique_id_type_jour_fkey" FOREIGN KEY (id_type_jour)
-        REFERENCES public."TypeJour" (id_type) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    heure_arrivee time without time zone not null,
+    heure_depart time without time zone not null,
+    prend_gouter boolean not null,
+    id_contrat  character varying not null,
+    id_type_jour integer not null,
+    id_presence_theorique serial,
+    constraint "presencetheorique_pkey" primary key (id_presence_theorique),
+    constraint "presencetheorique_id_contrat_fkey" foreign key (id_contrat)
+        references public."contrat" (id_contrat) match simple
+        on update no action
+        on delete no action,
+    constraint "presencetheorique_id_type_jour_fkey" foreign key (id_type_jour)
+        references public."typejour" (id_type) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
 
--- Table: public."FactureMensuelle"
+-- table: public."facturemensuelle"
 
--- DROP TABLE public."FactureMensuelle";
+-- drop table public."facturemensuelle";
 
-CREATE TABLE public."FactureMensuelle"
+create table public."facturemensuelle"
 (
-    id_facture character varying NOT NULL,
-    date_debut date NOT NULL,
-    date_fin date NOT NULL,
-    nb_jours_activite integer NOT NULL,
-    nb_heures_normales numeric NOT NULL,
-    nb_heures_supp numeric NOT NULL,
-    nb_jours_conges_payes integer NOT NULL,
-    id_contrat character varying NOT NULL,
-    CONSTRAINT "FactureMensuelle_pkey" PRIMARY KEY (id_facture),
-    CONSTRAINT "FactureMensuelle_id_contrat_fkey" FOREIGN KEY (id_contrat)
-        REFERENCES public."Contrat" (id_contrat) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_facture serial primary key,
+    date_debut date not null,
+    date_fin date not null,
+    nb_jours_activite integer not null,
+    nb_heures_normales numeric not null,
+    nb_heures_supp numeric not null,
+    nb_jours_conges_payes integer not null,
+    id_contrat  character varying not null,
+    constraint "facturemensuelle_id_contrat_fkey" foreign key (id_contrat)
+        references public."contrat" (id_contrat) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );
--- Table: public."PresenceReelle"
+-- table: public."presencereelle"
 
--- DROP TABLE public."PresenceReelle";
+-- drop table public."presencereelle";
 
-CREATE TABLE public."PresenceReelle"
+create table public."presencereelle"
 (
-    "datePresenceReelle" date,
+    "datepresencereelle" date,
     heure_arrivee_r time without time zone,
     heure_depart_r time without time zone,
     prend_gouter_r boolean,
-    id_presence_theo character varying NOT NULL,
-    id_presence_reelle character varying NOT NULL,
-    id_facture character varying,
-    CONSTRAINT "PresenceReelle_pkey" PRIMARY KEY (id_presence_reelle),
-    CONSTRAINT "PresenceReelle_id_facture_fkey" FOREIGN KEY (id_facture)
-        REFERENCES public."FactureMensuelle" (id_facture) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "PresenceReelle_id_presence_theo_fkey" FOREIGN KEY (id_presence_theo)
-        REFERENCES public."PresenceTheorique" (id_presence_theorique) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id_presence_theo integer,
+    id_presence_reelle serial primary key,
+    id_facture integer,
+    constraint "presencereelle_id_facture_fkey" foreign key (id_facture)
+        references public."facturemensuelle" (id_facture) match simple
+        on update no action
+        on delete no action,
+    constraint "presencereelle_id_presence_theo_fkey" foreign key (id_presence_theo)
+        references public."presencetheorique" (id_presence_theorique) match simple
+        on update no action
+        on delete no action
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 );

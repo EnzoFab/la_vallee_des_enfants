@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex  xs12 md6 offset-md3 class="my-5">
 
-        <v-toolbar :color="toolbarColor" class="pink lighten-4">
+        <v-toolbar class="pink lighten-4">
           <v-spacer></v-spacer>
           <v-toolbar-title>Planning d'accueil</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -125,7 +125,7 @@
 
 <script>
 export default {
-  name: 'PlanningEnfant',
+  name: 'PlaningPresenceContrat',
   data () {
     return {
       ex4: ['Prend_goûter'],
@@ -156,16 +156,14 @@ export default {
       minutes: [
         { minute: '00' },
         { minute: '30' }
-      ],
-      }
-    },
-
+      ]
+    }
+  },
   methods: {
     afficheLundi () {
-
+      console.log('ee')
     }
   }
-
 }
 </script>
 

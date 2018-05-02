@@ -20,7 +20,17 @@ function jwtSignAssMat(assmat) {
 
 module.exports = {
     // TODO modifier la connexion parents voir s'il faut deplacer la fonction dans la route
-    loginParent(req, res) {
+    loginParent(req, res, next){
+        var login = req.body.login;
+        var pwd = req.body.mdp
+        modelParent.match(login, pwd, function (retour) {
+            if(retour.erreur == null){
+                retour.token = jwtSignParent(retour.parent)
+            }
+            res.statut(retour.statut).send(retour)
+        })
+    },
+    /*loginParent(req, res) {
         // var email = req.body.email
         var login = req.body.login
         var mdp = req.body.mdp
@@ -55,7 +65,7 @@ module.exports = {
                 }
             }
         })
-    },
+    }, */
     loginAssMat(req, res) {
         var login = req.body.login
         var mdp = req.body.mdp

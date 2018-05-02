@@ -17,26 +17,24 @@ var usersRouter = require('./routes/users');
 var parentRouter = require('./routes/parent');
 var evenementRouter = require('./routes/evenement');
 
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/parents', parentRouter);
-app.use('/evenements', evenementRouter);
-
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
+// use it before all view definitions
+app.use(cors({origin: '*'}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// use it before all view definitions
-app.use(cors({origin: '*'}))
+/* ======================  ROUTES ================================================ */
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/parents', parentRouter);
+app.use('/evenements', evenementRouter);
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 
 // catch 404 and forward to error handler

@@ -1,18 +1,19 @@
 <template>
   <div id="app">
     <v-app light>
-      <drawer v-if="drawer"></drawer>
       <Toolbar v-on:toogleDrawer="toogleDrawer" class="lightOpcity"></Toolbar>
-      <v-content>
-        <transition name="custom-classes-transition"
-                    enter-active-class="animated fadeIn"
-                    leave-active-class="animated bounceOutDown"
-                    mode="out-in"
-                    :duration="500"
-        >
-          <router-view />
-        </transition>
-      </v-content>
+      <v-container>
+        <v-content>
+          <transition name="custom-classes-transition"
+                      enter-active-class="animated fadeIn"
+                      leave-active-class="animated bounceOutDown"
+                      mode="out-in"
+                      :duration="500"
+          >
+            <router-view />
+          </transition>
+        </v-content>
+      </v-container>
       <Footer></Footer>
     </v-app>
   </div>
