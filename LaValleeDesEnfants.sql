@@ -61,6 +61,7 @@ CREATE TABLE public.tuteur
     telephone character varying(10) COLLATE "default".pg_catalog NOT NULL,
     profession character varying(255) COLLATE "default".pg_catalog,
     id_type_tuteur integer NOT NULL,
+    telephone_pro character varying COLLATE "default".pg_catalog,
     CONSTRAINT parent_pkey PRIMARY KEY (id_tuteur),
     CONSTRAINT tuteur_id_type_tuteur_fkey FOREIGN KEY (id_type_tuteur)
         REFERENCES public.typetuteur (id_type_tuteur) MATCH SIMPLE
@@ -69,8 +70,7 @@ CREATE TABLE public.tuteur
 )
 WITH (
     OIDS = FALSE
-);
-
+)
 -- Table: public.apourtuteur
 
 -- DROP TABLE public.apourtuteur;
@@ -208,6 +208,26 @@ create table public."etreenconges"
 with (
     oids = false
 );
+
+-- Table: public.employeur
+
+-- DROP TABLE public.employeur;
+
+CREATE TABLE public.employeur
+(
+    id_employeur integer NOT NULL DEFAULT nextval('employeur_id_employeur_seq'::regclass),
+    nom_naissance_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    nom_usage_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    rue_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    cp_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    ville_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    email_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    telephone_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    CONSTRAINT employeur_pkey PRIMARY KEY (id_employeur)
+)
+WITH (
+    OIDS = FALSE
+)
 
 -- Table: public.compte
 
