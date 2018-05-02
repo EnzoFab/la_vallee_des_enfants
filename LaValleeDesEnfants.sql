@@ -1,23 +1,23 @@
-drop table if exists disposer cascade;
-drop table if exists apourparent cascade;
-drop table if exists apourtuteur cascade;
-drop table if exists parent cascade;
-drop table if exists assmat cascade;
-drop table if exists compte cascade;
-drop table if exists contrat cascade;
-drop table if exists employeur cascade;
-drop table if exists enfant cascade;
-drop table if exists etreenconges cascade;
-drop table if exists evenement cascade;
-drop table if exists facturemensuelle cascade;
-drop table if exists periodeconges cascade;
-drop table if exists post cascade;
-drop table if exists presencereelle cascade;
-drop table if exists presencetheorique cascade;
-drop table if exists tuteur cascade;
-drop table if exists typecontrat cascade;
-drop table if exists typejour cascade;
-drop table if exists typetuteur cascade;
+drop table if exists public."disposer" cascade;
+drop table if exists public."apourparent" cascade;
+drop table if exists public."apourtuteur" cascade;
+drop table if exists public."parent" cascade;
+drop table if exists public."assmat" cascade;
+drop table if exists public."compte" cascade;
+drop table if exists public."contrat" cascade;
+drop table if exists public."employeur" cascade;
+drop table if exists public."enfant" cascade;
+drop table if exists public."etreenconges" cascade;
+drop table if exists public."evenement" cascade;
+drop table if exists public."facturemensuelle" cascade;
+drop table if exists public."periodeconges" cascade;
+drop table if exists public."post" cascade;
+drop table if exists public."presencereelle" cascade;
+drop table if exists public."presencetheorique" cascade;
+drop table if exists public."tuteur" cascade;
+drop table if exists public."typecontrat" cascade;
+drop table if exists public."typejour" cascade;
+drop table if exists public."typetuteur" cascade;
 
 
 
