@@ -25,36 +25,38 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 const bcrypt = require('bcrypt');
 
-
-
-let Parents = {
+let Employeurs = {
 
     /**
      *
-     * @param email : Mail du parent
+     * @param email : Mail de l'employeur
      * @param callback : doit prendre un unique parametre
      */
     findOne: function (email, callback) {
-        db.query('SELECT * FROM public.Parent P WHERE P.mail=$1',
+        db.query('SELECT * FROM public.employeur E WHERE E.mail_employeur=$1',
             [email],
             function (err, rst) {
                 retour = {
                     erreur: null,
-                    parent: null,
+                    employeur: null,
                     statut: null
                 };
-               let e = helper.handleError(err, rst,'Le parent demandé n\'existe pas');
+               let e = helper.handleError(err, rst,"L'employeur demandé n\'existe pas");
                 retour.erreur = e.erreur
                 retour.statut = e.statut
                 if(retour.erreur == null){
-                    retour.parent = {
-                        id : rst.rows[0].id_parent, // peut etre qu'il faut pas le renvoyer
-                        nom_naissance: rst.rows[0].nom_de_naissance,
-                        nom_usage: rst.rows[0].nom_d_usage,
-                        prenom: rst.rows[0].prenom,
-                        num_tel: rst.rows[0].tel,
-                        email: rst.rows[0].mail,
-                        profession: rst.rows[0].profession
+                    retour.employeur = {
+                        id : rst.rows[0].id_employeur, // peut etre qu'il faut pas le renvoyer
+                        nom_naissance: rst.rows[0].nom_naissance_employeur,
+                        nom_usage: rst.rows[0].nom_usage_employeur,
+                        prenom: rst.rows[0].prenom_employeur,
+                        rue: rst.rows[0].rue_employeur,
+                        cp: rst.rows[0].cp_employeur,
+                        ville: rst.rows[0].ville_employeur,
+                        mail: rst.rows[0].mail_employeur,
+                        tel: rst.rows[0].telephone_employeur,
+                        identifiant: rst.rows[0].identifiant_connexion,
+                        mdp: rst.rows[0].mot_de_passe
                     }
                     retour.statut = 200
                 }
@@ -71,12 +73,12 @@ let Parents = {
      */
     match: function(login, pwd, callback){
         db.query(
-            'SELECT * FROM public.Parent P, public.Disposer D, public.Compte C WHERE C.identifiant_connexion=$1 and D.id_compte=C.id_compte and P.id_parent=D.id_parent',
+            'SELECT * FROM public.employeur E WHERE E.identifiant_connexion=$1',
             [login],
             function (err, rst) {
                 retour = {
                     erreur: null,
-                    parent: null,
+                    employeur: null,
                     statut: null
                 };
                 let e = helper.handleError(err, rst,'Identifiants de connexion non valides');
@@ -96,14 +98,19 @@ let Parents = {
                             }
                             retour.statut = 500
                         }else{
-                            retour.parent = {
-                                id : rst.rows[0].id_parent, // peut etre qu'il faut pas le renvoyer
-                                nom_naissance: rst.rows[0].nom_de_naissance,
-                                nom_usage: rst.rows[0].nom_d_usage,
-                                prenom: rst.rows[0].prenom,
-                                num_tel: rst.rows[0].tel,
-                                email: rst.rows[0].mail,
-                                profession: rst.rows[0].profession
+                            retour.employeur = {
+                                id : rst.rows[0].id_employeur, // peut etre qu'il faut pas le renvoyer
+                                nom_naissance: rst.rows[0].nom_naissance_employeur,
+                                nom_usage: rst.rows[0].nom_usage_employeur,
+                                prenom: rst.rows[0].prenom_employeur,
+                                rue: rst.rows[0].rue_employeur,
+                                cp: rst.rows[0].cp_employeur,
+                                ville: rst.rows[0].ville_employeur,
+                                mail: rst.rows[0].mail_employeur,
+                                tel: rst.rows[0].telephone_employeur,
+                                identifiant: rst.rows[0].identifiant_connexion,
+                                mdp: rst.rows[0].mot_de_passe
+
                             }
                             retour.statut = 200
                         }
@@ -123,10 +130,10 @@ let Parents = {
      * @param callback
      */
     getAll: function (callback) {
-        db.query('SELECT * FROM public.Parent','', function (err, rslt) {
+        db.query('SELECT * FROM public.employeur','', function (err, rslt) {
             retour = {
                 erreur: null,
-                parents: null,
+                employeurs: null,
                 statut: null
             };
             let e = helper.handleError(err, rst,'Aucun parents');
@@ -136,16 +143,20 @@ let Parents = {
                 var array = []
                 for(var i = 0; i < rslt.rows.length; i++){
                     array.push({
-                        id : rst.rows[i].id_parent, // peut etre qu'il faut pas le renvoyer
-                        nom_naissance: rst.rows[i].nom_de_naissance,
-                        nom_usage: rst.rows[i].nom_d_usage,
-                        prenom: rst.rows[i].prenom,
-                        num_tel: rst.rows[i].tel,
-                        email: rst.rows[i].mail,
-                        profession: rst.rows[i].profession
+                        id : rst.rows[0].id_employeur, // peut etre qu'il faut pas le renvoyer
+                        nom_naissance: rst.rows[0].nom_naissance_employeur,
+                        nom_usage: rst.rows[0].nom_usage_employeur,
+                        prenom: rst.rows[0].prenom_employeur,
+                        rue: rst.rows[0].rue_employeur,
+                        cp: rst.rows[0].cp_employeur,
+                        ville: rst.rows[0].ville_employeur,
+                        mail: rst.rows[0].mail_employeur,
+                        tel: rst.rows[0].telephone_employeur,
+                        identifiant: rst.rows[0].identifiant_connexion,
+                        mdp: rst.rows[0].mot_de_passe
                     })
                 }
-                retour.parents = array;
+                retour.employeurs = array;
                 retour.statut = 200
             }
             callback(retour); // on passe en parametre l'objet retour
@@ -155,11 +166,11 @@ let Parents = {
 
     /**
      *
-     * @param parent: un objet javascript
+     * @param employeur: un objet javascript
      * @param callback
      */
-    create: function (parent, callback) {
-        db.query("INSERT INTO public.parent(id_parent, nom_de_naissance, nom_d_usage, prenom_parent, telephone, mail, profession) VALUES ('', $1, $2, $3, $4, $5, $6)",
+    create: function (employeur, callback) {
+        db.query("INSERT INTO public.employeur(nom_naissance_employeur, nom_usage_employeur, prenom_employeur, rue_employeur, cp_employeur, ville_employeur, mail_employeur, telephone_employeur, identifiant_connexion, mot_de_passe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
             [],
             function () {
                 
@@ -167,4 +178,4 @@ let Parents = {
     }
 };
 
-module.exports = Parents;
+module.exports = Employeurs;

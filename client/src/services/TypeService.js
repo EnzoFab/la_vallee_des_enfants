@@ -12,5 +12,8 @@ export default {
   },
   typeTuteur () {
     return Api().get('typeTuteur/all')
+  },
+  indemnitesJour () {
+    return Api.get('frais/indemnites')
   }
 }

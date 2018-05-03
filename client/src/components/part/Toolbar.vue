@@ -19,6 +19,10 @@
         <h4 class="light-blue--text"> Contact </h4>
         <v-icon x-large color="light-blue">contact_mail</v-icon>
       </v-tab>
+      <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
+        <h4 class="blue--text"> Inscription </h4>
+        <v-icon x-large color="blue">assignment</v-icon>
+      </v-tab>
 
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
@@ -48,7 +52,7 @@ export default {
     return {
       menus: [
         {id: 1, icon: 'face', iconClass: 'transparent grey--text', title: 'Assistante maternelle', route: '/assistante/connexion'},
-        {id: 2, icon: 'wc', iconClass: 'transparent lighten-1 grey--text', title: 'Parents', route: '/parent/connexion'}
+        {id: 2, icon: 'wc', iconClass: 'transparent lighten-1 grey--text', title: 'Parents', route: '/employeur/connexion'}
       ]
     }
   },
@@ -62,5 +66,10 @@ export default {
 </script>
 
 <style scoped>
+  h1, h2, h3, span {
+    font-size: 25px;
+    font-family: 'Handlee', cursive;;
+
+  }
 
 </style>
