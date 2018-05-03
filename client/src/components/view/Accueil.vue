@@ -14,7 +14,7 @@
      <v-layout column wrap class="my-5" align-center>
        <v-flex xs6>
          <div class="text-xs-center">
-           <h1 class="bl"  >La vallée des enfants en bref</h1>
+           <h1 class="bl2"  >La vallée des enfants en bref</h1>
            <span class="subheading">
                <p>
                  Cette association existe pour coordonner toutes les initiatives susceptibles d'améliorer les conditions d'accueil des enfants.
@@ -31,10 +31,10 @@
              <v-flex xs6>
                <v-card class="elevation-0 transparent">
                  <v-card-text class="text-xs-center">
-                   <v-icon x-large class="grey--text transparent">child_friendly</v-icon>
+                   <v-icon x-large class="blue--text transparent">child_friendly</v-icon>
                  </v-card-text>
                  <v-card-title primary-title class="layout justify-center">
-                   <div class="headline text-xs-center">Parents</div>
+                   <div class="headline text-xs-center bl2">Parents</div>
                  </v-card-title>
                  <p>
                    Trouvez une place dans notre crèche pour votre enfant
@@ -45,10 +45,10 @@
              <v-flex xs6>
                <v-card class="elevation-0 transparent">
                  <v-card-text class="text-xs-center">
-                   <v-icon x-large class="grey--text transparent">child_care</v-icon>
+                   <v-icon x-large class="transparent blue--text" >child_care</v-icon>
                  </v-card-text>
                  <v-card-title primary-title class="layout justify-center">
-                   <div class="headline">Notre mission</div>
+                   <div class="headline text-xs-center bl2">Notre mission</div>
                  </v-card-title>
                  <p>
                    Garantir le bonheur de votre enfant
@@ -114,6 +114,7 @@ export default {
 <style scoped>
 h1, h2, span {
   font-size: 30px;
+  font-family: 'Handlee', cursive;
 }
 ul {
   list-style-type: none;
@@ -121,6 +122,7 @@ ul {
 }
 p {
   font-size: 20px;
+  font-family: 'Handlee', cursive;;
 }
 li {
   display: inline-block;
@@ -129,8 +131,9 @@ li {
 a {
   color: #42b983;
 }
-.bl {
+.bl2 {
   color: #58a0cc;
+  font-family: 'Handlee', cursive;
 }
 #carous{
   height: 95vh;

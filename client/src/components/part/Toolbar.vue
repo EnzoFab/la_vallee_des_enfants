@@ -66,5 +66,10 @@ export default {
 </script>
 
 <style scoped>
+  h1, h2, h3, span {
+    font-size: 30px;
+    font-family: 'Handlee', cursive;;
+
+  }
 
 </style>
