@@ -17,8 +17,8 @@ var usersRouter = require('./routes/users');
 var parentRouter = require('./routes/parent');
 var evenementRouter = require('./routes/evenement');
 var modeDePaiement = require('./routes/modeDePaiement');
-var typeDeContrat = require('./routes/typeDeContrat')
-
+var typeDeContrat = require('./routes/typeDeContrat');
+var frais = require('./routes/frais');
 // use it before all view definitions
 app.use(cors({origin: '*'}))
 app.use(logger('dev'));
@@ -34,6 +34,7 @@ app.use('/parents', parentRouter);
 app.use('/evenements', evenementRouter);
 app.use('/modepaiements', modeDePaiement);
 app.use('/typeContrat', typeDeContrat);
+app.use('/frais', frais)
 
 
 // view engine setup
