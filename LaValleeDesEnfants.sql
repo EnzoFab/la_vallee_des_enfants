@@ -60,7 +60,7 @@ CREATE TABLE public.tuteur
     profession character varying(255),
     id_type_tuteur integer NOT NULL,
     telephone_pro character varying,
-    CONSTRAINT parent_pkey PRIMARY KEY (id_tuteur),
+    CONSTRAINT tuteur_pkey PRIMARY KEY (id_tuteur),
     CONSTRAINT tuteur_id_type_tuteur_fkey FOREIGN KEY (id_type_tuteur)
         REFERENCES public.typetuteur (id_type_tuteur) MATCH SIMPLE
         ON UPDATE NO ACTION
