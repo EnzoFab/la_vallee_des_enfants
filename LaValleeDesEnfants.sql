@@ -3,7 +3,6 @@ drop table if exists public."apourparent" cascade;
 drop table if exists public."apourtuteur" cascade;
 drop table if exists public."parent" cascade;
 drop table if exists public."assmat" cascade;
-drop table if exists public."compte" cascade;
 drop table if exists public."contrat" cascade;
 drop table if exists public."employeur" cascade;
 drop table if exists public."enfant" cascade;
@@ -224,31 +223,14 @@ CREATE TABLE public.employeur
     ville_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     mail_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     telephone_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    identifiant_connexion character varying COLLATE "default".pg_catalog NOT NULL,
+    mot_de_passe character varying COLLATE "default".pg_catalog NOT NULL,
     CONSTRAINT employeur_pkey PRIMARY KEY (id_employeur)
 )
 WITH (
     OIDS = FALSE
 )
 
--- Table: public.compte
-
--- DROP TABLE public.compte;
-
-CREATE TABLE public.compte
-(
-    id_compte serial NOT NULL DEFAULT nextval('compte_id_compte_seq'::regclass),
-    identifiant_connexion character varying COLLATE "default".pg_catalog NOT NULL,
-    mot_de_passe character varying COLLATE "default".pg_catalog NOT NULL,
-    id_employeur integer,
-    CONSTRAINT compte_pkey PRIMARY KEY (id_compte),
-    CONSTRAINT compte_id_employeur_fkey FOREIGN KEY (id_employeur)
-        REFERENCES public.employeur (id_employeur) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-WITH (
-    OIDS = FALSE
-);
 
 -- table: public."modedepaiement"
 
@@ -294,15 +276,15 @@ CREATE TABLE public.contrat
     id_enfant integer,
     id_mode_paiement integer,
     id_am integer NOT NULL,
-    id_compte integer,
+    id_employeur integer,
     jour_paiement integer,
     CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat),
     CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
         REFERENCES public.assmat (id_am) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT contrat_id_compte_fkey FOREIGN KEY (id_compte)
-        REFERENCES public.compte (id_compte) MATCH SIMPLE
+    CONSTRAINT employeur_id_employeur_fkey FOREIGN KEY (id_employeur)
+        REFERENCES public.employeur (id_employeur) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT contrat_id_enfant_fkey FOREIGN KEY (id_enfant)
