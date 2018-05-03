@@ -1,5 +1,5 @@
 <template>
-  <v-footer height="auto">
+  <v-footer height="auto" >
     <v-card
       flat
       tile
