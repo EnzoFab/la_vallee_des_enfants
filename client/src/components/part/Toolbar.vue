@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
   h1, h2, h3, span {
-    font-size: 30px;
+    font-size: 25px;
     font-family: 'Handlee', cursive;;
 
   }
