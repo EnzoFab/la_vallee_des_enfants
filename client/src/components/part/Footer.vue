@@ -13,8 +13,8 @@
           <v-icon x-large>fab fa-facebook</v-icon>
         </v-btn>
       </v-card-text>
-      <v-card-text class="white--text pt-0">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+      <v-card-text class="white--text pt-0 bl2">
+        Vous recherchez une place en crèche ? La vallée des enfants propose différentes solutions d’accueil aux parents. Expertes dans l’accueil de l’enfant en crèche, les assistantes maternelles agrées proposent également des solutions d’accompagnement aux associations. Pour plus d'informations veuillez nous contacter via la rubrique "Contact" située en haut de cette page.
       </v-card-text>
     </v-card>
   </v-footer>
@@ -27,5 +27,8 @@ export default {
 </script>
 
 <style scoped>
-
+  .bl2 {
+    font-size: 20px;
+    font-family: 'Handlee', cursive;;
+  }
 </style>

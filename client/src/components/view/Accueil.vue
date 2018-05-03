@@ -65,7 +65,7 @@
    <section>
      <v-parallax src="/static/toy.jpg" height="400">
        <v-layout column align-center justify-center>
-         <div class="headline white--text mb-3 text-xs-center">Phrase generer contrat</div>
+         <div class="headline white--text mb-3 text-xs-center">J'essaie un contrat</div>
          <v-btn class="blue-grey darken-1" dark large to="/contrat/simulation">
            Simulation de contrat
            <v-icon right dark>send</v-icon>
@@ -79,7 +79,7 @@
        <v-flex xs12 sm4 class="my-3">
          <div class="text-xs-center">
            <v-icon x-large color="red">fa-map-marker-alt</v-icon>
-           <h1>Retrouvez nous</h1>
+           <h1 class="bl2">Retrouvez nous</h1>
          </div>
        </v-flex>
      </v-layout>
