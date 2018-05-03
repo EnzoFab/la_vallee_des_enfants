@@ -34,11 +34,11 @@
                    <v-icon x-large class="grey--text transparent">child_friendly</v-icon>
                  </v-card-text>
                  <v-card-title primary-title class="layout justify-center">
-                   <div class="headline text-xs-center">Phrase accroche 1</div>
+                   <div class="headline text-xs-center">Parents</div>
                  </v-card-title>
-                 <v-card-text>
-                   texte à venir
-                 </v-card-text>
+                 <p>
+                   Trouvez une place dans notre crèche pour votre enfant
+                 </p>
                </v-card>
              </v-flex>
 
@@ -48,11 +48,11 @@
                    <v-icon x-large class="grey--text transparent">child_care</v-icon>
                  </v-card-text>
                  <v-card-title primary-title class="layout justify-center">
-                   <div class="headline">Phrase accroche 2</div>
+                   <div class="headline">Notre mission</div>
                  </v-card-title>
-                 <v-card-text>
-                   text à venir
-                 </v-card-text>
+                 <p>
+                   Garantir le bonheur de votre enfant
+                 </p>
                </v-card>
              </v-flex>
 
