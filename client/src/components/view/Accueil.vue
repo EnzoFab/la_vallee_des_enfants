@@ -14,9 +14,13 @@
      <v-layout column wrap class="my-5" align-center>
        <v-flex xs6>
          <div class="text-xs-center">
-           <h2 class="headline">La vallée des enfants existe pour coordonner toutes les initiatives susceptibles d'améliorer les conditions d'accueil des enfants.</h2>
+           <h1 class="bl"  >La vallée des enfants en bref</h1>
            <span class="subheading">
-               Chaque enfant est pris en compte dans son individualité mais il a l'avantage d'être en collectivité.
+               <p>
+                 Cette association existe pour coordonner toutes les initiatives susceptibles d'améliorer les conditions d'accueil des enfants.
+                 <br>
+                 Chaque enfant est pris en compte dans son individualité mais il a l'avantage d'être en collectivité.
+               </p>
               </span>
          </div>
        </v-flex>
@@ -109,11 +113,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2, span {
-  font-weight: normal;
+  font-size: 30px;
 }
 ul {
   list-style-type: none;
   padding: 0;
+}
+p {
+  font-size: 20px;
 }
 li {
   display: inline-block;
@@ -121,6 +128,9 @@ li {
 }
 a {
   color: #42b983;
+}
+.bl {
+  color: #58a0cc;
 }
 #carous{
   height: 95vh;
