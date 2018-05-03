@@ -94,64 +94,6 @@
       </v-layout>
     </v-form>
   </v-flex>
-
-  <!--<v-card>
-    <v-layout row wrap>
-      <v-flex  xs12 md6 offset-md3 class="my-5">
-        <v-toolbar color="light-green lighten-4">
-          <v-spacer></v-spacer>
-          <v-toolbar-title>Informations de l'enfant</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-        <v-form>
-          <v-text-field
-            label="Nom de l'enfant"
-            color="light-blue darken-4"
-            required
-          ></v-text-field>
-          <v-text-field
-            label="Prénom de l'enfant"
-            color="light-blue darken-4"
-            required
-          ></v-text-field>
-          <h3>Sexe</h3>
-          <v-radio-group v-model="row" mandatory="true" row>
-            <v-spacer></v-spacer>
-            <v-radio label="Une fille" value="F" ></v-radio>
-            <v-radio label="Un garçon" value="G"></v-radio>
-            <v-spacer></v-spacer>
-          </v-radio-group>
-          <v-spacer></v-spacer>
-          <h3>Date de naissance :</h3>
-          <v-flex xs12 sm6 md4>
-            <v-dialog
-              ref="dialog"
-              persistent
-              v-model="modal"
-              lazy
-              full-width
-              width="290px"
-              :return-value.sync="date"
-            >
-              <v-text-field
-                slot="activator"
-                label="Date de naissance"
-                v-model="date"
-                prepend-icon="event"
-                readonly
-                required
-              ></v-text-field>
-              <v-date-picker v-model="date" scrollable day-format="fr" locale="fr">
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
-              </v-date-picker>
-            </v-dialog>
-          </v-flex>
-        </v-form>
-      </v-flex>
-    </v-layout>
-  </v-card> -->
 </template>
 
 <script>

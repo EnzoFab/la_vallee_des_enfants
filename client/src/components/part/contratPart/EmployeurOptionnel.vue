@@ -31,7 +31,7 @@
             <v-text-field
               label="Prénom"
               v-model="prenom"
-              :rules="regleNom"
+              :rules="reglePrenom"
               prepend-icon="person_outline"
               required
             ></v-text-field>
@@ -93,7 +93,6 @@
             <v-text-field
               label="Téléphone 2"
               v-model="telephone2"
-              :rules="regleTel"
               prepend-icon="phone"
             ></v-text-field>
           </v-flex>
@@ -107,7 +106,6 @@
             <v-text-field
               label="Profession"
               v-model="profession"
-              :rules="regleNom"
               prepend-icon="business_center"
             ></v-text-field>
           </v-flex>
@@ -115,7 +113,6 @@
             <v-text-field
               label="Téléphone Professionnel"
               v-model="telephonePro"
-              :rules="regleTel"
               prepend-icon="contact_phone"
             ></v-text-field>
           </v-flex>
@@ -141,7 +138,45 @@
 
 <script>
 export default {
-  name: 'EmployeurOptionnel'
+  name: 'EmployeurOptionnel',
+  data () {
+    return {
+      nomNaissance: null,
+      nomUsage: null,
+      prenom: null,
+      adresse: null,
+      codePostal: null,
+      ville: null,
+      email: null,
+      telephone1: null,
+      telephone2: null,
+      profession: null,
+      telephonePro: null,
+      estValide: false,
+      reglePrenom: [
+        v => !!v || 'Veuillez saisir le prénom'
+      ],
+      regleNom: [
+        v => !!v || 'Veuillez saisir le nom'
+      ],
+      regleAdresse: [
+        v => !!v || 'Veuillez saisir l\'adresse'
+      ],
+      regleCodeP: [
+        v => !!v || 'Veuillez saisir le code postal'
+      ],
+      regleVille: [
+        v => !!v || 'Veuillez saisir la ville'
+      ],
+      regleMail: [
+        v => !!v || 'Veuillez saisir l\'email',
+        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'email n\'est pas valide '
+      ],
+      regleTel: [
+        v => !!v || 'Veuillez saisir un téléphone'
+      ]
+    }
+  }
 }
 </script>
 
