@@ -49,14 +49,36 @@
               required
               prepend-icon="assignment_ind"
             ></v-text-field>
-            <v-text-field
-              label="Date de naissance"
-              color="light-blue darken-4"
-              v-model.trim="dateNaiss"
-              :rules="dateNaissRules"
-              required
-              prepend-icon="assignment_ind"
-            ></v-text-field>
+            <v-menu
+              ref="dateNaissMenu"
+              lazy
+              :close-on-content-click="false"
+              v-model="dateNaissMenu"
+              transition="scale-transition"
+              offset-y
+              full-width
+              :nudge-right="40"
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                color="blue"
+                label="Date de naissance"
+                v-model="dateNaissFr"
+                prepend-icon="event"
+                required
+                :rules="dateNaissRules"
+                readonly
+              ></v-text-field>
+              <v-date-picker
+                locale="fr_FR"
+                v-model="dateNaiss"
+                no-title
+                scrollable
+              >
+                <v-spacer></v-spacer>
+              </v-date-picker>
+            </v-menu>
             <v-text-field
               label="Ville de naissance"
               color="light-blue darken-4"
@@ -73,14 +95,36 @@
               required
               prepend-icon="assignment_ind"
             ></v-text-field>
-            <v-text-field
-              label="Date d'agrément"
-              color="light-blue darken-4"
-              v-model.trim="dateAgr"
-              :rules="dateAgrRules"
-              required
-              prepend-icon="assignment_ind"
-            ></v-text-field>
+            <v-menu
+              ref="dateAgrMenu"
+              lazy
+              :close-on-content-click="false"
+              v-model="dateAgrMenu"
+              transition="scale-transition"
+              offset-y
+              full-width
+              :nudge-right="40"
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                color="blue"
+                label="Date d'agrément"
+                v-model="dateAgrFr"
+                prepend-icon="event"
+                required
+                :rules="dateAgrRules"
+                readonly
+              ></v-text-field>
+              <v-date-picker
+                locale="fr_FR"
+                v-model="dateAgr"
+                no-title
+                scrollable
+              >
+                <v-spacer></v-spacer>
+              </v-date-picker>
+            </v-menu>
             <v-text-field
               label="Référence d'agrément"
               color="light-blue darken-4"
@@ -148,6 +192,8 @@
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import AuthentificationService from '../../services/AuthentificationService'
+let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
+
 export default {
   mixins: [validationMixin],
   validations: {
@@ -168,15 +214,17 @@ export default {
 
   },
   data: () => ({
+    dateNaissMenu: false,
+    dateAgrMenu: false,
     nomNaissance: '',
     nomUsage: '',
     prenom: '',
     tel: '',
     nbConges: '',
-    dateNaiss: '',
+    dateNaiss: null,
     villeNaiss: '',
     numSS: '',
-    dateAgr: '',
+    dateAgr: null,
     refAgr: '',
     assResp: '',
     numPolice: '',
@@ -229,6 +277,30 @@ export default {
 
     estValide: false
   }),
+  computed: {
+    dateNaissFr () { // transforme la date qui est en format anglaise en format francaise
+      var dateString = null
+      if (this.dateNaiss != null) {
+        var d = new Date(this.dateNaiss)
+        let day = d.getDate()
+        let month = mois[d.getMonth()]
+        let year = d.getFullYear()
+        dateString = day + ' ' + month + ' ' + year
+      }
+      return dateString
+    },
+    dateAgrFr () { // transforme la date qui est en format anglaise en format francaise
+      var dateString = null
+      if (this.dateAgr != null) {
+        var d = new Date(this.dateAgr)
+        let day = d.getDate()
+        let month = mois[d.getMonth()]
+        let year = d.getFullYear()
+        dateString = day + ' ' + month + ' ' + year
+      }
+      return dateString
+    }
+  },
   methods: {
     async inscription () {
       const data = {assMat: {nomNaissance: this.nomNaissance, nomUsage: this.nomUsage, prenom: this.prenom, tel: this.tel, nbConges: this.nbConges, dateNaiss: this.dateNaiss, villeNaiss: this.villeNaiss, numSS: this.numSS, dateAgr: this.dateAgr, refAgr: this.refAgr, assResp: this.assResp, numPolice: this.numPolice, login: this.login, mdp: this.mdp}}
