@@ -41,8 +41,8 @@ with (
 
 CREATE TABLE public.typetuteur
 (
-    id_type_tuteur integer NOT NULL DEFAULT nextval('typetuteur_id_type_tuteur_seq'::regclass),
-    "nom_type-_tuteur" character varying COLLATE "default".pg_catalog NOT NULL,
+    id_type_tuteur serial NOT NULL DEFAULT nextval('typetuteur_id_type_tuteur_seq'::regclass),
+    "nom_type_tuteur" character varying COLLATE "default".pg_catalog NOT NULL,
     CONSTRAINT typetuteur_pkey PRIMARY KEY (id_type_tuteur)
 )
 WITH (
@@ -55,7 +55,7 @@ WITH (
 
 CREATE TABLE public.tuteur
 (
-    id_tuteur integer NOT NULL DEFAULT nextval('parent_id_parent_seq'::regclass),
+    id_tuteur serial NOT NULL DEFAULT nextval('parent_id_parent_seq'::regclass),
     nom_tuteur character varying COLLATE "default".pg_catalog NOT NULL,
     prenom_tuteur character varying COLLATE "default".pg_catalog NOT NULL,
     telephone character varying(10) COLLATE "default".pg_catalog NOT NULL,
@@ -110,6 +110,7 @@ create table public."assmat"
 (
     id_am serial primary key,
     nom_naissance_am character varying(255) not null,
+    nom_usage_am character varying(255) not null,
     prenom_am character varying(255) not null,
     tel_am character varying(10) not null,
     nb_semaines_conges integer not null,
@@ -178,8 +179,8 @@ with (
 
 create table public."periodeconges"
 (
-    "datedebut" date not null,
-    "datefin" date not null,
+    "date_debut" date not null,
+    "date_fin" date not null,
     id_periode serial primary key
 
 )
@@ -193,8 +194,8 @@ with (
 
 create table public."etreenconges"
 (
-    id_am integer not null,
-    id_periode integer not null,
+    id_am serial not null,
+    id_periode serial not null,
     constraint "etreenconges_pkey" primary key (id_am, id_periode),
     constraint "etreenconges_id_am_fkey" foreign key (id_am)
         references public."assmat" (id_am) match simple
@@ -215,13 +216,13 @@ with (
 
 CREATE TABLE public.employeur
 (
-    id_employeur integer NOT NULL DEFAULT nextval('employeur_id_employeur_seq'::regclass),
+    id_employeur serial NOT NULL DEFAULT nextval('employeur_id_employeur_seq'::regclass),
     nom_naissance_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     nom_usage_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     rue_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     cp_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     ville_employeur character varying COLLATE "default".pg_catalog NOT NULL,
-    email_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    mail_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     telephone_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     CONSTRAINT employeur_pkey PRIMARY KEY (id_employeur)
 )
@@ -235,7 +236,7 @@ WITH (
 
 CREATE TABLE public.compte
 (
-    id_compte integer NOT NULL DEFAULT nextval('compte_id_compte_seq'::regclass),
+    id_compte serial NOT NULL DEFAULT nextval('compte_id_compte_seq'::regclass),
     identifiant_connexion character varying COLLATE "default".pg_catalog NOT NULL,
     mot_de_passe character varying COLLATE "default".pg_catalog NOT NULL,
     id_employeur integer,
@@ -324,7 +325,7 @@ create table public."presencetheorique"
 (
     heure_arrivee time without time zone not null,
     heure_depart time without time zone not null,
-    prend_gouter boolean not null,
+    prends_gouter boolean not null,
     id_contrat  character varying not null,
     id_type_jour integer not null,
     id_presence_theorique serial,
@@ -373,7 +374,7 @@ create table public."presencereelle"
     "datepresencereelle" date,
     heure_arrivee_r time without time zone,
     heure_depart_r time without time zone,
-    prend_gouter_r boolean,
+    prends_gouter_r boolean,
     id_presence_theo integer,
     id_presence_reelle serial primary key,
     id_facture integer,
