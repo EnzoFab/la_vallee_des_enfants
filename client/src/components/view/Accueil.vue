@@ -14,9 +14,9 @@
      <v-layout column wrap class="my-5" align-center>
        <v-flex xs6>
          <div class="text-xs-center">
-           <h2 class="headline">En attente de punchline</h2>
+           <h2 class="headline">La vallée des enfants existe pour coordonner toutes les initiatives susceptibles d'améliorer les conditions d'accueil des enfants.</h2>
            <span class="subheading">
-                en attente d'une punchline
+               Chaque enfant est pris en compte dans son individualité mais il a l'avantage d'être en collectivité.
               </span>
          </div>
        </v-flex>
@@ -108,7 +108,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1, h2, span {
   font-weight: normal;
 }
 ul {
