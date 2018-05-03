@@ -218,6 +218,7 @@ CREATE TABLE public.employeur
     id_employeur SERIAL NOT NULL,
     nom_naissance_employeur character varying NOT NULL,
     nom_usage_employeur character varying NOT NULL,
+    prenom_employeur character varying NOT NULL,
     rue_employeur character varying NOT NULL,
     cp_employeur character varying NOT NULL,
     ville_employeur character varying NOT NULL,
