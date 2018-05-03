@@ -35,7 +35,7 @@ let Parents = {
      * @param callback : doit prendre un unique parametre
      */
     findOne: function (email, callback) {
-        db.query('SELECT * FROM public.Parent P WHERE P.mail=$1',
+        db.query('SELECT * FROM public.employeur E WHERE E.mail_employeur=$1',
             [email],
             function (err, rst) {
                 retour = {
@@ -48,13 +48,12 @@ let Parents = {
                 retour.statut = e.statut
                 if(retour.erreur == null){
                     retour.parent = {
-                        id : rst.rows[0].id_parent, // peut etre qu'il faut pas le renvoyer
-                        nom_naissance: rst.rows[0].nom_de_naissance,
-                        nom_usage: rst.rows[0].nom_d_usage,
-                        prenom: rst.rows[0].prenom,
-                        num_tel: rst.rows[0].tel,
-                        email: rst.rows[0].mail,
-                        profession: rst.rows[0].profession
+                        id : rst.rows[0].id_employeur, // peut etre qu'il faut pas le renvoyer
+                        nom_naissance: rst.rows[0].nom_naissance_employeur,
+                        nom_usage: rst.rows[0].nom_usage_employeur,
+                        prenom: rst.rows[0].prenom_employeur,
+                        num_tel: rst.rows[0].telephone_employeur,
+                        email: rst.rows[0].mail_employeur
                     }
                     retour.statut = 200
                 }
@@ -71,7 +70,7 @@ let Parents = {
      */
     match: function(login, pwd, callback){
         db.query(
-            'SELECT * FROM public.Parent P, public.Disposer D, public.Compte C WHERE C.identifiant_connexion=$1 and D.id_compte=C.id_compte and P.id_parent=D.id_parent',
+            'SELECT * FROM public.employeur E WHERE E.identifiant_connexion=$1',
             [login],
             function (err, rst) {
                 retour = {
@@ -97,13 +96,12 @@ let Parents = {
                             retour.statut = 500
                         }else{
                             retour.parent = {
-                                id : rst.rows[0].id_parent, // peut etre qu'il faut pas le renvoyer
-                                nom_naissance: rst.rows[0].nom_de_naissance,
-                                nom_usage: rst.rows[0].nom_d_usage,
-                                prenom: rst.rows[0].prenom,
-                                num_tel: rst.rows[0].tel,
-                                email: rst.rows[0].mail,
-                                profession: rst.rows[0].profession
+                                id : rst.rows[0].id_employeur, // peut etre qu'il faut pas le renvoyer
+                                nom_naissance: rst.rows[0].nom_naissance_employeur,
+                                nom_usage: rst.rows[0].nom_usage_employeur,
+                                prenom: rst.rows[0].prenom_employeur,
+                                num_tel: rst.rows[0].telephone_employeur,
+                                email: rst.rows[0].mail_employeur
                             }
                             retour.statut = 200
                         }
@@ -123,7 +121,7 @@ let Parents = {
      * @param callback
      */
     getAll: function (callback) {
-        db.query('SELECT * FROM public.Parent','', function (err, rslt) {
+        db.query('SELECT * FROM public.employeur','', function (err, rslt) {
             retour = {
                 erreur: null,
                 parents: null,
@@ -136,13 +134,12 @@ let Parents = {
                 var array = []
                 for(var i = 0; i < rslt.rows.length; i++){
                     array.push({
-                        id : rst.rows[i].id_parent, // peut etre qu'il faut pas le renvoyer
-                        nom_naissance: rst.rows[i].nom_de_naissance,
-                        nom_usage: rst.rows[i].nom_d_usage,
-                        prenom: rst.rows[i].prenom,
-                        num_tel: rst.rows[i].tel,
-                        email: rst.rows[i].mail,
-                        profession: rst.rows[i].profession
+                        id : rst.rows[i].id_employeur, // peut etre qu'il faut pas le renvoyer
+                        nom_naissance: rst.rows[i].nom_naissance_employeur,
+                        nom_usage: rst.rows[i].nom_usage_employeur,
+                        prenom: rst.rows[i].prenom_employeur,
+                        num_tel: rst.rows[i].telephone_employeur,
+                        email: rst.rows[i].mail_employeur
                     })
                 }
                 retour.parents = array;
@@ -159,7 +156,7 @@ let Parents = {
      * @param callback
      */
     create: function (parent, callback) {
-        db.query("INSERT INTO public.parent(id_parent, nom_de_naissance, nom_d_usage, prenom_parent, telephone, mail, profession) VALUES ('', $1, $2, $3, $4, $5, $6)",
+        db.query("INSERT INTO public.employeur(id_employeur, nom_naissance_employeur, nom_usage_employeur, prenom_employeur, rue_employeur, cp_employeur, ville_employeur, mail_employeur, telephone_employeur, identifiant_connexion, mot_de_passe) VALUES ('', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
             [],
             function () {
                 

@@ -4,6 +4,7 @@ import Accueil from '@/components/view/Accueil'
 import Contact from '@/components/view/Contact'
 import NotFound from '@/components/view/NotFound'
 import ConnexionAM from '@/components/view/ConnexionAssMat'
+import InscriptionAM from '@/components/view/Register'
 import ConnexionPA from '@/components/view/ConnexionParent'
 import SimulationContrat from '@/components/view/Simulation'
 import ToolbarParent from '@/components/part/ToolbarParent'
@@ -56,6 +57,12 @@ export default new Router({
       name: 'ConnexionAM',
       component: ConnexionAM,
       meta: {title: 'ConnexionAM'}
+    },
+    {
+      path: '/assistante/inscription',
+      name: 'InscriptionAM',
+      component: InscriptionAM,
+      meta: {title: 'InscriptionAM'}
     },
     {
       path: '/parent/connexion',

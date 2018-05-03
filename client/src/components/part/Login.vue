@@ -10,7 +10,7 @@
       <v-card-text>
         <v-form v-model="estValide" ref="form">
           <v-text-field
-            label="login"
+            label="Login"
             color="light-blue darken-4"
             v-model.trim="login"
             :rules="loginRules"
@@ -59,7 +59,7 @@ export default {
   name: 'Login',
   mixins: [validationMixin],
   validations: {
-    email: { required },
+    login: { required },
     mdp: { required },
     connexion: { required }
 
@@ -71,17 +71,12 @@ export default {
     titre: {String, required}
   },
   data: () => ({
-    email: '',
     mdp: '',
     connexion: '',
     login: '',
     visible: false,
     pwdRules: [
       v => !!v || 'Veuillez remplir le mot de passe'
-    ],
-    emailRules: [
-      v => !!v || 'Veuillez remplir l\'email',
-      v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'email n\'est pas valide '
     ],
     loginRules: [
       v => !!v || 'Veuillez remplir le login'

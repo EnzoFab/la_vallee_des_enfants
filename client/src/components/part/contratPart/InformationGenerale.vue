@@ -170,7 +170,7 @@ export default {
         console.log(e)
       }
     },
-    initNombreJour () { // remplies avec 28 jours
+    initNombreJour () { // remplis avec 28 jours
       for (var i = 1; i < 29; i++) {
         this.jours.push(i)
       }
