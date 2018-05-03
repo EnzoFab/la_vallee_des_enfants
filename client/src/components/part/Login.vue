@@ -104,14 +104,6 @@ export default {
     },
     clearForm () {
       this.$refs.form.reset()
-      /* if (this.estAssMat) {
-        this.login = ''
-        this.mdp = ''
-      } else {
-        this.$v.$reset()
-        this.email = ''
-        this.mdp = ''
-      } */
     }
   }
 }

@@ -7,15 +7,15 @@ export default new Vuex.Store({
   strict: true,
   state: {
     token: null,
-    parent: null,
+    employeur: null,
     assMat: null
   },
   mutations: {
     setToken (state, token) {
       state.token = token
     },
-    setParent (state, parent) {
-      state.parent = parent
+    setEmployeur (state, employeur) {
+      state.employeur = employeur
     },
     setAssMat (state, assMat) {
       state.assMat = assMat
@@ -25,8 +25,8 @@ export default new Vuex.Store({
     setToken ({commit}, token) {
       commit('setToken', token)
     },
-    setParent ({commit}, parent) {
-      commit('setParent', parent)
+    setEmployeur ({commit}, employeur) {
+      commit('setEmployeur', employeur)
     },
     setAssMat ({commit}, assMat) {
       commit('setAssMat', assMat)

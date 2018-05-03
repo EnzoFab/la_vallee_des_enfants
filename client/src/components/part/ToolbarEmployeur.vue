@@ -36,11 +36,11 @@
 
 <script>
 export default {
-  name: 'ToolbarAssMat',
+  name: 'ToolbarEmployeur',
   methods: {
     logout () {
       this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setParent', null)
+      this.$store.dispatch('setEmployeur', null)
       this.$router.push({
         name: 'Accueil'
       })

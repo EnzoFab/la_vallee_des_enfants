@@ -19,7 +19,7 @@
 import Login from '../part/Login'
 import AuthentificationService from '../../services/AuthentificationService'
 export default {
-  name: 'ConnexionPa',
+  name: 'ConnexionEmp',
   data: () => ({
     error: '',
     alert: false
@@ -35,9 +35,9 @@ export default {
         const response = await AuthentificationService.login(data)
         if (response.data.erreur == null) { // connexion reussie
           this.$store.dispatch('setToken', response.data.token)
-          this.$store.dispatch('setParent', response.data.parent)
+          this.$store.dispatch('setEmployeur', response.data.employeur)
           this.$router.push({
-            name: 'AccueilParent'
+            name: 'AccueilEmployeur'
           })
         } else {
           this.showError(response.data.erreur.texte)

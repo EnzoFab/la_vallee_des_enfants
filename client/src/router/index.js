@@ -5,9 +5,9 @@ import Contact from '@/components/view/Contact'
 import NotFound from '@/components/view/NotFound'
 import ConnexionAM from '@/components/view/ConnexionAssMat'
 import InscriptionAM from '@/components/view/Register'
-import ConnexionPA from '@/components/view/ConnexionParent'
+import ConnexionEmp from '@/components/view/ConnexionEmployeur'
 import SimulationContrat from '@/components/view/Simulation'
-import ToolbarParent from '@/components/part/ToolbarParent'
+import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
 import ToolbarAssMat from '@/components/part/ToolbarAssMat'
 import Evenement from '@/components/view/Evenements'
 
@@ -35,10 +35,10 @@ export default new Router({
       meta: {title: 'Accueil'}
     },
     {
-      path: '/parent/accueil',
-      name: 'AccueilParent',
-      component: ToolbarParent,
-      meta: {title: 'AccueilParent'}
+      path: '/employeur/accueil',
+      name: 'AccueilEmployeur',
+      component: ToolbarEmployeur,
+      meta: {title: 'AccueilEmployeur'}
     },
     {
       path: '/assMat/accueil',
@@ -65,10 +65,10 @@ export default new Router({
       meta: {title: 'InscriptionAM'}
     },
     {
-      path: '/parent/connexion',
-      name: 'ConnexionPA',
-      component: ConnexionPA,
-      meta: {title: 'ConnexionPA'}
+      path: '/employeur/connexion',
+      name: 'ConnexionEmp',
+      component: ConnexionEmp,
+      meta: {title: 'ConnexionEmp'}
     },
     {
       path: '/contrat/simulation',
