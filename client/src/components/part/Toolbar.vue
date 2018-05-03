@@ -20,8 +20,8 @@
         <v-icon x-large color="light-blue">contact_mail</v-icon>
       </v-tab>
       <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
-        <h4 class="light-blue--text"> Inscription </h4>
-        <v-icon x-large color="light-blue">assignment</v-icon>
+        <h4 class="blue--text"> Inscription </h4>
+        <v-icon x-large color="blue">assignment</v-icon>
       </v-tab>
 
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
