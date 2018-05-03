@@ -3,7 +3,6 @@ drop table if exists public."apourparent" cascade;
 drop table if exists public."apourtuteur" cascade;
 drop table if exists public."parent" cascade;
 drop table if exists public."assmat" cascade;
-drop table if exists public."compte" cascade;
 drop table if exists public."contrat" cascade;
 drop table if exists public."employeur" cascade;
 drop table if exists public."enfant" cascade;
@@ -41,8 +40,8 @@ with (
 
 CREATE TABLE public.typetuteur
 (
-    id_type_tuteur integer NOT NULL DEFAULT nextval('typetuteur_id_type_tuteur_seq'::regclass),
-    "nom_type-_tuteur" character varying COLLATE "default".pg_catalog NOT NULL,
+    id_type_tuteur serial NOT NULL DEFAULT nextval('typetuteur_id_type_tuteur_seq'::regclass),
+    "nom_type_tuteur" character varying COLLATE "default".pg_catalog NOT NULL,
     CONSTRAINT typetuteur_pkey PRIMARY KEY (id_type_tuteur)
 )
 WITH (
@@ -55,7 +54,7 @@ WITH (
 
 CREATE TABLE public.tuteur
 (
-    id_tuteur integer NOT NULL DEFAULT nextval('parent_id_parent_seq'::regclass),
+    id_tuteur serial NOT NULL DEFAULT nextval('parent_id_parent_seq'::regclass),
     nom_tuteur character varying COLLATE "default".pg_catalog NOT NULL,
     prenom_tuteur character varying COLLATE "default".pg_catalog NOT NULL,
     telephone character varying(10) COLLATE "default".pg_catalog NOT NULL,
@@ -70,7 +69,7 @@ CREATE TABLE public.tuteur
 )
 WITH (
     OIDS = FALSE
-)
+);
 -- Table: public.apourtuteur
 
 -- DROP TABLE public.apourtuteur;
@@ -90,7 +89,7 @@ CREATE TABLE public.apourtuteur
 )
 WITH (
     OIDS = FALSE
-)
+);
 
 create table public."evenement"
 (
@@ -110,6 +109,7 @@ create table public."assmat"
 (
     id_am serial primary key,
     nom_naissance_am character varying(255) not null,
+    nom_usage_am character varying(255) not null,
     prenom_am character varying(255) not null,
     tel_am character varying(10) not null,
     nb_semaines_conges integer not null,
@@ -178,8 +178,8 @@ with (
 
 create table public."periodeconges"
 (
-    "datedebut" date not null,
-    "datefin" date not null,
+    "date_debut" date not null,
+    "date_fin" date not null,
     id_periode serial primary key
 
 )
@@ -193,8 +193,8 @@ with (
 
 create table public."etreenconges"
 (
-    id_am integer not null,
-    id_periode integer not null,
+    id_am serial not null,
+    id_periode serial not null,
     constraint "etreenconges_pkey" primary key (id_am, id_periode),
     constraint "etreenconges_id_am_fkey" foreign key (id_am)
         references public."assmat" (id_am) match simple
@@ -215,39 +215,22 @@ with (
 
 CREATE TABLE public.employeur
 (
-    id_employeur integer NOT NULL DEFAULT nextval('employeur_id_employeur_seq'::regclass),
+    id_employeur serial NOT NULL DEFAULT nextval('employeur_id_employeur_seq'::regclass),
     nom_naissance_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     nom_usage_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     rue_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     cp_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     ville_employeur character varying COLLATE "default".pg_catalog NOT NULL,
-    email_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    mail_employeur character varying COLLATE "default".pg_catalog NOT NULL,
     telephone_employeur character varying COLLATE "default".pg_catalog NOT NULL,
+    identifiant_connexion character varying COLLATE "default".pg_catalog NOT NULL,
+    mot_de_passe character varying COLLATE "default".pg_catalog NOT NULL,
     CONSTRAINT employeur_pkey PRIMARY KEY (id_employeur)
 )
 WITH (
     OIDS = FALSE
-)
-
--- Table: public.compte
-
--- DROP TABLE public.compte;
-
-CREATE TABLE public.compte
-(
-    id_compte integer NOT NULL DEFAULT nextval('compte_id_compte_seq'::regclass),
-    identifiant_connexion character varying COLLATE "default".pg_catalog NOT NULL,
-    mot_de_passe character varying COLLATE "default".pg_catalog NOT NULL,
-    id_employeur integer,
-    CONSTRAINT compte_pkey PRIMARY KEY (id_compte),
-    CONSTRAINT compte_id_employeur_fkey FOREIGN KEY (id_employeur)
-        REFERENCES public.employeur (id_employeur) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-WITH (
-    OIDS = FALSE
 );
+
 
 -- table: public."modedepaiement"
 
@@ -293,15 +276,15 @@ CREATE TABLE public.contrat
     id_enfant integer,
     id_mode_paiement integer,
     id_am integer NOT NULL,
-    id_compte integer,
+    id_employeur integer,
     jour_paiement integer,
     CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat),
     CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
         REFERENCES public.assmat (id_am) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT contrat_id_compte_fkey FOREIGN KEY (id_compte)
-        REFERENCES public.compte (id_compte) MATCH SIMPLE
+    CONSTRAINT employeur_id_employeur_fkey FOREIGN KEY (id_employeur)
+        REFERENCES public.employeur (id_employeur) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT contrat_id_enfant_fkey FOREIGN KEY (id_enfant)
@@ -324,7 +307,7 @@ create table public."presencetheorique"
 (
     heure_arrivee time without time zone not null,
     heure_depart time without time zone not null,
-    prend_gouter boolean not null,
+    prends_gouter boolean not null,
     id_contrat  character varying not null,
     id_type_jour integer not null,
     id_presence_theorique serial,
@@ -373,7 +356,7 @@ create table public."presencereelle"
     "datepresencereelle" date,
     heure_arrivee_r time without time zone,
     heure_depart_r time without time zone,
-    prend_gouter_r boolean,
+    prends_gouter_r boolean,
     id_presence_theo integer,
     id_presence_reelle serial primary key,
     id_facture integer,
