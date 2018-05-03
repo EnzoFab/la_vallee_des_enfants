@@ -69,7 +69,7 @@ CREATE TABLE public.tuteur
 )
 WITH (
     OIDS = FALSE
-)
+);
 -- Table: public.apourtuteur
 
 -- DROP TABLE public.apourtuteur;
@@ -89,7 +89,7 @@ CREATE TABLE public.apourtuteur
 )
 WITH (
     OIDS = FALSE
-)
+);
 
 create table public."evenement"
 (
@@ -229,7 +229,7 @@ CREATE TABLE public.employeur
 )
 WITH (
     OIDS = FALSE
-)
+);
 
 
 -- table: public."modedepaiement"
