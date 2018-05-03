@@ -14,7 +14,8 @@ require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var parentRouter = require('./routes/parent');
+var EmployeurRouter = require('./routes/employeur');
+var assMatRouter = require('./routes/assmat');
 var evenementRouter = require('./routes/evenement');
 var modeDePaiement = require('./routes/modeDePaiement');
 var typeDeContrat = require('./routes/typeDeContrat');
@@ -30,7 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 /* ======================  ROUTES ================================================ */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/parents', parentRouter);
+app.use('/employeurs', EmployeurRouter);
+app.use('/assmats', assMatRouter);
 app.use('/evenements', evenementRouter);
 app.use('/modepaiements', modeDePaiement);
 app.use('/typeContrat', typeDeContrat);

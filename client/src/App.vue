@@ -2,7 +2,6 @@
   <div id="app">
     <v-app light>
       <Toolbar v-on:toogleDrawer="toogleDrawer" class="lightOpcity"></Toolbar>
-      <v-container>
         <v-content>
           <transition name="custom-classes-transition"
                       enter-active-class="animated fadeIn"
@@ -12,9 +11,8 @@
           >
             <router-view />
           </transition>
-        </v-content>
-      </v-container>
       <Footer></Footer>
+        </v-content>
     </v-app>
   </div>
 </template>
