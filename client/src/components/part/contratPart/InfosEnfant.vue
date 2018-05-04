@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import AuthentificationService from '../../../services/AuthentificationService'
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'InfosEnfant',
@@ -131,12 +132,13 @@ export default {
     save (date) {
       this.$refs.menu.save(date)
     },
-    submit () {
-      let data = {
-        prenom: this.prenom,
-        nom: this.nom,
-        sexe: this.sexe,
-        date_naissance: new Date(this.date)
+    async submit () {
+      let data = {enfant: {prenom: this.prenom, nom: this.nom, sexe: this.sexe, date_naissance: this.date}}
+      try {
+        await AuthentificationService.createContratEnfant(data)
+      } catch (error) {
+        console.log(error)
+        this.error = error.response.data.error
       }
       console.log(data.date_naissance)
       this.$emit('submit', data)

@@ -20,6 +20,7 @@ var evenementRouter = require('./routes/evenement');
 var modeDePaiement = require('./routes/modeDePaiement');
 var typeDeContrat = require('./routes/typeDeContrat');
 var typeTuteur = require('./routes/typeTuteurs');
+var enfant = require('./routes/enfant');
 
 var typeDeContrat = require('./routes/typeDeContrat');
 var frais = require('./routes/frais');
@@ -40,7 +41,8 @@ app.use('/evenements', evenementRouter);
 app.use('/modepaiements', modeDePaiement);
 app.use('/typeContrat', typeDeContrat);
 app.use('/typeTuteur', typeTuteur);
-app.use('/frais', frais)
+app.use('/frais', frais);
+app.use('/enfants', enfant);
 
 
 // view engine setup
