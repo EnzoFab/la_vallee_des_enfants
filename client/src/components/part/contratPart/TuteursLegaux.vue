@@ -57,7 +57,7 @@
 
                   <v-flex md6 lg6 xl6 sm12 xs12>
                     <v-text-field
-                      label="Prenom"
+                      label="Prénom"
                       :rules="reglePrenom"
                       :counter="50"
                       v-model="tuteur.prenom"
@@ -76,7 +76,7 @@
 
                   <v-flex md6 lg6 xl6sm12 xs12>
                     <v-text-field
-                      label="Telelphone"
+                      label="Téléphone"
                       v-model="tuteur.telephone"
                       :rules="regleTel"
                       required
@@ -85,7 +85,7 @@
                   </v-flex>
                   <v-flex md6 lg6 xl6 sm12 xs12>
                     <v-text-field
-                      label="Tel Professionnel"
+                      label="Téléphone Professionnel"
                       prepend-icon="phone"
                       v-model="tuteur.telephonePro"
                       :rules="regleTel"
@@ -99,11 +99,11 @@
                   </v-flex>
                   <v-subheader v-if="tuteur.estDemandeur">Adresse</v-subheader>
                   <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field label="ville"></v-text-field>
+                    <v-text-field label="Ville"></v-text-field>
                   </v-flex>
                   <v-flex md6 lg6 xl6 sm12 xs12>
                     <v-text-field v-if="tuteur.estDemandeur"
-                      label="code postal"
+                      label="Code Postal"
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
