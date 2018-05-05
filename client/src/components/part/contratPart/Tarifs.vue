@@ -8,16 +8,14 @@
     </v-toolbar>
 
     <v-flex mt-3>
-      <v-form>
+      <v-form v-model="estValide">
         <v-layout>
           <v-flex offset-md1 md10>
             <h3>Nombre de semaines d'accueil</h3>
             <v-text-field
               v-model="nbSemAccueil"
-              :rules="regleSemaine"
               prepend-icon="date_range"
-              disabled="true"
-              required
+              disabled
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -31,7 +29,7 @@
                   v-model= "calculerSalBrut"
                   :rules="regleSalaire"
                   prepend-icon="monetization_on"
-                  required
+                  disabled
                 ></v-text-field>
               </v-flex>
               <v-flex md11>
@@ -47,7 +45,7 @@
                 <v-layout>
                   <v-text-field
                     label="Majoration"
-                    value="25"
+                    v-model="majoration"
                     :rules="regleMajo"
                     prepend-icon="add_circle_outline"
                     required
@@ -60,7 +58,7 @@
           <v-flex mt-5 md6>
             <v-card height="150">
               <h2 align="center">Salaire mensuel : </h2>
-              <span class="display-3"> {{ salaireMensuel }}€ </span>
+              <span class="display-3"> {{ salaireMensuel }} € </span>
             </v-card>
           </v-flex>
         </v-layout>
@@ -69,11 +67,10 @@
             <v-flex md11>
               <h3>Indémnités journalières</h3>
               <v-text-field
-                :items="indemniteJour"
-                :rules="regleIndem"
+                v-model="indemniteJour"
+                :rules="regleTarif"
                 prepend-icon="bubble_chart"
-                disabled="true"
-                required
+                disabled
               ></v-text-field>
             </v-flex>
           </v-flex>
@@ -81,12 +78,10 @@
             <v-flex md11>
               <h3>Goûter</h3>
               <v-text-field
-                label="prix du goûter"
                 v-model="gouter"
-                :rules="regleGouter"
+                :rules="regleTarif"
                 prepend-icon="restaurant"
-                disabled="true"
-                required
+                disabled
               ></v-text-field>
             </v-flex>
           </v-flex>
@@ -97,12 +92,12 @@
       <v-btn
         class="yellow lighten-2"
         depressed large round
-        @click="cancel"
+        @click="annuler"
       >Annuler</v-btn>
       <v-btn
         depressed large round
         class="yellow lighten-2"
-        @click="submit"
+        @click="envoyer"
         :disabled="!estValide"
       >Suivant</v-btn>
     </v-flex>
@@ -117,27 +112,67 @@ export default {
   data () {
     return {
       salaireNet: 3.25,
-      indemniteJour: null
+      indemniteJour: null,
+      gouter: null,
+      nbSemAccueil: null,
+      salaireMensuel: 100,
+      majoration: 25,
+      estValide: false,
+      regleSalaire: [
+        v => !!v || 'Veuillez remplir le mot de passe',
+        v => /^[0-9]+(([.][0-9]+)?)$/.test(v) || 'Le format de salaire n\'est pas valide'
+      ],
+      regleMajo: [
+        v => !!v || 'Veuillez renseigner le taux de majoration',
+        v => /^[0-9]+(([.][0-9]+)?)$/.test(v) || 'Le format de majoration n\'est pas valide'
+      ],
+      regleTarif: [
+        v => !!v || 'Veuillez renseigner le tarif correspondant',
+        v => /^[0-9]+(([.][0-9]+)?) €$/.test(v) || 'Le format du tarif donné n\'est pas valide'
+      ]
     }
   },
   computed: {
     calculerSalBrut () {
       return this.salaireNet * 2.0
-    },
-    mounted () {
-      this.initIndemnites()
-      return 1
     }
+  },
+  mounted () {
+    this.initIndemnites()
+    this.initGouter()
+    console.log('HELLLLOOOOOO')
+    return 1
   },
   methods: {
     async initIndemnites () {
       try {
         const response = await TypeService.indemnitesJour()
-        this.indemniteJour = response.data.indemniteJour
-        console.log(response.data.indemniteJour)
+        this.indemniteJour = response.data.entretien + ' €'
       } catch (e) {
         console.log(e)
       }
+    },
+    async initGouter () {
+      try {
+        console.log('salut')
+        const response = await TypeService.gouter()
+        this.gouter = response.data.gouter + ' €'
+        console.log(response.data)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    envoyer () {
+      let data = {
+        salaireNet: this.salaireNet,
+        majoration: this.majoration
+      }
+      console.log('submit', data)
+      this.$emit('submit', data)
+    },
+    annuler () {
+      this.$route.redirect('/') // mettre bon truc
+      console.log('annulation')
     }
   }
 }

@@ -93,6 +93,7 @@
             <v-text-field
               label="Téléphone 2"
               v-model="telephone2"
+              :rules="regleTelOpt"
               prepend-icon="phone"
             ></v-text-field>
           </v-flex>
@@ -113,6 +114,7 @@
             <v-text-field
               label="Téléphone Professionnel"
               v-model="telephonePro"
+              :rules="regleTelOpt"
               prepend-icon="contact_phone"
             ></v-text-field>
           </v-flex>
@@ -124,7 +126,7 @@
       <v-btn
         class="red lighten-2"
         depressed large round
-        @click="cancel"
+        @click="annuler"
       >Annuler</v-btn>
       <v-btn
         depressed large round
@@ -160,10 +162,12 @@ export default {
         v => !!v || 'Veuillez saisir le nom'
       ],
       regleAdresse: [
-        v => !!v || 'Veuillez saisir l\'adresse'
+        v => !!v || 'Veuillez saisir l\'adresse',
+        v => /^\w \(?\)?\w$/.test(v) || 'Le format d\'adresse est incorrect'
       ],
       regleCodeP: [
-        v => !!v || 'Veuillez saisir le code postal'
+        v => !!v || 'Veuillez saisir le code postal',
+        v => /^[1-9]([0-9]{4})$/.test(v) || 'Le code postal n\'est pas valide'
       ],
       regleVille: [
         v => !!v || 'Veuillez saisir la ville'
@@ -173,7 +177,11 @@ export default {
         v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'email n\'est pas valide '
       ],
       regleTel: [
-        v => !!v || 'Veuillez saisir un téléphone'
+        v => !!v || 'Veuillez saisir un téléphone',
+        v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
+      ],
+      regleTelOpt: [
+        v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
       ]
     }
   }

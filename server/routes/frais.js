@@ -8,4 +8,10 @@ router.get('/indemnites', function(req, res, next) {
     });
 });
 
+router.get('/gouter', function(req, res, next) {
+    modelFrais.getGouter(function (retour) {
+        res.send(retour)
+    });
+});
+
 module.exports = router;
