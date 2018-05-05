@@ -10,6 +10,9 @@ export default {
   typeContrat () {
     return Api().get('typeContrat/all')
   },
+  typeTuteur () {
+    return Api().get('typeTuteur/all')
+  },
   indemnitesJour () {
     return Api.get('frais/indemnites')
   }

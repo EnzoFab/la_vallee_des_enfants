@@ -7,19 +7,19 @@
       <v-divider></v-divider>
       <v-stepper-step step="3" :complete="estValideEtape2">Tuteurs légaux</v-stepper-step>
       <v-divider></v-divider>
-      <v-stepper-step step="4" >Name of step 3</v-stepper-step>
+      <v-stepper-step step="4" >Name of step 4</v-stepper-step>
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-       <InformationGenerale></InformationGenerale>
+       <InformationGenerale nom="" @submit="submitInfoG"></InformationGenerale>
       </v-stepper-content>
       <v-stepper-content step="2">
         <infos-enfant @submit="submitEnfant"></infos-enfant>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <date-contrat @back="dateContratBack" @submit="submitDateContrat"></date-contrat>
+        <TuteursLegaux></TuteursLegaux>
       </v-stepper-content>
-      <v-stepper-content step="5">
+      <v-stepper-content step="4">
         <!-- <planing-presence-contrat></planing-presence-contrat> -->
       </v-stepper-content>
     </v-stepper-items>
@@ -31,15 +31,18 @@ import InfosEnfant from '../part/contratPart/InfosEnfant'
 import PlaningPresenceContrat from '../part/contratPart/PlaningPresenceContrat'
 import DateContrat from '../part/contratPart/DateDebutContrat'
 import InformationGenerale from '../part/contratPart/InformationGenerale'
+import TuteursLegaux from '../part/contratPart/TuteursLegaux'
 export default {
   name: 'Simulation',
-  components: {InformationGenerale, DateContrat, PlaningPresenceContrat, InfosEnfant},
+  components: {TuteursLegaux, InformationGenerale, DateContrat, PlaningPresenceContrat, InfosEnfant},
   data () {
     return {
       etape: 1,
       estValideEtape1: false,
       estValideEtape2: false,
-      estValideEtape3: false
+      estValideEtape3: false,
+      estValideEtape4: false,
+      estValideEtape5: false
 
     }
   },
@@ -47,8 +50,14 @@ export default {
     submitEnfant (data) {
       console.log(data)
       // store data in DB
+      this.estValideEtape2 = true
+      this.etape++
+    },
+    submitInfoG (data) {
+      console.log(this.etape)
+      console.log(data)
+      this.etape++
       this.estValideEtape1 = true
-      this.etape = 2
     },
     submitDateContrat (data) {
       console.log(data)
@@ -56,8 +65,8 @@ export default {
       this.estValideEtape2 = true
       this.etape = 3
     },
-    dateContratBack () {
-      this.etape = 1
+    back () {
+      this.etape--
     }
   }
 }

@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var modelPaiement = require('../models/paiement')
+var modelTypeJour = require('../models/typeJour')
 
 router.get('/all', function (req, res, next) {
-    modelPaiement.getAll(function (retour) {
+    modelTypeJour.getAll(function (retour) {
         res.send(retour);
     });
 });

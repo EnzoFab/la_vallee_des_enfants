@@ -90,7 +90,7 @@
         @click="envoyer"
         :disabled="!estValide"
       >
-        Envoyer
+        Suivant
       </v-btn>
     </v-form>
   </v-flex>
@@ -170,7 +170,7 @@ export default {
         console.log(e)
       }
     },
-    initNombreJour () { // remplis avec 28 jours
+    initNombreJour () { // remplit avec 28 jours
       for (var i = 1; i < 29; i++) {
         this.jours.push(i)
       }
@@ -179,10 +179,10 @@ export default {
       let data = {
         date: this.date,
         modePaiement: this.modeDePaiementContrat,
-        typeContrat: this.typeContrat,
+        typeContrat: this.typeDuContrat,
         jourPrelevement: this.jourPrelevement
       }
-      console.log('submit', data)
+      this.$emit('submit', data)
     }
   }
 }

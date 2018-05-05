@@ -19,6 +19,10 @@ var assMatRouter = require('./routes/assmat');
 var evenementRouter = require('./routes/evenement');
 var modeDePaiement = require('./routes/modeDePaiement');
 var typeDeContrat = require('./routes/typeDeContrat');
+var typeTuteur = require('./routes/typeTuteurs');
+var enfant = require('./routes/enfant');
+
+var typeDeContrat = require('./routes/typeDeContrat');
 var frais = require('./routes/frais');
 // use it before all view definitions
 app.use(cors({origin: '*'}))
@@ -36,7 +40,9 @@ app.use('/assmats', assMatRouter);
 app.use('/evenements', evenementRouter);
 app.use('/modepaiements', modeDePaiement);
 app.use('/typeContrat', typeDeContrat);
-app.use('/frais', frais)
+app.use('/typeTuteur', typeTuteur);
+app.use('/frais', frais);
+app.use('/enfants', enfant);
 
 
 // view engine setup

@@ -9,5 +9,8 @@ export default {
   },
   registerAssMat (credentials) {
     return Api().post('/assmats/register', credentials)
+  },
+  createContratEnfant (credentials) {
+    return Api().post('/enfants/create', credentials)
   }
 }
