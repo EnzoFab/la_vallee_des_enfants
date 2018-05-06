@@ -15,6 +15,7 @@
             hint="Prénom de l'enfant"
             persistent-hint
             class="pr-4"
+            color="light-green darken-2"
             required></v-text-field>
         </v-flex>
         <v-flex xs12 sm6>
@@ -25,10 +26,11 @@
             hint="Nom de l'enfant"
             persistent-hint
             class="pr-4"
+            color="light-green darken-2"
             required
           ></v-text-field>
         </v-flex>
-        <v-flex xs12>
+        <v-flex xs12 offset-md3>
           <v-radio-group
             label="Sexe"
             persistent-hint
@@ -59,6 +61,7 @@
               v-model="dateFr"
               prepend-icon="event"
               readonly
+              color="light-green darken-2"
               required
               :rules="regleDate"
             ></v-text-field>

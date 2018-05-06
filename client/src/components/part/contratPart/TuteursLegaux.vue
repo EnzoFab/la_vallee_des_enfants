@@ -74,7 +74,7 @@
                     ></v-text-field>
                   </v-flex>
 
-                  <v-flex md6 lg6 xl6sm12 xs12>
+                  <v-flex md6 lg6 xl6 sm12 xs12>
                     <v-text-field
                       label="Téléphone"
                       v-model="tuteur.telephone"

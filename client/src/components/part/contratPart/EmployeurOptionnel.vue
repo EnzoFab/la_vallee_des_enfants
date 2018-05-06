@@ -15,6 +15,7 @@
               v-model="nomNaissance"
               :rules="regleNom"
               prepend-icon="account_box"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -24,6 +25,7 @@
               v-model="nomUsage"
               :rules="regleNom"
               prepend-icon="account_circle"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -33,6 +35,7 @@
               v-model="prenom"
               :rules="reglePrenom"
               prepend-icon="person_outline"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -46,6 +49,7 @@
               v-model="adresse"
               :rules="regleAdresse"
               prepend-icon="home"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -55,6 +59,7 @@
               v-model="codePostal"
               :rules="regleCodeP"
               prepend-icon="mail_outline"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -64,6 +69,7 @@
               v-model="ville"
               :rules="regleVille"
               prepend-icon="location_city"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -77,6 +83,7 @@
               v-model="email"
               :rules="regleMail"
               prepend-icon="mail"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -86,6 +93,7 @@
               v-model="telephone1"
               :rules="regleTel"
               prepend-icon="smartphone"
+              color="red lighten-3"
               required
             ></v-text-field>
           </v-flex>
@@ -95,32 +103,44 @@
               v-model="telephone2"
               :rules="regleTelOpt"
               prepend-icon="phone"
+              color="red lighten-3"
             ></v-text-field>
           </v-flex>
         </v-card>
         </v-flex>
       </v-layout>
-      <v-flex>
-      <v-card>
+        <v-flex>
+          <v-card>
         <v-layout>
-          <v-flex offset-md1 md4>
+          <v-flex pl-4 md4>
             <v-text-field
               label="Profession"
               v-model="profession"
               prepend-icon="business_center"
+              color="red lighten-3"
             ></v-text-field>
           </v-flex>
-          <v-flex offset-md2 md4>
+          <v-flex offset-md1 md4>
             <v-text-field
               label="Téléphone Professionnel"
               v-model="telephonePro"
               :rules="regleTelOpt"
               prepend-icon="contact_phone"
+              color="red lighten-3"
+            ></v-text-field>
+          </v-flex>
+          <v-flex offset-md1 pr-5 md4>
+            <v-text-field
+              label="semaines de congés supplémentaires"
+              v-model="congesSupp"
+              :rules="regleConges"
+              prepend-icon="date_range"
+              color="red lighten-3"
             ></v-text-field>
           </v-flex>
         </v-layout>
-      </v-card>
-      </v-flex>
+          </v-card>
+        </v-flex>
     </v-form>
     <v-flex mt-3 xs12>
       <v-btn
@@ -154,6 +174,7 @@ export default {
       telephone2: null,
       profession: null,
       telephonePro: null,
+      congesSupp: 0,
       estValide: false,
       reglePrenom: [
         v => !!v || 'Veuillez saisir le prénom'
@@ -182,6 +203,10 @@ export default {
       ],
       regleTelOpt: [
         v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
+      ],
+      regleConges: [
+        v => !!v || 'Veuillez saisir le nombre de semaines',
+        v => /^[0-9]([0-9]?)$/.test(v) || 'Le nombre de semaines n\'est pas valide'
       ]
     }
   }

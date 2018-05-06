@@ -38,6 +38,7 @@
                   v-model="salaireNet"
                   :rules="regleSalaire"
                   prepend-icon="attach_money"
+                  color="yellow darken-2"
                   required
                 ></v-text-field>
               </v-flex>
@@ -48,6 +49,7 @@
                     v-model="majoration"
                     :rules="regleMajo"
                     prepend-icon="add_circle_outline"
+                    color="yellow darken-2"
                     required
                   ></v-text-field>
                   <v-flex mt-4 md1>%</v-flex>
