@@ -50,7 +50,7 @@
                     <v-text-field
                       label="Nom"
                       :rules="regleNom"
-                      :counter="50"
+                      :counter="15"
                       v-model="tuteur.nom"
                     ></v-text-field>
                   </v-flex>
@@ -59,7 +59,7 @@
                     <v-text-field
                       label="Prénom"
                       :rules="reglePrenom"
-                      :counter="50"
+                      :counter="15"
                       v-model="tuteur.prenom"
                     ></v-text-field>
                   </v-flex>
@@ -67,7 +67,7 @@
                   <v-flex xs12>
                     <v-text-field
                       label="Profession"
-                      :counter="50"
+                      :counter="20"
                       :rules="regleProfession"
                       required
                       v-model="tuteur.profession"
@@ -88,7 +88,6 @@
                       label="Téléphone Professionnel"
                       prepend-icon="phone"
                       v-model="tuteur.telephonePro"
-                      :rules="regleTel"
                     ></v-text-field>
                   </v-flex>
                   <v-flex md12 lg12 x112 sm12 xs12>
@@ -97,13 +96,55 @@
                       v-model="tuteur.estDemandeur"
                     ></v-checkbox>
                   </v-flex>
-                  <v-subheader v-if="tuteur.estDemandeur">Adresse</v-subheader>
-                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field label="Ville"></v-text-field>
+                  <v-flex md12 lg12 xl12 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-subheader>Adresse</v-subheader>
                   </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12>
-                    <v-text-field v-if="tuteur.estDemandeur"
-                      label="Code Postal"
+                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-text-field
+                      label="Ville"
+                      :rules="regleVille"
+                      v-model="ville"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-text-field
+                      required
+                      :rules="regleCodePostal"
+                      v-model="codePostal"
+                      label="Code postal"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-text-field
+                      required
+                      :counter="15"
+                      :rules="regleNom"
+                      v-model="nomDeNaissance"
+                      label="Nom de naissance"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 v-if="tuteur.estDemandeur">
+                    <h3>Nombre de semaine(s) de congé supplémentaire(s): {{nombreSemaine}}</h3>
+                    <v-slider v-model="nombreSemaine"
+                              min="0" max="10"
+                              thumb-label step="1" ticks
+                              required
+                              v-if="inputSemaineDisable"></v-slider>
+                  </v-flex>
+                  <v-flex xs12 v-if="tuteur.estDemandeur">
+                    <a @click="toogleChange">
+                      {{toogleText}}
+                      <v-icon>arrow_drop_down</v-icon>
+                    </a>
+                    <v-text-field
+                      label="Nombre de semaines supplementaire de congé"
+                      color="blue"
+                      type="number"
+                      required
+                      v-model="nombreSemaine"
+                      :rules="regleSemaine"
+                      v-if="!inputSemaineDisable"
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -146,6 +187,12 @@ export default {
       tuteurs: [],
       typeTuteurs: [],
       estValide: false,
+      inputSemaineDisable: true,
+      codePostal: '',
+      ville: '',
+      nomDeNaissance: '',
+      nombreSemaine: 0,
+      toogleText: 'Plus de semaines', // texte affiché sur le lien
       regleTypeTuteur: [
         v => !!v || 'Veuillez renseigner le type de tuteur'
       ],
@@ -164,6 +211,16 @@ export default {
       regleTel: [
         v => !!v || 'Veuillez renseigner le numéro de telephone du tuteur',
         v => /^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/.test(v) || 'le numero de téléphone n\'est pas valide'
+      ],
+      regleCodePostal: [
+        v => !!v || 'Veuillez renseigner le code postal',
+        v => /^(([0-8][0-9])|(9[0-5]))[0-9]{3}$/.test(v) || 'code postal non valide'
+      ],
+      regleVille: [
+        v => !!v || 'Veuillez préciser la ville'
+      ],
+      regleSemaine: [
+        v => /^\d+(\d+)?([Ee][+]?\d+)?$/.test(v) || 'Entrez un nombre entier'
       ]
     }
   },
@@ -206,10 +263,45 @@ export default {
     },
     submit () {
       // envoyer
+      let data = {tuteurs: [], asEmployeur: false}
+      for (var tuteur in this.tuteurs) {
+        if (tuteur.estDemandeur) {
+          data.asEmployeur = true
+          tuteur.infoDemandeur = {
+            codePostal: this.codePostal,
+            ville: this.ville,
+            nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
+            nomNaissance: this.nomDeNaissance
+          }
+        }
+        data.tuteurs.push(tuteur)
+      }
+      this.$emit('submit', data)
     },
     back () {
       console.log('back')
       this.$emit('back')
+    },
+    toogleChange () { // rend disponible soit l'input soit le slider
+      this.inputSemaineDisable = !this.inputSemaineDisable
+      this.nombreSemaine = 0
+      if (this.inputSemaineDisable) {
+        this.toogleText = 'Plus de semaines'
+        // this.toogleIcone = 'arrow_drop_down'
+      } else {
+        // this.toogleIcone = 'arrow_drop_up'
+        this.toogleText = 'Repasser à la barre de selections'
+        console.log('tougle')
+      }
+    },
+    computedNbSemaine (val) {
+      this.nombreSemaine = val
+      console.log(this.nombreSemaine)
+      if (this.nombreSemaine == null) {
+        return 0
+      } else {
+        return this.nombreSemaine
+      }
     }
   },
   computed: {

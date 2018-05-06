@@ -5,22 +5,27 @@
       <v-divider></v-divider>
       <v-stepper-step step="2" :complete="estValideEtape2" >Enfants</v-stepper-step>
       <v-divider></v-divider>
-      <v-stepper-step step="3" :complete="estValideEtape2">Tuteurs légaux</v-stepper-step>
+      <v-stepper-step step="3" :complete="estValideEtape3">Tuteurs légaux</v-stepper-step>
       <v-divider></v-divider>
-      <v-stepper-step step="4" >Name of step 4</v-stepper-step>
+      <v-stepper-step step="4" :complete="estValideEtape4">Information employeur</v-stepper-step>
+      <v-divider></v-divider>
+      <v-stepper-step step="5" >Carnet des présence</v-stepper-step>
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
-       <InformationGenerale nom="" @submit="submitInfoG"></InformationGenerale>
+       <InformationGenerale @submit="submitInfoG"></InformationGenerale>
       </v-stepper-content>
       <v-stepper-content step="2">
-        <infos-enfant @submit="submitEnfant"></infos-enfant>
+        <infos-enfant @back="back" @submit="submitEnfant"></infos-enfant>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <TuteursLegaux></TuteursLegaux>
+        <TuteursLegaux @back="back" @submit="submitTuteurs"></TuteursLegaux>
       </v-stepper-content>
       <v-stepper-content step="4">
-        <!-- <planing-presence-contrat></planing-presence-contrat> -->
+        <EmployeurOptionnel></EmployeurOptionnel>
+      </v-stepper-content>
+      <v-stepper-content step="5">
+        <planing-presence-contrat></planing-presence-contrat>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -32,9 +37,10 @@ import PlaningPresenceContrat from '../part/contratPart/PlaningPresenceContrat'
 import DateContrat from '../part/contratPart/DateDebutContrat'
 import InformationGenerale from '../part/contratPart/InformationGenerale'
 import TuteursLegaux from '../part/contratPart/TuteursLegaux'
+import EmployeurOptionnel from '../part/contratPart/EmployeurOptionnel'
 export default {
   name: 'Simulation',
-  components: {TuteursLegaux, InformationGenerale, DateContrat, PlaningPresenceContrat, InfosEnfant},
+  components: {EmployeurOptionnel, TuteursLegaux, InformationGenerale, DateContrat, PlaningPresenceContrat, InfosEnfant},
   data () {
     return {
       etape: 1,
@@ -67,6 +73,14 @@ export default {
     },
     back () {
       this.etape--
+    },
+    submitTuteurs (data) {
+      this.estValideEtape3 = true
+      if (data.asEmployeur) {
+        this.etape = 5
+      } else {
+        this.etape = 4
+      }
     }
   }
 }
