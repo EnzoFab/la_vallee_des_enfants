@@ -21,5 +21,26 @@
     "morgan": "~1.9.0",
     "pg": "^7.4.1",
     "socket.io": "^2.1.0"
-  }
+  },
+  "engines": {
+    "node": "8.11.1"
+  },
+  "description": "Projet industriel de 4èeme année",
+  "main": "www",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnzoFab/la_vallee_des_enfants.git"
+  },
+  "keywords": [
+    "Assistantes maternelles",
+    "Creche",
+    "Enfants"
+  ],
+  "author": "Enzo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EnzoFab/la_vallee_des_enfants/issues"
+  },
+  "homepage": "https://github.com/EnzoFab/la_vallee_des_enfants#readme"
 }
