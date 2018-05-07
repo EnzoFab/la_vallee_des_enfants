@@ -84,6 +84,11 @@
           ></v-select>
       </v-flex>
       <v-btn
+        class="light-green lighten-4"
+        depressed large round
+        @click="back"
+      >Précédent</v-btn>
+      <v-btn
         color="green lighten-1"
         depressed large round
         :dark="estValide"
@@ -183,6 +188,9 @@ export default {
         jourPrelevement: this.jourPrelevement
       }
       this.$emit('submit', data)
+    },
+    back () {
+      this.$emit('back')
     }
   }
 }

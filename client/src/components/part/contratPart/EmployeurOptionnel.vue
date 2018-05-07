@@ -146,12 +146,12 @@
       <v-btn
         class="red lighten-2"
         depressed large round
-        @click="annuler"
-      >Annuler</v-btn>
+        @click="back"
+      >Précédent</v-btn>
       <v-btn
         depressed large round
         class="red lighten-2"
-        @click="submit"
+        @click="envoyer"
         :disabled="!estValide"
       >Suivant</v-btn>
     </v-flex>
@@ -183,8 +183,7 @@ export default {
         v => !!v || 'Veuillez saisir le nom'
       ],
       regleAdresse: [
-        v => !!v || 'Veuillez saisir l\'adresse',
-        v => /^\w \(?\)?\w$/.test(v) || 'Le format d\'adresse est incorrect'
+        v => !!v || 'Veuillez saisir l\'adresse'
       ],
       regleCodeP: [
         v => !!v || 'Veuillez saisir le code postal',
@@ -208,6 +207,29 @@ export default {
         v => !!v || 'Veuillez saisir le nombre de semaines',
         v => /^[0-9]([0-9]?)$/.test(v) || 'Le nombre de semaines n\'est pas valide'
       ]
+    }
+  },
+  methods: {
+    envoyer () {
+      let data = {employeur: {
+        nomNaissance: this.nomNaissance,
+        nomUsage: this.nomUsage,
+        prenom: this.prenom,
+        adresse: this.adresse,
+        codePostal: this.codePostal,
+        ville: this.ville,
+        email: this.email,
+        telephone1: this.telephone1,
+        telephone2: this.telephone2,
+        profession: this.profession,
+        telephonePro: this.telephonePro,
+        congesSupp: this.congesSupp
+      }
+      }
+      this.$emit('submit', data)
+    },
+    back () {
+      this.$emit('back')
     }
   }
 }

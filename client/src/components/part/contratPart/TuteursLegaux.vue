@@ -279,7 +279,6 @@ export default {
       this.$emit('submit', data)
     },
     back () {
-      console.log('back')
       this.$emit('back')
     },
     toogleChange () { // rend disponible soit l'input soit le slider
