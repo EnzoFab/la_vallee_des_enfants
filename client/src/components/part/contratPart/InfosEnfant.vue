@@ -86,7 +86,7 @@
             class="light-green lighten-4"
             depressed large round
             @click="back"
-          >Précédent</v-btn>
+          >Annuler</v-btn>
           <v-btn
             depressed large round
             class="light-green lighten-4"
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import AuthentificationService from '../../../services/AuthentificationService'
+import EnfantService from '../../../services/EnfantService'
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'InfosEnfant',
@@ -138,7 +138,7 @@ export default {
     async submit () {
       let data = {enfant: {prenom: this.prenom, nom: this.nom, sexe: this.sexe, date_naissance: this.date}}
       try {
-        await AuthentificationService.createContratEnfant(data)
+        await EnfantService.createContratEnfant(data)
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error
@@ -147,7 +147,9 @@ export default {
       this.$emit('submit', data)
     },
     back () {
-      this.$emit('back')
+      this.$router.push({
+        name: 'Accueil'
+      })
     }
   },
   computed: {

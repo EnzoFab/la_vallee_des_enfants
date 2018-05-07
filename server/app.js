@@ -21,9 +21,11 @@ var modeDePaiement = require('./routes/modeDePaiement');
 var typeDeContrat = require('./routes/typeDeContrat');
 var typeTuteur = require('./routes/typeTuteurs');
 var enfant = require('./routes/enfant');
-
-var typeDeContrat = require('./routes/typeDeContrat');
 var frais = require('./routes/frais');
+var tuteur = require('./routes/tuteur')
+var employeur = require('./routes/employeur')
+
+
 // use it before all view definitions
 app.use(cors({origin: '*'}))
 app.use(logger('dev'));
@@ -43,6 +45,8 @@ app.use('/typeContrat', typeDeContrat);
 app.use('/typeTuteur', typeTuteur);
 app.use('/frais', frais);
 app.use('/enfants', enfant);
+app.use('/tuteurs', tuteur);
+app.use('/employeurs', employeur)
 
 
 // view engine setup

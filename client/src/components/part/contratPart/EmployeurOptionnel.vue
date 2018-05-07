@@ -5,7 +5,7 @@
       <v-toolbar-title>Information Employeur</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-form>
+    <v-form v-model="estValide" ref="form" class="pa-3">
       <v-layout mt-3>
         <v-flex md4>
         <v-card>
@@ -45,9 +45,9 @@
         <v-card>
           <v-flex offset-md1 md10>
             <v-text-field
-              label="Adresse"
-              v-model="adresse"
-              :rules="regleAdresse"
+              label="Rue"
+              v-model="rue"
+              :rules="regleRue"
               prepend-icon="home"
               color="red lighten-3"
               required
@@ -146,12 +146,13 @@
       <v-btn
         class="red lighten-2"
         depressed large round
-        @click="annuler"
-      >Annuler</v-btn>
+        @click="back"
+      >Précédent</v-btn>
       <v-btn
         depressed large round
         class="red lighten-2"
-        @click="submit"
+        :dark="estValide"
+        @click="envoyer"
         :disabled="!estValide"
       >Suivant</v-btn>
     </v-flex>
@@ -159,6 +160,8 @@
 </template>
 
 <script>
+import EmployeurService from '../../../services/EmployeurService'
+import TuteurService from '../../../services/TuteurService'
 export default {
   name: 'EmployeurOptionnel',
   data () {
@@ -166,7 +169,7 @@ export default {
       nomNaissance: null,
       nomUsage: null,
       prenom: null,
-      adresse: null,
+      rue: null,
       codePostal: null,
       ville: null,
       email: null,
@@ -174,17 +177,18 @@ export default {
       telephone2: null,
       profession: null,
       telephonePro: null,
+      identifiantConnexion: null,
       congesSupp: 0,
       estValide: false,
+      mdp: '123456789',
       reglePrenom: [
         v => !!v || 'Veuillez saisir le prénom'
       ],
       regleNom: [
         v => !!v || 'Veuillez saisir le nom'
       ],
-      regleAdresse: [
-        v => !!v || 'Veuillez saisir l\'adresse',
-        v => /^\w \(?\)?\w$/.test(v) || 'Le format d\'adresse est incorrect'
+      regleRue: [
+        v => !!v || 'Veuillez saisir l\'adresse'
       ],
       regleCodeP: [
         v => !!v || 'Veuillez saisir le code postal',
@@ -208,6 +212,43 @@ export default {
         v => !!v || 'Veuillez saisir le nombre de semaines',
         v => /^[0-9]([0-9]?)$/.test(v) || 'Le nombre de semaines n\'est pas valide'
       ]
+    }
+  },
+  methods: {
+    async envoyer () {
+      let data = {
+        employeur: {
+          nomNaissance: this.nomNaissance,
+          nomUsage: this.nomUsage,
+          prenom: this.prenom,
+          rue: this.rue,
+          codePostal: this.codePostal,
+          ville: this.ville,
+          email: this.email,
+          telephone1: this.telephone1,
+          identifiantConnexion: this.nomUsage,
+          mdp: this.mdp
+        },
+        tuteur: {
+          nomUsage: this.nomUsage,
+          prenom: this.prenom,
+          telephone: this.telephone2,
+          profession: this.profession,
+          telephonePro: this.telephonePro
+        },
+        congesSupp: this.congesSupp
+      }
+      try {
+        await EmployeurService.createContratEmployeur(data.employeur)
+        await TuteurService.createContratTuteur(data.tuteur)
+      } catch (error) {
+        console.log(error)
+        this.error = error.response.data.error
+      }
+      this.$emit('submit', data)
+    },
+    back () {
+      this.$emit('back')
     }
   }
 }

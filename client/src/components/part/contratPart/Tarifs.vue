@@ -94,8 +94,8 @@
       <v-btn
         class="yellow lighten-2"
         depressed large round
-        @click="annuler"
-      >Annuler</v-btn>
+        @click="back"
+      >Précédent</v-btn>
       <v-btn
         depressed large round
         class="yellow lighten-2"
@@ -172,9 +172,8 @@ export default {
       console.log('submit', data)
       this.$emit('submit', data)
     },
-    annuler () {
-      this.$route.redirect('/') // mettre bon truc
-      console.log('annulation')
+    back () {
+      this.$emit('back')
     }
   }
 }

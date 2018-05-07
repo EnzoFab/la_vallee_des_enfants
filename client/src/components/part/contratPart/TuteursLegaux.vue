@@ -51,7 +51,7 @@
                       label="Nom"
                       :rules="regleNom"
                       :counter="15"
-                      v-model="tuteur.nom"
+                      v-model="tuteur.nomUsage"
                     ></v-text-field>
                   </v-flex>
 
@@ -96,8 +96,13 @@
                       v-model="tuteur.estDemandeur"
                     ></v-checkbox>
                   </v-flex>
-                  <v-flex md12 lg12 xl12 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-subheader>Adresse</v-subheader>
+                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-text-field
+                      label="Rue"
+                      :rules="regleRue"
+                      v-model="rue"
+                      required
+                    ></v-text-field>
                   </v-flex>
                   <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
                     <v-text-field
@@ -118,9 +123,17 @@
                   <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
                     <v-text-field
                       required
+                      :rules="regleEmail"
+                      v-model="email"
+                      label="Mail"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-text-field
+                      required
                       :counter="15"
                       :rules="regleNom"
-                      v-model="nomDeNaissance"
+                      v-model="nomNaissance"
                       label="Nom de naissance"
                     ></v-text-field>
                   </v-flex>
@@ -179,6 +192,7 @@
 
 <script>
 import TypeService from '../../../services/TypeService'
+import TuteurService from '../../../services/TuteurService'
 
 export default {
   name: 'TuteursLegaux',
@@ -188,9 +202,11 @@ export default {
       typeTuteurs: [],
       estValide: false,
       inputSemaineDisable: true,
+      rue: '',
       codePostal: '',
       ville: '',
       nomDeNaissance: '',
+      email: '',
       nombreSemaine: 0,
       toogleText: 'Plus de semaines', // texte affiché sur le lien
       regleTypeTuteur: [
@@ -204,6 +220,10 @@ export default {
         v => !!v || 'Veuillez renseigner le prenom de tuteur',
         v => v.length <= 15 || 'Max 15 lettres'
       ],
+      regleEmail: [
+        v => !!v || 'Veuillez saisir l\'email',
+        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'email n\'est pas valide '
+      ],
       regleProfession: [
         v => !!v || 'Veuillez renseigner la profession du tuteur',
         v => v.length <= 20 || 'Max 20 lettres'
@@ -211,6 +231,9 @@ export default {
       regleTel: [
         v => !!v || 'Veuillez renseigner le numéro de telephone du tuteur',
         v => /^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/.test(v) || 'le numero de téléphone n\'est pas valide'
+      ],
+      regleRue: [
+        v => !!v || 'Veuillez préciser la rue'
       ],
       regleCodePostal: [
         v => !!v || 'Veuillez renseigner le code postal',
@@ -237,7 +260,7 @@ export default {
       if (this.tuteurs.length < 2) { // ajoute un tuteur à la listes
         this.tuteurs.push({
           typeDeTuteur: null,
-          nom: '',
+          nomUsage: '',
           prenom: '',
           profession: '',
           telephone: '',
@@ -261,17 +284,26 @@ export default {
       }
       return existe
     },
-    submit () {
+    async submit () {
       // envoyer
       let data = {tuteurs: [], asEmployeur: false}
+      try {
+        console.log('TUTEUUUUUUURS', this.tuteurs[0])
+        await TuteurService.createContratTuteur(data)
+      } catch (error) {
+        console.log(error)
+        this.error = error.response.data.error
+      }
       for (var tuteur in this.tuteurs) {
         if (tuteur.estDemandeur) {
           data.asEmployeur = true
           tuteur.infoDemandeur = {
+            rue: this.rue,
             codePostal: this.codePostal,
+            email: this.email,
             ville: this.ville,
             nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
-            nomNaissance: this.nomDeNaissance
+            nomNaissance: this.nomNaissance
           }
         }
         data.tuteurs.push(tuteur)
@@ -279,7 +311,6 @@ export default {
       this.$emit('submit', data)
     },
     back () {
-      console.log('back')
       this.$emit('back')
     },
     toogleChange () { // rend disponible soit l'input soit le slider

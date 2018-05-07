@@ -25,7 +25,7 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 const bcrypt = require('bcrypt');
 
-let Employeurs = {
+let Employeur = {
 
     /**
      *
@@ -164,18 +164,37 @@ let Employeurs = {
         });
     },
 
-    /**
-     *
-     * @param employeur: un objet javascript
-     * @param callback
-     */
     create: function (employeur, callback) {
         db.query("INSERT INTO public.employeur(nom_naissance_employeur, nom_usage_employeur, prenom_employeur, rue_employeur, cp_employeur, ville_employeur, mail_employeur, telephone_employeur, identifiant_connexion, mot_de_passe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-            [],
-            function () {
-                
-            })
+            [employeur.nomNaissance, employeur.nomUsage, employeur.prenom, employeur.rue, employeur.codePostal, employeur.ville, employeur.email, employeur.telephone1, employeur.identifiantConnexion, employeur.mdp ],
+            function (err, result) {
+                let retour = {
+                    erreur: null,
+                    employeur: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, result, 'Aucun employeur');
+                retour.erreur= e.erreur;
+                retour.statut= e.statut;
+                console.log(result)
+                if (retour.erreur == null) {
+                    retour.employeur = {
+                        nomNaissance: result.rows[0].nom_naissance_employeur,
+                        nomUsage: result.rows[0].nom_usage_employeur,
+                        prenom: result.rows[0].prenom_employeur,
+                        rue: result.rows[0].rue_employeur,
+                        codePostal: result.rows[0].cp_employeur,
+                        ville: result.rows[0].ville_employeur,
+                        email: result.rows[0].mail_employeur,
+                        telephone1: result.rows[0].telephone_employeur,
+                        identifiantConnexion: result.rows[0].identifiant_connexion,
+                        mdp: result.rows[0].mot_de_passe
+                    }
+                    retour.statut = 200
+                }
+            });
+        callback(retour);
     }
 };
 
-module.exports = Employeurs;
+module.exports = Employeur;

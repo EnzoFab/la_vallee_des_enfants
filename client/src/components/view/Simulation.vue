@@ -20,19 +20,19 @@
             <InfosEnfant @submit="submitEnfant"></InfosEnfant>
           </v-stepper-content>
           <v-stepper-content step="2">
-            <TuteursLegaux @submit="submitTuteurs"></TuteursLegaux>
+            <TuteursLegaux @back="back" @submit="submitTuteurs"></TuteursLegaux>
           </v-stepper-content>
           <v-stepper-content step="3">
-            <EmployeurOptionnel @submit="submitEmp"></EmployeurOptionnel>
+            <EmployeurOptionnel @back="back" @submit="submitEmp"></EmployeurOptionnel>
           </v-stepper-content>
           <v-stepper-content step="4">
-            <InformationGenerale nom="" @submit="submitInfoG"></InformationGenerale>
+            <InformationGenerale nom="" @back="back" @submit="submitInfoG"></InformationGenerale>
           </v-stepper-content>
           <v-stepper-content step="5">
-            <PlaningPresenceContrat @submit="submitPresences"></PlaningPresenceContrat>
+            <PlaningPresenceContrat @back="back" @submit="submitPresences"></PlaningPresenceContrat>
           </v-stepper-content>
           <v-stepper-content step="6">
-            <Tarifs @submit="submitTarifs"></Tarifs>
+            <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -68,49 +68,44 @@ export default {
     submitEnfant (data) {
       console.log(data)
       // store data in DB
-      this.estValideEtape2 = true
+      this.estValideEtape1 = true
       this.etape++
     },
     submitTuteurs (data) {
-      console.log(data)
-      // store data in DB
-      this.estValideEtape3 = true
-      this.etape++
+      this.estValideEtape2 = true
+      if (data.asEmployeur) {
+        this.etape = 4
+      } else {
+        this.etape = 3
+      }
     },
     submitEmp (data) {
       console.log(data)
       // store data in DB
-      this.estValideEtape4 = true
+      this.estValideEtape3 = true
       this.etape++
     },
     submitInfoG (data) {
       console.log(this.etape)
       console.log(data)
       this.etape++
-      this.estValideEtape5 = true
+      this.estValideEtape4 = true
     },
     submitPresences (data) {
       console.log(this.etape)
       console.log(data)
       this.etape++
-      this.estValideEtape6 = true
+      this.estValideEtape5 = true
     },
     submitTarifs (data) {
       console.log(this.etape)
       console.log(data)
       this.etape++
       this.fin = true
+      this.estValideEtape6 = true
     },
     back () {
       this.etape--
-    },
-    submitTuteurs (data) {
-      this.estValideEtape3 = true
-      if (data.asEmployeur) {
-        this.etape = 5
-      } else {
-        this.etape = 4
-      }
     }
   }
 }
