@@ -2,7 +2,7 @@
   <v-flex  xs12 class="my-1">
     <v-toolbar color="red lighten-2">
       <v-spacer></v-spacer>
-      <v-toolbar-title>Employeur</v-toolbar-title>
+      <v-toolbar-title>Information Employeur</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-form>
@@ -21,7 +21,7 @@
           </v-flex>
           <v-flex offset-md1 md10>
             <v-text-field
-              label="Nom d\'usage"
+              label="Nom d'usage"
               v-model="nomUsage"
               :rules="regleNom"
               prepend-icon="account_circle"

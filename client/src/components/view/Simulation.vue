@@ -11,7 +11,7 @@
           <v-divider></v-divider>
           <v-stepper-step step="4" :complete="estValideEtape4" >Informations générales</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" :complete="estValideEtape5" >Présences</v-stepper-step>
+          <v-stepper-step step="5" :complete="estValideEtape5" >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="6" :complete="estValideEtape6" >Tarifs</v-stepper-step>
         </v-stepper-header>
@@ -103,6 +103,14 @@ export default {
     },
     back () {
       this.etape--
+    },
+    submitTuteurs (data) {
+      this.estValideEtape3 = true
+      if (data.asEmployeur) {
+        this.etape = 5
+      } else {
+        this.etape = 4
+      }
     }
   }
 }

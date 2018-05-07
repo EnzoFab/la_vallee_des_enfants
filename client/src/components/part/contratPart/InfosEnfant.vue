@@ -85,8 +85,8 @@
           <v-btn
             class="light-green lighten-4"
             depressed large round
-            @click="cancel"
-          >Annuler</v-btn>
+            @click="back"
+          >Précédent</v-btn>
           <v-btn
             depressed large round
             class="light-green lighten-4"
@@ -146,9 +146,8 @@ export default {
       console.log(data.date_naissance)
       this.$emit('submit', data)
     },
-    cancel () {
-      // TODO choisir la route de redirection
-      this.$route.redirect('/')
+    back () {
+      this.$emit('back')
     }
   },
   computed: {
