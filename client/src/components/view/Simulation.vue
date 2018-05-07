@@ -20,19 +20,19 @@
             <InfosEnfant @submit="submitEnfant"></InfosEnfant>
           </v-stepper-content>
           <v-stepper-content step="2">
-            <TuteursLegaux @submit="submitTuteurs"></TuteursLegaux>
+            <TuteursLegaux @back="back" @submit="submitTuteurs"></TuteursLegaux>
           </v-stepper-content>
           <v-stepper-content step="3">
-            <EmployeurOptionnel @submit="submitEmp"></EmployeurOptionnel>
+            <EmployeurOptionnel @back="back" @submit="submitEmp"></EmployeurOptionnel>
           </v-stepper-content>
           <v-stepper-content step="4">
-            <InformationGenerale nom="" @submit="submitInfoG"></InformationGenerale>
+            <InformationGenerale nom="" @back="back" @submit="submitInfoG"></InformationGenerale>
           </v-stepper-content>
           <v-stepper-content step="5">
-            <PlaningPresenceContrat @submit="submitPresences"></PlaningPresenceContrat>
+            <PlaningPresenceContrat @back="back" @submit="submitPresences"></PlaningPresenceContrat>
           </v-stepper-content>
           <v-stepper-content step="6">
-            <Tarifs @submit="submitTarifs"></Tarifs>
+            <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>

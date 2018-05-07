@@ -5,7 +5,7 @@
       <v-toolbar-title>Information Employeur</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-form>
+    <v-form v-model="estValide" ref="form" class="pa-3">
       <v-layout mt-3>
         <v-flex md4>
         <v-card>
@@ -151,6 +151,7 @@
       <v-btn
         depressed large round
         class="red lighten-2"
+        :dark="estValide"
         @click="envoyer"
         :disabled="!estValide"
       >Suivant</v-btn>
