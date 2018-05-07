@@ -117,7 +117,19 @@
 
           </v-layout>
         </v-container>
-
+        <v-flex xs12>
+          <v-btn
+            class="pink lighten-4"
+            depressed large round
+            @click="back"
+          >Précédent</v-btn>
+          <v-btn
+            depressed large round
+            class="pink lighten-4"
+            @click="submit"
+            :disabled="!estValide"
+          >Suivant</v-btn>
+        </v-flex>
       </v-flex>
     </v-layout>
   </v-card>
@@ -162,6 +174,12 @@ export default {
   methods: {
     afficheLundi () {
       console.log('ee')
+    },
+    back () {
+      this.$emit('back')
+    },
+    async submit () {
+
     }
   }
 }

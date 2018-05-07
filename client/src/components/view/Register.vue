@@ -242,10 +242,12 @@ export default {
       v => !!v || 'Veuillez remplir le prénom'
     ],
     telRules: [
-      v => !!v || 'Veuillez remplir le numéro de téléphone'
+      v => !!v || 'Veuillez remplir le numéro de téléphone',
+      v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
     ],
     nbCongesRules: [
-      v => !!v || 'Veuillez remplir les nombres de semaines de congés'
+      v => !!v || 'Veuillez remplir les nombres de semaines de congés',
+      v => /^[1-9]([0-9]?)$/.test(v) || 'Le nombre de congés n\'est pas valide'
     ],
     dateNaissRules: [
       v => !!v || 'Veuillez choisir une date de naissance'

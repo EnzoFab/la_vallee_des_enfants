@@ -68,49 +68,44 @@ export default {
     submitEnfant (data) {
       console.log(data)
       // store data in DB
-      this.estValideEtape2 = true
+      this.estValideEtape1 = true
       this.etape++
     },
     submitTuteurs (data) {
-      console.log(data)
-      // store data in DB
-      this.estValideEtape3 = true
-      this.etape++
+      this.estValideEtape2 = true
+      if (data.asEmployeur) {
+        this.etape = 4
+      } else {
+        this.etape = 3
+      }
     },
     submitEmp (data) {
       console.log(data)
       // store data in DB
-      this.estValideEtape4 = true
+      this.estValideEtape3 = true
       this.etape++
     },
     submitInfoG (data) {
       console.log(this.etape)
       console.log(data)
       this.etape++
-      this.estValideEtape5 = true
+      this.estValideEtape4 = true
     },
     submitPresences (data) {
       console.log(this.etape)
       console.log(data)
       this.etape++
-      this.estValideEtape6 = true
+      this.estValideEtape5 = true
     },
     submitTarifs (data) {
       console.log(this.etape)
       console.log(data)
       this.etape++
       this.fin = true
+      this.estValideEtape6 = true
     },
     back () {
       this.etape--
-    },
-    submitTuteurs (data) {
-      this.estValideEtape3 = true
-      if (data.asEmployeur) {
-        this.etape = 5
-      } else {
-        this.etape = 4
-      }
     }
   }
 }
