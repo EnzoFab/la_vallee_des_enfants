@@ -96,8 +96,13 @@
                       v-model="tuteur.estDemandeur"
                     ></v-checkbox>
                   </v-flex>
-                  <v-flex md12 lg12 xl12 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-subheader>Adresse</v-subheader>
+                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                    <v-text-field
+                      label="Rue"
+                      :rules="regleRue"
+                      v-model="rue"
+                      required
+                    ></v-text-field>
                   </v-flex>
                   <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
                     <v-text-field
@@ -188,6 +193,7 @@ export default {
       typeTuteurs: [],
       estValide: false,
       inputSemaineDisable: true,
+      rue: '',
       codePostal: '',
       ville: '',
       nomDeNaissance: '',
@@ -211,6 +217,9 @@ export default {
       regleTel: [
         v => !!v || 'Veuillez renseigner le numéro de telephone du tuteur',
         v => /^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/.test(v) || 'le numero de téléphone n\'est pas valide'
+      ],
+      regleRue: [
+        v => !!v || 'Veuillez préciser la rue'
       ],
       regleCodePostal: [
         v => !!v || 'Veuillez renseigner le code postal',
@@ -268,6 +277,7 @@ export default {
         if (tuteur.estDemandeur) {
           data.asEmployeur = true
           tuteur.infoDemandeur = {
+            rue: this.rue,
             codePostal: this.codePostal,
             ville: this.ville,
             nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
