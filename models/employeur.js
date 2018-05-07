@@ -169,27 +169,13 @@ let Employeur = {
             [employeur.nomNaissance, employeur.nomUsage, employeur.prenom, employeur.rue, employeur.codePostal, employeur.ville, employeur.email, employeur.telephone1, employeur.identifiantConnexion, employeur.mdp ],
             function (err, result) {
                 let retour = {
-                    erreur: null,
-                    employeur: null,
-                    statut: null
+                    statut: null,
+                    erreur: null
                 };
-                let e = helper.handleError(err, result, 'Aucun employeur');
-                retour.erreur= e.erreur;
-                retour.statut= e.statut;
-                console.log(result)
-                if (retour.erreur == null) {
-                    retour.employeur = {
-                        nomNaissance: result.rows[0].nom_naissance_employeur,
-                        nomUsage: result.rows[0].nom_usage_employeur,
-                        prenom: result.rows[0].prenom_employeur,
-                        rue: result.rows[0].rue_employeur,
-                        codePostal: result.rows[0].cp_employeur,
-                        ville: result.rows[0].ville_employeur,
-                        email: result.rows[0].mail_employeur,
-                        telephone1: result.rows[0].telephone_employeur,
-                        identifiantConnexion: result.rows[0].identifiant_connexion,
-                        mdp: result.rows[0].mot_de_passe
-                    }
+                if (err) {
+                    retour.statut = 500
+                    retour.erreur = err.toString()
+                } else {
                     retour.statut = 200
                 }
             });

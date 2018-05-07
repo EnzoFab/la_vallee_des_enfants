@@ -41,24 +41,16 @@ let Enfant = {
         db.query("INSERT INTO public.enfant(nom_enfant, prenom_enfant, date_naissance_enfant, sexe) VALUES ($1, $2, $3, $4)",
             [enfant.nom, enfant.prenom, enfant.date_naissance, enfant.sexe],
             function (err, result) {
-            let retour = {
-                erreur: null,
-                enfant: null,
-                statut: null
-            };
-                let e = helper.handleError(err, result, 'Aucun enfant');
-                retour.erreur= e.erreur;
-                retour.statut= e.statut;
-                console.log(result)
-                if (retour.erreur == null) {
-                        retour.enfant = {
-                            nom: result.rows[0].nom_enfant,
-                            prenom: result.rows[0].prenom_enfant,
-                            date_naissance: result.rows[0].date_naissance_enfant,
-                            sexe: result.rows[0].sexe
-                        }
+                let retour = {
+                    statut: null,
+                    erreur: null
+                };
+                if (err) {
+                    retour.statut = 500
+                    retour.erreur = err.toString()
+                } else {
                     retour.statut = 200
-                    }
+                }
             });
         callback(retour);
 }
