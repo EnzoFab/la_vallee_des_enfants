@@ -8,4 +8,12 @@ router.get('/all', function (req, res, next) {
     });
 });
 
+router.post('/create', function (req, res, next) {
+    var contrat = req.body.contrat
+    modelContrat.create(contrat, function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
 module.exports = router;
