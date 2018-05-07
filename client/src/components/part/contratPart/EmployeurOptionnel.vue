@@ -45,9 +45,9 @@
         <v-card>
           <v-flex offset-md1 md10>
             <v-text-field
-              label="Adresse"
-              v-model="adresse"
-              :rules="regleAdresse"
+              label="Rue"
+              v-model="rue"
+              :rules="regleRue"
               prepend-icon="home"
               color="red lighten-3"
               required
@@ -160,6 +160,8 @@
 </template>
 
 <script>
+import EmployeurService from '../../../services/EmployeurService'
+import TuteurService from '../../../services/TuteurService'
 export default {
   name: 'EmployeurOptionnel',
   data () {
@@ -167,7 +169,7 @@ export default {
       nomNaissance: null,
       nomUsage: null,
       prenom: null,
-      adresse: null,
+      rue: null,
       codePostal: null,
       ville: null,
       email: null,
@@ -175,15 +177,17 @@ export default {
       telephone2: null,
       profession: null,
       telephonePro: null,
+      identifiantConnexion: null,
       congesSupp: 0,
       estValide: false,
+      mdp: '123456789',
       reglePrenom: [
         v => !!v || 'Veuillez saisir le prénom'
       ],
       regleNom: [
         v => !!v || 'Veuillez saisir le nom'
       ],
-      regleAdresse: [
+      regleRue: [
         v => !!v || 'Veuillez saisir l\'adresse'
       ],
       regleCodeP: [
@@ -211,21 +215,35 @@ export default {
     }
   },
   methods: {
-    envoyer () {
-      let data = {employeur: {
-        nomNaissance: this.nomNaissance,
-        nomUsage: this.nomUsage,
-        prenom: this.prenom,
-        adresse: this.adresse,
-        codePostal: this.codePostal,
-        ville: this.ville,
-        email: this.email,
-        telephone1: this.telephone1,
-        telephone2: this.telephone2,
-        profession: this.profession,
-        telephonePro: this.telephonePro,
+    async envoyer () {
+      let data = {
+        employeur: {
+          nomNaissance: this.nomNaissance,
+          nomUsage: this.nomUsage,
+          prenom: this.prenom,
+          rue: this.rue,
+          codePostal: this.codePostal,
+          ville: this.ville,
+          email: this.email,
+          telephone1: this.telephone1,
+          identifiantConnexion: this.nomUsage,
+          mdp: this.mdp
+        },
+        tuteur: {
+          nomUsage: this.nomUsage,
+          prenom: this.prenom,
+          telephone: this.telephone2,
+          profession: this.profession,
+          telephonePro: this.telephonePro
+        },
         congesSupp: this.congesSupp
       }
+      try {
+        await EmployeurService.createContratEmployeur(data.employeur)
+        await TuteurService.createContratTuteur(data.tuteur)
+      } catch (error) {
+        console.log(error)
+        this.error = error.response.data.error
       }
       this.$emit('submit', data)
     },

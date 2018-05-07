@@ -10,7 +10,6 @@ router.get('/all', function (req, res, next) {
 
 router.post('/create', function (req, res, next) {
     var enfant = req.body.enfant
-    console.log('ENFANNNNNNT', enfant)
     modelEnfant.create(enfant, function (retour) {
         console.log(retour)
         res.send(retour)

@@ -52,10 +52,10 @@ let Enfant = {
                 console.log(result)
                 if (retour.erreur == null) {
                         retour.enfant = {
-                            nom: result.rows[i].nom_enfant,
-                            prenom: result.rows[i].prenom_enfant,
-                            date_naissance: result.rows[i].date_naissance_enfant,
-                            sexe: result.rows[i].sexe
+                            nom: result.rows[0].nom_enfant,
+                            prenom: result.rows[0].prenom_enfant,
+                            date_naissance: result.rows[0].date_naissance_enfant,
+                            sexe: result.rows[0].sexe
                         }
                     retour.statut = 200
                     }

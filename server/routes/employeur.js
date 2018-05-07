@@ -25,4 +25,12 @@ router.post('/login', function (req, res, next) {
     })
 });
 
+router.post('/create', function (req, res, next) {
+    var employeur = req.body.employeur
+    modelEmployeur.create(employeur, function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
 module.exports = router;
