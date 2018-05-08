@@ -11,7 +11,7 @@ import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
 import VueSocketIO from 'vue-socket.io'
 
-Vue.use(VueSocketIO, 'http://localhost:3000/evenements/')
+Vue.use(VueSocketIO, process.env.BASE_URL +'/evenements/')
 
 Vue.use(VueGoogleMaps, {
   load: {
