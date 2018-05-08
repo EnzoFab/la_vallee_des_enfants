@@ -1,20 +1,20 @@
 <template>
   <v-layout mt-5>
-    <v-flex>
+    <v-flex md6 offset-md1>
       <v-flex md10 offset-md1>
         <v-flex class="text-md-left">
           <h1 class="blue--text">Enfant</h1>
         </v-flex>
         <v-card>
           <v-flex pt-2 offset-md1 class="text-sm-left">
-            <h2>Marion Rul</h2>
+            <h2> {{ prenomEnfant + ' ' + nomEnfant }} </h2>
           </v-flex>
           <v-flex pl-5 class="text-sm-left">
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">cake</v-icon> Anniversaire : </h4><span>8 avril 1996</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">cake</v-icon> Anniversaire : </h4><span>{{ dateNaissanceEnfant }}</span>
             </v-layout>
             <v-layout pb-2 mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">face</v-icon> Sexe : </h4><span>Fille</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">face</v-icon> Sexe : </h4><span>{{ sexeEnfant }}</span>
             </v-layout>
           </v-flex>
         </v-card>
@@ -25,20 +25,23 @@
         </v-flex>
         <v-card>
           <v-flex pt-2 offset-md1 class="text-sm-left">
-            <h2>Contrat n° AFT5-98SEY </h2>
+            <h2>Contrat n° {{ numeroContrat }} </h2>
           </v-flex>
           <v-flex pl-5 class="text-sm-left">
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">description</v-icon> Type de contrat : </h4><span>CDI</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">description</v-icon> Type de contrat : </h4><span> {{ typeContrat }} </span>
             </v-layout>
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">payment</v-icon> Mode de paiement : </h4><span>Espèces</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">payment</v-icon> Mode de paiement : </h4><span>{{ modeDePaiementContrat }} </span>
             </v-layout>
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date de début du contrat </h4><span>5 mai 2018</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Période d'adaptation : </h4><span> du {{ dateDebAdapt }} au {{ dateFinAdapt }}</span>
+            </v-layout>
+            <v-layout mt-1>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date de début du contrat :</h4><span> {{ dateDebutContrat }} </span>
             </v-layout>
             <v-layout pb-2 mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date de fin du contrat : </h4><span>Aucune</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date de fin du contrat : </h4><span> {{ dateFinContrat }} </span>
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md2>
@@ -48,6 +51,48 @@
           </v-flex>
         </v-card>
       </v-flex>
+      <v-flex pt-2 mb-5 md10 offset-md1>
+      <v-flex class="text-md-left">
+        <h1 class="blue--text">Employé(e)</h1>
+      </v-flex>
+      <v-card>
+        <v-flex pt-2 offset-md1 class="text-sm-left">
+          <h2>{{ prenomAssMat + ' ' + nomUsageAssMat }}</h2>
+        </v-flex>
+        <v-flex pl-5 class="text-sm-left">
+          <v-layout mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">account_circle</v-icon> Nom de naissance : </h4><span>{{ nomNaissanceAssMat }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">cake</v-icon> date de naissance :</h4><span>{{ dateNaissanceAssMat }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">domain</v-icon> Ville de naissance :</h4><span>{{ villeNaissanceAssMat }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone :</h4><span>{{ telephoneAssMat }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">perm_identity</v-icon> Numéro SS :</h4><span>{{ numeroSS }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date agrément :</h4><span>{{ dateAgrement }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">receipt</v-icon> Référence agrément :</h4><span>{{ referenceAgrement }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">assessment</v-icon> Assurance responsabilité civile :</h4><span>{{ assurance }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">label_outline</v-icon> Numéro de police :</h4><span>{{ numeroPolice }}</span>
+          </v-layout>
+          <v-layout pb-2 mt-1>
+            <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Nombre de semaines de congés :</h4><span>{{ nombreSemaineConges }}</span>
+          </v-layout>
+        </v-flex>
+      </v-card>
+    </v-flex>
     </v-flex>
     <v-flex md6 offset-md1>
       <v-flex md10>
@@ -55,72 +100,172 @@
           <h1 class="blue--text">Employeur</h1>
         </v-flex>
         <v-card>
-          <v-flex offset-md1 class="text-sm-left">
-            <h2>Enzo Fabre</h2>
+          <v-flex pt-2 offset-md1 class="text-sm-left">
+            <h2>{{ prenomEmp + ' ' + nomUsageEmp }}</h2>
           </v-flex>
           <v-flex pl-5 class="text-md-left">
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">home</v-icon> Adresse : </h4><span>3 rue des coquelicots 17300 La Rochelle</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">account_circle</v-icon> Nom de naissance : </h4><span>{{ nomNaissanceEmp }}</span>
             </v-layout>
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span> 05 46 23 45 87</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">home</v-icon> Adresse : </h4><span>{{ rueEmp + ' ' + codePEmp + ' ' + villeEmp }}</span>
             </v-layout>
             <v-layout mt-1>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">local_post_office</v-icon> Email : </h4><span> zozio.foot@but.com</span>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>{{ telephoneEmp }}</span>
             </v-layout>
-            <v-layout mt-1 pb-3>
-              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contacts</v-icon> Identifiant : </h4>ZoFa</span>
+            <v-layout mt-1>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">local_post_office</v-icon> Email : </h4><span>{{ emailEmp }}</span>
+            </v-layout>
+            <v-layout mt-1>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contacts</v-icon> Identifiant : </h4><span>{{ identifiantEmp }}</span>
+            </v-layout>
+            <v-layout pb-3 mt-1>
+              <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Nombre de semaines de congés supplémentaires :</h4><span>{{ nombreSemSupp }}</span>
+            </v-layout>
+            <v-layout pb-2 mt-1>
+              <v-flex offset-md3>
+                <v-btn color="blue--text">Modifier</v-btn>
+              </v-flex>
             </v-layout>
           </v-flex>
         </v-card>
       </v-flex>
       <v-flex>
-        <v-flex>
+        <v-flex v-for="parent in parents" pt-2 md10>
           <v-flex class="text-md-left">
             <h1 class="blue--text">Parents</h1>
           </v-flex>
           <v-card>
             <v-flex pt-2 offset-md1 class="text-sm-left">
-              <h2>Enzo Fabre</h2>
+              <h2>{{ parent.prenom_tuteur + ' ' + parent.nom_tuteur }}</h2>
             </v-flex>
             <v-flex pl-5 class="text-md-left">
               <v-layout mt-1>
-                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>04 04 05 08 32</span>
+                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>{{ parent.telephone}}</span>
               </v-layout>
               <v-layout mt-1>
-                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">work</v-icon> Profession : </h4><span> Footballeur professionnel</span>
+                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">work</v-icon> Profession : </h4><span> {{ parent.profession}}</span>
               </v-layout>
               <v-layout pb-3 mt-1>
-                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>Non renseigné</span>
+                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>{{ parent.telephone_pro}}</span>
               </v-layout>
             </v-flex>
             <v-divider></v-divider>
-            <v-flex pt-2 offset-md1 class="text-sm-left">
-              <h2>Zinedine Zidane</h2>
-            </v-flex>
-            <v-flex pl-5 class="text-md-left">
-              <v-layout mt-1>
-                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>04 04 05 08 32</span>
-              </v-layout>
-              <v-layout mt-1>
-                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">work</v-icon> Profession : </h4><span> Footballeur professionnel</span>
-              </v-layout>
-              <v-layout pb-2 mt-1>
-                <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>Non renseigné</span>
-              </v-layout>
-            </v-flex>
           </v-card>
         </v-flex>
     </v-flex>
     </v-flex>
   </v-layout>
 
-
 </template>
 
 <script>
+import ContratService from '../../../services/ContratService'
+import moment from 'moment'
+import 'moment/locale/fr';
+moment.locale('fr')
 export default {
-  name: 'Fiche'
+  name: 'Fiche',
+  data() {
+    return {
+      prenomEnfant: null,
+      nomEnfant: null,
+      dateNaissanceEnfant: null,
+      sexeEnfant: null,
+      numeroContrat: 'monprems1',
+      typeContrat: null,
+      modeDePaiementContrat: null,
+      dateDebAdapt: null,
+      dateFinAdapt: null,
+      dateDebutContrat: null,
+      dateFinContrat: 'Aucune, contrat en cours',
+      nomUsageAssMat: null,
+      prenomAssMat: null,
+      nomNaissanceAssMat: null,
+      dateNaissanceAssMat: null,
+      villeNaissanceAssMat: null,
+      telephoneAssMat: null,
+      numeroSS: null,
+      dateAgrement: null,
+      referenceAgrement: null,
+      assurance: null,
+      numeroPolice: null,
+      nombreSemaineConges: null,
+      nomUsageEmp: null,
+      prenomEmp: null,
+      nomNaissanceEmp: null,
+      rueEmp: null,
+      codePEmp: null,
+      villeEmp: null,
+      telephoneEmp: null,
+      emailEmp: null,
+      identifiantEmp: null,
+      nombreSemSupp: null,
+      parents: []
+    }
+  },
+  mounted() {
+    this.initDonnees(this.numeroContrat)
+    this.initParents(this.numeroContrat)
+  },
+  methods: {
+    async initDonnees(numeroContrat) {
+      try {
+        const response = await ContratService.donneesContrat(this.numeroContrat)
+        console.log(response.data)
+        this.numeroContrat = numeroContrat
+        this.modeDePaiementContrat = response.data.modepaiements
+        this.nomEnfant = response.data.nom_enfant
+        this.prenomEnfant = response.data.prenom_enfant
+        this.dateNaissanceEnfant = moment(response.data.date_naissance_enfant).format('LL')
+        if (response.data.sexe === 'F') {
+          this.sexeEnfant = 'Fille'
+        } else {
+          this.sexeEnfant = 'Garçon'
+        }
+        this.typeContrat = response.data.type_contrat
+        this.dateDebAdapt = moment(response.data.date_deb_periode_adaptation).format('L')
+        this.dateFinAdapt = moment(response.data.date_fin_periode_adaptation).format('L')
+        this.dateDebutContrat = moment(response.data.date_debut).format('LL')
+        /* if(response.data.date_fin != null){
+          this.dateFinContrat = response.data.date_fin
+        } */
+        this.nomUsageAssMat = response.data.nom_usage_am
+        this.prenomAssMat = response.data.prenom_am
+        this.nomNaissanceAssMat = response.data.nom_naissance_am
+        this.dateNaissanceAssMat = moment(response.data.date_naissance_am).format('LL')
+        this.villeNaissanceAssMat = response.data.ville_naissance_am
+        this.telephoneAssMat = response.data.tel_am
+        this.numeroSS = response.data.numero_ss
+        this.dateAgrement = moment(response.data.date_agrement).format('L')
+        this.referenceAgrement = response.data.reference_agrement
+        this.assurance = response.data.assurance_resp_civile
+        this.numeroPolice = response.data.num_police
+        this.nombreSemaineConges = response.data.nb_semaines_conges
+        this.nomUsageEmp = response.data.nom_usage_employeur
+        this.prenomEmp = response.data.prenom_employeur
+        this.nomNaissanceEmp = response.data.nom_naissance_employeur
+        this.rueEmp = response.data.rue_employeur
+        this.codePEmp = response.data.cp_employeur
+        this.villeEmp = response.data.ville_employeur
+        this.telephoneEmp = response.data.telephone_employeur
+        this.emailEmp = response.data.mail_employeur
+        this.identifiantEmp = response.data.identifiant_connexion
+        this.nombreSemSupp = response.data.nb_semaines_conges_parents
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async initParents(numeroContrat) {
+      try {
+        const response = await ContratService.donneesParents(this.numeroContrat)
+        console.log(response.data)
+        this.parents = response.data.tuteurs
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
 }
 </script>
 
