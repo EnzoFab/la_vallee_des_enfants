@@ -137,6 +137,7 @@ export default {
     },
     async submit () {
       let data = {enfant: {prenom: this.prenom, nom: this.nom, sexe: this.sexe, date_naissance: this.date}}
+      console.log('ee ', process.env)
       try {
         await EnfantService.createContratEnfant(data)
       } catch (error) {

@@ -373,3 +373,12 @@ create table public."presencereelle"
 with (
     oids = false
 );
+
+INSERT INTO public.typetuteur(nom_type_tuteur)
+	VALUES ('Père'),('Mère'),('Tuteur');
+INSERT INTO public.typejour(libelle)
+	VALUES ('Lundi'), ('Mardi'), ('Mercredi'), ('Jeudi'), ('Vendredi'), ('Samedi'), ('Dimanche');
+INSERT INTO public.typecontrat(nom_type)
+	VALUES ('CDI');
+INSERT INTO public.modedepaiement(nom_mode)
+	VALUES ('Virement'), ('Chèque'), ('Espèces');

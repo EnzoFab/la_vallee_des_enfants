@@ -2,7 +2,6 @@
   <v-card>
     <v-layout row wrap>
       <v-flex  xs12 md6 offset-md3 class="my-5">
-
         <v-toolbar class="pink lighten-4">
           <v-spacer></v-spacer>
           <v-toolbar-title>Planning d'accueil</v-toolbar-title>

@@ -155,6 +155,8 @@ export default {
     this.initModePaiement()
     this.initTypeContrat()
     this.initNombreJour()
+    console.log(process.env.BASE_URL)
+    //
   },
   methods: {
     async initModePaiement () {

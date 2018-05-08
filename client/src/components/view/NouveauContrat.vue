@@ -51,7 +51,7 @@ import Tarifs from '../part/contratPart/Tarifs'
 import TuteursLegaux from '../part/contratPart/TuteursLegaux'
 import PresenceTheorique from '../part/contratPart/PresenceTheorique'
 export default {
-  name: 'Simulation',
+  name: 'NouveauContrat',
   components: {
     PresenceTheorique,
     TuteursLegaux,
@@ -118,6 +118,9 @@ export default {
     back () {
       this.etape--
     }
+  },
+  mounted () {
+    console.log(this.$store.state.numContrat)
   }
 }
 </script>

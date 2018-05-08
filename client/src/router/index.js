@@ -10,6 +10,8 @@ import SimulationContrat from '@/components/view/Simulation'
 import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
 import ToolbarAssMat from '@/components/part/ToolbarAssMat'
 import Evenement from '@/components/view/Evenements'
+import AllContrat from '@/components/view/AllContrat'
+import NouveauContrat from '@/components/view/NouveauContrat'
 
 Vue.use(Router)
 
@@ -69,6 +71,18 @@ export default new Router({
       name: 'ConnexionEmp',
       component: ConnexionEmp,
       meta: {title: 'ConnexionEmp'}
+    },
+    {
+      path: '/contrat/',
+      name: 'AllContrats',
+      component: AllContrat,
+      meta: {title: 'Contrats'}
+    },
+    {
+      path: '/contrat/creation',
+      name: 'NouveauContrat',
+      component: NouveauContrat,
+      meta: {title: 'nouveau contrat'}
     },
     {
       path: '/contrat/simulation',

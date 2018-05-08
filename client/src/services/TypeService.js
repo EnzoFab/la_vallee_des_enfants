@@ -14,6 +14,9 @@ export default {
     return Api().get('typeTuteur/all')
   },
   indemnitesJour () {
-    return Api.get('frais/indemnites')
+    return Api().get('frais/indemnites')
+  },
+  joursDeLaSemaine () {
+    return Api().get('typeJours/all')
   }
 }

@@ -18,7 +18,6 @@ let Contrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_contrat,
                             dateDebut: rslt.rows[i].date_debut,
@@ -30,7 +29,6 @@ let Contrat = {
                             dateFinAdapt: rslt.rows[i].date_fin_periode_adaptation,
                             jourPaiement: rslt.rows[i].jour_paiement
                         });
-                        console.log('array', array)
                     }
                     retour.contrats = array;
                     retour.statut = 200
