@@ -8,9 +8,18 @@ router.get('/all', function (req, res, next) {
     });
 });
 
-router.post('/create', function (req, res, next) {
+router.post('/create2', function (req, res, next) {
     var contrat = req.body.contrat
-    modelContrat.create(contrat, function (retour) {
+    modelContrat.create2(contrat, function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
+router.post('/create', function (req, res, next) {
+    //var contrat = req.body.contrat
+    //console.log('drtyjb ' + contrat.numContrat)
+    modelContrat.create(req.body.numContrat, req.body.numAssMat, function (retour) {
         console.log(retour)
         res.send(retour)
     })

@@ -18,6 +18,7 @@ let Contrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
+                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_contrat,
                             dateDebut: rslt.rows[i].date_debut,
@@ -29,6 +30,7 @@ let Contrat = {
                             dateFinAdapt: rslt.rows[i].date_fin_periode_adaptation,
                             jourPaiement: rslt.rows[i].jour_paiement
                         });
+                        console.log('array', array)
                     }
                     retour.contrats = array;
                     retour.statut = 200
@@ -140,8 +142,66 @@ let Contrat = {
         );
     },
 
+    /*
+    * -------------- TOUT CE QUI CONCERNE LE CONTRAT AJOUT/MODIFICATION PAR SECTION ET CREATION INITIALE --------------
+     */
 
-    create: function (contrat, callback) {
+    // creation initiale du contrat
+    create: function (numContrat, numAssMat, callback) {
+        db.query('INSERT INTO public.contrat(id_contrat, id_am) VALUES ($1, $2)',
+            [numContrat, numAssMat],
+            function () {
+                console.log('c\'est inséré :)')
+                let retour = 'contrat créé'
+                callback(retour)
+            });
+    },
+
+    // Ajout de l'enfant au contrat
+    sectionEnfantCreate: function (numContrat, numEnfant) {
+        db.query('UPDATE public.contrat ' +
+            'SET id_enfant = $1 ' +
+            'WHERE id_contrat = $2',
+            [numEnfant, numContrat],
+            function () {
+                console.log('c\'est inséré :)')
+                let retour = 'l\'enfant est ajouté au contrat'
+                callback(retour)
+            }
+        )
+    },
+
+    //Ajout de l'employeur au contrat
+    sectionEmployeurCreate: function (numContrat, nombreSemainesCong, numEmployeur) {
+        db.query('UPDATE public.contrat ' +
+            'SET id_employeur = $1, nb_semaines_conges_parents = $2 ' +
+            'WHERE id_contrat = $3',
+            [numEmployeur, nombreSemainesCong, numContrat],
+            function () {
+                console.log('c\'est inséré :)')
+                let retour = 'l\'employeur et ses conges sont ajoutés au contrat'
+                callback(retour)
+            }
+        )
+    },
+
+    //Ajout des informations générales
+    sectionInfosGeneralesCreate: function (numContrat, numTypeContrat, numModeDePaiement, dateDebut, jourDePaiement) {
+        db.query('UPDATE public.contrat ' +
+            'SET id_type_contrat = $1, id_mode_paiement = $2, jour_paiement = $3, date_debut = $4 ' +
+            'WHERE id_contrat = $5',
+            [numTypeContrat, numModeDePaiement, jourDePaiement, dateDebut, numContrat],
+            function () {
+                console.log('c\'est inséré :)')
+                let retour = 'les infos générales sont ajoutées au contrat'
+                callback(retour)
+            }
+        )
+    },
+
+    sectionTarifscreate: function (numContrat, tarifHoraire)
+
+    create2: function (contrat, callback) {
         db.query("INSERT INTO public.contrat(id_contrat, date_debut, nb_semaines_conges_parents, tarif, nb_heures_semaine, taux_majore, date_deb_periode_adaptation, date_fin_periode_adaptation, jour_paiement) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
             [contrat.id, contrat.date, contrat.congesSupp, contrat.salaireNet, contrat.nbHeuresSemaine, contrat.majoration, contrat.dateDebAdapt, contrat.dateFinAdapt, contrat.jourPrelevement],
             function (err, result) {
