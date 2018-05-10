@@ -8,13 +8,13 @@ router.get('/all', function (req, res, next) {
     });
 });
 
-router.post('/create2', function (req, res, next) {
+/* router.post('/create2', function (req, res, next) {
     var contrat = req.body.contrat
     modelContrat.create2(contrat, function (retour) {
         console.log(retour)
         res.send(retour)
     })
-});
+}); */
 
 router.post('/create', function (req, res, next) {
     //var contrat = req.body.contrat
@@ -42,5 +42,14 @@ router.get('/getTuteursById/:numC', function (req, res, next) {
         res.send(retour)
     })
 });
+
+//
+router.put('/:n/enfant', function (req, res) {
+    let id_contrat = req.params.n
+    let id_enfant = req.body.id_enfant
+    modelContrat.sectionEnfantCreate(id_contrat, id_enfant, function (retour) {
+        res.send(retour)
+    })
+})
 
 module.exports = router;

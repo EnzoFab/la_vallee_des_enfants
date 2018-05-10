@@ -30,7 +30,6 @@
           </v-stepper-content>
           <v-stepper-content step="5">
             <PresenceTheorique @back="back" @submit="submitPresences"></PresenceTheorique>
-            <!-- <PlaningPresenceContrat @back="back" @submit="submitPresences"></PlaningPresenceContrat> -->
           </v-stepper-content>
           <v-stepper-content step="6">
             <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
@@ -50,6 +49,8 @@ import EmployeurOptionnel from '../part/contratPart/EmployeurOptionnel'
 import Tarifs from '../part/contratPart/Tarifs'
 import TuteursLegaux from '../part/contratPart/TuteursLegaux'
 import PresenceTheorique from '../part/contratPart/PresenceTheorique'
+import EnfantService from '../../services/EnfantService'
+import ContratService from '../../services/ContratService'
 export default {
   name: 'NouveauContrat',
   components: {
@@ -75,11 +76,35 @@ export default {
     }
   },
   methods: {
-    submitEnfant (data) {
-      console.log(data)
-      // store data in DB
-      this.estValideEtape1 = true
-      this.etape++
+    async submitEnfant (data) {
+      // console.log(data)
+      console.log(this.$store.state.assMat.id_assmat)
+      try {
+        let response = await EnfantService.findOneByContratID(this.$store.state.numContrat)
+        // on regarde si l'enfant existe deja
+        if (response.data.statut === 200) { // il existe un enfants
+          // update l'enfant
+        } else if (response.data.statut === 404) { // l'enfant n'existe pas
+          let enfantR = await EnfantService.createContratEnfant(data)
+          let r = await ContratService.create({
+            numContrat: this.$store.state.numContrat,
+            numAssMat: this.$store.state.assMat.id_assmat
+          }) // creer le contrat
+          console.log('contrat ', enfantR.data.id_enfant)
+          if (r.data.erreur == null) {
+            let updateContrat = await ContratService.updateEnfant(
+              this.$store.state.numContrat, {id_enfant: enfantR.data.id_enfant}
+            )
+            console.log(updateContrat.data)
+            if (updateContrat.data.erreur == null) {
+              this.estValideEtape1 = true
+              this.etape++
+            }
+          }
+        }
+      } catch (e) {
+        console.log(e.toString())
+      }
     },
     submitTuteurs (data) {
       console.log(data)

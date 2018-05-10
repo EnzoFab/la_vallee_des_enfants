@@ -28,6 +28,7 @@ router.post('/login', function (req, res, next) {
         if(retour.erreur == null){
             retour.token = jwtSignAssMat(retour.assmat)
         }
+        console.log(retour)
         res.send(retour)
     })
 });

@@ -1,18 +1,20 @@
 <template>
   <div id="app">
     <v-app light>
-      <Toolbar v-on:toogleDrawer="toogleDrawer" class="lightOpcity"></Toolbar>
-        <v-content>
-          <transition name="custom-classes-transition"
-                      enter-active-class="animated fadeIn"
-                      leave-active-class="animated bounceOutDown"
-                      mode="out-in"
-                      :duration="500"
-          >
-            <router-view />
-          </transition>
-      <Footer></Footer>
-        </v-content>
+      <ToolbarAssMat class="lightOpcity" v-if="assMatConnecte"></ToolbarAssMat>
+      <ToolbarEmployeur class="lightOpcity" v-if="employeurConnecte"></ToolbarEmployeur>
+      <Toolbar class="lightOpcity" v-if="!assMatConnecte && !employeurConnecte"></Toolbar>
+      <v-content>
+        <transition name="custom-classes-transition"
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated bounceOutDown"
+                    mode="out-in"
+                    :duration="500"
+        >
+          <router-view />
+        </transition>
+        <Footer></Footer>
+      </v-content>
     </v-app>
   </div>
 </template>
@@ -21,9 +23,16 @@
 import Drawer from './components/part/Drawer'
 import Toolbar from './components/part/Toolbar'
 import Footer from './components/part/Footer'
+import ToolbarAssMat from './components/part/ToolbarAssMat'
+import ToolbarEmployeur from './components/part/ToolbarEmployeur'
 export default {
   name: 'App',
-  components: {Footer, Toolbar, Drawer},
+  components: {
+    Footer,
+    Toolbar,
+    Drawer,
+    ToolbarAssMat,
+    ToolbarEmployeur},
   data () {
     return {
       drawer: false
@@ -34,6 +43,17 @@ export default {
       console.log('Toogle')
       this.drawer = !this.drawer // affiche ou masque le navigation drawer
     }
+  },
+  computed: {
+    assMatConnecte () {
+      return this.$store.getters.connectedUser !== null && this.$store.getters.connectedUser.rang === 'Assmat'
+    },
+    employeurConnecte () {
+      return this.$store.getters.connectedUser !== null && this.$store.getters.connectedUser.rang === 'Employeur'
+    }
+  },
+  mounted () {
+    console.log(this.$store.state)
   }
 }
 </script>

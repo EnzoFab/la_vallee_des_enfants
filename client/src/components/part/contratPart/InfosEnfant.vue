@@ -100,7 +100,6 @@
 </template>
 
 <script>
-import EnfantService from '../../../services/EnfantService'
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'InfosEnfant',
@@ -137,14 +136,6 @@ export default {
     },
     async submit () {
       let data = {enfant: {prenom: this.prenom, nom: this.nom, sexe: this.sexe, date_naissance: this.date}}
-      console.log('ee ', process.env)
-      try {
-        await EnfantService.createContratEnfant(data)
-      } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
-      }
-      console.log(data.date_naissance)
       this.$emit('submit', data)
     },
     back () {

@@ -150,22 +150,28 @@ let Contrat = {
     create: function (numContrat, numAssMat, callback) {
         db.query('INSERT INTO public.contrat(id_contrat, id_am) VALUES ($1, $2)',
             [numContrat, numAssMat],
-            function () {
+            function (e) {
+                let retour = {
+                    erreur : null
+                }
+                if (e) {
+                    retour.erreur = e.toString()
+                }
                 console.log('c\'est inséré :)')
-                let retour = 'contrat créé'
                 callback(retour)
             });
     },
 
     // Ajout de l'enfant au contrat
-    sectionEnfantCreate: function (numContrat, numEnfant) {
-        db.query('UPDATE public.contrat ' +
-            'SET id_enfant = $1 ' +
-            'WHERE id_contrat = $2',
+    sectionEnfantCreate: function (numContrat, numEnfant, callback) {
+        db.query('UPDATE public.contrat SET id_enfant = $1 WHERE id_contrat = $2',
             [numEnfant, numContrat],
-            function () {
-                console.log('c\'est inséré :)')
-                let retour = 'l\'enfant est ajouté au contrat'
+            function (e) {
+            let retour = {erreur : null}
+                if (e) {
+                    console.log(e.toString())
+                    retour.erreur = e.toString()
+                }
                 callback(retour)
             }
         )
@@ -199,7 +205,7 @@ let Contrat = {
         )
     },
 
-    sectionTarifscreate: function (numContrat, tarifHoraire)
+    // sectionTarifscreate: function (numContrat, tarifHoraire)
 
     create2: function (contrat, callback) {
         db.query("INSERT INTO public.contrat(id_contrat, date_debut, nb_semaines_conges_parents, tarif, nb_heures_semaine, taux_majore, date_deb_periode_adaptation, date_fin_periode_adaptation, jour_paiement) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",

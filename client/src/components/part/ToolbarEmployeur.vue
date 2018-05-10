@@ -40,7 +40,7 @@ export default {
   methods: {
     logout () {
       this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setEmployeur', null)
+      this.$store.dispatch('removeEmployeur')
       this.$router.push({
         name: 'Accueil'
       })

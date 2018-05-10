@@ -52,7 +52,7 @@ export default {
     },
     async loadContrat () {
       try {
-        let response = ContratService.getAll()
+        let response = await ContratService.getAll()
         this.contrats = response.data.contrats
       } catch (e) {
 

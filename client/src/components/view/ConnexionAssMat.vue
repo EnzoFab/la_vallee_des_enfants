@@ -36,8 +36,9 @@ export default {
         const response = await AuthentificationService.loginAssMat(data)
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setAssMat', response.data.assmat)
+        console.log(this.$store.state.assMat)
         this.$router.push({
-          name: 'AccueilAssMat'
+          name: 'AllContrats'
         })
       } catch (error) {
         console.log(error)

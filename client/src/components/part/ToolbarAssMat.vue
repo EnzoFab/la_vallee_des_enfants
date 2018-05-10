@@ -69,7 +69,7 @@
         </v-menu>
       </v-tab>
       <v-tab align="right" @click="logout">
-          <h4 class="teal--text">Se déconnecter</h4>
+          <h4 class="teal--text">Deconnexion</h4>
           <v-icon x-large color="teal">exit_to_app</v-icon>
       </v-tab>
     </v-tabs>
@@ -140,8 +140,9 @@ export default {
   },
   methods: {
     logout () {
+      console.log('logout')
       this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setAssMat', null)
+      this.$store.dispatch('removeAssMat')
       this.$router.push({
         name: 'Accueil'
       })
