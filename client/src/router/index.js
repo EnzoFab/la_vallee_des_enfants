@@ -9,7 +9,7 @@ import ConnexionEmp from '@/components/view/ConnexionEmployeur'
 import SimulationContrat from '@/components/view/Simulation'
 import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
 import ToolbarAssMat from '@/components/part/ToolbarAssMat'
-import Evenement from '@/components/view/Evenements'
+import FilActualite from '@/components/view/FilActualite'
 import AllContrat from '@/components/view/AllContrat'
 import NouveauContrat from '@/components/view/NouveauContrat'
 
@@ -91,10 +91,10 @@ export default new Router({
       meta: {title: 'Simulation'}
     },
     {
-      path: '/evenements',
-      name: 'Evenement',
-      component: Evenement,
-      meta: {title: 'Evenements'}
+      path: '/actualites',
+      name: 'FilActualite',
+      component: FilActualite,
+      meta: {title: 'Fil d\'actualité'}
     },
     { path: '/404',
       name: '404',

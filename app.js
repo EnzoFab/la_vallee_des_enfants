@@ -16,7 +16,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var EmployeurRouter = require('./routes/employeur');
 var assMatRouter = require('./routes/assmat');
-var evenementRouter = require('./routes/evenement');
+var evenementRouter = require('./routes/post');
 var modeDePaiement = require('./routes/modeDePaiement');
 var typeDeContrat = require('./routes/typeDeContrat');
 var typeTuteur = require('./routes/typeTuteurs');
@@ -56,6 +56,27 @@ app.use('/contrat', contrat)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+var chat = io
+    .of('/post')
+    .on('connection', function (socket) {
+        console.log('Nouveau client')
+        socket.on('nouveauPost', function (data) {
+            socket.broadcast.emit('nouveauPost', data)
+        })
+        /*socket.on('post', function (val) {
+            console.log(val)
+            this.emit('nouveauPost', {msg: 'Contrat'})
+        })
+        socket.emit('message', {
+            that: 'only'
+            , '/post': 'will get'
+        });
+        chat.emit('message', {
+            everyone: 'in'
+            , '/post': 'will get'
+        });*/
+    });
 
 
 // catch 404 and forward to error handler

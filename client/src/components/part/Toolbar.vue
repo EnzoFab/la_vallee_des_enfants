@@ -11,8 +11,8 @@
         <h4 class="pink--text"> Accueil </h4>
         <v-icon x-large color="pink">fa-home</v-icon>
       </v-tab>
-      <v-tab to="/evenements" class="d-inline-block" ripple>
-        <h4 class="light-green--text"> Événements </h4>
+      <v-tab to="/actualites" class="d-inline-block" ripple>
+        <h4 class="light-green--text"> fil d'actualité </h4>
         <v-icon x-large color="light-green">event</v-icon>
       </v-tab>
       <v-tab to="/contact"  ripple class="d-inline-block">
