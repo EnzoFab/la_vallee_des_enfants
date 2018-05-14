@@ -60,7 +60,24 @@ let Tuteur = {
     * -------------- TOUT CE QUI CONCERNE LE CONTRAT AJOUT/MODIFICATION PAR SECTION ET CREATION INITIALE --------------
      */
 
-    // creation initiale du contrat
+    sectionEnfantTuteur: function (numEnfant, numTuteur, callback) {
+        db.query('INSERT INTO public.apourtuteur(id_enfant, id_tuteur) VALUES ($1, $2)',
+            [numEnfant, numTuteur],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            });
+    },
 }
 
 module.exports = Tuteur;

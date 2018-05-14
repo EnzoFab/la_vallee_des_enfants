@@ -16,6 +16,15 @@ router.get('/:n', function (req, res) {
     modelTuteur.getTuteursById(numContrat, function (retour) {
         res.send(retour)
     });
-})
+});
+
+// Ajout/Modification des données de la SECTION TUTEUR DE L'ENFANT
+router.post('/lierEnfant', function (req, res) {
+    let id_enfant = req.body.id_enfant
+    let id_tuteur = req.body.id_tuteur
+    modelTuteur.sectionEnfantTuteur(id_enfant, id_tuteur, function (retour) {
+        res.send(retour)
+    })
+});
 
 module.exports = router;
