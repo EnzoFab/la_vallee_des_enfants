@@ -40,4 +40,15 @@ router.get('/all', function (req, res, next) {
     })
 });
 
+// Update du mot de passe
+router.put('/modifMdp', function (req, res) {
+    let num_assmat = req.body.id_am
+    let ancienMdp = req.body.ancienpwd
+    let nouveauMdp = req.body.nouveaupwd
+    let reecrireMdp = req.body.reecrirepwd
+    modelAssMat.updateMdp(num_assmat, ancienMdp, nouveauMdp, reecrireMdp, function (retour) {
+        res.send(retour)
+    })
+});
+
 module.exports = router;

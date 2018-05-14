@@ -185,7 +185,6 @@ let Contrat = {
             })
     },
 
-
     /* -------------------------------------------------------------------------------------------------------------- */
     create2: function (contrat, callback) {
         db.query("INSERT INTO public.contrat(id_contrat, date_debut, nb_semaines_conges_parents, tarif, nb_heures_semaine, taux_majore, date_deb_periode_adaptation, date_fin_periode_adaptation, jour_paiement) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",

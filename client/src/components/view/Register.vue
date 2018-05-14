@@ -4,7 +4,7 @@
       <v-card>
         <v-toolbar color="pink lighten-1" dark>
           <v-spacer></v-spacer>
-          <v-toolbar-title>Inscription assistante maternelle</v-toolbar-title>
+          <v-toolbar-title>Inscrire une nouvelle assistante maternelle</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-card-text>

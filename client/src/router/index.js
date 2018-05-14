@@ -13,7 +13,7 @@ import AllContrat from '@/components/view/AllContrat'
 import Fiche from '@/components/part/VisualisationContratPart/Fiche'
 import SaisirPresences from '@/components/part/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
-import ParametresCompte from '@/components/part/ParametresCompte'
+import ParametresCompte from '@/components/view/ParametresCompte'
 import FilActualite from '@/components/view/FilActualite'
 
 Vue.use(Router)
@@ -28,7 +28,7 @@ export default new Router({
       meta: {title: 'Accueil'}
     },
     {
-      path: '/tool',
+      path: '/parametres',
       name: 'ParametresCompte',
       component: ParametresCompte,
       meta: {title: 'ParametresCompte'}
