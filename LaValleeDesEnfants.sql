@@ -162,7 +162,7 @@ create table public."post"
     id_post SERIAL NOT NULL primary key,
     date_post date not null,
     texte text not null,
-    image bytea not null,
+    image character varying,
     titre character varying,
     id_am integer not null,
     constraint "post_id_am_fkey" foreign key (id_am)
