@@ -34,15 +34,18 @@ export default {
     async connexion (data) {
       try {
         const response = await AuthentificationService.loginAssMat(data)
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setAssMat', response.data.assmat)
-        console.log(this.$store.state.assMat)
-        this.$router.push({
-          name: 'AllContrats'
-        })
+        if (response.data.erreur == null) {
+          this.$store.dispatch('setToken', response.data.token)
+          this.$store.dispatch('setAssMat', response.data.assmat)
+          console.log(this.$store.state.assMat)
+          this.$router.push({
+            name: 'AllContrats'
+          })
+        } else {
+          this.showError(response.data.erreur.texte)
+        }
       } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
+        this.showError(error)
       }
     },
     showError (erreur) { // affiche l'erreur
