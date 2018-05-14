@@ -36,8 +36,25 @@ let post = {
         );
     },
     create: function (post, callback) {
-        db.query("INSERT INTO public.post(date_post, texte, image) VALUES (Date(now()), $2, $3) returning id_post",
-            [Date(now()), post.message, post.image],
+        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $2, $3, $4, $5) returning id_post",
+            [Date(now()), post.message, post.image, post.titre, post.id_am],
+            function (err, result) {
+                let retour = {
+                    statut: null,
+                    erreur: null
+                };
+                if (err) {
+                    retour.statut = 500
+                    retour.erreur = err.toString()
+                } else {
+                    retour.statut = 200
+                }
+            });
+        callback(retour);
+    },
+    delete: function (post, callback) {
+        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $2, $3, $4, $5) returning id_post",
+            [Date(now()), post.message, post.image, post.titre, post.id_am],
             function (err, result) {
                 let retour = {
                     statut: null,

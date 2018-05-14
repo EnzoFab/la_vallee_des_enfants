@@ -269,6 +269,7 @@ CREATE TABLE public.contrat
 (
     id_contrat character varying NOT NULL,
     date_debut date,
+    date_fin date,
     nb_semaines_conges_parents integer,
     tarif numeric,
     nb_heures_semaine numeric,
