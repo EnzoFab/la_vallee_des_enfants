@@ -35,7 +35,11 @@ let presenceTheorique = {
             }
         );
     },
-
+    /**
+     * Recupère tous les enfants qui doivent être présent aujourd'hui
+     * @param numDay
+     * @param callback
+     */
     getAllChildrenOfTheDay: function (numDay, callback) {
         console.log('numDuJour : ' + numDay)
         db.query(
