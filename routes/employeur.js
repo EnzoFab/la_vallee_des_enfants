@@ -32,4 +32,13 @@ router.post('/create', function (req, res, next) {
     })
 });
 
+// Update de l'employeur
+router.put('/:n/update', function (req, res) {
+    let num_employeur = req.params.n
+    let employeur = req.body.employeur
+    modelEmployeur.update(num_employeur, employeur, function (retour) {
+        res.send(retour)
+    })
+});
+
 module.exports = router;
