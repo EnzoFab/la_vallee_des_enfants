@@ -177,8 +177,8 @@ let Contrat = {
         )
     },
 
-    //Ajout de l'employeur au contrat
-    sectionEmployeurCreate: function (numContrat, nombreSemainesCong, numEmployeur) {
+    // Ajout de l'employeur au contrat
+    sectionEmployeurCreate: function (numContrat, nombreSemainesCong, numEmployeur, callback) {
         db.query('UPDATE public.contrat ' +
             'SET id_employeur = $1, nb_semaines_conges_parents = $2 ' +
             'WHERE id_contrat = $3',
@@ -191,12 +191,12 @@ let Contrat = {
         )
     },
 
-    //Ajout des informations générales
-    sectionInfosGeneralesCreate: function (numContrat, numTypeContrat, numModeDePaiement, dateDebut, jourDePaiement) {
+    // Ajout des informations générales
+    sectionInfosGeneralesCreate: function (numContrat, numTypeContrat, numModeDePaiement, dateDebutContrat, dateDebAdapt, dateFinAdapt, jourDePaiement, callback) {
         db.query('UPDATE public.contrat ' +
-            'SET id_type_contrat = $1, id_mode_paiement = $2, jour_paiement = $3, date_debut = $4 ' +
+            'SET id_type_contrat = $1, id_mode_paiement = $2, jour_paiement = $3, date_debut = $4, date_deb_periode_adaptation = $5, date_fin_periode_adaptation = $6 ' +
             'WHERE id_contrat = $5',
-            [numTypeContrat, numModeDePaiement, jourDePaiement, dateDebut, numContrat],
+            [numTypeContrat, numModeDePaiement, jourDePaiement, dateDebut, dateDebAdapt, dateFinAdapt, numContrat],
             function () {
                 console.log('c\'est inséré :)')
                 let retour = 'les infos générales sont ajoutées au contrat'
@@ -205,8 +205,34 @@ let Contrat = {
         )
     },
 
-    // sectionTarifscreate: function (numContrat, tarifHoraire)
+    // Ajout du nombre d'heures de presence hebdomadaire de l'enfant
+    sectionHeuresHebdoCreate: function(numContrat, nbHeures, callback) {
+        db.query('UPDATE public.contrat ' +
+            'SET nb_heures_semaine = $1 ' +
+            'WHERE id_contrat = $2',
+            [nbHeures, numContrat],
+            function () {
+                console.log('c\'est inséré :)')
+                let retour = 'le nb d\'heures hebdos est ajouté au contrat'
+                callback(retour)
+            })
+    },
 
+    // Ajout des tarifs de l'assmat au contrat
+    sectionTarifscreate: function (numContrat, tarifHoraire, tauxMajoration, callback) {
+        db.query('UPDATE public.contrat ' +
+            'SET tarif = $1 , taux_majore = $2 ' +
+            'WHERE id_contrat = $3',
+            [tarifHoraire, tauxMajoration, numContrat],
+            function () {
+                console.log('c\'est inséré :)')
+                let retour = 'les tarifs sont ajoutés au contrat'
+                callback(retour)
+            })
+    },
+
+
+    /* -------------------------------------------------------------------------------------------------------------- */
     create2: function (contrat, callback) {
         db.query("INSERT INTO public.contrat(id_contrat, date_debut, nb_semaines_conges_parents, tarif, nb_heures_semaine, taux_majore, date_deb_periode_adaptation, date_fin_periode_adaptation, jour_paiement) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
             [contrat.id, contrat.date, contrat.congesSupp, contrat.salaireNet, contrat.nbHeuresSemaine, contrat.majoration, contrat.dateDebAdapt, contrat.dateFinAdapt, contrat.jourPrelevement],

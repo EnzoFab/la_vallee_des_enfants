@@ -133,7 +133,7 @@
                       required
                       :counter="15"
                       :rules="regleNom"
-                      v-model="nomDeNaissance"
+                      v-model="nomNaissance"
                       label="Nom de naissance"
                     ></v-text-field>
                   </v-flex>
@@ -192,7 +192,7 @@
 
 <script>
 import TypeService from '../../../services/TypeService'
-// import TuteurService from '../../../services/TuteurService'
+import TuteurService from '../../../services/TuteurService'
 
 export default {
   name: 'TuteursLegaux',
@@ -271,6 +271,7 @@ export default {
     },
     remove (tuteur) {
       // supprime un element de la liste
+      console.log(tuteur)
       this.tuteurs.splice(this.tuteurs.indexOf(tuteur), 1)
     },
     existeAutredemandeur (tuteur) {
@@ -286,29 +287,27 @@ export default {
     async submit () {
       // envoyer
       let data = {tuteurs: [], asEmployeur: false}
-      /* try {
+      try {
         console.log('TUTEUUUUUUURS', this.tuteurs[0])
         await TuteurService.createContratTuteur(data)
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error
-      } */
-      let infoDemandeur = {
-        rue: this.rue,
-        codePostal: this.codePostal,
-        email: this.email,
-        ville: this.ville,
-        nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
-        nomNaissance: this.nomNaissance
       }
-      this.tuteurs.forEach(function (tuteur) {
-        console.log(tuteur)
+      for (var tuteur in this.tuteurs) {
         if (tuteur.estDemandeur) {
           data.asEmployeur = true
-          tuteur.infoDemandeur = infoDemandeur
+          tuteur.infoDemandeur = {
+            rue: this.rue,
+            codePostal: this.codePostal,
+            email: this.email,
+            ville: this.ville,
+            nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
+            nomNaissance: this.nomNaissance
+          }
         }
         data.tuteurs.push(tuteur)
-      })
+      }
       this.$emit('submit', data)
     },
     back () {
@@ -323,6 +322,7 @@ export default {
       } else {
         // this.toogleIcone = 'arrow_drop_up'
         this.toogleText = 'Repasser à la barre de selections'
+        console.log('tougle')
       }
     },
     computedNbSemaine (val) {

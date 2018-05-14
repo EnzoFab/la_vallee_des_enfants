@@ -22,10 +22,10 @@ var typeDeContrat = require('./routes/typeDeContrat');
 var typeTuteur = require('./routes/typeTuteurs');
 var enfant = require('./routes/enfant');
 var frais = require('./routes/frais');
-var tuteur = require('./routes/tuteur')
-var employeur = require('./routes/employeur')
-var typeJours = require('./routes/typeJour')
-var contrat = require('./routes/contrat')
+var tuteur = require('./routes/tuteur');
+var employeur = require('./routes/employeur');
+var contrat = require('./routes/contrat');
+var presencetheo = require('./routes/presenceTheorique');
 
 
 // use it before all view definitions
@@ -49,8 +49,9 @@ app.use('/frais', frais);
 app.use('/enfants', enfant);
 app.use('/tuteurs', tuteur);
 app.use('/employeurs', employeur)
-app.use('/typeJours', typeJours)
-app.use('/contrat', contrat)
+app.use('/contrat', contrat),
+app.use('/presencetheo', presencetheo)
+
 
 
 // view engine setup

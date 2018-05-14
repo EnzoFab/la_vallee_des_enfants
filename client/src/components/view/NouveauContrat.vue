@@ -3,7 +3,9 @@
     <v-card>
       <v-stepper v-model="etape" class="my-2" light non-linear>
         <v-stepper-header>
-          <v-stepper-step class="red--text" step="1" :complete="estValideEtape1" >Enfant</v-stepper-step>
+          <v-stepper-step class="red--text" step="1" :complete="estValideEtape1" >Assistante</v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step class="red--text" step="7" :complete="estValideEtape1" >Enfant</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="2" :complete="estValideEtape2" >Tuteur légaux</v-stepper-step>
           <v-divider></v-divider>
@@ -17,6 +19,9 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
+            <ChoisirAssMat @submit="submitAssMat"></ChoisirAssMat>
+          </v-stepper-content>
+          <v-stepper-content step="7">
             <InfosEnfant @submit="submitEnfant"></InfosEnfant>
           </v-stepper-content>
           <v-stepper-content step="2">
@@ -41,6 +46,7 @@
 </template>
 
 <script>
+import ChoisirAssMat from '../part/contratPart/ChoisirAssMat'
 import InfosEnfant from '../part/contratPart/InfosEnfant'
 import PlaningPresenceContrat from '../part/contratPart/PlaningPresenceContrat'
 import DateContrat from '../part/contratPart/DateDebutContrat'
@@ -54,6 +60,7 @@ import ContratService from '../../services/ContratService'
 export default {
   name: 'NouveauContrat',
   components: {
+    ChoisirAssMat,
     PresenceTheorique,
     TuteursLegaux,
     InformationGenerale,
@@ -72,6 +79,7 @@ export default {
       estValideEtape4: false,
       estValideEtape5: false,
       estValideEtape6: false,
+      estValideEtape7: false,
       Fin: false
     }
   },

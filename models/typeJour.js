@@ -17,7 +17,7 @@ let typeJour = {
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     var array = []
-                    for(var i = 0; i < result.rows.length; i++){
+                    for(var i = 0; i < rslt.rows.length; i++){
                         console.log(1)
                         array.push({
                             id: result.rows[i].id_type,

@@ -7,7 +7,7 @@
     </v-toolbar>
     <v-container fluid grid-list-md>
       <v-alert v-model="erreur" type="error" dismissible>
-       {{msgErreur}}
+        {{msgErreur}}
       </v-alert>
       <v-layout row wrap>
         <v-flex d-flex md6 lg6 xl6 sm12 xs12 >
@@ -186,7 +186,6 @@
 
 <script>
 import TypeService from '../../../services/TypeService'
-
 export default {
   name: 'PresenceTheorique',
   data () {
@@ -273,5 +272,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

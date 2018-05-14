@@ -16,7 +16,7 @@ export default {
   indemnitesJour () {
     return Api().get('frais/indemnites')
   },
-  joursDeLaSemaine () {
-    return Api().get('typeJours/all')
+  gouter () {
+    return Api().get('frais/gouter')
   }
 }

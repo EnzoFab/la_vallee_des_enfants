@@ -162,11 +162,11 @@
 <script>
 import ContratService from '../../../services/ContratService'
 import moment from 'moment'
-import 'moment/locale/fr';
+import 'moment/locale/fr'
 moment.locale('fr')
 export default {
   name: 'Fiche',
-  data() {
+  data () {
     return {
       prenomEnfant: null,
       nomEnfant: null,
@@ -204,13 +204,15 @@ export default {
       parents: []
     }
   },
-  mounted() {
+  mounted () {
+    console.log('sdfghj')
     this.initDonnees(this.numeroContrat)
     this.initParents(this.numeroContrat)
   },
   methods: {
-    async initDonnees(numeroContrat) {
+    async initDonnees (numeroContrat) {
       try {
+        console.log('heyyyyyyyyyyyyyyyyyyooooooooh')
         const response = await ContratService.donneesContrat(this.numeroContrat)
         console.log(response.data)
         this.numeroContrat = numeroContrat
@@ -253,10 +255,11 @@ export default {
         this.identifiantEmp = response.data.identifiant_connexion
         this.nombreSemSupp = response.data.nb_semaines_conges_parents
       } catch (e) {
+        console.log('erreur')
         console.log(e)
       }
     },
-    async initParents(numeroContrat) {
+    async initParents (numeroContrat) {
       try {
         const response = await ContratService.donneesParents(this.numeroContrat)
         console.log(response.data)

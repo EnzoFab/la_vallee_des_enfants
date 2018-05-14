@@ -1,29 +1,25 @@
 <template>
-  <div>
-    <v-flex offset-md1 mt-5 md10>
-      <v-toolbar
-        color="grey"
-        dark
-        tabs
+  <v-tabs
+    dark
+    color="cyan"
+    show-arrows
+  >
+    <v-tabs-slider color="yellow"></v-tabs-slider>
+    <v-tab
+      :href="'#tab-'"
+    >
+      Item
+    </v-tab>
+    <v-tabs-items>
+      <v-tab-item
+        :id="'tab-'"
       >
-        <v-tabs right>
-          <v-tab :href="`#LaFiche`">Fiche</v-tab>
-          <v-tab>Planning</v-tab>
-          <v-tab>Présences</v-tab>
-          <v-tab>Paie</v-tab>
-        </v-tabs>
-      </v-toolbar>
-      <v-tabs-items v-model="model">
-        <v-flex>
-          <v-tab-item :id="`LaFiche`" md10>
-            <v-card>
-              <Fiche></Fiche>
-            </v-card>
-          </v-tab-item>
-        </v-flex>
-      </v-tabs-items>
-    </v-flex>
-  </div>
+        <v-card flat>
+          <Fiche ref="fiche"></Fiche>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-tabs>
 </template>
 
 <script>
@@ -35,6 +31,9 @@ export default {
     return {
       model: 'tab-2'
     }
+  },
+  mounted (){
+    this.$refs.fiche.initDonnees()
   }
 }
 </script>

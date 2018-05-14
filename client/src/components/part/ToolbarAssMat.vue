@@ -68,11 +68,33 @@
           </v-list>
         </v-menu>
       </v-tab>
-      <v-tab align="right" @click="logout">
-          <h4 class="teal--text">Deconnexion</h4>
-          <v-icon x-large color="teal">exit_to_app</v-icon>
+      <v-tab>
+        <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
+          <a class="tabs__item" slot="activator" >
+            <h4 class="teal--text">Compte</h4>
+            <v-icon x-large color="teal">edit</v-icon>
+          </a>
+          <v-list class="grey lighten-3" >
+            <router-link avatar key="paramcompte" to="/assistante/parametres" tag="v-list-tile">
+              <v-list-tile-avatar>
+                <v-icon medium class="transparent grey--text">event</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>Parametres</v-list-tile-title>
+              </v-list-tile-content>
+            </router-link>
+            <router-link avatar key="deco" to="assistante/deco" tag="v-list-tile">
+              <v-list-tile-avatar>
+                <v-icon medium>exit_to_app</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content @click="logout">
+                <v-list-tile-title>Deconnexion</v-list-tile-title>
+              </v-list-tile-content>
+            </router-link>
+          </v-list>
+        </v-menu>
       </v-tab>
-    </v-tabs>
+      </v-tabs>
   </v-toolbar>
 </template>
 

@@ -9,9 +9,12 @@ import ConnexionEmp from '@/components/view/ConnexionEmployeur'
 import SimulationContrat from '@/components/view/Simulation'
 import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
 import ToolbarAssMat from '@/components/part/ToolbarAssMat'
-import FilActualite from '@/components/view/FilActualite'
 import AllContrat from '@/components/view/AllContrat'
+import Fiche from '@/components/part/VisualisationContratPart/Fiche'
+import SaisirPresences from '@/components/part/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
+import ParametresCompte from '@/components/part/ParametresCompte'
+import FilActualite from '@/components/view/FilActualite'
 
 Vue.use(Router)
 
@@ -23,6 +26,12 @@ export default new Router({
       name: 'index',
       component: Accueil,
       meta: {title: 'Accueil'}
+    },
+    {
+      path: '/tool',
+      name: 'ParametresCompte',
+      component: ParametresCompte,
+      meta: {title: 'ParametresCompte'}
     },
     {
       path: '/accueil',
@@ -95,6 +104,18 @@ export default new Router({
       name: 'FilActualite',
       component: FilActualite,
       meta: {title: 'Fil d\'actualité'}
+    },
+    {
+      path: '/contrat/visualisation',
+      name: 'Fiche',
+      component: Fiche,
+      meta: {title: 'Fiche'}
+    },
+    {
+      path: '/presence/saisir',
+      name: 'SaisirPresences',
+      component: SaisirPresences,
+      meta: {title: 'SaisirPresences'}
     },
     { path: '/404',
       name: '404',

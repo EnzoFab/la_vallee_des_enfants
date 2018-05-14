@@ -109,7 +109,37 @@ let AssMats = {
 
             });
 
-    }
+    },
+
+    getAll: function(callback){
+        db.query(
+            'SELECT id_am, nom_usage_am, nom_naissance_am, prenom_am FROM public.assmat',
+            [],
+            function (err, rslt) {
+                retour = {
+                    erreur: null,
+                    assmat: [],
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun contrat');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if (retour.erreur == null) {
+                    var array = []
+                    for (var i = 0; i < rslt.rows.length; i++) {
+                        console.log(1)
+                        array.push({
+                            id_am: rslt.rows[i].id_am,
+                            nom_complet: rslt.rows[i].nom_usage_am + ' ' + rslt.rows[i].nom_naissance_am + ' ' + rslt.rows[i].prenom_am
+                        });
+                        console.log('array', array)
+                    }
+                    retour.assmat = array;
+                    retour.statut = 200
+                }
+                callback(retour);
+            }
+        )}
 
 
 };

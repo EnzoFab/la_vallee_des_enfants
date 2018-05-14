@@ -1,17 +1,17 @@
 <template>
   <v-flex md10 offset-md1>
     <v-card>
-      <v-stepper v-model="etape" class="my-2" light non-linear>
+      <v-stepper v-model="etape" class="my-2" light>
         <v-stepper-header>
           <v-stepper-step class="red--text" step="1" :complete="estValideEtape1" >Enfant</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="2" :complete="estValideEtape2" >Tuteur légaux</v-stepper-step>
+          <v-stepper-step step="2" :complete="estValideEtape2" >Parents</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="3" :complete="estValideEtape3">Employeur</v-stepper-step>
+          <v-stepper-step step="3" :complete="estValideEtape3">Tuteur légal</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="4" :complete="estValideEtape4" >Informations générales</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" :complete="estValideEtape5" editable >Carnet de présences</v-stepper-step>
+          <v-stepper-step step="5" :complete="estValideEtape5" >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="6" :complete="estValideEtape6" >Tarifs</v-stepper-step>
         </v-stepper-header>
@@ -29,8 +29,7 @@
             <InformationGenerale nom="" @back="back" @submit="submitInfoG"></InformationGenerale>
           </v-stepper-content>
           <v-stepper-content step="5">
-            <PresenceTheorique @back="back" @submit="submitPresences"></PresenceTheorique>
-            <!-- <PlaningPresenceContrat @back="back" @submit="submitPresences"></PlaningPresenceContrat> -->
+            <PlaningPresenceContrat @back="back" @submit="submitPresences"></PlaningPresenceContrat>
           </v-stepper-content>
           <v-stepper-content step="6">
             <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
@@ -49,19 +48,9 @@ import InformationGenerale from '../part/contratPart/InformationGenerale'
 import EmployeurOptionnel from '../part/contratPart/EmployeurOptionnel'
 import Tarifs from '../part/contratPart/Tarifs'
 import TuteursLegaux from '../part/contratPart/TuteursLegaux'
-import PresenceTheorique from '../part/contratPart/PresenceTheorique'
 export default {
   name: 'Simulation',
-  components: {
-    PresenceTheorique,
-    TuteursLegaux,
-    InformationGenerale,
-    DateContrat,
-    PlaningPresenceContrat,
-    InfosEnfant,
-    EmployeurOptionnel,
-    Tarifs
-  },
+  components: {TuteursLegaux, InformationGenerale, DateContrat, PlaningPresenceContrat, InfosEnfant, EmployeurOptionnel, Tarifs},
   data () {
     return {
       etape: 1,
@@ -72,6 +61,7 @@ export default {
       estValideEtape5: false,
       estValideEtape6: false,
       Fin: false
+
     }
   },
   methods: {
@@ -82,7 +72,6 @@ export default {
       this.etape++
     },
     submitTuteurs (data) {
-      console.log(data)
       this.estValideEtape2 = true
       if (data.asEmployeur) {
         this.etape = 4

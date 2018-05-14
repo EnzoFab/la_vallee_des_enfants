@@ -33,4 +33,11 @@ router.post('/login', function (req, res, next) {
     })
 });
 
+router.get('/all', function (req, res, next) {
+    modelAssMat.getAll(function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
 module.exports = router;
