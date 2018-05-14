@@ -23,7 +23,8 @@ let post = {
                             id: rslt.rows[i].id_post,
                             date: rslt.rows[i].date_post,
                             texte: rslt.rows[i].texte,
-                            image: rslt.rows[i].image
+                            image: rslt.rows[i].image,
+                            titre: rslt.rows[i].titre
                         });
                         console.log('array', array)
                     }
