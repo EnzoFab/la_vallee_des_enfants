@@ -52,9 +52,9 @@ let post = {
             });
         callback(retour);
     },
-    delete: function (post, callback) {
-        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $2, $3, $4, $5) returning id_post",
-            [Date(now()), post.message, post.image, post.titre, post.id_am],
+    delete: function (idPost, callback) {
+        db.query("DELETE FROM public.post WHERE id_post=$1",
+            [idPost],
             function (err, result) {
                 let retour = {
                     statut: null,
