@@ -180,7 +180,8 @@ export default {
       const formData = new FormData()
       formData.append('image', this.image, this.image.name)
       try {
-        let response = await FileService.postImg(formData, {
+        let response = await FileService.postImg(formData
+          , /*{
           onUploadProgress (e) {
             console.log(this.progress)
             this.progress += e.loaded * 100 / e.total
@@ -188,7 +189,8 @@ export default {
               this.progress = 0
             }
           }
-        })
+        } */
+        )
         if (response.data.erreur == null) {
           console.log(response.data)
           return response.data.image
@@ -201,7 +203,7 @@ export default {
       }
     },
     async envoyer () {
-      let image = await this.saveImg()
+      let image = this.saveImg()
       console.log(image)
       if (image != null && this.creerPost(image)) {
         let post = {
