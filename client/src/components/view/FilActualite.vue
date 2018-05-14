@@ -181,7 +181,7 @@ export default {
       formData.append('image', this.image, this.image.name)
       try {
         let response = await FileService.postImg(formData
-          , /*{
+          /*, {
           onUploadProgress (e) {
             console.log(this.progress)
             this.progress += e.loaded * 100 / e.total
@@ -203,21 +203,26 @@ export default {
       }
     },
     async envoyer () {
-      let image = this.saveImg()
-      console.log(image)
-      if (image != null && this.creerPost(image)) {
-        let post = {
-          image: process.env.BASE_URL + '/' + image, // this.imgPath,
-          message: this.postMessage,
-          titre: this.postTitre
+      try {
+        let image = await this.saveImg()
+        console.log(image)
+        if (image != null && this.creerPost(image)) {
+          let post = {
+            image: process.env.BASE_URL + '/' + image, // this.imgPath,
+            message: this.postMessage,
+            titre: this.postTitre
+          }
+          console.log(post)
+          this.posts.push(post)
+          this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+          this.clearForm()
+        } else {
+          console.log('Il y a un problème dans la création du post')
         }
-        console.log(post)
-        this.posts.push(post)
-        this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
-        this.clearForm()
-      } else {
-        console.log('Il y a un problème dans la création du post')
+      } catch (e) {
+        console.log(e)
       }
+
     },
     clearForm () {
       this.$refs.form.reset()
