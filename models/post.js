@@ -46,6 +46,7 @@ let post = {
                     id_post: null
                 };
                 if (err) {
+                    console.log(err.toString())
                     retour.statut = 500
                     retour.erreur = err.toString()
                 } else {
