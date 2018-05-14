@@ -131,7 +131,7 @@
         </v-card>
       </v-flex>
       <v-flex>
-        <v-flex v-for="parent in parents" pt-2 md10>
+        <v-flex :key="parent" v-for="parent in parents" pt-2 md10>
           <v-flex class="text-md-left">
             <h1 class="blue--text">Parents</h1>
           </v-flex>

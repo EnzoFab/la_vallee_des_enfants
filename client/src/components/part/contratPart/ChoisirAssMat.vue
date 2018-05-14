@@ -42,7 +42,7 @@ import AssistanteService from '../../../services/AssistanteService'
 export default {
   name: 'ChoisirAssMat',
   data () {
-    return{
+    return {
       assmats: [],
       id_am: null
     }
@@ -51,11 +51,11 @@ export default {
     this.initAssMat()
   },
   methods: {
-    async initAssMat(){
+    async initAssMat () {
       try {
         const response = await AssistanteService.getAll()
         this.assmats = response.data.assmat
-        console.log('assssssssssssmat : ' + assmats)
+        console.log('assssssssssssmat : ' + this.assmats)
       } catch (e) {
         console.log('Erreur')
       }

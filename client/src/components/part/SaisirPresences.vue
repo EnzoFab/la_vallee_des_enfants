@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import PresenceService from "../../services/PresenceService";
+import PresenceService from '../../services/PresenceService'
 import moment from 'moment'
 moment.locale('fr')
 export default {
@@ -147,14 +147,14 @@ export default {
         const response = await PresenceService.getAllChildrenOfTheDay()
         this.enfantsDuJour = response.data.presencestheoriques
         console.log(this.enfantsDuJour[0].heure_arrivee)
-        for(var i = 0; i < this.enfantsDuJour.length; i++) {
-          this.enfantsDuJour[i].heure_arrivee = moment(this.enfantsDuJour[i].heure_arrivee).format('LT');
+        for (var i = 0; i < this.enfantsDuJour.length; i++) {
+          this.enfantsDuJour[i].heure_arrivee = moment(this.enfantsDuJour[i].heure_arrivee).format('LT')
           console.log('hbg' + this.enfantsDuJour)
         }
       } catch (e) {
-      console.log(e)
+        console.log(e)
       }
-    }+
+    }
   }
 }
 </script>

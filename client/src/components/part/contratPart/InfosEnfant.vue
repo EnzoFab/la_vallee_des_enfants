@@ -100,64 +100,64 @@
 </template>
 
 <script>
-  let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
-  export default {
-    name: 'InfosEnfant',
-    data () {
-      return {
-        date: null,
-        menu: false,
-        prenom: null,
-        nom: null,
-        estValide: false,
-        sexe: null,
-        reglePrenom: [
-          v => !!v || 'Veuillez remplir le prénom'
-        ],
-        regleNom: [
-          v => !!v || 'Veuillez remplir le nom'
-        ],
-        regleDate: [
-          v => !!v || 'Veuillez remplir la date de naissance'
-        ],
-        regleSexes: [
-          v => !!v || 'Choisissez le sexe'
-        ]
-      }
+let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
+export default {
+  name: 'InfosEnfant',
+  data () {
+    return {
+      date: null,
+      menu: false,
+      prenom: null,
+      nom: null,
+      estValide: false,
+      sexe: null,
+      reglePrenom: [
+        v => !!v || 'Veuillez remplir le prénom'
+      ],
+      regleNom: [
+        v => !!v || 'Veuillez remplir le nom'
+      ],
+      regleDate: [
+        v => !!v || 'Veuillez remplir la date de naissance'
+      ],
+      regleSexes: [
+        v => !!v || 'Choisissez le sexe'
+      ]
+    }
+  },
+  watch: {
+    menu (val) {
+      val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
+  },
+  methods: {
+    save (date) {
+      this.$refs.menu.save(date)
     },
-    watch: {
-      menu (val) {
-        val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
-      }
+    async submit () {
+      let data = {enfant: {prenom: this.prenom, nom: this.nom, sexe: this.sexe, date_naissance: this.date}}
+      this.$emit('submit', data)
     },
-    methods: {
-      save (date) {
-        this.$refs.menu.save(date)
-      },
-      async submit () {
-        let data = {enfant: {prenom: this.prenom, nom: this.nom, sexe: this.sexe, date_naissance: this.date}}
-        this.$emit('submit', data)
-      },
-      back () {
-        this.$router.push({
-          name: 'Accueil'
-        })
+    back () {
+      this.$router.push({
+        name: 'Accueil'
+      })
+    }
+  },
+  computed: {
+    dateFr () {
+      var dateString = null
+      if (this.date != null) {
+        var d = new Date(this.date)
+        let day = d.getDate()
+        let month = mois[d.getMonth()]
+        let year = d.getFullYear()
+        dateString = day + ' ' + month + ' ' + year
       }
-    },
-    computed: {
-      dateFr () {
-        var dateString = null
-        if (this.date != null) {
-          var d = new Date(this.date)
-          let day = d.getDate()
-          let month = mois[d.getMonth()]
-          let year = d.getFullYear()
-          dateString = day + ' ' + month + ' ' + year
-        }
-        return dateString
-      }
+      return dateString
     }
   }
+}
 </script>
 
 <style scoped>
