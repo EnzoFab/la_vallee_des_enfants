@@ -85,15 +85,13 @@ export default {
   },
   methods: {
     async submitEnfant (data) {
-      // console.log(data)
       console.log(this.$store.state.assMat.id_assmat)
       try {
-        let response = await EnfantService.findOneByContratID(this.$store.state.numContrat)
-        // on regarde si l'enfant existe deja
+        let response = await EnfantService.findOneByContratID(this.$store.state.numContrat)// on regarde si l'enfant existe deja
         if (response.data.statut === 200) { // il existe un enfants
           // update l'enfant
         } else if (response.data.statut === 404) { // l'enfant n'existe pas
-          let enfantR = await EnfantService.createContratEnfant(data)
+          let enfantR = await EnfantService.createContratEnfant(data) // creation d'un nouvel enfant
           let r = await ContratService.create({
             numContrat: this.$store.state.numContrat,
             numAssMat: this.$store.state.assMat.id_assmat

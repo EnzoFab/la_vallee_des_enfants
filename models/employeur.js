@@ -65,8 +65,6 @@ let Employeur = {
             });
     },
 
-
-
     /**
      *
      * @param login
