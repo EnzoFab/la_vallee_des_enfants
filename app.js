@@ -33,7 +33,7 @@ var files = require('./routes/files');
 
 
 // use it before all view definitions
-app.use(cors({origin: '*'}))
+// app.use(cors({origin: '*'}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
