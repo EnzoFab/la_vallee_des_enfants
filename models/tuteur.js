@@ -27,8 +27,8 @@ let Tuteur = {
                     }
                     retour.statut = 200
                 }
+                callback(retour);
             });
-        callback(retour);
     },
     getTuteursById: function (numeroContrat, callback) {
         db.query(

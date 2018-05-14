@@ -214,8 +214,8 @@ let Contrat = {
                     }
                     retour.statut = 200
                 }
+                callback(retour);
             });
-        callback(retour);
     }
 }
 
