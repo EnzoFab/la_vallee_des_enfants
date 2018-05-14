@@ -11,4 +11,11 @@ router.post('/create', function (req, res, next) {
     })
 });
 
+router.get('/:n', function (req, res) {
+    let numContrat = req.params.n;
+    modelTuteur.getTuteursById(numContrat, function (retour) {
+        res.send(retour)
+    });
+})
+
 module.exports = router;

@@ -10,11 +10,12 @@
         <v-flex xs12 sm6>
           <v-select
             :items="assmats"
-            v-model="assmats.id_am"
-            label="Assistante"
+            v-model="id_assmat"
+            label="Assistante maternelle"
             single-line
             item-text="nom_complet"
             item-value="id_am"
+            :rules="regleChoixAssmat"
             auto
             required>
           </v-select>
@@ -25,8 +26,8 @@
       <v-btn
         class="yellow lighten-2"
         depressed large round
-        @click="back"
-      >Précédent</v-btn>
+        @click="annuler"
+      >Annuler</v-btn>
       <v-btn
         depressed large round
         class="yellow lighten-2"
@@ -44,7 +45,11 @@ export default {
   data () {
     return {
       assmats: [],
-      id_am: null
+      id_assmat: null,
+      estValide: false,
+      regleChoixAssmat: [
+        v => !!v || 'Veuillez choisir une assistante'
+      ]
     }
   },
   mounted () {
@@ -55,10 +60,15 @@ export default {
       try {
         const response = await AssistanteService.getAll()
         this.assmats = response.data.assmat
-        console.log('assssssssssssmat : ' + this.assmats)
       } catch (e) {
-        console.log('Erreur')
+        this.$emit('erreur', e.toString())
       }
+    },
+    envoyer () {
+      this.$emit('submit', this.id_assmat) // on envoie l'id assmat
+    },
+    annuler () {
+      this.$emit('cancel')
     }
   }
 }
