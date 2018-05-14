@@ -27,4 +27,13 @@ router.post('/lierEnfant', function (req, res) {
     })
 });
 
+// Update du tuteur
+router.put('/:n/update', function (req, res) {
+    let num_tuteur = req.params.n
+    let tuteur = req.body.tuteur
+    modelTuteur.update(num_tuteur, tuteur, function (retour) {
+        res.send(retour)
+    })
+});
+
 module.exports = router;

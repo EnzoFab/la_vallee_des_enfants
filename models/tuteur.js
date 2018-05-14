@@ -56,10 +56,6 @@ let Tuteur = {
         );
     },
 
-    /*
-    * -------------- TOUT CE QUI CONCERNE LE CONTRAT AJOUT/MODIFICATION PAR SECTION ET CREATION INITIALE --------------
-     */
-
     sectionEnfantTuteur: function (numEnfant, numTuteur, callback) {
         db.query('INSERT INTO public.apourtuteur(id_enfant, id_tuteur) VALUES ($1, $2)',
             [numEnfant, numTuteur],
@@ -77,6 +73,25 @@ let Tuteur = {
                 }
                 callback(retour)
             });
+    },
+
+    update: function (numTuteur, tuteur, callback) {
+        db.query('UPDATE public.tuteur SET nom_tuteur = $1, prenom_tuteur = $2, telephone = $3, profession = $4, telephone_pro = $5, id_type_tuteur = $6 WHERE id_tuteur = $7',
+            [tuteur.nomUsage, tuteur.prenom, tuteur.telephone, tuteur.profession, tuteur.telephonePro, tuteur.typeDeTuteur, numTuteur],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
     },
 }
 
