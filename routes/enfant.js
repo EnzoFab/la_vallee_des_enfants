@@ -31,9 +31,13 @@ router.get('/:n', function (req, res) {
 
 });
 
-// update enfants
-router.put('/:n', function (req, res) {
-    
+// Update de l'enfant
+router.put('/:n/update', function (req, res) {
+    let num_enfant = req.params.n
+    let enfant = req.body.enfant
+    modelEnfant.update(num_enfant, enfant, function (retour) {
+        res.send(retour)
+    })
 });
 
 router.delete('/:n', function (req ,res) {

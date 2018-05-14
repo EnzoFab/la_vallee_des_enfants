@@ -81,7 +81,25 @@ let Enfant = {
                 }
                 callback(retour);
             });
-    }
-};
+    },
 
+    update: function (numEnfant, enfant, callback) {
+        db.query('UPDATE public.enfant SET nom_enfant = $1, prenom_enfant = $2, date_naissance_enfant = $3, sexe = $4 WHERE id_enfant = $5',
+            [enfant.nom, enfant.prenom, enfant.date_naissance, enfant.sexe, numEnfant],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
+};
 module.exports = Enfant;
