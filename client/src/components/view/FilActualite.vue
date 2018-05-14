@@ -98,6 +98,7 @@
 
 <script>
 import Calendar from '../part/Calendar'
+import PostService from '../../services/PostService'
 export default {
   name: 'Evenements',
   components: {Calendar},
@@ -140,15 +141,30 @@ export default {
     removeImage (e) {
       this.imgPath = null
     },
-    envoyer () {
-      let post = {
-        image: this.imgPath,
-        message: this.postMessage,
-        titre: this.postTitre
+    async creerPost () {
+      const data = {post: {image: this.imgPath, message: this.postMessage, titre: this.postTitre, id_am: this.$store.state.assMat.id_am}}
+      try {
+        let r = await PostService.create(data)
+        return r.erreur == null
+      } catch (error) {
+        console.log(error)
+        this.error = error.response.data.error
+        return false
       }
-      this.posts.push(post)
-      this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
-      this.clearForm()
+    },
+    envoyer () {
+      if (this.creerPost()) {
+        let post = {
+          image: this.imgPath,
+          message: this.postMessage,
+          titre: this.postTitre
+        }
+        this.posts.push(post)
+        this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+        this.clearForm()
+      } else {
+        console.log('Il y a un problème dans la création du post')
+      }
     },
     clearForm () {
       this.$refs.form.reset()
@@ -161,6 +177,7 @@ export default {
     // faire une requete ajax pour charger tous les evenements
   }
 }
+
 </script>
 
 <style scoped>
