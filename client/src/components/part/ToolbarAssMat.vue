@@ -99,14 +99,14 @@ export default {
           icon: 'event_note',
           iconClass: 'transparent grey--text',
           title: 'Consulter le planning',
-          route: '/assistante/presence/consulter'
+          route: '/presence/consulter'
         },
         {
           id: 'p2',
           icon: 'alarm_on',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Pointer',
-          route: '/assistante/presence/pointer'
+          route: '/presence/saisir'
         }
       ],
       menusContrat: [
@@ -115,21 +115,21 @@ export default {
           icon: 'edit',
           iconClass: 'transparent grey--text',
           title: 'Créer un contrat',
-          route: '/assistante/contrat/creer'
+          route: '/contrat'
         },
         {
           id: 'c2',
           icon: 'visibility',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Consulter mes contrats',
-          route: '/assistante/contrat/consulter'
+          route: '/contrat/consulter'
         },
         {
           id: 'c3',
           icon: 'border_color',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Modifier un contrat',
-          route: '/assistante/contrat/modifier'
+          route: '/contrat/modifier'
         }
       ],
       menusPost: [
@@ -138,14 +138,14 @@ export default {
           icon: 'edit',
           iconClass: 'transparent grey--text',
           title: 'Éditer un post',
-          route: '/assistante/post/creer'
+          route: '/post/creer'
         },
         {
           id: 'po2',
           icon: 'event',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Mes posts',
-          route: '/assistante/post/consulter'
+          route: '/post/consulter'
         }
       ]
     }
