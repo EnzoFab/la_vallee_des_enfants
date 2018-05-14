@@ -196,7 +196,7 @@ export default {
           return null
         }
       } catch (e) {
-        console.log('Erreur')
+        console.log(e.toString())
         return null
       }
     },
