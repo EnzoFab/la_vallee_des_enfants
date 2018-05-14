@@ -11,6 +11,7 @@ router.post('/image', function (req, res) {
             if (err) {
                 res.statut(500).send(err)
             } else {
+                console.log(req.files)
                 let img = req.files.image;
                 let pathImg = 'images/' + files.length + img.name  // on rajoute l'image le numero d'image qu'il y avait avant elle
                 res.send({
