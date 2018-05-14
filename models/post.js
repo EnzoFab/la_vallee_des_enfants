@@ -23,7 +23,8 @@ let post = {
                             id: rslt.rows[i].id_post,
                             date: rslt.rows[i].date_post,
                             texte: rslt.rows[i].texte,
-                            image: rslt.rows[i].image
+                            image: rslt.rows[i].image,
+                            titre: rslt.rows[i].titre
                         });
                         console.log('array', array)
                     }
@@ -36,21 +37,24 @@ let post = {
         );
     },
     create: function (post, callback) {
-        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $2, $3, $4, $5) returning id_post",
-            [Date(now()), post.message, post.image, post.titre, post.id_am],
+        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $1, $2, $3, $4) returning id_post",
+            [post.message, post.image, post.titre, post.id_am],
             function (err, result) {
                 let retour = {
                     statut: null,
-                    erreur: null
+                    erreur: null,
+                    id_post: null
                 };
                 if (err) {
                     retour.statut = 500
                     retour.erreur = err.toString()
                 } else {
                     retour.statut = 200
+                    retour.id_post = result.rows[0].id_post
                 }
+                callback(retour);
             });
-        callback(retour);
+
     },
     delete: function (idPost, callback) {
         db.query("DELETE FROM public.post WHERE id_post=$1",
@@ -66,8 +70,9 @@ let post = {
                 } else {
                     retour.statut = 200
                 }
+                callback(retour);
             });
-        callback(retour);
+
     }
 }
 

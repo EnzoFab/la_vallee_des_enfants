@@ -26,6 +26,7 @@ var tuteur = require('./routes/tuteur');
 var employeur = require('./routes/employeur');
 var contrat = require('./routes/contrat');
 var presencetheo = require('./routes/presenceTheorique');
+var post = require('./routes/post');
 
 
 // use it before all view definitions
@@ -50,7 +51,8 @@ app.use('/enfants', enfant);
 app.use('/tuteurs', tuteur);
 app.use('/employeurs', employeur)
 app.use('/contrat', contrat),
-app.use('/presencetheo', presencetheo)
+app.use('/presencetheo', presencetheo),
+app.use('/posts', post)
 
 
 
