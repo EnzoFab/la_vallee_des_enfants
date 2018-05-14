@@ -60,7 +60,7 @@ import TuteursLegaux from '../part/contratPart/TuteursLegaux'
 import PresenceTheorique from '../part/contratPart/PresenceTheorique'
 import EnfantService from '../../services/EnfantService'
 import ContratService from '../../services/ContratService'
-import TuteurService from "../../services/TuteurService";
+import TuteurService from '../../services/TuteurService'
 export default {
   name: 'NouveauContrat',
   components: {

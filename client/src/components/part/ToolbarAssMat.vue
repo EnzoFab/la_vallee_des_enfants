@@ -3,7 +3,7 @@
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab>
-        <router-link to="/assistante/accueil" tag="v-tab">
+        <router-link to="/" tag="v-tab">
           <h4 class="purple--text">Accueil</h4>
           <v-icon x-large color="purple">home</v-icon>
         </router-link>
@@ -25,6 +25,10 @@
             </router-link>
           </v-list>
         </v-menu>
+      </v-tab>
+      <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
+        <h4 class="blue--text"> Inscription </h4>
+        <v-icon x-large color="blue">assignment</v-icon>
       </v-tab>
       <v-tab>
         <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
@@ -50,23 +54,9 @@
           <v-icon x-large color="green">library_books</v-icon>
         </router-link>
       </v-tab>
-      <v-tab>
-        <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
-          <a class="tabs__item" slot="activator" >
-          <h4 class="indigo--text">Posts</h4>
-          <v-icon x-large color="indigo">edit</v-icon>
-          </a>
-          <v-list class="grey lighten-3" >
-            <router-link avatar v-for="menu in menusPost" :key="menu.id" :to="menu.route" tag="v-list-tile">
-              <v-list-tile-avatar>
-                <v-icon medium :class="[menu.iconClass]">{{ menu.icon }}</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ menu.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </router-link>
-          </v-list>
-        </v-menu>
+      <v-tab to="/actualites" class="d-inline-block" ripple>
+        <h4 class="indigo--text"> Fil d'actualité </h4>
+        <v-icon x-large color="indigo">event</v-icon>
       </v-tab>
       <v-tab>
         <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
@@ -75,12 +65,12 @@
             <v-icon x-large color="teal">edit</v-icon>
           </a>
           <v-list class="grey lighten-3" >
-            <router-link avatar key="paramcompte" to="/assistante/parametres" tag="v-list-tile">
+            <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
               <v-list-tile-avatar>
                 <v-icon medium class="transparent grey--text">event</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>Parametres</v-list-tile-title>
+                <v-list-tile-title>Paramètres</v-list-tile-title>
               </v-list-tile-content>
             </router-link>
             <router-link avatar key="deco" to="assistante/deco" tag="v-list-tile">
