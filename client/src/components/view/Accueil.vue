@@ -95,7 +95,7 @@ import Carousel from '../part/Carousel'
 import Drawer from '../part/Drawer'
 import Map from '../part/map'
 export default {
-  name: 'HelloWorld',
+  name: 'Accueil',
   components: {
     Map,
     Carousel,
