@@ -86,7 +86,7 @@
             class="light-green lighten-4"
             depressed large round
             @click="back"
-          >Annuler</v-btn>
+          >Retour</v-btn>
           <v-btn
             depressed large round
             class="light-green lighten-4"
@@ -139,9 +139,7 @@ export default {
       this.$emit('submit', data)
     },
     back () {
-      this.$router.push({
-        name: 'Accueil'
-      })
+      this.$emit('back')
     }
   },
   computed: {

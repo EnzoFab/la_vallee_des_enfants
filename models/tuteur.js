@@ -4,31 +4,23 @@ let helper = require('../helpers/helper');
 let Tuteur = {
 
     create: function (tuteur, callback) {
-        db.query("INSERT INTO public.tuteur(nom_tuteur, prenom_tuteur, telephone, profession, telephone_pro, id_type_tuteur) VALUES ($1, $2, $3, $4, $5, $6)",
+        db.query("INSERT INTO public.tuteur(nom_tuteur, prenom_tuteur, telephone, profession, telephone_pro, id_type_tuteur) VALUES ($1, $2, $3, $4, $5, $6) returning id_tuteur",
             [tuteur.nomUsage, tuteur.prenom, tuteur.telephone, tuteur.profession, tuteur.telephonePro, tuteur.typeDeTuteur],
             function (err, result) {
                 let retour = {
+                    statut: null,
                     erreur: null,
-                    tuteur: null,
-                    statut: null
+                    id_tuteur: null
                 };
-                let e = helper.handleError(err, result, 'Aucun tuteur');
-                retour.erreur= e.erreur;
-                retour.statut= e.statut;
-                console.log(result)
-                if (retour.erreur == null) {
-                    retour.tuteur = {
-                        nomUsage: result.rows[0].nom_tuteur,
-                        prenom: result.rows[0].prenom_tuteur,
-                        telephone: result.rows[0].telephone,
-                        profession: result.rows[0].profession,
-                        telephonePro: result.rows[0].telephone_pro,
-                        typeDeTuteur: result.rows[0].id_type_tuteur
-                    }
+                if (err) {
+                    retour.statut = 500
+                    retour.erreur = err.toString()
+                } else {
                     retour.statut = 200
+                    retour.id_tuteur = result.rows[0].id_tuteur
                 }
+                callback(retour);
             });
-        callback(retour);
     },
     getTuteursById: function (numeroContrat, callback) {
         db.query(
@@ -48,20 +40,14 @@ let Tuteur = {
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
-                        array.push({
-                            nom_tuteur: rslt.rows[i].nom_tuteur,
-                            prenom_tuteur: rslt.rows[i].prenom_tuteur,
-                            telephone: rslt.rows[i].telephone,
-                            profession: rslt.rows[i].profession,
-                            telephone_pro: rslt.rows[i].telephone_pro,
-                            nom_type_tuteur: rslt.rows[i].nom_type_tuteur
-                        });
-                        console.log('array', array)
-                    }
-                    retour.tuteurs = array;
+                    retour.tuteurs = {
+                        nom_tuteur: rslt.rows[0].nom_tuteur,
+                        prenom_tuteur: rslt.rows[0].prenom_tuteur,
+                        telephone: rslt.rows[0].telephone,
+                        profession: rslt.rows[0].profession,
+                        telephone_pro: rslt.rows[0].telephone_pro,
+                        nom_type_tuteur: rslt.rows[0].nom_type_tuteur
+                    };
                     retour.statut = 200
                 }
                 callback(retour); // on passe en parametre l'objet retour
