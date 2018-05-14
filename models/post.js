@@ -37,8 +37,8 @@ let post = {
         );
     },
     create: function (post, callback) {
-        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $2, $3, $4, $5) returning id_post",
-            [Date(now()), post.message, post.image, post.titre, post.id_am],
+        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $1, $2, $3, $4) returning id_post",
+            [post.message, post.image, post.titre, post.id_am],
             function (err, result) {
                 let retour = {
                     statut: null,
