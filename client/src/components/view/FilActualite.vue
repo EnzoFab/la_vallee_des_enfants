@@ -169,7 +169,7 @@ export default {
       const data = {post: {image: image || this.image.name, message: this.postMessage, titre: this.postTitre, id_am: this.$store.state.assMat.id_assmat}}
       try {
         let r = await PostService.create(data)
-        return r.erreur == null
+        return r.erreur != null
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error
@@ -196,14 +196,14 @@ export default {
           return null
         }
       } catch (e) {
-        console.log(e.toString())
+        console.log(e)
         return null
       }
     },
     async envoyer () {
       let image = await this.saveImg()
       console.log(image)
-      if (this.creerPost(image)) {
+      if (image != null && this.creerPost(image)) {
         let post = {
           image: process.env.BASE_URL + '/' + image, // this.imgPath,
           message: this.postMessage,
