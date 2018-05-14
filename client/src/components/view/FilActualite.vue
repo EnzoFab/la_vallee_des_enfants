@@ -191,13 +191,16 @@ export default {
           }
         } */
         )
+        console.log(response.data)
         if (response.data.erreur == null) {
           console.log(response.data)
           return response.data.image
         } else {
+          console.log('Cette erreur')
           return null
         }
       } catch (e) {
+        console.log('Catch')
         console.log(e)
         return null
       }
