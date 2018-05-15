@@ -8,15 +8,15 @@ router.post('/image', function (req, res) {
     }else {
         console.log(req.files)
         let img = req.files.image;
-        let pathImg = img.name  // on rajoute l'image le numero d'image qu'il y avait avant elle
+        let pathImg = 'images/' + img.name  // on rajoute l'image le numero d'image qu'il y avait avant elle
         // Use the mv() method to place the file somewhere on your server
-        img.mv('./image/'+pathImg, function(err) {
+        img.mv('.public/'+pathImg, function(err) {
             if (err)
                 return res.send({erreur: err, msg: 'y a erreur'});
 
             res.send({
                 erreur: null,
-                image: './image/'+pathImg
+                image: 'static/'+pathImg
             });
         });
         /* fs.readdir('./public/images', (err, files) => {
