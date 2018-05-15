@@ -4,13 +4,18 @@ var modelTuteur = require('../models/tuteur')
 
 /* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
 
+router.get('/tuteursEnfants', function (req, res, next) {
+    modelTuteur.getTuteursEnfants(function (retour) {
+        res.send(retour);
+    });
+});
+
 router.get('/:n', function (req, res) {
     let numContrat = req.params.n;
     modelTuteur.getTuteursById(numContrat, function (retour) {
         res.send(retour)
     });
 });
-
 /* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/create', function (req, res, next) {

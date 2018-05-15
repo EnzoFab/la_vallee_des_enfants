@@ -56,6 +56,43 @@ let Tuteur = {
         );
     },
 
+    getTuteursEnfants: function (callback) {
+        db.query(
+            'SELECT E.nom_enfant, E.prenom_enfant, T.id_tuteur, T.nom_tuteur, T.prenom_tuteur FROM public.tuteur T, public.enfant E, public.apourtuteur A\n' +
+            'WHERE T.id_tuteur = A.id_tuteur AND A.id_enfant = E.id_enfant\n' +
+            'GROUP BY E.nom_enfant, E.prenom_enfant, T.id_tuteur, T.nom_tuteur, T.prenom_tuteur ',
+            [],
+            function (err, rslt){
+                retour = {
+                    erreur: null,
+                    resultats: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun tuteur et enfant');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        console.log(1)
+                        array.push({
+                            id_tuteur: rslt.rows[i].id_tuteur,
+                            prenom_enfant: rslt.rows[i].prenom_enfant,
+                            nom_enfant: rslt.rows[i].nom_enfant,
+                            nom_tuteur: rslt.rows[i].nom_tuteur,
+                            prenom_tuteur: rslt.rows[i].prenom_tuteur
+                        });
+                        console.log('array', array)
+                    }
+                    retour.resultats = array;
+                    retour.statut = 200
+                }
+                callback(retour);
+            }
+        );
+    },
+
+
     sectionEnfantTuteur: function (numEnfant, numTuteur, callback) {
         db.query('INSERT INTO public.apourtuteur(id_enfant, id_tuteur) VALUES ($1, $2)',
             [numEnfant, numTuteur],

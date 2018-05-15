@@ -2,6 +2,7 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 
 let Contrat = {
+
     getAll: function (callback) {
         db.query(
             'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant',
