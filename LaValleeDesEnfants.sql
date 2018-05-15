@@ -281,6 +281,7 @@ CREATE TABLE public.contrat
     id_am integer NOT NULL,
     id_employeur integer,
     jour_paiement integer,
+    id_type_contrat integer,
     CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat),
     CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
         REFERENCES public.assmat (id_am) MATCH SIMPLE
@@ -296,6 +297,10 @@ CREATE TABLE public.contrat
         ON DELETE NO ACTION,
     CONSTRAINT contrat_id_mode_paiement_fkey FOREIGN KEY (id_mode_paiement)
         REFERENCES public.modedepaiement (id_mode) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT contrat_id_type_contrat_fkey FOREIGN KEY (id_type_contrat)
+        REFERENCES public.typecontrat (id_type) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )

@@ -106,7 +106,7 @@ export default new Router({
       meta: {title: 'Fil d\'actualité'}
     },
     {
-      path: '/contrat/visualisation',
+      path: '/contrat/:numC',
       name: 'Fiche',
       component: Fiche,
       meta: {title: 'Fiche'}

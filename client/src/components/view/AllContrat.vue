@@ -13,7 +13,7 @@
               <v-flex d-flex
                       md3 lg3 xl4 sm12 xs12
                       v-for="(contrat,i) in contrats" :key="i">
-                <v-card>
+                <router-link v-bind:to="'/contrat/' + contrat.id"><v-card>
                   <v-flex v-if="contrat.sexeEnfant == 'F'">
                     <img height="200px" src="/static/fille.jpg" />
                   </v-flex>
@@ -27,6 +27,7 @@
                     </v-flex>
                   </v-flex>
                 </v-card>
+                </router-link>
               </v-flex>
             </v-flex>
             <v-flex d-flex
@@ -67,11 +68,17 @@ export default {
       let random = randomstring.generate(35) // chaine de charactere aleatoire de taille 15
       this.$store.dispatch('setNumContrat', random)
     },
+    ficheContrat () {
+      this.$router.push({
+        name: 'Accueil'
+      })
+    },
     async loadContrat () {
       try {
         let response = await ContratService.getAll()
         this.contrats = response.data.contrats
       } catch (e) {
+        console.log(e)
       }
     }
   }
