@@ -256,7 +256,7 @@ export default {
         console.log(e)
       }
     },
-    async initParents (numeroContrat) {
+    async initParents () {
       try {
         const response = await ContratService.donneesParents(this.numeroContrat)
         console.log(response.data)
