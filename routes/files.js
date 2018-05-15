@@ -12,7 +12,7 @@ router.post('/image', function (req, res) {
         // Use the mv() method to place the file somewhere on your server
         img.mv('./public/'+pathImg, function(err) {
             if (err)
-                return res.status(500).send({erreur: err, msg: 'y a erreur'});
+                return res.send({erreur: err, msg: 'y a erreur'});
 
             res.send({
                 erreur: null,
