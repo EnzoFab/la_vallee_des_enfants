@@ -28,8 +28,7 @@
     "socket.io": "^2.1.0"
   },
   "engines": {
-    "node": "8.11.1",
-    "npm": "5.6.0"
+    "node": "8.11.1"
   },
   "description": "Projet industriel de 4èeme année",
   "main": "www",
