@@ -15,15 +15,15 @@
                       v-for="(contrat,i) in contrats" :key="i">
                 <v-card>
                   <v-flex v-if="contrat.sexeEnfant == 'F'">
-                    <img height="200px" src="/static/boy.jpg" />
+                    <img height="200px" src="/static/fille.jpg" />
                   </v-flex>
                   <v-flex v-else>
-                    <img height="200px" src="/static/fille.jpg" />
+                    <img height="200px" src="/static/boy.jpg" />
                   </v-flex>
                   <v-flex>
                     <v-divider></v-divider>
                     <v-flex mt-2>
-                      <h2 class = "orange--text text--darken-1">{{ contrat.nomEnfant }} {{ contrat.prenomEnfant }}</h2>
+                      <h4>{{ contrat.nomEnfant }} {{ contrat.prenomEnfant }}</h4>
                     </v-flex>
                   </v-flex>
                 </v-card>

@@ -123,13 +123,6 @@ export default {
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Consulter mes contrats',
           route: '/contrat/'
-        },
-        {
-          id: 'c3',
-          icon: 'border_color',
-          iconClass: 'transparent lighten-1 grey--text',
-          title: 'Modifier un contrat',
-          route: '/contrat/modifier'
         }
       ],
       menusPost: [
