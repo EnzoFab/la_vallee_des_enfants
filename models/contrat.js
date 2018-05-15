@@ -95,6 +95,7 @@ let Contrat = {
                     retour.mail_employeur = rslt.rows[0].mail_employeur,
                     retour.identifiant_connexion = rslt.rows[0].identifiant_connexion,
                     retour.nb_semaines_conges_parents = rslt.rows[0].nb_semaines_conges_parents,
+                    retour.id_employeur = rslt.rows[0].id_employeur,
                     retour.statut = 200;
                 }
                 console.log('coucou')

@@ -41,4 +41,12 @@ router.put('/:n/update', function (req, res) {
     })
 });
 
+// Modification des données d'un employeur
+router.put('/modifEmp', function (req, res) {
+    let employeur = req.body.employeur
+    modelEmployeur.updateInfosEmp(employeur, function (retour) {
+        res.send(retour)
+    })
+});
+
 module.exports = router;

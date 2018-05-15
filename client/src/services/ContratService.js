@@ -18,6 +18,10 @@ export default {
     return Api().post('contrat/create', data)
   },
 
+  updateInfosEmp (numContrat, data) {
+    return Api().put('contrat/' + numContrat + '/enfant', data)
+  },
+
   updateEnfant (numContrat, data) {
     return Api().put('contrat/' + numContrat + '/enfant', data)
   },

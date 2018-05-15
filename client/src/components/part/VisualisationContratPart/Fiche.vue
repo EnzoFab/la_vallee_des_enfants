@@ -124,12 +124,47 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md3>
-                <v-btn color="blue--text">Modifier</v-btn>
+                <v-btn @click.stop="dialogBox = true">
+                  Modifier
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
         </v-card>
       </v-flex>
+
+      <v-dialog v-model="dialogBox" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Modification des informations</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Rue" v-model="rue" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Code Postal" v-model="codePostal" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Ville" v-model="ville" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Téléphone" v-model="tel" required></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+            <small>*indiquer les champs requis</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="dialogBox = false">Fermer</v-btn>
+            <v-btn color="blue darken-1" flat @click="enregistrer" @click.native="dialogBox = false">Enregistrer</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <v-flex>
         <v-flex :key="parent" v-for="parent in parents" pt-2 md10>
           <v-flex class="text-md-left">
@@ -161,6 +196,7 @@
 
 <script>
 import ContratService from '../../../services/ContratService'
+import EmployeurService from '../../../services/EmployeurService'
 import moment from 'moment'
 import 'moment/locale/fr'
 moment.locale('fr')
@@ -191,6 +227,7 @@ export default {
       assurance: null,
       numeroPolice: null,
       nombreSemaineConges: null,
+      id_employeur: null,
       nomUsageEmp: null,
       prenomEmp: null,
       nomNaissanceEmp: null,
@@ -201,6 +238,11 @@ export default {
       emailEmp: null,
       identifiantEmp: null,
       nombreSemSupp: null,
+      dialogBox: false,
+      rue: null,
+      ville: null,
+      codePostal: null,
+      tel: null,
       parents: []
     }
   },
@@ -241,6 +283,7 @@ export default {
         this.assurance = response.data.assurance_resp_civile
         this.numeroPolice = response.data.num_police
         this.nombreSemaineConges = response.data.nb_semaines_conges
+        this.id_employeur = response.data.id_employeur
         this.nomUsageEmp = response.data.nom_usage_employeur
         this.prenomEmp = response.data.prenom_employeur
         this.nomNaissanceEmp = response.data.nom_naissance_employeur
@@ -263,6 +306,20 @@ export default {
         this.parents = response.data.tuteurs
       } catch (e) {
         console.log(e)
+      }
+    },
+    async enregistrer () {
+      try {
+        let data = {employeur: { rue: this.rue, codePostal: this.codePostal, ville: this.ville, tel: this.tel, id_employeur: this.id_employeur }}
+        console.log('ICIIIIIIIII' + data.employeur.id_employeur)
+        let response = await EmployeurService.updateEmp(data)
+        this.rueEmp = this.rue
+        this.codePEmp = this.codePostal
+        this.villeEmp = this.ville
+        this.telephoneEmp = this.tel
+        console.log('ICIIIIIIIII 2222', response.data)
+      } catch (e) {
+        console.log('ERREUR' + e)
       }
     }
   }
