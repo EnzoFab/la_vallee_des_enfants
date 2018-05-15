@@ -34,8 +34,8 @@ var helmet = require('helmet')
 
 
 // use it before all view definitions
-app.use(helmet())
 app.use(cors({origin: '*'}))
+app.use(helmet())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

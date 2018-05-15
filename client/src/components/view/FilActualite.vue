@@ -225,7 +225,6 @@ export default {
       } catch (e) {
         console.log(e)
       }
-
     },
     clearForm () {
       this.$refs.form.reset()

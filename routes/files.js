@@ -14,12 +14,8 @@ router.post('/image', function (req, res) {
                 console.log(req.files)
                 let img = req.files.image;
                 let pathImg = 'images/' + files.length + img.name  // on rajoute l'image le numero d'image qu'il y avait avant elle
-                res.send({
-                    erreur: null,
-                    image: 'static/'+pathImg
-                })
                 // Use the mv() method to place the file somewhere on your server
-               /* img.mv('./public/'+pathImg, function(err) {
+               img.mv('./public/'+pathImg, function(err) {
                     if (err)
                         return res.status(500).send(err);
 
@@ -27,7 +23,7 @@ router.post('/image', function (req, res) {
                         erreur: null,
                         image: 'static/'+pathImg
                     });
-                }); */
+                });
             }
         });
     }
