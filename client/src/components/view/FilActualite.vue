@@ -177,33 +177,38 @@ export default {
       }
     },
     async saveImg () { // sauvegarde l'image sur le serveur
-      const formData = new FormData()
-      formData.append('image', this.image, this.image.name)
-      try {
-        let response = await FileService.postImg(formData
-          /*, {
-          onUploadProgress (e) {
-            console.log(this.progress)
-            this.progress += e.loaded * 100 / e.total
-            if (this.progress === 100) {
-              this.progress = 0
+      if (this.image) {
+        const formData = new FormData()
+        formData.append('image', this.image, this.image.name)
+        try {
+          let response = await FileService.postImg(formData
+            /*, {
+            onUploadProgress (e) {
+              console.log(this.progress)
+              this.progress += e.loaded * 100 / e.total
+              if (this.progress === 100) {
+                this.progress = 0
+              }
             }
-          }
-        } */
-        )
-        console.log(response.data)
-        if (response.data.erreur == null) {
+          } */
+          )
           console.log(response.data)
-          return response.data.image
-        } else {
-          console.log('Cette erreur')
+          if (response.data.erreur == null) {
+            console.log(response.data)
+            return response.data.image
+          } else {
+            console.log('Cette erreur')
+            return null
+          }
+        } catch (e) {
+          console.log('Catch')
+          console.log(e)
           return null
         }
-      } catch (e) {
-        console.log('Catch')
-        console.log(e)
+      } else {
         return null
       }
+
     },
     async envoyer () {
       try {
