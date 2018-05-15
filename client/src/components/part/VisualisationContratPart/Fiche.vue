@@ -212,7 +212,6 @@ export default {
     async initDonnees () {
       try {
         const response = await ContratService.donneesContrat(this.numeroContrat)
-        console.log(response.data)
         this.numeroContrat = this.numeroContrat
         this.modeDePaiementContrat = response.data.modepaiements
         this.nomEnfant = response.data.nom_enfant
