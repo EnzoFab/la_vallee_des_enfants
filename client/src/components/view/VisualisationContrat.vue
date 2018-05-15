@@ -1,18 +1,29 @@
 <template>
+  <v-flex mt-3>
   <v-tabs
     dark
-    color="cyan"
+    color="blue"
     show-arrows
   >
     <v-tabs-slider color="yellow"></v-tabs-slider>
     <v-tab
-      :href="'#tab-'"
+      :href="'#tab1'"
     >
-      Item
+      Fiche
+    </v-tab>
+    <v-tab
+      :href="'#tab2'"
+    >
+      Présence
+    </v-tab>
+    <v-tab
+      :href="'#tab3'"
+    >
+      Facture
     </v-tab>
     <v-tabs-items>
       <v-tab-item
-        :id="'tab-'"
+        :id="'tab1'"
       >
         <v-card flat>
           <Fiche ref="fiche"></Fiche>
@@ -20,6 +31,7 @@
       </v-tab-item>
     </v-tabs-items>
   </v-tabs>
+  </v-flex>
 </template>
 
 <script>
@@ -32,7 +44,7 @@ export default {
       model: 'tab-2'
     }
   },
-  mounted (){
+  mounted () {
     this.$refs.fiche.initDonnees()
   }
 }

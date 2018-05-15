@@ -10,14 +10,6 @@ router.get('/all', function (req, res, next) {
     });
 });
 
-router.get('/:n', function (req, res) {
-    let numContrat = req.params.n // le numero du contrat
-    modelEnfant.findOne(numContrat, function (retour) {
-        console.log(retour);
-        res.send(retour);
-    })
-});
-
 router.get('/', function (req, res) {
     let nom = req.query.nom;
     let prenom = req.query.prenom;
@@ -25,6 +17,13 @@ router.get('/', function (req, res) {
     let sexe = req.query.sexe;
 });
 
+router.get('/:n', function (req, res) {
+    let numContrat = req.params.n // le numero du contrat
+    modelEnfant.findOne(numContrat, function (retour) {
+        console.log(retour);
+        res.send(retour);
+    })
+});
 /* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/create', function (req, res, next) {

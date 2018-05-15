@@ -365,6 +365,7 @@ create table public."presencereelle"
     heure_arrivee_r time without time zone,
     heure_depart_r time without time zone,
     prends_gouter_r boolean,
+    absence_justifiee boolean,
     id_presence_theo integer,
     id_presence_reelle SERIAL NOT NULL primary key,
     id_facture integer,

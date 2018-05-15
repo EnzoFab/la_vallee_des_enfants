@@ -10,11 +10,11 @@ import SimulationContrat from '@/components/view/Simulation'
 import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
 import ToolbarAssMat from '@/components/part/ToolbarAssMat'
 import AllContrat from '@/components/view/AllContrat'
-import Fiche from '@/components/part/VisualisationContratPart/Fiche'
 import SaisirPresences from '@/components/part/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
 import ParametresCompte from '@/components/view/ParametresCompte'
 import FilActualite from '@/components/view/FilActualite'
+import VisualisationContrat from '@/components/view/VisualisationContrat'
 
 Vue.use(Router)
 
@@ -107,9 +107,9 @@ export default new Router({
     },
     {
       path: '/contrat/:numC',
-      name: 'Fiche',
-      component: Fiche,
-      meta: {title: 'Fiche'}
+      name: 'VisualisationContrat',
+      component: VisualisationContrat,
+      meta: {title: 'VisualisationContrat'}
     },
     {
       path: '/presence/saisir',
