@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var modelPresenceTheorique = require('../models/presenceTheorique')
 
+/* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
+
 router.get('/all', function (req, res, next) {
     modelPresenceTheorique.getAll(function (retour) {
         res.send(retour);
@@ -16,6 +18,8 @@ router.get('/:n/allchildren', function (req, res, next) {
     });
 });
 
+/* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
+
 router.post('/create', function (req, res, next) {
     var presenceTheorique = req.body.presenceTheorique
     modelPresenceTheorique.create(presenceTheorique, function (retour) {
@@ -23,6 +27,8 @@ router.post('/create', function (req, res, next) {
         res.send(retour)
     })
 });
+
+/* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
 
 // Update de la présence théorique
 router.put('/:n/update', function (req, res) {

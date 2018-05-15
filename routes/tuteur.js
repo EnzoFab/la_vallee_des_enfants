@@ -2,6 +2,16 @@ var express = require('express');
 var router = express.Router();
 var modelTuteur = require('../models/tuteur')
 
+/* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
+
+router.get('/:n', function (req, res) {
+    let numContrat = req.params.n;
+    modelTuteur.getTuteursById(numContrat, function (retour) {
+        res.send(retour)
+    });
+});
+
+/* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/create', function (req, res, next) {
     var tuteur = req.body.tuteur
@@ -9,13 +19,6 @@ router.post('/create', function (req, res, next) {
         console.log(retour)
         res.send(retour)
     })
-});
-
-router.get('/:n', function (req, res) {
-    let numContrat = req.params.n;
-    modelTuteur.getTuteursById(numContrat, function (retour) {
-        res.send(retour)
-    });
 });
 
 // Ajout/Modification des données de la SECTION TUTEUR DE L'ENFANT
@@ -26,6 +29,8 @@ router.post('/lierEnfant', function (req, res) {
         res.send(retour)
     })
 });
+
+/* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
 
 // Update du tuteur
 router.put('/:n/update', function (req, res) {

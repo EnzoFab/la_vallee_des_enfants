@@ -2,24 +2,12 @@ var express = require('express');
 var router = express.Router();
 var modelEnfant= require('../models/enfant')
 
+/* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
+
 router.get('/all', function (req, res, next) {
     modelEnfant.getAll(function (retour) {
         res.send(retour);
     });
-});
-
-router.post('/create', function (req, res, next) {
-    var enfant = req.body.enfant
-    modelEnfant.create(enfant, function (retour) {
-        console.log(retour)
-        res.send(retour)
-    })
-});
-router.get('/', function (req, res) {
-    let nom = req.query.nom;
-    let prenom = req.query.prenom;
-    let dateNaissance = req.query.date;
-    let sexe = req.query.sexe;
 });
 
 router.get('/:n', function (req, res) {
@@ -28,8 +16,27 @@ router.get('/:n', function (req, res) {
         console.log(retour);
         res.send(retour);
     })
-
 });
+
+router.get('/', function (req, res) {
+    let nom = req.query.nom;
+    let prenom = req.query.prenom;
+    let dateNaissance = req.query.date;
+    let sexe = req.query.sexe;
+});
+
+/* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
+
+router.post('/create', function (req, res, next) {
+    var enfant = req.body.enfant
+    modelEnfant.create(enfant, function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
+
+/* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
 
 // Update de l'enfant
 router.put('/:n/update', function (req, res) {
@@ -39,9 +46,5 @@ router.put('/:n/update', function (req, res) {
         res.send(retour)
     })
 });
-
-router.delete('/:n', function (req ,res) {
-    
-})
 
 module.exports = router;

@@ -10,9 +10,9 @@ function jwtSignEmployeur(employeur) {
     return jwt.sign(employeur, process.env.JWT_SECRET, {expiresIn: ON_WEEK})
 }
 
-/* router.post('/login',
-   // AuthentificationControllerPolicy.login,
-    AuthentificationController.loginParent); */
+/* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
+
+/* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/login', function (req, res, next) {
     var login = req.body.login;
@@ -31,6 +31,8 @@ router.post('/create', function (req, res, next) {
         res.send(retour)
     })
 });
+
+/* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
 
 // Update de l'employeur
 router.put('/:n/update', function (req, res) {
