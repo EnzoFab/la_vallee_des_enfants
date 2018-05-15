@@ -172,7 +172,7 @@ export default {
       nomEnfant: null,
       dateNaissanceEnfant: null,
       sexeEnfant: null,
-      numeroContrat: 'monprems1',
+      numeroContrat: this.$route.params.numC,
       typeContrat: null,
       modeDePaiementContrat: null,
       dateDebAdapt: null,
@@ -205,17 +205,14 @@ export default {
     }
   },
   mounted () {
-    console.log('sdfghj')
     this.initDonnees(this.numeroContrat)
     this.initParents(this.numeroContrat)
   },
   methods: {
-    async initDonnees (numeroContrat) {
+    async initDonnees () {
       try {
-        console.log('heyyyyyyyyyyyyyyyyyyooooooooh')
         const response = await ContratService.donneesContrat(this.numeroContrat)
-        console.log(response.data)
-        this.numeroContrat = numeroContrat
+        this.numeroContrat = this.numeroContrat
         this.modeDePaiementContrat = response.data.modepaiements
         this.nomEnfant = response.data.nom_enfant
         this.prenomEnfant = response.data.prenom_enfant
