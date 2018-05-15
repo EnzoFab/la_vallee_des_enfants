@@ -134,6 +134,7 @@
       </v-flex>
 
       <v-dialog v-model="dialogBox" max-width="500px">
+        <v-form v-model="estValide" ref="form">
         <v-card>
           <v-card-title>
             <span class="headline">Modification des informations</span>
@@ -142,16 +143,16 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Rue" v-model="rue" required></v-text-field>
+                  <v-text-field label="Rue" :rules="regleRue" v-model="rue" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Code Postal" v-model="codePostal" required></v-text-field>
+                  <v-text-field label="Code Postal" :rules="regleCodeP" v-model="codePostal" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Ville" v-model="ville" required></v-text-field>
+                  <v-text-field label="Ville" :rules="regleVille" v-model="ville" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Téléphone" v-model="tel" required></v-text-field>
+                  <v-text-field label="Téléphone" :rules="regleTel" v-model="tel" required></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -160,9 +161,16 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="dialogBox = false">Fermer</v-btn>
-            <v-btn color="blue darken-1" flat @click="enregistrer" @click.native="dialogBox = false">Enregistrer</v-btn>
+            <v-btn
+              color="blue darken-1"
+              flat @click="enregistrer"
+              :disabled="!estValide"
+              @click.native="dialogBox = false"
+              :dark="estValide"
+            >Enregistrer</v-btn>
           </v-card-actions>
         </v-card>
+        </v-form>
       </v-dialog>
 
       <v-flex>
@@ -197,13 +205,16 @@
 <script>
 import ContratService from '../../../services/ContratService'
 import EmployeurService from '../../../services/EmployeurService'
+import { validationMixin } from 'vuelidate'
 import moment from 'moment'
 import 'moment/locale/fr'
 moment.locale('fr')
 export default {
+  mixins: [validationMixin],
   name: 'Fiche',
   data () {
     return {
+      estValide: false,
       prenomEnfant: null,
       nomEnfant: null,
       dateNaissanceEnfant: null,
@@ -243,7 +254,21 @@ export default {
       ville: null,
       codePostal: null,
       tel: null,
-      parents: []
+      parents: [],
+      regleRue: [
+        v => !!v || 'Veuillez saisir la rue'
+      ],
+      regleCodeP: [
+        v => !!v || 'Veuillez saisir le code postal',
+        v => /^[1-9]([0-9]{4})$/.test(v) || 'Le code postal n\'est pas valide'
+      ],
+      regleVille: [
+        v => !!v || 'Veuillez saisir la ville'
+      ],
+      regleTel: [
+        v => !!v || 'Veuillez saisir un téléphone',
+        v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
+      ]
     }
   },
   mounted () {
