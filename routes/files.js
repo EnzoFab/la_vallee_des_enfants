@@ -10,7 +10,7 @@ router.post('/image', function (req, res) {
         let img = req.files.image;
         let pathImg = 'images/' + img.name  // on rajoute l'image le numero d'image qu'il y avait avant elle
         // Use the mv() method to place the file somewhere on your server
-        img.mv('public/'+pathImg, function(err) {
+        img.mv(__dirname + '/public/'+pathImg, function(err) {
             if (err)
                 return res.send({erreur: err, msg: 'y a erreur'});
 
