@@ -10,9 +10,9 @@ function jwtSignEmployeur(employeur) {
     return jwt.sign(employeur, process.env.JWT_SECRET, {expiresIn: ON_WEEK})
 }
 
-/* router.post('/login',
-   // AuthentificationControllerPolicy.login,
-    AuthentificationController.loginParent); */
+/* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
+
+/* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/login', function (req, res, next) {
     var login = req.body.login;
@@ -32,11 +32,21 @@ router.post('/create', function (req, res, next) {
     })
 });
 
+/* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
+
 // Update de l'employeur
 router.put('/:n/update', function (req, res) {
     let num_employeur = req.params.n
     let employeur = req.body.employeur
     modelEmployeur.update(num_employeur, employeur, function (retour) {
+        res.send(retour)
+    })
+});
+
+// Modification des données d'un employeur
+router.put('/modifEmp', function (req, res) {
+    let employeur = req.body.employeur
+    modelEmployeur.updateInfosEmp(employeur, function (retour) {
         res.send(retour)
     })
 });

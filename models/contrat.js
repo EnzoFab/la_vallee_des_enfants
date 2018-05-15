@@ -2,6 +2,7 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 
 let Contrat = {
+
     getAll: function (callback) {
         db.query(
             'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant',
@@ -95,6 +96,7 @@ let Contrat = {
                     retour.mail_employeur = rslt.rows[0].mail_employeur,
                     retour.identifiant_connexion = rslt.rows[0].identifiant_connexion,
                     retour.nb_semaines_conges_parents = rslt.rows[0].nb_semaines_conges_parents,
+                    retour.id_employeur = rslt.rows[0].id_employeur,
                     retour.statut = 200;
                 }
                 console.log('coucou')
@@ -127,6 +129,7 @@ let Contrat = {
                     for(var i = 0; i < rslt.rows.length; i++){
                         console.log(1)
                         array.push({
+                            id_tuteur: rslt.rows[i].id_tuteur,
                             nom_tuteur: rslt.rows[i].nom_tuteur,
                             prenom_tuteur: rslt.rows[i].prenom_tuteur,
                             telephone: rslt.rows[i].telephone,

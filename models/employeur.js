@@ -177,6 +177,25 @@ let Employeur = {
                 callback(retour)
             })
     },
+
+    updateInfosEmp: function (employeur, callback) {
+        db.query('UPDATE public.employeur SET rue_employeur = $1, cp_employeur = $2, ville_employeur = $3, telephone_employeur = $4 WHERE id_employeur = $5',
+            [employeur.rue, employeur.codePostal, employeur.ville, employeur.tel, employeur.id_employeur],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
 };
 
 module.exports = Employeur;

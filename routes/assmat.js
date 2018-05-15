@@ -9,8 +9,16 @@ function jwtSignAssMat(assmat) {
     return jwt.sign(assmat, process.env.JWT_SECRET, {expiresIn: ON_WEEK})
 }
 
-// Express middlewares
-const AuthentificationController = require('../controllers/AuthentificationController')
+/* --------------------------------------- ROUTES GET ----------------------------------------------------------- */
+
+router.get('/all', function (req, res, next) {
+    modelAssMat.getAll(function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
+/* --------------------------------------- ROUTES POST --------------------------------------------------------- */
 
 router.post('/register', function (req, res, next) {
     var assMat = req.body.assMat
@@ -33,12 +41,7 @@ router.post('/login', function (req, res, next) {
     })
 });
 
-router.get('/all', function (req, res, next) {
-    modelAssMat.getAll(function (retour) {
-        console.log(retour)
-        res.send(retour)
-    })
-});
+/* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
 
 // Update du mot de passe
 router.put('/modifMdp', function (req, res) {
