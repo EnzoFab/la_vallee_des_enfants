@@ -6,6 +6,7 @@ var modelTuteur = require('../models/tuteur')
 
 router.get('/tuteursEnfants', function (req, res, next) {
     modelTuteur.getTuteursEnfants(function (retour) {
+        console.log('============', retour)
         res.send(retour);
     });
 });
@@ -20,6 +21,7 @@ router.get('/:n', function (req, res) {
 
 router.post('/create', function (req, res, next) {
     var tuteur = req.body.tuteur
+    console.log()
     modelTuteur.create(tuteur, function (retour) {
         console.log(retour)
         res.send(retour)

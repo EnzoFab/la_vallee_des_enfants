@@ -240,7 +240,7 @@ export default {
       }
       try {
         await EmployeurService.createContratEmployeur(data.employeur)
-        await TuteurService.createContratTuteur(data.tuteur)
+        await TuteurService.createTuteur(data.tuteur)
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error

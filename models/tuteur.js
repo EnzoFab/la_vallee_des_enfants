@@ -74,7 +74,6 @@ let Tuteur = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id_tuteur: rslt.rows[i].id_tuteur,
                             prenom_enfant: rslt.rows[i].prenom_enfant,

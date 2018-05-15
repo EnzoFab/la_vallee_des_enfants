@@ -6,5 +6,8 @@ export default {
   },
   findOneByContratID (idContrat) {
     return Api().get('/enfants/' + idContrat)
+  },
+  updateEnfant (idEnfant, credentials) {
+    return Api().put('enfants/' + idEnfant + '/update', credentials)
   }
 }

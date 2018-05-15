@@ -8,17 +8,17 @@
         <v-stepper-header>
           <v-stepper-step class="red--text" step="1" :complete="estValideEtape1" >Assistante</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step class="red--text" step="2" :complete="estValideEtape1" >Enfant</v-stepper-step>
+          <v-stepper-step class="red--text" step="2" :complete="estValideEtape2" >Enfant</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="3" :complete="estValideEtape2" >Tuteur légaux</v-stepper-step>
+          <v-stepper-step step="3" :complete="estValideEtape3" editable>Tuteur légaux</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="4" :complete="estValideEtape3">Employeur</v-stepper-step>
+          <v-stepper-step step="4" :complete="estValideEtape4">Employeur</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" :complete="estValideEtape4" >Informations générales</v-stepper-step>
+          <v-stepper-step step="5" :complete="estValideEtape5" >Informations générales</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="6" :complete="estValideEtape5" editable >Carnet de présences</v-stepper-step>
+          <v-stepper-step step="6" :complete="estValideEtape6" editable >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="7" :complete="estValideEtape6" >Tarifs</v-stepper-step>
+          <v-stepper-step step="7" :complete="estValideEtape7" >Tarifs</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
@@ -87,7 +87,8 @@ export default {
       Fin: false,
       erreur: false,
       erreurMessage: null,
-      idAssmat: null
+      idAssmat: null,
+      idEnfant: null
     }
   },
   methods: {
@@ -95,8 +96,18 @@ export default {
       // console.log(this.$store.state.assMat.id_assmat)
       try {
         let response = await EnfantService.findOneByContratID(this.$store.state.numContrat)// on regarde si l'enfant existe deja
-        if (response.data.statut === 200) { // il existe un enfants
-          // update l'enfant
+        if (response.data.statut === 200) { // il existe un enfant on le mets à jour
+          console.log(data)
+          let result = await EnfantService.updateEnfant(
+            response.data.enfant.id,
+            data)
+          if (result.data.erreur == null) {
+            this.idEnfant = response.data.enfant.id
+            this.estValideEtape1 = true
+            this.etape++
+          } else {
+            this.triggerErreur(result.data.erreur)
+          }
         } else if (response.data.statut === 404) { // l'enfant n'existe pas
           let enfantR = await EnfantService.createContratEnfant(data) // creation d'un nouvel enfant
           let r = await ContratService.create({
@@ -110,11 +121,11 @@ export default {
             ) // liaison entre le contrat et l'enfant
             console.log(updateContrat.data)
             if (updateContrat.data.erreur == null) {
+              this.idEnfant = enfantR.data.id_enfant
               this.estValideEtape1 = true
               this.etape++
             } else {
-              this.erreurMessage = 'Une erreur est survenue'
-              this.erreur = true
+              this.triggerErreur('Une erreur est survenue')
             }
           } else {
             this.triggerErreur('Une erreur est survenue')
@@ -128,26 +139,51 @@ export default {
     },
     async submitTuteurs (data) {
       console.log(data)
-      try {
-        let responseTuteur = await TuteurService.getTuteurByContrat(this.$store.state.numContrat)
-        if (responseTuteur.statut === 200) { // le tuteur existe
-          // update le tuteur
-        } else {
-          let responseCreation = await TuteurService.createContratTuteur(data)
-          if (responseCreation.erreur == null) { // insertion avec succes
-
+      let tuteurs = data.tuteurs
+      for (var i = 0; i < tuteurs.length; i++) {
+        console.log(tuteurs[i])
+        try {
+          if (tuteurs[i].tuteurExistant) {
+            let res = await TuteurService.lierTuteurEnfant({
+              id_tuteur: tuteurs[i].informationTuteurExistant.id_tuteur,
+              id_enfant: this.idEnfant
+            })
+            console.log('=========', res.data)
           } else {
-            this.triggerErreur('Une erreur est survenue')
+            let response = await TuteurService.createTuteur({tuteur: tuteurs[i]})
+            if (response.data.erreur == null) {
+              let id = response.data.id_tuteur
+              console.log('ID', id, ' ENFAT', this.idEnfant)
+              let res = await TuteurService.lierTuteurEnfant({
+                id_tuteur: id,
+                id_enfant: this.idEnfant
+              }) // lie le tuteurs et l'enfant
+              if (res.data.erreur != null) {
+                this.triggerErreur(res.data.erreur)
+              }
+            } else {
+              this.triggerErreur(response.data.erreur)
+              return
+            }
           }
+        } catch (e) {
+          this.triggerErreur(e.toString())
+          return
         }
-      } catch (e) {
-        this.triggerErreur(e.toString())
       }
-      this.estValideEtape2 = true
+      /* tuteurs.forEach(function (tuteur) {
+        console.log(tuteur)
+        TuteurService.createTuteur({tuteur: tuteur}).then(function (res) {
+          console.log(res.data)
+        }).catch(function (er) {
+          this.triggerErreur(er)
+        })
+      }) */
+      this.estValideEtape3 = true
       if (data.asEmployeur) {
-        this.etape = 4
+        this.etape = 5
       } else {
-        this.etape = 3
+        this.etape = 4
       }
     },
     submitEmp (data) {
