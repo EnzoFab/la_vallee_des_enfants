@@ -6,5 +6,8 @@ export default {
   },
   getTuteurByContrat (numContrat) {
     return Api().get('/tuteurs/', numContrat)
+  },
+  updateTuteur (data) {
+    return Api().put('/tuteurs/modifTuteur', data)
   }
 }

@@ -124,7 +124,7 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md3>
-                <v-btn @click.stop="dialogBox = true">
+                <v-btn color="blue--text" @click.stop="dialogBox = true">
                   Modifier
                 </v-btn>
               </v-flex>
@@ -143,16 +143,16 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Rue" :rules="regleRue" v-model="rue" required></v-text-field>
+                  <v-text-field label="Rue" :rules="regleRue" v-model="rueEmp" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Code Postal" :rules="regleCodeP" v-model="codePostal" required></v-text-field>
+                  <v-text-field label="Code Postal" :rules="regleCodeP" v-model="codePEmp" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Ville" :rules="regleVille" v-model="ville" required></v-text-field>
+                  <v-text-field label="Ville" :rules="regleVille" v-model="villeEmp" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Téléphone" :rules="regleTel" v-model="tel" required></v-text-field>
+                  <v-text-field label="Téléphone" :rules="regleTel" v-model="telephoneEmp" required></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -192,9 +192,53 @@
               <v-layout pb-3 mt-1>
                 <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>{{ parent.telephone_pro}}</span>
               </v-layout>
+              <v-layout pb-2 mt-1>
+                <v-flex offset-md3>
+                  <v-btn color="blue--text" @click.stop="dialogBox2 = true">
+                    Modifier
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-flex>
             <v-divider></v-divider>
           </v-card>
+          <v-dialog v-model="dialogBox2" max-width="500px">
+            <v-form v-model="estValide" ref="form">
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Modification des informations</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <v-flex xs12>
+                        <v-text-field label="Téléphone" :rules="regleTel" v-model="parent.telephone" required></v-text-field>
+                      </v-flex>
+                      <v-flex xs12>
+                        <v-text-field label="Profession" :rules="regleProfession" v-model="parent.profession" required></v-text-field>
+                      </v-flex>
+                      <v-flex xs12>
+                        <v-text-field label="Téléphone professionnel" :rules="regleTel" v-model="parent.telephone_pro" required></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                  <small>*indiquer les champs requis</small>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat @click.native="dialogBox2 = false">Fermer</v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    flat @click="enregistrerParent(parent)"
+                    :disabled="!estValide"
+                    @click.native="dialogBox2 = false"
+                    :dark="estValide"
+                  >Enregistrer</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-form>
+          </v-dialog>
+
         </v-flex>
     </v-flex>
     </v-flex>
@@ -205,6 +249,7 @@
 <script>
 import ContratService from '../../../services/ContratService'
 import EmployeurService from '../../../services/EmployeurService'
+import TuteurService from '../../../services/TuteurService'
 import { validationMixin } from 'vuelidate'
 import moment from 'moment'
 import 'moment/locale/fr'
@@ -250,10 +295,7 @@ export default {
       identifiantEmp: null,
       nombreSemSupp: null,
       dialogBox: false,
-      rue: null,
-      ville: null,
-      codePostal: null,
-      tel: null,
+      dialogBox2: false,
       parents: [],
       regleRue: [
         v => !!v || 'Veuillez saisir la rue'
@@ -268,6 +310,9 @@ export default {
       regleTel: [
         v => !!v || 'Veuillez saisir un téléphone',
         v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
+      ],
+      regleProfession: [
+        v => !!v || 'Veuillez saisir la profession'
       ]
     }
   },
@@ -335,14 +380,16 @@ export default {
     },
     async enregistrer () {
       try {
-        let data = {employeur: { rue: this.rue, codePostal: this.codePostal, ville: this.ville, tel: this.tel, id_employeur: this.id_employeur }}
-        console.log('ICIIIIIIIII' + data.employeur.id_employeur)
-        let response = await EmployeurService.updateEmp(data)
-        this.rueEmp = this.rue
-        this.codePEmp = this.codePostal
-        this.villeEmp = this.ville
-        this.telephoneEmp = this.tel
-        console.log('ICIIIIIIIII 2222', response.data)
+        let data = {employeur: { rue: this.rueEmp, codePostal: this.codePEmp, ville: this.villeEmp, tel: this.telephoneEmp, id_employeur: this.id_employeur }}
+        await EmployeurService.updateEmp(data)
+      } catch (e) {
+        console.log('ERREUR' + e)
+      }
+    },
+    async enregistrerParent (parent) {
+      try {
+        let data = {tuteur: { telParent: parent.telephone, profession: parent.profession, telProParent: parent.telephone_pro, id_tuteur: parent.id_tuteur }}
+        await TuteurService.updateTuteur(data)
       } catch (e) {
         console.log('ERREUR' + e)
       }

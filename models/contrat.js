@@ -128,6 +128,7 @@ let Contrat = {
                     for(var i = 0; i < rslt.rows.length; i++){
                         console.log(1)
                         array.push({
+                            id_tuteur: rslt.rows[i].id_tuteur,
                             nom_tuteur: rslt.rows[i].nom_tuteur,
                             prenom_tuteur: rslt.rows[i].prenom_tuteur,
                             telephone: rslt.rows[i].telephone,

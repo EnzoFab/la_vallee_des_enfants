@@ -93,6 +93,25 @@ let Tuteur = {
                 callback(retour)
             })
     },
+
+    updateInfosTuteur: function (tuteur, callback) {
+        db.query('UPDATE public.tuteur SET telephone = $1, profession = $2, telephone_pro = $3 WHERE id_tuteur = $4',
+            [tuteur.telParent, tuteur.profession, tuteur.telProParent, tuteur.id_tuteur],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
 }
 
 module.exports = Tuteur;
