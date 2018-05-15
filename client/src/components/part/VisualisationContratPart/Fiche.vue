@@ -205,17 +205,15 @@ export default {
     }
   },
   mounted () {
-    console.log('sdfghj')
     this.initDonnees(this.numeroContrat)
     this.initParents(this.numeroContrat)
   },
   methods: {
     async initDonnees () {
       try {
-        console.log('heyyyyyyyyyyyyyyyyyyooooooooh')
         const response = await ContratService.donneesContrat(this.numeroContrat)
         console.log(response.data)
-        this.numeroContrat = this.$route.params.numC
+        this.numeroContrat = this.numeroContrat
         this.modeDePaiementContrat = response.data.modepaiements
         this.nomEnfant = response.data.nom_enfant
         this.prenomEnfant = response.data.prenom_enfant
