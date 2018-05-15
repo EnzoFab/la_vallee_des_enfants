@@ -122,7 +122,7 @@ export default {
           icon: 'visibility',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Consulter mes contrats',
-          route: '/contrat/consulter'
+          route: '/contrat/'
         },
         {
           id: 'c3',

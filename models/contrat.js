@@ -4,7 +4,7 @@ let helper = require('../helpers/helper');
 let Contrat = {
     getAll: function (callback) {
         db.query(
-            'SELECT * FROM public.contrat',
+            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant',
             [],
             function (err, rslt){
                 retour = {
@@ -28,7 +28,10 @@ let Contrat = {
                             taux: rslt.rows[i].taux_majore,
                             dateDebAdapt: rslt.rows[i].date_deb_periode_adaptation,
                             dateFinAdapt: rslt.rows[i].date_fin_periode_adaptation,
-                            jourPaiement: rslt.rows[i].jour_paiement
+                            jourPaiement: rslt.rows[i].jour_paiement,
+                            nomEnfant: rslt.rows[i].nom_enfant,
+                            prenomEnfant: rslt.rows[i].prenom_enfant,
+                            sexeEnfant: rslt.rows[i].sexe
                         });
                         console.log('array', array)
                     }
