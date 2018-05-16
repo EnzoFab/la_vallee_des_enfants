@@ -231,7 +231,7 @@
 </template>
 
 <script>
-import PresenceService from "../../services/PresenceService";
+import PresenceService from '../../services/PresenceService'
 import moment from 'moment'
 moment.locale('fr')
 export default {
@@ -272,11 +272,11 @@ export default {
       try {
         const response = await PresenceService.getAllChildrenOfTheDay()
         this.enfantsDuJour = response.data.presencestheoriques
-        for(var i = 0; i < this.enfantsDuJour.length; i++) {
-          var heureDecoupeeArr = (this.enfantsDuJour[i].heure_arrivee).split(":", 2)
+        for (var i = 0; i < this.enfantsDuJour.length; i++) {
+          var heureDecoupeeArr = (this.enfantsDuJour[i].heure_arrivee).split(':', 2)
           this.enfantsDuJour[i].heureArrivee = heureDecoupeeArr[0]
           this.enfantsDuJour[i].minuteArrivee = heureDecoupeeArr[1]
-          var heureDecoupeeDep = (this.enfantsDuJour[i].heure_depart).split(":", 2)
+          var heureDecoupeeDep = (this.enfantsDuJour[i].heure_depart).split(':', 2)
           this.enfantsDuJour[i].heureDepart = heureDecoupeeDep[0]
           this.enfantsDuJour[i].minuteDepart = heureDecoupeeDep[1]
           const response2 = await PresenceService.estEnregistreAujourdhui(this.enfantsDuJour[i].id_enfant)
@@ -287,21 +287,20 @@ export default {
           this.enfantsDuJour[i].a_pris_gouter = response2.data.a_pris_gouter
           this.enfantsDuJour[i].absence_justifiee = response2.data.absence_justifiee
           console.log(this.enfantsDuJour[i].absence_justifiee)
-          var heureDecoupeeArrR = (this.enfantsDuJour[i].heure_arrivee_r).split(":", 2)
+          var heureDecoupeeArrR = (this.enfantsDuJour[i].heure_arrivee_r).split(':', 2)
           this.enfantsDuJour[i].heureArriveeR = heureDecoupeeArrR[0]
           this.enfantsDuJour[i].minuteArriveeR = heureDecoupeeArrR[1]
-          var heureDecoupeeDepR = (this.enfantsDuJour[i].heure_depart_r).split(":", 2)
+          var heureDecoupeeDepR = (this.enfantsDuJour[i].heure_depart_r).split(':', 2)
           this.enfantsDuJour[i].heureDepartR = heureDecoupeeDepR[0]
           this.enfantsDuJour[i].minuteDepartR = heureDecoupeeDepR[1]
-
         }
       } catch (e) {
-      console.log(e)
+        console.log(e)
       }
     },
-    async submitArrivee(enfant) {
+    async submitArrivee (enfant) {
       try {
-        if (enfant.enregistre == false) {
+        if (enfant.enregistre === false) {
           var date = new Date()
           let data = {
             presence:
@@ -326,12 +325,12 @@ export default {
           console.log(v2.data)
           this.dialogBox = false
         }
-      }catch (e) {
+      } catch (e) {
         console.log(e)
       }
-      this.alert=true
+      this.alert = true
     },
-    async submitDepart(enfant) {
+    async submitDepart (enfant) {
       try {
         let data = {
           presence:
@@ -343,13 +342,12 @@ export default {
         const v = await PresenceService.majHeureDepart(data)
         console.log(v)
         this.dialogBox = false
-
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
-      this.alert=true
+      this.alert = true
     },
-    async submitGouter(enfant) {
+    async submitGouter (enfant) {
       try {
         let data = {
           presence:
@@ -361,15 +359,14 @@ export default {
         const v = await PresenceService.majGouter(data)
         console.log(v)
         this.dialogBox = false
-
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
-      this.alert=true
+      this.alert = true
     },
-    async submitAbsenceJu(enfant) {
+    async submitAbsenceJu (enfant) {
       try {
-        if (enfant.enregistre == false) {
+        if (enfant.enregistre === false) {
           var date = new Date()
           let data = {
             absence:
@@ -394,14 +391,14 @@ export default {
           console.log(v2.data)
           this.dialogBoxAbsence = false
         }
-      }catch (e) {
+      } catch (e) {
         console.log(e)
       }
-      this.alert=true
+      this.alert = true
     },
-    async submitAbsenceNonJu(enfant) {
+    async submitAbsenceNonJu (enfant) {
       try {
-        if (enfant.enregistre == false) {
+        if (enfant.enregistre === false) {
           var date = new Date()
           let data = {
             absence:
@@ -426,10 +423,10 @@ export default {
           console.log(v2.data)
           this.dialogBoxAbsence = false
         }
-      }catch (e) {
+      } catch (e) {
         console.log(e)
       }
-      this.alert=true
+      this.alert = true
     },
     heureRassemblee: function (heure, minute) {
       return (heure + ':' + minute)
