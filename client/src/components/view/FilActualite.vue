@@ -11,6 +11,9 @@
     ></v-progress-circular>
     <v-card>
       <v-container fluid style="min-height: 0;" grid-list-lg>
+        <v-alert v-model="erreur" type="error" dismissible>
+         {{erreurMessage}}
+        </v-alert>
         <v-layout row wrap>
           <v-flex v-for="(post,i) in posts" :key="i" xs12 sm12 md12>
             <v-card color="purple" class="white--text">
@@ -36,9 +39,10 @@
         </v-layout>
       </v-container>
       <v-card-text style="height: 100px; position: relative">
-        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-dialog v-model="dialog" persistent max-width="500px" v-if="isAssMatConnected">
           <v-fab-transition slot="activator">
             <v-btn
+              v-if="isAssMatConnected"
               color="pink"
               dark
               large
@@ -130,7 +134,9 @@ export default {
       image: null,
       postMessage: null,
       postTitre: null,
-      progress: 0
+      progress: 0,
+      erreur: false,
+      erreurMessage: ''
     }
   },
   sockets: {
@@ -142,6 +148,9 @@ export default {
     },
     nouveauPost (data) {
       this.posts.push(data)
+    },
+    suppression (data) {
+      this.deletePost(data)
     }
   },
   methods: {
@@ -149,7 +158,13 @@ export default {
       var files = e.target.files || e.dataTransfer.files
       if (files.length !== undefined) {
         this.image = files[0]
-        this.createImage(files[0])
+        if (!this.image.type.includes('image/')) {
+          this.dialog = false
+          this.clearForm()
+          this.triggerErreur('Fichier non supporté')
+        } else {
+          this.createImage(files[0])
+        }
       }
     },
     createImage (file) {
@@ -166,43 +181,56 @@ export default {
       this.image = null
     },
     async creerPost (image) {
-      const data = {post: {image: image || this.image.name, message: this.postMessage, titre: this.postTitre, id_am: this.$store.state.assMat.id_assmat}}
+      const data = {
+        post: {
+          image: image.url || this.image.name,
+          message: this.postMessage,
+          titre: this.postTitre,
+          id_am: this.$store.state.assMat.id_assmat,
+          image_id: image.public_id
+        }
+      }
+      console.log('=======DATA===', data)
       try {
         let r = await PostService.create(data)
-        return r.erreur != null
+        if (r.data.erreur == null) {
+          return {
+            id_post: r.id_post,
+            image_id: r.imageID
+          }
+        } else {
+          this.triggerErreur('Une erreur est survenue')
+        }
       } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
-        return false
+        this.triggerErreur(error.toString())
+        return null
       }
     },
     async saveImg () { // sauvegarde l'image sur le serveur
       if (this.image) {
         const formData = new FormData()
+        console.log('IMAGE====', this.image)
         formData.append('image', this.image, this.image.name)
         try {
-          let response = await FileService.postImg(formData
-            /*, {
-            onUploadProgress (e) {
+          let response = await FileService.postImg(formData,
+            {onUploadProgress (e) {
               console.log(this.progress)
               this.progress += e.loaded * 100 / e.total
               if (this.progress === 100) {
                 this.progress = 0
               }
-            }
-          } */
+            }}
           )
           console.log(response.data)
           if (response.data.erreur == null) {
-            console.log(response.data)
-            return response.data.image
+            console.log(response.data.resultats)
+            return response.data.resultats
           } else {
-            console.log('Cette erreur')
+            this.triggerErreur('Une erreur est survenue')
             return null
           }
         } catch (e) {
-          console.log('Catch')
-          console.log(e)
+         this.triggerErreur(e.toString())
           return null
         }
       } else {
@@ -213,30 +241,90 @@ export default {
       try {
         let image = await this.saveImg()
         console.log(image)
-        if (image != null && this.creerPost(image)) {
-          let post = {
-            image: process.env.BASE_URL + '/' + image, // this.imgPath,
-            message: this.postMessage,
-            titre: this.postTitre
+        if (image != null ) {
+          let result = this.creerPost(image)
+          if (result != null) {
+            let post = {
+              image: image.url, // this.imgPath,
+              message: this.postMessage,
+              titre: this.postTitre,
+              id_post: result.id_post,
+              image_id: result.image_id
+            }
+            console.log(post)
+            this.posts.push(post)
+            this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+            this.clearForm()
+          } else {
+            this.triggerErreur('Il y a un problème dans la création du post')
           }
-          console.log(post)
-          this.posts.push(post)
-          this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
-          this.clearForm()
         } else {
-          console.log('Il y a un problème dans la création du post')
+          this.triggerErreur('Il y a un problème dans la création du post')
         }
       } catch (e) {
         console.log(e)
+      }
+    },
+    async deleteHostedImage (imageId) { // supprime l'image du serveur
+      try {
+        let response = await FileService.deleteImg({publicId: imageId})
+        if (response.data.erreur == null) {
+          return true
+        } else {
+          this.triggerErreur('Une erreur est survenue')
+          return false
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
+        return false
+      }
+    },
+    async deleteDBPost (idPost) { // permet de supprimer un dans la base de données
+      try {
+        let response = PostService.delete({idPost: idPost})
+        if (response.data.erreur == null) {
+          return true
+        } else {
+          this.triggerErreur('Une erreur est survenue')
+          return false
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
+        return false
+      }
+    },
+    async deletePost (post) {
+      if ( await this.deleteDBPost(post.id_post) && await this.deleteHostedImage()) {
+        this.deletePostFromArray(post)
+        this.$socket.emit('suppression', post)
+      } else {
+
       }
     },
     clearForm () {
       this.$refs.form.reset()
       this.imgPath = null
       this.dialog = false
+    },
+    triggerErreur (erreur) {
+      this.erreur = true
+      this.erreurMessage = erreur
+    },
+    deletePostFromArray (post) { // supprime un post de la liste
+      this.posts.splice(this.posts.indexOf(post), 1)
+    }
+  },
+  computed: {
+    /**
+     * verifie si une assMat est connectée
+     * @returns {boolean}
+     */
+    isAssMatConnected () {
+      return this.$store.getters.isAssMatConnected
     }
   },
   mounted () {
+    console.log('======', this.isAssMatConnected)
     console.log('Mounted')
     // faire une requete ajax pour charger tous les evenements
   }

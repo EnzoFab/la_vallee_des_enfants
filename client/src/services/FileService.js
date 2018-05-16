@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '../store/store'
+import Api from './Api'
 
 export default {
   /* postImg (formData, actions) {
@@ -12,9 +13,12 @@ export default {
       data: formData,
       headers: {
         'Authorization': `Bearer ${store.state.token}`,
-        'Content-Type': 'multipart/form-data;boundary="boundary"'
+        'Content-Type': 'multipart/form-data'
       }
     })
     // return Api().post('files/image', formData)
+  },
+  deleteImg (imageUrl) {
+    return Api().delete('/files/image', imageUrl)
   }
 }
