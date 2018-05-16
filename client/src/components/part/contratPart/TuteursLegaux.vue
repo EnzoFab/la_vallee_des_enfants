@@ -334,7 +334,7 @@ export default {
         if (!tuteur.tuteurExistant) {
           if (tuteur.estDemandeur) {
             data.asEmployeur = true
-            console.log('Has employeur', data.asEmployeur )
+            console.log('Has employeur', data.asEmployeur)
             tuteur.infoDemandeur = {
               rue: vm.rue,
               codePostal: vm.codePostal,

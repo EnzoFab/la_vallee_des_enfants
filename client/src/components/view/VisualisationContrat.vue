@@ -29,6 +29,13 @@
           <Fiche ref="fiche"></Fiche>
         </v-card>
       </v-tab-item>
+      <v-tab-item
+        :id="'tab2'"
+      >
+        <v-card flat>
+          <Calendar ref="calendar"></Calendar>
+        </v-card>
+      </v-tab-item>
     </v-tabs-items>
   </v-tabs>
   </v-flex>
@@ -36,9 +43,10 @@
 
 <script>
 import Fiche from '../part/VisualisationContratPart/Fiche'
+import Calendar from '../part/Calendar'
 export default {
   name: 'VisualisationContrat',
-  components: {Fiche},
+  components: {Fiche, Calendar},
   data () {
     return {
       model: 'tab-2'
