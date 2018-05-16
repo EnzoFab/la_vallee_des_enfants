@@ -35,20 +35,25 @@
             <v-icon x-large color="blue">attach_file</v-icon>
           </a>
           <v-list class="grey lighten-3" >
-            <v-list-tile avatar v-for="menu in menusContrat" :key="menu.id" :to="menu.route" >
+            <v-list-tile avatar @click="nouveauContrat" >
               <v-list-tile-avatar>
-                <v-icon medium :class="[menu.iconClass]">{{ menu.icon }}</v-icon>
+                <v-icon medium class="transparent grey--text">edit</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>{{ menu.title }}</v-list-tile-title>
+                <v-list-tile-title>Créer un contrat</v-list-tile-title>
               </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile avatar to="/contrat" >
+              <v-list-tile-avatar>
+                <v-icon medium class="transparent lighten-1 grey--text">visibility</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>Consulter mes contrats</v-list-tile-title>
+              </v-list-tile-content>
+
             </v-list-tile>
           </v-list>
         </v-menu>
-      </v-tab>
-      <v-tab to="/assistante/facture">
-        <h4 class="green--text">Fiches de paie</h4>
-        <v-icon x-large color="green">library_books</v-icon>
       </v-tab>
       <v-tab to="/actualites" class="d-inline-block" ripple>
         <h4 class="indigo--text"> Fil d'actualité </h4>
@@ -68,7 +73,7 @@
               <v-list-tile-title>Paramètres</v-list-tile-title>
             </v-list-tile-content>
           </router-link>
-          <router-link avatar key="deco" to="assistante/deco" tag="v-list-tile">
+          <router-link avatar key="deco" to="/" tag="v-list-tile">
             <v-list-tile-avatar>
               <v-icon medium>exit_to_app</v-icon>
             </v-list-tile-avatar>
@@ -83,6 +88,7 @@
 </template>
 
 <script>
+var randomstring = require('randomstring')
 export default {
   name: 'ToolbarAssMat',
   data () {
@@ -145,6 +151,16 @@ export default {
       this.$router.push({
         name: 'Accueil'
       })
+    },
+    nouveauContrat () {
+      this.storeRandomString() // crée une chaine de charactere aleatoire et la stocke dans le store
+      this.$router.push({
+        name: 'NouveauContrat'
+      })
+    },
+    storeRandomString () {
+      let random = randomstring.generate(35) // chaine de charactere aleatoire de taille 15
+      this.$store.dispatch('setNumContrat', random)
     }
   }
 }

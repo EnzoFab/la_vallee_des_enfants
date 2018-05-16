@@ -165,6 +165,7 @@ create table public."post"
     image character varying,
     titre character varying,
     id_am integer not null,
+    image_id character varying,
     constraint "post_id_am_fkey" foreign key (id_am)
         references public."assmat" (id_am) match simple
         on update no action

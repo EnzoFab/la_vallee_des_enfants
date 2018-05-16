@@ -3,7 +3,7 @@
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab>
-        <router-link to="/assistante/accueil" tag="v-tab">
+        <router-link to="/" tag="v-tab">
           <h4 class="purple--text">Accueil</h4>
           <v-icon x-large color="purple">home</v-icon>
         </router-link>
@@ -15,21 +15,39 @@
         </router-link>
       </v-tab>
       <v-tab>
-        <router-link to="/assistante/contrat" tag="v-tab">
+        <router-link to="/contrat" tag="v-tab">
           <h4 class="blue--text">Contrats</h4>
           <v-icon x-large color="blue">attach_file</v-icon>
         </router-link>
       </v-tab>
-      <v-tab>
-        <router-link to="/assistante/facture" tag="v-tab">
-          <h4 class="green--text">Factures</h4>
-          <v-icon x-large color="green">library_books</v-icon>
-        </router-link>
+      <v-tab to="/actualites" class="d-inline-block" ripple>
+        <h4 class="indigo--text"> Fil d'actualité </h4>
+        <v-icon x-large color="indigo">event</v-icon>
       </v-tab>
-      <v-tab align="right" @click="logout">
-          <h4 class="teal--text">Se déconnecter</h4>
-          <v-icon x-large color="teal">exit_to_app</v-icon>
-      </v-tab>
+      <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
+        <a class="tabs__item" slot="activator" >
+          <h4 class="teal--text">Compte</h4>
+          <v-icon x-large color="teal">edit</v-icon>
+        </a>
+        <v-list class="grey lighten-3" >
+          <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
+            <v-list-tile-avatar>
+              <v-icon medium class="transparent grey--text">event</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>Paramètres</v-list-tile-title>
+            </v-list-tile-content>
+          </router-link>
+          <router-link avatar key="deco" to="/" tag="v-list-tile">
+            <v-list-tile-avatar>
+              <v-icon medium>exit_to_app</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-content @click="logout">
+              <v-list-tile-title>Deconnexion</v-list-tile-title>
+            </v-list-tile-content>
+          </router-link>
+        </v-list>
+      </v-menu>
     </v-tabs>
   </v-toolbar>
 </template>

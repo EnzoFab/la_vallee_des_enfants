@@ -34,6 +34,26 @@ export default new Vuex.Store({
       } else {
         return null // aucun utilisateur connecté s'il n'y a pas de token
       }
+    },
+    /**
+     * regarde si le l'utilisateur connecté est un assistante maternelle
+     * @param state
+     * @param getters
+     * @returns {boolean}
+     */
+    isAssMatConnected (state, getters) {
+      var connectedUser = getters.connectedUser
+      return connectedUser != null && connectedUser.rang === 'Assmat'
+    },
+    /**
+     * regarde si l'utilisateur connecté est un employeur
+     * @param state
+     * @param getters
+     * @returns {boolean}
+     */
+    isEmployeurConnected (state, getters) {
+      var connectedUser = getters.connectedUser
+      return connectedUser != null && connectedUser.rang === 'Employeur'
     }
   },
   mutations: {

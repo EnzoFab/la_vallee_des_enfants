@@ -11,34 +11,55 @@
     ></v-progress-circular>
     <v-card>
       <v-container fluid style="min-height: 0;" grid-list-lg>
+        <v-alert v-model="erreur" type="error" dismissible>
+         {{erreurMessage}}
+        </v-alert>
         <v-layout row wrap>
-          <v-flex v-for="(post,i) in posts" :key="i" xs12 sm12 md12>
-            <v-card color="purple" class="white--text">
-              <v-container fluid grid-list-lg>
-                <v-layout row>
-                  <v-flex xs5>
-                    <v-card-media
-                      :src="post.image"
-                      height="200px"
-                      contain
-                    ></v-card-media>
-                  </v-flex>
-                  <v-flex xs7>
-                    <div>
-                      <div class="headline">{{post.titre}}</div>
-                      <div>{{post.message}}</div>
-                    </div>
-                  </v-flex>
-                </v-layout>
-              </v-container>
+          <v-flex v-if="posts == 0">
+            <v-card>
+              <v-card-media>
+              </v-card-media>
+            </v-card>
+          </v-flex>
+          <v-flex v-else v-for="(post,i) in posts" :key="i" xs12 sm6 offset-sm3>
+            <v-card>
+              <v-card-media
+                :src="post.image"
+                height="200px"
+              >
+              </v-card-media>
+              <v-card-title primary-title>
+                <div>
+                  <div class="headline">{{post.titre}}</div>
+                  <span class="grey--text">{{post.date}}</span>
+                </div>
+              </v-card-title>
+              <v-card-actions>
+                <v-btn icon @click.native="post.contentVisible = !post.contentVisible">
+                  <v-icon>{{ post.contentVisible ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                </v-btn>
+              </v-card-actions>
+              <v-slide-y-transition>
+                <v-card-text v-show="post.contentVisible">
+                  {{post.message}}
+                </v-card-text>
+              </v-slide-y-transition>
+              <v-card-text>
+                <v-btn
+                  v-if="isAssMatConnected"
+                  outline color="indigo"
+                  @click="deletePost(post)"
+                >Supprimer ce post</v-btn>
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
       </v-container>
       <v-card-text style="height: 100px; position: relative">
-        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-dialog v-model="dialog" persistent max-width="500px" v-if="isAssMatConnected">
           <v-fab-transition slot="activator">
             <v-btn
+              v-if="isAssMatConnected"
               color="pink"
               dark
               large
@@ -119,6 +140,7 @@
 import Calendar from '../part/Calendar'
 import PostService from '../../services/PostService'
 import FileService from '../../services/FileService'
+let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'Evenements',
   components: {Calendar},
@@ -130,7 +152,9 @@ export default {
       image: null,
       postMessage: null,
       postTitre: null,
-      progress: 0
+      progress: 0,
+      erreur: false,
+      erreurMessage: ''
     }
   },
   sockets: {
@@ -142,6 +166,9 @@ export default {
     },
     nouveauPost (data) {
       this.posts.push(data)
+    },
+    suppressionPost (data) {
+      this.deletePost(data)
     }
   },
   methods: {
@@ -149,7 +176,13 @@ export default {
       var files = e.target.files || e.dataTransfer.files
       if (files.length !== undefined) {
         this.image = files[0]
-        this.createImage(files[0])
+        if (!this.image.type.includes('image/')) {
+          this.dialog = false
+          this.clearForm()
+          this.triggerErreur('Fichier non supporté')
+        } else {
+          this.createImage(files[0])
+        }
       }
     },
     createImage (file) {
@@ -166,43 +199,56 @@ export default {
       this.image = null
     },
     async creerPost (image) {
-      const data = {post: {image: image || this.image.name, message: this.postMessage, titre: this.postTitre, id_am: this.$store.state.assMat.id_assmat}}
+      const data = {
+        post: {
+          image: image.url || this.image.name,
+          message: this.postMessage,
+          titre: this.postTitre,
+          id_am: this.$store.state.assMat.id_assmat,
+          image_id: image.public_id,
+        }
+      }
+      console.log('=======DATA===', data)
       try {
         let r = await PostService.create(data)
-        return r.erreur != null
+        if (r.data.erreur == null) {
+          return {
+            id_post: r.id_post,
+            image_id: r.imageID
+          }
+        } else {
+          this.triggerErreur('Une erreur est survenue')
+        }
       } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
-        return false
+        this.triggerErreur(error.toString())
+        return null
       }
     },
     async saveImg () { // sauvegarde l'image sur le serveur
       if (this.image) {
         const formData = new FormData()
+        console.log('IMAGE====', this.image)
         formData.append('image', this.image, this.image.name)
         try {
-          let response = await FileService.postImg(formData
-            /*, {
-            onUploadProgress (e) {
+          let response = await FileService.postImg(formData,
+            {onUploadProgress (e) {
               console.log(this.progress)
               this.progress += e.loaded * 100 / e.total
               if (this.progress === 100) {
                 this.progress = 0
               }
-            }
-          } */
+            }}
           )
           console.log(response.data)
           if (response.data.erreur == null) {
-            console.log(response.data)
-            return response.data.image
+            console.log(response.data.resultats)
+            return response.data.resultats
           } else {
-            console.log('Cette erreur')
+            this.triggerErreur('Une erreur est survenue')
             return null
           }
         } catch (e) {
-          console.log('Catch')
-          console.log(e)
+         this.triggerErreur(e.toString())
           return null
         }
       } else {
@@ -213,32 +259,127 @@ export default {
       try {
         let image = await this.saveImg()
         console.log(image)
-        if (image != null && this.creerPost(image)) {
-          let post = {
-            image: process.env.BASE_URL + '/' + image, // this.imgPath,
-            message: this.postMessage,
-            titre: this.postTitre
+        if (image != null ) {
+          let result = await this.creerPost(image)
+          if (result != null) {
+            let post = {
+              image: image.url, // this.imgPath,
+              message: this.postMessage,
+              titre: this.postTitre,
+              id_post: result.id_post,
+              image_id: result.image_id,
+              date: this.dateFr(new Date()),
+              contentVisible: false
+            }
+            console.log(post)
+            this.posts.push(post)
+            this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+            this.clearForm()
+          } else {
+            this.triggerErreur('Il y a un problème dans la création du post')
           }
-          console.log(post)
-          this.posts.push(post)
-          this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
-          this.clearForm()
         } else {
-          console.log('Il y a un problème dans la création du post')
+          this.triggerErreur('Il y a un problème dans la création du post')
         }
       } catch (e) {
         console.log(e)
+      }
+    },
+    async deleteHostedImage (imageId) { // supprime l'image du serveur
+      console.log('PUBLIC ID ',imageId)
+      try {
+        let response = await FileService.deleteImg(imageId)
+        if (response.data.erreur == null) {
+          return true
+        } else {
+          console.log("SUPER ERREUR ", response.data.erreur)
+          // this.triggerErreur(response.data.erreur.toString())
+          return false
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
+        return false
+      }
+    },
+    async deleteDBPost (idPost) { // permet de supprimer un dans la base de données
+      try {
+        let response = await PostService.delete(idPost)
+        if (response.data.erreur == null) {
+          return true
+        } else {
+          this.triggerErreur('Une erreur est survenue')
+          return false
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
+        return false
+      }
+    },
+    async deletePost (post) {
+      console.log('POST', post)
+      if ( await this.deleteDBPost(post.id_post) && await this.deleteHostedImage(post.image_id)) {
+        this.deletePostFromArray(post)
+        this.$socket.emit('suppressionPost', post)
+      }
+    },
+    async initPost () {
+      try {
+        let response = await PostService.getAll()
+        if (response.data.erreur == null){
+          let loadedPosts = response.data.posts
+          let vm = this
+          loadedPosts.forEach(function (post) {
+            vm.posts.push({
+              image: post.image, // this.imgPath,
+              message: post.texte,
+              titre: post.titre,
+              id_post: post.id,
+              image_id: post.image_id,
+              date: vm.dateFr(post.date),
+              contentVisible: false
+            })
+          })
+        } else {
+          this.triggerErreur(response.data.erreur.texte)
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
       }
     },
     clearForm () {
       this.$refs.form.reset()
       this.imgPath = null
       this.dialog = false
+    },
+    triggerErreur (erreur) {
+      this.erreur = true
+      this.erreurMessage = erreur
+    },
+    deletePostFromArray (post) { // supprime un post de la liste
+      this.posts.splice(this.posts.indexOf(post), 1)
+    },
+    dateFr (date) {
+      var dateString = null
+      date = new Date(date)
+      let day = date.getDate()
+      let month = mois[date.getMonth()]
+      let year = date.getFullYear()
+      dateString = day + ' ' + month + ' ' + year
+
+      return dateString
+    }
+  },
+  computed: {
+    /**
+     * verifie si une assMat est connectée
+     * @returns {boolean}
+     */
+    isAssMatConnected () {
+      return this.$store.getters.isAssMatConnected
     }
   },
   mounted () {
-    console.log('Mounted')
-    // faire une requete ajax pour charger tous les evenements
+    this.initPost()
   }
 }
 

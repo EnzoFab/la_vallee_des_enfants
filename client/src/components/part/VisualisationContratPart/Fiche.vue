@@ -1,5 +1,5 @@
 <template>
-  <v-layout mt-5>
+  <v-layout mt-5 id="monPDF">
     <v-flex md6 offset-md1>
       <v-flex md10 offset-md1>
         <v-flex class="text-md-left">
@@ -45,7 +45,7 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md2>
-                <v-btn color="blue--text">Clôturer le contrat</v-btn>
+                <v-btn color="blue--text" v-if="isAssMatConnected">Clôturer le contrat</v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -124,7 +124,7 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md3>
-                <v-btn color="blue--text" @click.stop="dialogBox = true">
+                <v-btn color="blue--text" @click.stop="dialogBox = true" v-if="isAssMatConnected">
                   Modifier
                 </v-btn>
               </v-flex>
@@ -194,7 +194,7 @@
               </v-layout>
               <v-layout pb-2 mt-1>
                 <v-flex offset-md3>
-                  <v-btn color="blue--text" @click.stop="dialogBox2 = true">
+                  <v-btn color="blue--text" @click.stop="dialogBox2 = true" v-if="isAssMatConnected">
                     Modifier
                   </v-btn>
                 </v-flex>
@@ -238,7 +238,10 @@
               </v-card>
             </v-form>
           </v-dialog>
-
+          <v-btn
+            color="blue--text"
+            @click="exportPDF"
+          >Exporter le contrat au format PDF</v-btn>
         </v-flex>
     </v-flex>
     </v-flex>
@@ -247,6 +250,7 @@
 </template>
 
 <script>
+import jspdf from 'jspdf'
 import ContratService from '../../../services/ContratService'
 import EmployeurService from '../../../services/EmployeurService'
 import TuteurService from '../../../services/TuteurService'
@@ -393,6 +397,25 @@ export default {
       } catch (e) {
         console.log('ERREUR' + e)
       }
+    },
+    exportPDF () {
+      let pdfName = 'contrat.pdf'
+      var doc = new jspdf()
+      // doc.text("Hello World", 10, 10)
+      doc.fromHTML(document.querySelector('#monPDF').html(), 15, 15, {
+        'width': 170,
+        'elementHandlers': specialElementHandlers
+      })
+      doc.save(pdfName + '.pdf')
+    }
+  },
+  computed: {
+    /**
+     * verifie si une assMat est connectée
+     * @returns {boolean}
+     */
+    isAssMatConnected () {
+      return this.$store.getters.isAssMatConnected
     }
   }
 }

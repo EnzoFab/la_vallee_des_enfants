@@ -24,7 +24,8 @@ let post = {
                             date: rslt.rows[i].date_post,
                             texte: rslt.rows[i].texte,
                             image: rslt.rows[i].image,
-                            titre: rslt.rows[i].titre
+                            titre: rslt.rows[i].titre,
+                            image_id: rslt.rows[i].image_id
                         });
                         console.log('array', array)
                     }
@@ -37,8 +38,8 @@ let post = {
         );
     },
     create: function (post, callback) {
-        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am) VALUES (Date(now()), $1, $2, $3, $4) returning id_post",
-            [post.message, post.image, post.titre, post.id_am],
+        db.query("INSERT INTO public.post(date_post, texte, image, titre, id_am, image_id) VALUES (Date(now()), $1, $2, $3, $4, $5) returning id_post, image_id",
+            [post.message, post.image, post.titre, post.id_am, post.image_id],
             function (err, result) {
                 let retour = {
                     statut: null,
@@ -52,6 +53,7 @@ let post = {
                 } else {
                     retour.statut = 200
                     retour.id_post = result.rows[0].id_post
+                    retour.imageID = result.rows[0].image_id
                 }
                 callback(retour);
             });

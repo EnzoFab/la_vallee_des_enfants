@@ -15,8 +15,40 @@ import NouveauContrat from '@/components/view/NouveauContrat'
 import ParametresCompte from '@/components/view/ParametresCompte'
 import FilActualite from '@/components/view/FilActualite'
 import VisualisationContrat from '@/components/view/VisualisationContrat'
+import store from '../store/store'
 
 Vue.use(Router)
+
+const isConnected = function(to , from, next) {
+  if (store.getters.connectedUser != null) {
+    next()
+  } else {
+    next('/employeur/connexion')
+  }
+
+}
+
+const isAssmat = function (to, from, next) {
+  if (store.getters.connectedUser != null) {
+    next()
+  } else {
+    next('/employeur/connexion')
+  }
+}
+
+/**
+ * utile si jamais un personne deja connectée essaie de se reconnecter
+ * @param to
+ * @param from
+ * @param next
+ */
+const isNotConnected = function (to, from, next) {
+  if (store.getters.connectedUser == null) {
+    next()
+  } else {
+    next('/')
+  }
+}
 
 export default new Router({
   mode: 'history',
@@ -67,7 +99,8 @@ export default new Router({
       path: '/assistante/connexion',
       name: 'ConnexionAM',
       component: ConnexionAM,
-      meta: {title: 'ConnexionAM'}
+      meta: {title: 'ConnexionAM'},
+      beforeEnter: isNotConnected
     },
     {
       path: '/assistante/inscription',
@@ -79,19 +112,22 @@ export default new Router({
       path: '/employeur/connexion',
       name: 'ConnexionEmp',
       component: ConnexionEmp,
-      meta: {title: 'ConnexionEmp'}
+      meta: {title: 'ConnexionEmp'},
+      beforeEnter: isNotConnected
     },
     {
       path: '/contrat/',
       name: 'AllContrats',
       component: AllContrat,
-      meta: {title: 'Contrats'}
+      meta: {title: 'Contrats'},
+      beforeEnter: isConnected
     },
     {
       path: '/contrat/creation',
       name: 'NouveauContrat',
       component: NouveauContrat,
-      meta: {title: 'nouveau contrat'}
+      meta: {title: 'nouveau contrat'},
+      beforeEnter: isAssmat
     },
     {
       path: '/contrat/simulation',

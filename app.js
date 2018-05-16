@@ -94,6 +94,10 @@ var chat = io
         socket.on('nouveauPost', function (data) {
             socket.broadcast.emit('nouveauPost', data)
         })
+
+        socket.on('suppressionPost', function (data){
+            socket.broadcast.emit('suppressionPost', data)
+        })
         /*socket.on('post', function (val) {
             console.log(val)
             this.emit('nouveauPost', {msg: 'Contrat'})
