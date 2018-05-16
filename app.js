@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var fileUpload = require('express-fileupload');
+var helmet = require('helmet');
 
 
 var app = express();
@@ -14,6 +15,9 @@ var io = require('socket.io').listen(server); // chargement de socket io qui per
 
 require('dotenv').config();
 
+/*
+============================ ROUTERS ========================================
+ */
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var EmployeurRouter = require('./routes/employeur');
@@ -31,7 +35,9 @@ var presencetheo = require('./routes/presenceTheorique');
 var presencereelle = require('./routes/presenceReelle');
 var post = require('./routes/post');
 var files = require('./routes/files');
-var helmet = require('helmet')
+var mail = require('./routes/mail');
+var typejour = require('./routes/typeJour')
+
 
 
 // use it before all view definitions
@@ -58,6 +64,13 @@ app.use('/typeTuteur', typeTuteur);
 app.use('/frais', frais);
 app.use('/enfants', enfant);
 app.use('/tuteurs', tuteur);
+app.use('/employeurs', employeur);
+app.use('/contrat', contrat);
+app.use('/presencetheo', presencetheo);
+app.use('/posts', post);
+app.use('/files', files);
+app.use('/mail', mail);
+app.use('/typeJour', typejour)
 app.use('/employeurs', employeur);
 app.use('/contrat', contrat);
 app.use('/presencetheo', presencetheo);

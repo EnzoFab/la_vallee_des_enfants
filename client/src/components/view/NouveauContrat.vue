@@ -61,6 +61,8 @@ import PresenceTheorique from '../part/contratPart/PresenceTheorique'
 import EnfantService from '../../services/EnfantService'
 import ContratService from '../../services/ContratService'
 import TuteurService from '../../services/TuteurService'
+import EmployeurService from '../../services/EmployeurService'
+const generator = require('generate-password') // module pour generer un mot de passe aleatoire
 export default {
   name: 'NouveauContrat',
   components: {
@@ -148,18 +150,44 @@ export default {
               id_tuteur: tuteurs[i].informationTuteurExistant.id_tuteur,
               id_enfant: this.idEnfant
             })
-            console.log('=========', res.data)
+            if (res.data.erreur != null) {
+              this.triggerErreur(res.data.erreur)
+              return
+            } else {
+
+            }
           } else {
-            let response = await TuteurService.createTuteur({tuteur: tuteurs[i]})
+            let response = await TuteurService.createTuteur({tuteur: tuteurs[i]}) // creation du tuteur
             if (response.data.erreur == null) {
               let id = response.data.id_tuteur
-              console.log('ID', id, ' ENFAT', this.idEnfant)
               let res = await TuteurService.lierTuteurEnfant({
                 id_tuteur: id,
                 id_enfant: this.idEnfant
               }) // lie le tuteurs et l'enfant
               if (res.data.erreur != null) {
                 this.triggerErreur(res.data.erreur)
+              } else {
+                if (tuteurs[i].infoDemandeur != null) { // le tuteurs est demandeur
+                  var login = tuteurs[i].prenom + '_' + tuteurs[i].nomUsage + generator.generate({length: 3, numbers: true})
+                  // prenom_nom + 3 charactere random
+                  let donneeEmployeur = {
+                    nom_naissance_employeur: tuteurs[i].infoDemandeur.nomNaissance,
+                    nom_usage_employeur: tuteurs[i].nomUsage,
+                    prenom_employeur: tuteurs[i].prenom,
+                    cp_employeur: tuteurs[i].infoDemandeur.codePostal,
+                    telephone_employeur: tuteurs[i].telephone,
+                    ville_employeur: tuteurs[i].infoDemandeur.ville,
+                    mail_employeur: tuteurs[i].infoDemandeur.email,
+                    rue: tuteurs[i].infoDemandeur.rue,
+                    nb_semaines_conges: tuteurs[i].infoDemandeur.nombreSemainesSupplementaires,
+                    identifiant_connexion: login.replace(/\s/g, '').toLowerCase(), // login sans espaces et en minuscule
+                    mot_de_passe: generator.generate({length: 10, numbers: true}) // mot de passe de taille 10
+                  }
+                  console.log('=======', donneeEmployeur)
+                  if (!this.saveEmployeur(donneeEmployeur)) {
+                  return
+                  }
+                }
               }
             } else {
               this.triggerErreur(response.data.erreur)
@@ -186,11 +214,13 @@ export default {
         this.etape = 4
       }
     },
-    submitEmp (data) {
+    async submitEmp (data) {
       console.log(data)
       // store data in DB
-      this.estValideEtape3 = true
-      this.etape++
+      if (this.saveEmployeur(data)) {
+        this.estValideEtape4 = true
+        this.etape++
+      }
     },
     submitInfoG (data) {
       console.log(this.etape)
@@ -225,6 +255,29 @@ export default {
     },
     annuler () {
       // redirection
+    },
+    async saveEmployeur (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
+      try {
+        let response = await EmployeurService.createEmployeur({employeur: employeur})
+        if (response.data.erreur == null) {
+          let idEmployeur = response.data.id
+          let r = await ContratService.updateInfosEmp(this.$store.state.numContrat, {
+            id_employeur: idEmployeur,
+            nb_semaines_conges_parents: employeur.nb_semaines_conges
+          })
+          if (r.data.erreur == null) {
+            return true
+          } else {
+            return false
+          }
+        } else {
+          this.triggerErreur(response.data.erreur)
+          return false
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
+        return false
+      }
     }
   },
   mounted () {

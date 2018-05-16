@@ -142,8 +142,11 @@ let Employeur = {
     },
 
     create: function (employeur, callback) {
-        db.query("INSERT INTO public.employeur(nom_naissance_employeur, nom_usage_employeur, prenom_employeur, rue_employeur, cp_employeur, ville_employeur, mail_employeur, telephone_employeur, identifiant_connexion, mot_de_passe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-            [employeur.nomNaissance, employeur.nomUsage, employeur.prenom, employeur.rue, employeur.codePostal, employeur.ville, employeur.email, employeur.telephone1, employeur.identifiantConnexion, employeur.mdp ],
+        db.query("INSERT INTO public.employeur(nom_naissance_employeur, nom_usage_employeur, prenom_employeur, rue_employeur, cp_employeur, ville_employeur, mail_employeur, telephone_employeur, identifiant_connexion, mot_de_passe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id_employeur",
+            [employeur.nom_naissance_employeur, employeur.nom_usage_employeur,
+                employeur.prenom_employeur, employeur.rue,
+                employeur.cp_employeur, employeur.ville_employeur, employeur.mail_employeur, employeur.telephone_employeur,
+                employeur.identifiant_connexion, employeur.mot_de_passe ],
             function (err, result) {
                 let retour = {
                     statut: null,
@@ -154,6 +157,7 @@ let Employeur = {
                     retour.erreur = err.toString()
                 } else {
                     retour.statut = 200
+                    retour.id = result.rows[0].id_employeur
                 }
                 callback(retour);
             });

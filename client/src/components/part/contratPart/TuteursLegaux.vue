@@ -139,7 +139,7 @@
                       required
                       :counter="15"
                       :rules="regleNom"
-                      v-model="nomNaissance"
+                      v-model="nomDeNaissance"
                       label="Nom de naissance"
                     ></v-text-field>
                   </v-flex>
@@ -305,7 +305,8 @@ export default {
           telephonePro: '',
           estDemandeur: false,
           tuteurExistant: false,
-          informationTuteurExistant: null
+          informationTuteurExistant: null,
+          infoDemandeur: null
         })
       }
     },
@@ -326,20 +327,24 @@ export default {
     },
     async submit () {
       // envoyer
+      var vm = this
       let data = {tuteurs: [], asEmployeur: false}
       this.tuteurs.forEach(function (tuteur) {
         console.log(tuteur)
         if (!tuteur.tuteurExistant) {
           if (tuteur.estDemandeur) {
             data.asEmployeur = true
+            console.log('Has employeur', data.asEmployeur )
             tuteur.infoDemandeur = {
-              rue: this.rue,
-              codePostal: this.codePostal,
-              email: this.email,
-              ville: this.ville,
-              nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
-              nomNaissance: this.nomNaissance
+              rue: vm.rue,
+              codePostal: vm.codePostal,
+              email: vm.email,
+              ville: vm.ville,
+              nombreSemainesSupplementaires: vm.nombreSemainesSupplementaires,
+              nomNaissance: vm.nomDeNaissance
             }
+
+            console.log(tuteur)
           }
           tuteur.typeDeTuteur = tuteur.typeDeTuteur.id // on recupere l'id du type tuteur pour la base de données
         }

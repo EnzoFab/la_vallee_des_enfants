@@ -1,7 +1,7 @@
 import Api from '../services/Api'
 
 export default {
-  createContratEmployeur (credentials) {
+  createEmployeur (credentials) {
     return Api().post('/employeurs/create', credentials)
   },
 

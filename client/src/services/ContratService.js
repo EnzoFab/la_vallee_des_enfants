@@ -19,7 +19,7 @@ export default {
   },
 
   updateInfosEmp (numContrat, data) {
-    return Api().put('contrat/' + numContrat + '/enfant', data)
+    return Api().put('contrat/' + numContrat + '/employeur', data)
   },
 
   updateEnfant (numContrat, data) {

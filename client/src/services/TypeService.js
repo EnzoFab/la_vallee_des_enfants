@@ -18,5 +18,8 @@ export default {
   },
   gouter () {
     return Api().get('frais/gouter')
+  },
+  joursDeLaSemaine () {
+    return Api().get('typeJour/all')
   }
 }
