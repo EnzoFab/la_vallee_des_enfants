@@ -45,7 +45,7 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md2>
-                <v-btn color="blue--text">Clôturer le contrat</v-btn>
+                <v-btn color="blue--text" v-if="isAssMatConnected">Clôturer le contrat</v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -124,7 +124,7 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md3>
-                <v-btn color="blue--text" @click.stop="dialogBox = true">
+                <v-btn color="blue--text" @click.stop="dialogBox = true" v-if="isAssMatConnected">
                   Modifier
                 </v-btn>
               </v-flex>
@@ -194,7 +194,7 @@
               </v-layout>
               <v-layout pb-2 mt-1>
                 <v-flex offset-md3>
-                  <v-btn color="blue--text" @click.stop="dialogBox2 = true">
+                  <v-btn color="blue--text" @click.stop="dialogBox2 = true" v-if="isAssMatConnected">
                     Modifier
                   </v-btn>
                 </v-flex>
@@ -397,12 +397,24 @@ export default {
         console.log('ERREUR' + e)
       }
     }
-    /* exportPDF () {
-      var vm = this
-      var doc = new jsPDF()
-      doc.text(vm.prenomEnfant, vm.nomEnfant)
-      doc.save('test.pdf')
+    /*
+    exportPDF () {
+      var PDFDocument = require('pdfkit')
+      var fs = require('fs')
+      var doc = new PDFDocument()
+      doc.pipe(fs.createWriteStream('contrat.pdf'))
+      doc.end()
+      doc.text(this.nomEnfant, this.prenomEnfant)
     } */
+  },
+  computed: {
+    /**
+     * verifie si une assMat est connectée
+     * @returns {boolean}
+     */
+    isAssMatConnected () {
+      return this.$store.getters.isAssMatConnected
+    }
   }
 }
 </script>
