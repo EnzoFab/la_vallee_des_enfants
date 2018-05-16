@@ -33,7 +33,11 @@ let presenceTheorique = {
             }
         );
     },
-
+    /**
+     * Recupère tous les enfants qui doivent être présent aujourd'hui
+     * @param numDay
+     * @param callback
+     */
     getAllChildrenOfTheDay: function (numDay, callback) {
         console.log('numDuJour : ' + numDay)
         db.query(
@@ -72,7 +76,46 @@ let presenceTheorique = {
                 callback(retour);
             }
         );
-    }
+    },
+
+    create: function (presenceTheorique, callback) {
+        db.query("INSERT INTO public.presencetheorique(heure_arrivee, heure_depart, prends_gouter, id_contrat, id_type_jour) VALUES ($1, $2, $3, $4, $5) returning id_presence_theorique",
+            [presenceTheorique.heureArrivee, presenceTheorique.heureDepart, presenceTheorique.prendGouter, presenceTheorique.id_contrat, presenceTheorique.id_type_jour],
+            function (err, result) {
+                let retour = {
+                    statut: null,
+                    erreur: null,
+                    id_presence_theorique: null
+                };
+                if (err) {
+                    retour.statut = 500
+                    retour.erreur = err.toString()
+                } else {
+                    retour.statut = 200
+                    retour.id_presence_theorique = result.rows[0].id_presence_theorique
+                }
+                callback(retour);
+            });
+    },
+
+    update: function (numPresence, presenceTheorique, callback) {
+        db.query('UPDATE public.presencetheorique SET heure_arrivee = $1, heure_depart = $2, prends_gouter = $3, id_contrat = $4, id_type_jour = $5 WHERE id_presence_theorique = $6',
+            [presenceTheorique.heureArrivee, presenceTheorique.heureDepart, presenceTheorique.prendGouter, presenceTheorique.id_contrat, presenceTheorique.id_type_jour, numPresence],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
 }
 
 module.exports = presenceTheorique;

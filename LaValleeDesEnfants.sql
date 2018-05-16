@@ -162,7 +162,8 @@ create table public."post"
     id_post SERIAL NOT NULL primary key,
     date_post date not null,
     texte text not null,
-    image bytea not null,
+    image character varying,
+    titre character varying,
     id_am integer not null,
     constraint "post_id_am_fkey" foreign key (id_am)
         references public."assmat" (id_am) match simple
@@ -268,6 +269,7 @@ CREATE TABLE public.contrat
 (
     id_contrat character varying NOT NULL,
     date_debut date,
+    date_fin date,
     nb_semaines_conges_parents integer,
     tarif numeric,
     nb_heures_semaine numeric,
@@ -279,6 +281,7 @@ CREATE TABLE public.contrat
     id_am integer NOT NULL,
     id_employeur integer,
     jour_paiement integer,
+    id_type_contrat integer,
     CONSTRAINT contrat_pkey PRIMARY KEY (id_contrat),
     CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
         REFERENCES public.assmat (id_am) MATCH SIMPLE
@@ -294,6 +297,10 @@ CREATE TABLE public.contrat
         ON DELETE NO ACTION,
     CONSTRAINT contrat_id_mode_paiement_fkey FOREIGN KEY (id_mode_paiement)
         REFERENCES public.modedepaiement (id_mode) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT contrat_id_type_contrat_fkey FOREIGN KEY (id_type_contrat)
+        REFERENCES public.typecontrat (id_type) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -358,6 +365,7 @@ create table public."presencereelle"
     heure_arrivee_r time without time zone,
     heure_depart_r time without time zone,
     prends_gouter_r boolean,
+    absence_justifiee boolean,
     id_presence_theo integer,
     id_presence_reelle SERIAL NOT NULL primary key,
     id_facture integer,

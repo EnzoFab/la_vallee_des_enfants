@@ -1,6 +1,14 @@
 <template>
   <v-container fluid>
     <!-- <Calendar :customEvents="post"></Calendar> -->
+    <v-progress-circular
+      :size="100"
+      :width="15"
+      :rotate="360"
+      :value="progress"
+      v-if="progress !== 0"
+      color="teal"
+    ></v-progress-circular>
     <v-card>
       <v-container fluid style="min-height: 0;" grid-list-lg>
         <v-layout row wrap>
@@ -43,11 +51,13 @@
               <v-icon>add</v-icon>
             </v-btn>
           </v-fab-transition>
-          <v-form ref="form">
+          <v-toolbar color="pink" dark>
+            <v-spacer></v-spacer>
+            <span class="headline">Nouveau post</span>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-form ref="form" enctype="multipart/form-data">
             <v-card>
-              <v-card-title>
-                <span class="headline">Nouveau post</span>
-              </v-card-title>
               <v-card-text>
                 <v-container grid-list-md>
                   <v-layout wrap>
@@ -67,7 +77,16 @@
                       </v-badge>
                     </v-flex>
                     <v-flex xs12 sm12 md12>
-                      <input label="image" type="file" @change="onFileChange" v-if="imgPath == null"/>
+                      <input label="image" style="display: none" type="file" @change="onFileChange" name="image" accept="image/*"
+                      ref="fileInput"/>
+                      <v-btn
+                        round color="indigo"
+                        outline large
+                        v-if="imgPath == null"
+                        @click="$refs.fileInput.click()"
+                      >
+                        Ajouter une image
+                      </v-btn>
                     </v-flex>
                     <v-flex xs12 sm12 md12>
                       <v-text-field
@@ -98,6 +117,8 @@
 
 <script>
 import Calendar from '../part/Calendar'
+import PostService from '../../services/PostService'
+import FileService from '../../services/FileService'
 export default {
   name: 'Evenements',
   components: {Calendar},
@@ -106,8 +127,10 @@ export default {
       posts: [],
       dialog: false,
       imgPath: null,
+      image: null,
       postMessage: null,
-      postTitre: null
+      postTitre: null,
+      progress: 0
     }
   },
   sockets: {
@@ -125,6 +148,7 @@ export default {
     onFileChange (e) {
       var files = e.target.files || e.dataTransfer.files
       if (files.length !== undefined) {
+        this.image = files[0]
         this.createImage(files[0])
       }
     },
@@ -139,16 +163,72 @@ export default {
     },
     removeImage (e) {
       this.imgPath = null
+      this.image = null
     },
-    envoyer () {
-      let post = {
-        image: this.imgPath,
-        message: this.postMessage,
-        titre: this.postTitre
+    async creerPost (image) {
+      const data = {post: {image: image || this.image.name, message: this.postMessage, titre: this.postTitre, id_am: this.$store.state.assMat.id_assmat}}
+      try {
+        let r = await PostService.create(data)
+        return r.erreur != null
+      } catch (error) {
+        console.log(error)
+        this.error = error.response.data.error
+        return false
       }
-      this.posts.push(post)
-      this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
-      this.clearForm()
+    },
+    async saveImg () { // sauvegarde l'image sur le serveur
+      if (this.image) {
+        const formData = new FormData()
+        formData.append('image', this.image, this.image.name)
+        try {
+          let response = await FileService.postImg(formData
+            /*, {
+            onUploadProgress (e) {
+              console.log(this.progress)
+              this.progress += e.loaded * 100 / e.total
+              if (this.progress === 100) {
+                this.progress = 0
+              }
+            }
+          } */
+          )
+          console.log(response.data)
+          if (response.data.erreur == null) {
+            console.log(response.data)
+            return response.data.image
+          } else {
+            console.log('Cette erreur')
+            return null
+          }
+        } catch (e) {
+          console.log('Catch')
+          console.log(e)
+          return null
+        }
+      } else {
+        return null
+      }
+    },
+    async envoyer () {
+      try {
+        let image = await this.saveImg()
+        console.log(image)
+        if (image != null && this.creerPost(image)) {
+          let post = {
+            image: process.env.BASE_URL + '/' + image, // this.imgPath,
+            message: this.postMessage,
+            titre: this.postTitre
+          }
+          console.log(post)
+          this.posts.push(post)
+          this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+          this.clearForm()
+        } else {
+          console.log('Il y a un problème dans la création du post')
+        }
+      } catch (e) {
+        console.log(e)
+      }
     },
     clearForm () {
       this.$refs.form.reset()
@@ -161,6 +241,7 @@ export default {
     // faire une requete ajax pour charger tous les evenements
   }
 }
+
 </script>
 
 <style scoped>

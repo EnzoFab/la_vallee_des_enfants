@@ -2,11 +2,9 @@
   <v-toolbar app fixed tabs clipped-left light dense color="blue-grey lighten-5">
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab>
-        <router-link to="/assistante/accueil" tag="v-tab">
-          <h4 class="purple--text">Accueil</h4>
-          <v-icon x-large color="purple">home</v-icon>
-        </router-link>
+      <v-tab to="/" >
+        <h4 class="purple--text">Accueil</h4>
+        <v-icon x-large color="purple">home</v-icon>
       </v-tab>
       <v-tab>
         <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
@@ -26,6 +24,10 @@
           </v-list>
         </v-menu>
       </v-tab>
+      <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
+        <h4 class="blue--text"> Inscription </h4>
+        <v-icon x-large color="blue">assignment</v-icon>
+      </v-tab>
       <v-tab>
         <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
           <a class="tabs__item" slot="activator" >
@@ -33,68 +35,50 @@
             <v-icon x-large color="blue">attach_file</v-icon>
           </a>
           <v-list class="grey lighten-3" >
-            <router-link avatar v-for="menu in menusContrat" :key="menu.id" :to="menu.route" tag="v-list-tile">
+            <v-list-tile avatar v-for="menu in menusContrat" :key="menu.id" :to="menu.route" >
               <v-list-tile-avatar>
                 <v-icon medium :class="[menu.iconClass]">{{ menu.icon }}</v-icon>
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title>{{ menu.title }}</v-list-tile-title>
               </v-list-tile-content>
-            </router-link>
+            </v-list-tile>
           </v-list>
         </v-menu>
       </v-tab>
-      <v-tab>
-        <router-link to="/assistante/facture" tag="v-tab">
-          <h4 class="green--text">Fiches de paie</h4>
-          <v-icon x-large color="green">library_books</v-icon>
-        </router-link>
+      <v-tab to="/assistante/facture">
+        <h4 class="green--text">Fiches de paie</h4>
+        <v-icon x-large color="green">library_books</v-icon>
       </v-tab>
-      <v-tab>
-        <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
-          <a class="tabs__item" slot="activator" >
-          <h4 class="indigo--text">Posts</h4>
-          <v-icon x-large color="indigo">edit</v-icon>
-          </a>
-          <v-list class="grey lighten-3" >
-            <router-link avatar v-for="menu in menusPost" :key="menu.id" :to="menu.route" tag="v-list-tile">
-              <v-list-tile-avatar>
-                <v-icon medium :class="[menu.iconClass]">{{ menu.icon }}</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ menu.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </router-link>
-          </v-list>
-        </v-menu>
+      <v-tab to="/actualites" class="d-inline-block" ripple>
+        <h4 class="indigo--text"> Fil d'actualité </h4>
+        <v-icon x-large color="indigo">event</v-icon>
       </v-tab>
-      <v-tab>
-        <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
-          <a class="tabs__item" slot="activator" >
-            <h4 class="teal--text">Compte</h4>
-            <v-icon x-large color="teal">edit</v-icon>
-          </a>
-          <v-list class="grey lighten-3" >
-            <router-link avatar key="paramcompte" to="/assistante/parametres" tag="v-list-tile">
-              <v-list-tile-avatar>
-                <v-icon medium class="transparent grey--text">event</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Parametres</v-list-tile-title>
-              </v-list-tile-content>
-            </router-link>
-            <router-link avatar key="deco" to="assistante/deco" tag="v-list-tile">
-              <v-list-tile-avatar>
-                <v-icon medium>exit_to_app</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content @click="logout">
-                <v-list-tile-title>Deconnexion</v-list-tile-title>
-              </v-list-tile-content>
-            </router-link>
-          </v-list>
-        </v-menu>
-      </v-tab>
-      </v-tabs>
+      <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
+        <a class="tabs__item" slot="activator" >
+          <h4 class="teal--text">Compte</h4>
+          <v-icon x-large color="teal">edit</v-icon>
+        </a>
+        <v-list class="grey lighten-3" >
+          <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
+            <v-list-tile-avatar>
+              <v-icon medium class="transparent grey--text">event</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>Paramètres</v-list-tile-title>
+            </v-list-tile-content>
+          </router-link>
+          <router-link avatar key="deco" to="assistante/deco" tag="v-list-tile">
+            <v-list-tile-avatar>
+              <v-icon medium>exit_to_app</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-content @click="logout">
+              <v-list-tile-title>Deconnexion</v-list-tile-title>
+            </v-list-tile-content>
+          </router-link>
+        </v-list>
+      </v-menu>
+    </v-tabs>
   </v-toolbar>
 </template>
 
@@ -109,14 +93,14 @@ export default {
           icon: 'event_note',
           iconClass: 'transparent grey--text',
           title: 'Consulter le planning',
-          route: '/assistante/presence/consulter'
+          route: '/presence/consulter'
         },
         {
           id: 'p2',
           icon: 'alarm_on',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Pointer',
-          route: '/assistante/presence/pointer'
+          route: '/presence/saisir'
         }
       ],
       menusContrat: [
@@ -125,21 +109,14 @@ export default {
           icon: 'edit',
           iconClass: 'transparent grey--text',
           title: 'Créer un contrat',
-          route: '/assistante/contrat/creer'
+          route: '/contrat'
         },
         {
           id: 'c2',
           icon: 'visibility',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Consulter mes contrats',
-          route: '/assistante/contrat/consulter'
-        },
-        {
-          id: 'c3',
-          icon: 'border_color',
-          iconClass: 'transparent lighten-1 grey--text',
-          title: 'Modifier un contrat',
-          route: '/assistante/contrat/modifier'
+          route: '/contrat'
         }
       ],
       menusPost: [
@@ -148,14 +125,14 @@ export default {
           icon: 'edit',
           iconClass: 'transparent grey--text',
           title: 'Éditer un post',
-          route: '/assistante/post/creer'
+          route: '/post/creer'
         },
         {
           id: 'po2',
           icon: 'event',
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Mes posts',
-          route: '/assistante/post/consulter'
+          route: '/post/consulter'
         }
       ]
     }

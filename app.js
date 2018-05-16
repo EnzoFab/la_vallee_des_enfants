@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+var fileUpload = require('express-fileupload');
+
 
 var app = express();
 var server = require('http').Server(app);
@@ -27,15 +29,22 @@ var employeur = require('./routes/employeur');
 var contrat = require('./routes/contrat');
 var presencetheo = require('./routes/presenceTheorique');
 var presencereelle = require('./routes/presenceReelle');
+var post = require('./routes/post');
+var files = require('./routes/files');
+var helmet = require('helmet')
 
 
 // use it before all view definitions
 app.use(cors({origin: '*'}))
+app.use(helmet())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use('/static', express.static(__dirname + '/public'));
+app.use(fileUpload());
+
 
 /* ======================  ROUTES ================================================ */
 app.use('/', indexRouter);
@@ -53,6 +62,11 @@ app.use('/employeurs', employeur);
 app.use('/contrat', contrat);
 app.use('/presencetheo', presencetheo);
 app.use('/presencereelle', presencereelle);
+app.use('/employeurs', employeur)
+app.use('/contrat', contrat),
+app.use('/presencetheo', presencetheo),
+app.use('/posts', post)
+app.use('/files', files)
 
 
 

@@ -27,4 +27,3 @@ export default {
     return Api().post('presencereelle/createAbs', credential)
   }
 };
-

@@ -2,9 +2,10 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 
 let Contrat = {
+
     getAll: function (callback) {
         db.query(
-            'SELECT * FROM public.contrat',
+            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant',
             [],
             function (err, rslt){
                 retour = {
@@ -28,7 +29,10 @@ let Contrat = {
                             taux: rslt.rows[i].taux_majore,
                             dateDebAdapt: rslt.rows[i].date_deb_periode_adaptation,
                             dateFinAdapt: rslt.rows[i].date_fin_periode_adaptation,
-                            jourPaiement: rslt.rows[i].jour_paiement
+                            jourPaiement: rslt.rows[i].jour_paiement,
+                            nomEnfant: rslt.rows[i].nom_enfant,
+                            prenomEnfant: rslt.rows[i].prenom_enfant,
+                            sexeEnfant: rslt.rows[i].sexe
                         });
                         console.log('array', array)
                     }
@@ -92,6 +96,7 @@ let Contrat = {
                     retour.mail_employeur = rslt.rows[0].mail_employeur,
                     retour.identifiant_connexion = rslt.rows[0].identifiant_connexion,
                     retour.nb_semaines_conges_parents = rslt.rows[0].nb_semaines_conges_parents,
+                    retour.id_employeur = rslt.rows[0].id_employeur,
                     retour.statut = 200;
                 }
                 console.log('coucou')
@@ -124,6 +129,7 @@ let Contrat = {
                     for(var i = 0; i < rslt.rows.length; i++){
                         console.log(1)
                         array.push({
+                            id_tuteur: rslt.rows[i].id_tuteur,
                             nom_tuteur: rslt.rows[i].nom_tuteur,
                             prenom_tuteur: rslt.rows[i].prenom_tuteur,
                             telephone: rslt.rows[i].telephone,
@@ -142,11 +148,6 @@ let Contrat = {
         );
     },
 
-    /*
-    * -------------- TOUT CE QUI CONCERNE LE CONTRAT AJOUT/MODIFICATION PAR SECTION ET CREATION INITIALE --------------
-     */
-
-    // creation initiale du contrat
     create: function (numContrat, numAssMat, callback) {
         db.query('INSERT INTO public.contrat(id_contrat, id_am) VALUES ($1, $2)',
             [numContrat, numAssMat],
@@ -231,7 +232,6 @@ let Contrat = {
             })
     },
 
-
     /* -------------------------------------------------------------------------------------------------------------- */
     create2: function (contrat, callback) {
         db.query("INSERT INTO public.contrat(id_contrat, date_debut, nb_semaines_conges_parents, tarif, nb_heures_semaine, taux_majore, date_deb_periode_adaptation, date_fin_periode_adaptation, jour_paiement) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
@@ -260,8 +260,8 @@ let Contrat = {
                     }
                     retour.statut = 200
                 }
+                callback(retour);
             });
-        callback(retour);
     }
 }
 

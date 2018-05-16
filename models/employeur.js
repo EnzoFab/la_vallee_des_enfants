@@ -1,26 +1,3 @@
-/* let client = require('../config/db')
-const Promise = require('bluebird')
-const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
-
-class Parent {
-    static findParent(email) {
-        client.query('SELECT * FROM public."Parent" P, public."Disposer" D, public."Compte" C WHERE P.id_parent=D.id_parent AND D.id_compte=C.id_compte AND P.mail= $1', [email], (err, result) => {
-            if (err) {
-                console.log('Erreur', err)
-                res.status(403).send({
-                    error: 'Les informations sont incorrectes'
-                })
-            } else {
-               console.log("Connexion réussie !", result)
-                result
-            }
-        })
-    }
-}
-
-module.exports = Parent
-*/
-
 let db = require('../config/db');
 let helper = require('../helpers/helper');
 const bcrypt = require('bcrypt');
@@ -64,8 +41,6 @@ let Employeur = {
                 // il faudra verifier si une erreur existe ou non
             });
     },
-
-
 
     /**
      *
@@ -180,9 +155,47 @@ let Employeur = {
                 } else {
                     retour.statut = 200
                 }
+                callback(retour);
             });
-        callback(retour);
-    }
+    },
+
+    update: function (numEmployeur, employeur, callback) {
+        db.query('UPDATE public.employeur SET nom_naissance_employeur = $1, nom_usage_employeur = $2, prenom_employeur = $3, rue_employeur = $4, cp_employeur = $5, ville_employeur = $6, mail_employeur = $7, telephone_employeur = $8, identifiant_connexion = $9, mot_de_passe = $10 WHERE id_employeur = $11',
+            [employeur.nomNaissance, employeur.nomUsage, employeur.prenom, employeur.rue, employeur.codePostal, employeur.ville, employeur.email, employeur.telephone1, employeur.identifiantConnexion, employeur.mdp, numEmployeur],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
+
+    updateInfosEmp: function (employeur, callback) {
+        db.query('UPDATE public.employeur SET rue_employeur = $1, cp_employeur = $2, ville_employeur = $3, telephone_employeur = $4 WHERE id_employeur = $5',
+            [employeur.rue, employeur.codePostal, employeur.ville, employeur.tel, employeur.id_employeur],
+            function (e, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if (e) {
+                    retour.statut = 500
+                    retour.erreur = e.toString()
+                }
+                else {
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
 };
 
 module.exports = Employeur;

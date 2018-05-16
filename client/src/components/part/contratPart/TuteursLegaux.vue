@@ -5,6 +5,10 @@
       <v-toolbar-title>Tuteurs légaux</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
+    <span small  class="red--text">
+      <v-icon>warning</v-icon>
+      <i >Attention remplissez bien cette section il ne sera pas possible de revenir en arrière</i>
+    </span>
     <div v-if="btnVisible">
       <v-btn icon large dark color="indigo"
              @click="addTuteur">
@@ -12,15 +16,14 @@
       </v-btn>
       <span>Ajouter un tuteur</span>
     </div>
-
     <v-form v-model="estValide" ref="form" class="pa-3">
       <v-container grid-list-xl>
-        <v-layout row wrap align-center>
+        <v-layout row wrap>
           <v-flex md6 lg6 xl6 sm12 xs12 v-for="(tuteur,i) in tuteurs" :key="i">
             <v-card class="elevation-1">
               <v-toolbar dark color="blue lighten-3">
                 <v-spacer></v-spacer>
-                <h2>{{tuteur.typeDeTuteur}}</h2>
+                <h2 v-if="tuteur.typeDeTuteur != null">{{tuteur.typeDeTuteur.libelle}}</h2>
                 <v-spacer></v-spacer>
 
                 <v-btn icon dark large color="transparent"
@@ -28,10 +31,14 @@
                        v-if="!btnVisible">
                   <v-icon dark>remove</v-icon>
                 </v-btn>
-
               </v-toolbar>
-              <v-container fluid class="px-3">
-                <v-layout row wrap>
+
+              <v-container fluid class="px-3" >
+                <v-checkbox
+                  label="Choisir un tuteur existant"
+                  v-model="tuteur.tuteurExistant">
+                </v-checkbox>
+                <v-layout row wrap v-if="!tuteur.tuteurExistant">
                   <v-flex md12 xs12>
                     <v-select
                       :items="typeTuteurs"
@@ -39,7 +46,6 @@
                       label="Type de tuteur"
                       single-line
                       item-text="libelle"
-                      item-value="libelle"
                       auto
                       :rules="regleTypeTuteur"
                       required
@@ -92,7 +98,7 @@
                   </v-flex>
                   <v-flex md12 lg12 x112 sm12 xs12>
                     <v-checkbox v-if="!existeAutredemandeur(tuteur)"
-                      label="demandeur"
+                      label="Ce tuteur est aussi le demandeur"
                       v-model="tuteur.estDemandeur"
                     ></v-checkbox>
                   </v-flex>
@@ -161,18 +167,37 @@
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
+                <v-layout v-else>
+                  <v-select
+                    :items="allExistingTuteurs"
+                    label="Choisissez un tuteur dans la liste"
+                    :rules="regleListeTuteurs"
+                    v-model="tuteur.informationTuteurExistant"
+                    item-text="nom_tuteur"
+                    append-icon="search"
+                    autocomplete
+                    required
+                  >
+                    <template slot="item" slot-scope="data">
+                      <template v-if="typeof data.item !== 'object'">
+                        <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                      </template>
+                      <template v-else>
+                        <v-list-tile-avatar color="blue">
+                          <span class="white--text headline">{{getInitiale(data.item)}}</span>
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-html="data.item.prenom_tuteur + ' ' + data.item.nom_tuteur"></v-list-tile-title>
+                          <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant"></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                      </template>
+                    </template>
+                  </v-select>
+                </v-layout>
               </v-container>
             </v-card>
           </v-flex>
           <v-flex md12 lg12 xl12 sm12 xs12>
-            <v-btn
-              color="green lighten-1"
-              depressed large round
-              dark
-              @click="back"
-            >
-              Précédent
-            </v-btn>
             <v-btn
               color="green lighten-1"
               depressed large round
@@ -193,13 +218,13 @@
 <script>
 import TypeService from '../../../services/TypeService'
 import TuteurService from '../../../services/TuteurService'
-
 export default {
   name: 'TuteursLegaux',
   data () {
     return {
       tuteurs: [],
       typeTuteurs: [],
+      allExistingTuteurs: [],
       estValide: false,
       inputSemaineDisable: true,
       rue: '',
@@ -211,6 +236,9 @@ export default {
       toogleText: 'Plus de semaines', // texte affiché sur le lien
       regleTypeTuteur: [
         v => !!v || 'Veuillez renseigner le type de tuteur'
+      ],
+      regleListeTuteurs: [
+        v => !!v || 'Veuillez choisir un tuteurs dans la liste'
       ],
       regleNom: [
         v => !!v || 'Veuillez renseigner le nom du tuteur',
@@ -256,6 +284,16 @@ export default {
         console.log('Erreur')
       }
     },
+    async initTuteurExistant () {
+      try {
+        let response = await TuteurService.getListTuteurEnfant()
+        console.log('=======', response.data)
+        this.allExistingTuteurs = response.data.resultats
+        console.log(this.allExistingTuteurs)
+      } catch (e) {
+        console.log(e.toString())
+      }
+    },
     addTuteur () {
       if (this.tuteurs.length < 2) { // ajoute un tuteur à la listes
         this.tuteurs.push({
@@ -265,7 +303,9 @@ export default {
           profession: '',
           telephone: '',
           telephonePro: '',
-          estDemandeur: false
+          estDemandeur: false,
+          tuteurExistant: false,
+          informationTuteurExistant: null
         })
       }
     },
@@ -287,15 +327,28 @@ export default {
     async submit () {
       // envoyer
       let data = {tuteurs: [], asEmployeur: false}
-      try {
-        console.log('TUTEUUUUUUURS', this.tuteurs[0])
-        await TuteurService.createContratTuteur(data)
-      } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
-      }
-      for (var tuteur in this.tuteurs) {
+      this.tuteurs.forEach(function (tuteur) {
+        console.log(tuteur)
+        if (!tuteur.tuteurExistant) {
+          if (tuteur.estDemandeur) {
+            data.asEmployeur = true
+            tuteur.infoDemandeur = {
+              rue: this.rue,
+              codePostal: this.codePostal,
+              email: this.email,
+              ville: this.ville,
+              nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
+              nomNaissance: this.nomNaissance
+            }
+          }
+          tuteur.typeDeTuteur = tuteur.typeDeTuteur.id // on recupere l'id du type tuteur pour la base de données
+        }
+        data.tuteurs.push(tuteur)
+      })
+      /* for (var tuteur in this.tuteurs) {
+        console.log(tuteur)
         if (tuteur.estDemandeur) {
+          console.log(tuteur)
           data.asEmployeur = true
           tuteur.infoDemandeur = {
             rue: this.rue,
@@ -307,7 +360,7 @@ export default {
           }
         }
         data.tuteurs.push(tuteur)
-      }
+      } */
       this.$emit('submit', data)
     },
     back () {
@@ -333,6 +386,12 @@ export default {
       } else {
         return this.nombreSemaine
       }
+    },
+    getInitiale (item) {
+      var initiale = ''
+      initiale += item.prenom_tuteur.charAt(0)
+      initiale += item.nom_tuteur.charAt(0)
+      return initiale.toUpperCase()
     }
   },
   computed: {
@@ -343,6 +402,7 @@ export default {
   mounted () {
     this.addTuteur() // ajoute un premier tuteurs
     this.initTypeTuteur() // init le type de tuteur
+    this.initTuteurExistant() // charge tous les tuteurs dans le select
   }
 }
 </script>

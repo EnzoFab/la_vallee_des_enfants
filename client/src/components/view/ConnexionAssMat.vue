@@ -38,7 +38,7 @@ export default {
         this.$store.dispatch('setAssMat', response.data.assmat)
         console.log(this.$store.state.assMat)
         this.$router.push({
-          name: 'AllContrats'
+          name: 'Accueil'
         })
       } catch (error) {
         console.log(error)

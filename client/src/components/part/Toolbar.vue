@@ -12,18 +12,17 @@
         <v-icon x-large color="pink">fa-home</v-icon>
       </v-tab>
       <v-tab to="/actualites" class="d-inline-block" ripple>
-        <h4 class="light-green--text"> fil d'actualité </h4>
+        <h4 class="light-green--text"> Fil d'actualité </h4>
         <v-icon x-large color="light-green">event</v-icon>
-      </v-tab>
-      <v-tab to="/contact"  ripple class="d-inline-block">
-        <h4 class="light-blue--text"> Contact </h4>
-        <v-icon x-large color="light-blue">contact_mail</v-icon>
       </v-tab>
       <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
         <h4 class="blue--text"> Inscription </h4>
         <v-icon x-large color="blue">assignment</v-icon>
       </v-tab>
-
+      <v-tab to="/contact"  ripple class="d-inline-block">
+        <h4 class="light-blue--text"> Contact </h4>
+        <v-icon x-large color="light-blue">contact_mail</v-icon>
+      </v-tab>
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
           <h4 class="indigo--text"> Connexion </h4>

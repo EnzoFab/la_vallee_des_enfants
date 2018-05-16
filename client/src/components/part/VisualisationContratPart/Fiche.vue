@@ -124,14 +124,57 @@
             </v-layout>
             <v-layout pb-2 mt-1>
               <v-flex offset-md3>
-                <v-btn color="blue--text">Modifier</v-btn>
+                <v-btn color="blue--text" @click.stop="dialogBox = true">
+                  Modifier
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
         </v-card>
       </v-flex>
+
+      <v-dialog v-model="dialogBox" max-width="500px">
+        <v-form v-model="estValide" ref="form">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Modification des informations</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Rue" :rules="regleRue" v-model="rueEmp" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Code Postal" :rules="regleCodeP" v-model="codePEmp" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Ville" :rules="regleVille" v-model="villeEmp" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Téléphone" :rules="regleTel" v-model="telephoneEmp" required></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+            <small>*indiquer les champs requis</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="dialogBox = false">Fermer</v-btn>
+            <v-btn
+              color="blue darken-1"
+              flat @click="enregistrer"
+              :disabled="!estValide"
+              @click.native="dialogBox = false"
+              :dark="estValide"
+            >Enregistrer</v-btn>
+          </v-card-actions>
+        </v-card>
+        </v-form>
+      </v-dialog>
+
       <v-flex>
-        <v-flex v-for="parent in parents" pt-2 md10>
+        <v-flex :key="parent" v-for="parent in parents" pt-2 md10>
           <v-flex class="text-md-left">
             <h1 class="blue--text">Parents</h1>
           </v-flex>
@@ -149,9 +192,53 @@
               <v-layout pb-3 mt-1>
                 <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>{{ parent.telephone_pro}}</span>
               </v-layout>
+              <v-layout pb-2 mt-1>
+                <v-flex offset-md3>
+                  <v-btn color="blue--text" @click.stop="dialogBox2 = true">
+                    Modifier
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-flex>
             <v-divider></v-divider>
           </v-card>
+          <v-dialog v-model="dialogBox2" max-width="500px">
+            <v-form v-model="estValide" ref="form">
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Modification des informations</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
+                      <v-flex xs12>
+                        <v-text-field label="Téléphone" :rules="regleTel" v-model="parent.telephone" required></v-text-field>
+                      </v-flex>
+                      <v-flex xs12>
+                        <v-text-field label="Profession" :rules="regleProfession" v-model="parent.profession" required></v-text-field>
+                      </v-flex>
+                      <v-flex xs12>
+                        <v-text-field label="Téléphone professionnel" :rules="regleTel" v-model="parent.telephone_pro" required></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                  <small>*indiquer les champs requis</small>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat @click.native="dialogBox2 = false">Fermer</v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    flat @click="enregistrerParent(parent)"
+                    :disabled="!estValide"
+                    @click.native="dialogBox2 = false"
+                    :dark="estValide"
+                  >Enregistrer</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-form>
+          </v-dialog>
+
         </v-flex>
     </v-flex>
     </v-flex>
@@ -161,18 +248,23 @@
 
 <script>
 import ContratService from '../../../services/ContratService'
+import EmployeurService from '../../../services/EmployeurService'
+import TuteurService from '../../../services/TuteurService'
+import { validationMixin } from 'vuelidate'
 import moment from 'moment'
 import 'moment/locale/fr'
 moment.locale('fr')
 export default {
+  mixins: [validationMixin],
   name: 'Fiche',
   data () {
     return {
+      estValide: false,
       prenomEnfant: null,
       nomEnfant: null,
       dateNaissanceEnfant: null,
       sexeEnfant: null,
-      numeroContrat: 'monprems1',
+      numeroContrat: this.$route.params.numC,
       typeContrat: null,
       modeDePaiementContrat: null,
       dateDebAdapt: null,
@@ -191,6 +283,7 @@ export default {
       assurance: null,
       numeroPolice: null,
       nombreSemaineConges: null,
+      id_employeur: null,
       nomUsageEmp: null,
       prenomEmp: null,
       nomNaissanceEmp: null,
@@ -201,21 +294,37 @@ export default {
       emailEmp: null,
       identifiantEmp: null,
       nombreSemSupp: null,
-      parents: []
+      dialogBox: false,
+      dialogBox2: false,
+      parents: [],
+      regleRue: [
+        v => !!v || 'Veuillez saisir la rue'
+      ],
+      regleCodeP: [
+        v => !!v || 'Veuillez saisir le code postal',
+        v => /^[1-9]([0-9]{4})$/.test(v) || 'Le code postal n\'est pas valide'
+      ],
+      regleVille: [
+        v => !!v || 'Veuillez saisir la ville'
+      ],
+      regleTel: [
+        v => !!v || 'Veuillez saisir un téléphone',
+        v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
+      ],
+      regleProfession: [
+        v => !!v || 'Veuillez saisir la profession'
+      ]
     }
   },
   mounted () {
-    console.log('sdfghj')
     this.initDonnees(this.numeroContrat)
     this.initParents(this.numeroContrat)
   },
   methods: {
-    async initDonnees (numeroContrat) {
+    async initDonnees () {
       try {
-        console.log('heyyyyyyyyyyyyyyyyyyooooooooh')
         const response = await ContratService.donneesContrat(this.numeroContrat)
-        console.log(response.data)
-        this.numeroContrat = numeroContrat
+        this.numeroContrat = this.numeroContrat
         this.modeDePaiementContrat = response.data.modepaiements
         this.nomEnfant = response.data.nom_enfant
         this.prenomEnfant = response.data.prenom_enfant
@@ -244,6 +353,7 @@ export default {
         this.assurance = response.data.assurance_resp_civile
         this.numeroPolice = response.data.num_police
         this.nombreSemaineConges = response.data.nb_semaines_conges
+        this.id_employeur = response.data.id_employeur
         this.nomUsageEmp = response.data.nom_usage_employeur
         this.prenomEmp = response.data.prenom_employeur
         this.nomNaissanceEmp = response.data.nom_naissance_employeur
@@ -259,13 +369,29 @@ export default {
         console.log(e)
       }
     },
-    async initParents (numeroContrat) {
+    async initParents () {
       try {
         const response = await ContratService.donneesParents(this.numeroContrat)
         console.log(response.data)
         this.parents = response.data.tuteurs
       } catch (e) {
         console.log(e)
+      }
+    },
+    async enregistrer () {
+      try {
+        let data = {employeur: { rue: this.rueEmp, codePostal: this.codePEmp, ville: this.villeEmp, tel: this.telephoneEmp, id_employeur: this.id_employeur }}
+        await EmployeurService.updateEmp(data)
+      } catch (e) {
+        console.log('ERREUR' + e)
+      }
+    },
+    async enregistrerParent (parent) {
+      try {
+        let data = {tuteur: { telParent: parent.telephone, profession: parent.profession, telProParent: parent.telephone_pro, id_tuteur: parent.id_tuteur }}
+        await TuteurService.updateTuteur(data)
+      } catch (e) {
+        console.log('ERREUR' + e)
       }
     }
   }
