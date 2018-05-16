@@ -61,7 +61,15 @@ router.post('/image', function (req, res) {
 /* -----------------------------------------ROUTE DELETE -------------------------------------------------------- */
 router.delete('/image', function (req, res) {
     let publicId = req.body.publicId
-    cloudinary.v2.uploader.destroy(publicId, function(error, result){console.log(result)});
+    cloudinary.v2.uploader.destroy(publicId, function(error, result){
+        let retour = {erreur: null}
+        if(error){
+            retour.erreur = error.toString()
+        } else {
+            retour.resultats = result
+        }
+        res.send(retour)
+    })
 })
 
 module.exports = router;

@@ -15,25 +15,32 @@
          {{erreurMessage}}
         </v-alert>
         <v-layout row wrap>
-          <v-flex v-for="(post,i) in posts" :key="i" xs12 sm12 md12>
-            <v-card color="purple" class="white--text">
-              <v-container fluid grid-list-lg>
-                <v-layout row>
-                  <v-flex xs5>
-                    <v-card-media
-                      :src="post.image"
-                      height="200px"
-                      contain
-                    ></v-card-media>
-                  </v-flex>
-                  <v-flex xs7>
-                    <div>
-                      <div class="headline">{{post.titre}}</div>
-                      <div>{{post.message}}</div>
-                    </div>
-                  </v-flex>
-                </v-layout>
-              </v-container>
+          <v-flex v-for="(post,i) in posts" :key="i" xs12 sm6 offset-sm3>
+            <v-card>
+              <v-card-media
+                :src="post.image"
+                height="200px"
+              >
+              </v-card-media>
+              <v-card-title primary-title>
+                <div>
+                  <div class="headline">{{post.titre}}</div>
+                  <span class="grey--text">{{post.date}}</span>
+                </div>
+              </v-card-title>
+              <v-card-actions>
+                <v-btn icon @click.native="post.contentVisible = !post.contentVisible">
+                  <v-icon>{{ post.contentVisible ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                </v-btn>
+              </v-card-actions>
+              <v-slide-y-transition>
+                <v-card-text v-show="post.contentVisible">
+                  {{post.message}}
+                </v-card-text>
+              </v-slide-y-transition>
+              <v-card-text>
+                <v-btn @click="deletePost(post)">Supprimer ce post</v-btn>
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
@@ -123,6 +130,7 @@
 import Calendar from '../part/Calendar'
 import PostService from '../../services/PostService'
 import FileService from '../../services/FileService'
+let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'Evenements',
   components: {Calendar},
@@ -149,7 +157,7 @@ export default {
     nouveauPost (data) {
       this.posts.push(data)
     },
-    suppression (data) {
+    suppressionPost (data) {
       this.deletePost(data)
     }
   },
@@ -187,7 +195,7 @@ export default {
           message: this.postMessage,
           titre: this.postTitre,
           id_am: this.$store.state.assMat.id_assmat,
-          image_id: image.public_id
+          image_id: image.public_id,
         }
       }
       console.log('=======DATA===', data)
@@ -249,7 +257,9 @@ export default {
               message: this.postMessage,
               titre: this.postTitre,
               id_post: result.id_post,
-              image_id: result.image_id
+              image_id: result.image_id,
+              date: this.dateFr(new Date()),
+              contentVisible: false
             }
             console.log(post)
             this.posts.push(post)
@@ -296,9 +306,7 @@ export default {
     async deletePost (post) {
       if ( await this.deleteDBPost(post.id_post) && await this.deleteHostedImage()) {
         this.deletePostFromArray(post)
-        this.$socket.emit('suppression', post)
-      } else {
-
+        this.$socket.emit('suppressionPost', post)
       }
     },
     clearForm () {
@@ -312,6 +320,15 @@ export default {
     },
     deletePostFromArray (post) { // supprime un post de la liste
       this.posts.splice(this.posts.indexOf(post), 1)
+    },
+    dateFr (date) {
+      var dateString = null
+      let day = date.getDate()
+      let month = mois[date.getMonth()]
+      let year = date.getFullYear()
+      dateString = day + ' ' + month + ' ' + year
+
+      return dateString
     }
   },
   computed: {
