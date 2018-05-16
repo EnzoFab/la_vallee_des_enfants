@@ -54,10 +54,9 @@ router.post('/createAbs', function (req, res, next) {
     });
 });
 
-router.put('/majAbs', function (req, res, next) {
+router.post('/majAbs', function (req, res, next) {
     let abs = req.body.absence
-    console.log(abs)
-    modelPresenceReelle.updateAbs(abs, function (retour) {
+    modelPresenceReelle.createAbs(abs, function (retour) {
         res.send(retour);
     });
 });
