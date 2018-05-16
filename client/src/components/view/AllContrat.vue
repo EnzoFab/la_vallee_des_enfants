@@ -44,7 +44,7 @@
         </v-container>
       </v-layout>
     </v-container>
-    <v-btn class="light-blue white--text" @click="nouveauContrat">
+    <v-btn class="light-blue white--text" @click="nouveauContrat" v-if="isAssMatConnected">
       Nouveau contrat
     </v-btn>
   </v-flex>
@@ -86,6 +86,15 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    }
+  },
+  computed: {
+    /**
+     * verifie si une assMat est connectée
+     * @returns {boolean}
+     */
+    isAssMatConnected () {
+      return this.$store.getters.isAssMatConnected
     }
   }
 }
