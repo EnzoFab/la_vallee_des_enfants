@@ -10,7 +10,6 @@ router.get('/all', function (req, res, next) {
 
 router.get('/:n/allchildren', function (req, res, next) {
     let day = req.params.n
-    console.log('jftvvevj ' + day)
     modelPresenceTheorique.getAllChildrenOfTheDay(day, function (retour) {
         res.send(retour);
     });

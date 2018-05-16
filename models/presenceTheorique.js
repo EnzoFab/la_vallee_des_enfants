@@ -12,20 +12,18 @@ let presenceTheorique = {
                     presencestheoriques: null,
                     statut: null
                 };
-                let e = helper.handleError(err, result,'Aucun types de contrat');
+                let e = helper.handleError(err, result,'Aucune présence theorique');
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: result.rows[i].id_presence_theorique,
                             heureArrivee: result.rows[i].heure_arrivee,
                             heureDepart: result.rows[i].heure_depart,
                             prendsGouter: result.rows[i].prends_gouter
                         });
-                        console.log('array', array)
                     }
                     retour.presencestheoriques = array;
                     retour.statut = 200
@@ -56,16 +54,16 @@ let presenceTheorique = {
                 if (retour.erreur == null) {
                     var array = []
                     for (var i = 0; i < result.rows.length; i++) {
-                        console.log(1)
                         array.push({
                             id_contrat: result.rows[i].id_contrat,
+                            id_enfant: result.rows[i].id_enfant,
+                            id_presence_theo: result.rows[i].id_presence_theorique,
                             nom_enfant: result.rows[i].nom_enfant,
                             prenom_enfant: result.rows[i].prenom_enfant,
                             prend_gouter: result.rows[i].prends_gouter,
                             heure_arrivee: result.rows[i].heure_arrivee,
                             heure_depart: result.rows[i].heure_depart
                         });
-                        console.log('array', array)
                     }
                     retour.presencestheoriques = array
                     retour.statut = 200
