@@ -34,7 +34,7 @@
               <v-list-tile-title>Paramètres</v-list-tile-title>
             </v-list-tile-content>
           </router-link>
-          <router-link avatar key="deco" to="assistante/deco" tag="v-list-tile">
+          <router-link avatar key="deco" to="/" tag="v-list-tile">
             <v-list-tile-avatar>
               <v-icon medium>exit_to_app</v-icon>
             </v-list-tile-avatar>
