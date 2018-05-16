@@ -20,6 +20,10 @@
           <v-icon x-large color="blue">attach_file</v-icon>
         </router-link>
       </v-tab>
+      <v-tab to="/actualites" class="d-inline-block" ripple>
+        <h4 class="indigo--text"> Fil d'actualité </h4>
+        <v-icon x-large color="indigo">event</v-icon>
+      </v-tab>
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
           <h4 class="teal--text">Compte</h4>
