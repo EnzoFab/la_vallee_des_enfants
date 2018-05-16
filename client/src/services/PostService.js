@@ -11,6 +11,6 @@ export default {
   },
 
   delete (numPost) {
-    return Api().delete('posts/delete', numPost)
+    return Api().delete('posts/delete/' + numPost)
   }
 }

@@ -15,7 +15,13 @@
          {{erreurMessage}}
         </v-alert>
         <v-layout row wrap>
-          <v-flex v-for="(post,i) in posts" :key="i" xs12 sm6 offset-sm3>
+          <v-flex v-if="posts == 0">
+            <v-card>
+              <v-card-media>
+              </v-card-media>
+            </v-card>
+          </v-flex>
+          <v-flex v-else v-for="(post,i) in posts" :key="i" xs12 sm6 offset-sm3>
             <v-card>
               <v-card-media
                 :src="post.image"
@@ -39,7 +45,11 @@
                 </v-card-text>
               </v-slide-y-transition>
               <v-card-text>
-                <v-btn @click="deletePost(post)">Supprimer ce post</v-btn>
+                <v-btn
+                  v-if="isAssMatConnected"
+                  outline color="indigo"
+                  @click="deletePost(post)"
+                >Supprimer ce post</v-btn>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -250,7 +260,7 @@ export default {
         let image = await this.saveImg()
         console.log(image)
         if (image != null ) {
-          let result = this.creerPost(image)
+          let result = await this.creerPost(image)
           if (result != null) {
             let post = {
               image: image.url, // this.imgPath,
@@ -276,12 +286,14 @@ export default {
       }
     },
     async deleteHostedImage (imageId) { // supprime l'image du serveur
+      console.log('PUBLIC ID ',imageId)
       try {
-        let response = await FileService.deleteImg({publicId: imageId})
+        let response = await FileService.deleteImg(imageId)
         if (response.data.erreur == null) {
           return true
         } else {
-          this.triggerErreur('Une erreur est survenue')
+          console.log("SUPER ERREUR ", response.data.erreur)
+          // this.triggerErreur(response.data.erreur.toString())
           return false
         }
       } catch (e) {
@@ -291,7 +303,7 @@ export default {
     },
     async deleteDBPost (idPost) { // permet de supprimer un dans la base de données
       try {
-        let response = PostService.delete({idPost: idPost})
+        let response = await PostService.delete(idPost)
         if (response.data.erreur == null) {
           return true
         } else {
@@ -304,9 +316,34 @@ export default {
       }
     },
     async deletePost (post) {
-      if ( await this.deleteDBPost(post.id_post) && await this.deleteHostedImage()) {
+      console.log('POST', post)
+      if ( await this.deleteDBPost(post.id_post) && await this.deleteHostedImage(post.image_id)) {
         this.deletePostFromArray(post)
         this.$socket.emit('suppressionPost', post)
+      }
+    },
+    async initPost () {
+      try {
+        let response = await PostService.getAll()
+        if (response.data.erreur == null){
+          let loadedPosts = response.data.posts
+          let vm = this
+          loadedPosts.forEach(function (post) {
+            vm.posts.push({
+              image: post.image, // this.imgPath,
+              message: post.texte,
+              titre: post.titre,
+              id_post: post.id,
+              image_id: post.image_id,
+              date: vm.dateFr(post.date),
+              contentVisible: false
+            })
+          })
+        } else {
+          this.triggerErreur(response.data.erreur.texte)
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
       }
     },
     clearForm () {
@@ -323,6 +360,7 @@ export default {
     },
     dateFr (date) {
       var dateString = null
+      date = new Date(date)
       let day = date.getDate()
       let month = mois[date.getMonth()]
       let year = date.getFullYear()
@@ -341,9 +379,7 @@ export default {
     }
   },
   mounted () {
-    console.log('======', this.isAssMatConnected)
-    console.log('Mounted')
-    // faire une requete ajax pour charger tous les evenements
+    this.initPost()
   }
 }
 

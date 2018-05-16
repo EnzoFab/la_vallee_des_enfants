@@ -19,6 +19,6 @@ export default {
     // return Api().post('files/image', formData)
   },
   deleteImg (imageUrl) {
-    return Api().delete('/files/image', imageUrl)
+    return Api().delete('/files/image/' + imageUrl)
   }
 }

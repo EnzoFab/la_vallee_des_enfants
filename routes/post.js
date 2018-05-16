@@ -29,8 +29,8 @@ router.post('/create', function (req, res, next) {
 
 /* ------------------------------------------ ROUTES DELETE ------------------------------------------------------ */
 
-router.delete('/delete', function (req, res, next) {
-    var id = req.body.idPost
+router.delete('/delete/:idPost', function (req, res, next) {
+    var id = req.params.idPost
     modelPost.delete(id, function (retour) {
         res.send(retour)
     })
