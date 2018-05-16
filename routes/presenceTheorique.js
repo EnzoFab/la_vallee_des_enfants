@@ -10,9 +10,26 @@ router.get('/all', function (req, res, next) {
     });
 });
 
+router.get('/:n/allchildrennp', function (req, res, next) {
+    console.log('coucouc route')
+    let day = req.params.n
+    console.log(day + ' day')
+    modelPresenceTheorique.getChildrenNonPresentsOfTheDay(day, function (retour) {
+        res.send(retour);
+    });
+});
+
 router.get('/:n/allchildren', function (req, res, next) {
     let day = req.params.n
     modelPresenceTheorique.getAllChildrenOfTheDay(day, function (retour) {
+        res.send(retour);
+    });
+});
+
+router.get('/:e/:n', function (req, res, next) {
+    let enfant = req.params.e
+    let day = req.params.n
+    modelPresenceTheorique.recupIdTheoDuJour(day, enfant, function (retour) {
         res.send(retour);
     });
 });

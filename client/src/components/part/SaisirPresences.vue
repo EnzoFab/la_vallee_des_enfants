@@ -1,232 +1,300 @@
 <template>
   <div>
-      <v-flex mt-4>
-        <v-flex offset-md5>
+    <v-flex mt-4>
+      <v-flex offset-md5>
         <v-layout>
-        <h1>Présences du jour</h1>
-        <v-alert
-          v-model="alert" type="success" dismissible :value="alert"
-          transition="scale-transition"
-        >
-          Les modifications ont bien été prises en compte.
-        </v-alert>
+          <v-flex mb-1>
+            <v-alert
+              v-model="alert" type="success" dismissible :value="alert"
+              transition="scale-transition"
+            >
+              Les modifications ont bien été prises en compte.
+            </v-alert>
+          </v-flex>
         </v-layout>
-        </v-flex>
         <v-layout>
-          <v-flex>
-      <v-flex v-for="(enfant, i) in enfantsDuJour" :key="i">
-        <v-flex>
-        <v-flex mt-5 offset-md1 md4>
-          <v-card>
-            <v-layout>
-                <v-flex mt-2>
-                  <h2 class = "orange--text text--darken-1">{{ enfant.prenom_enfant }} {{ enfant.nom_enfant }}</h2>
-                </v-flex>
-            </v-layout>
-            <v-layout>
-                <v-flex mt-2 class="text-md-left">
-                  <v-flex offset-md1 mb-1>
-                    <v-layout>
-                    <span>{{ enfant.heureArrivee }}h{{ enfant.minuteArrivee }} - {{ enfant.heureDepart}}h{{enfant.minuteDepart}}</span>
-                    </v-layout>
-                  </v-flex>
-                  <v-flex offset-md1 v-if="enfant.prend_gouter == true">
-                    <v-layout>
-                    <span> Prend le goûter</span>
-                    </v-layout>
-                  </v-flex>
-                  <v-flex offset-md1 v-else>
-                    <v-layout>
-                    <span> Ne prend pas le goûter</span>
-                    </v-layout>
-                  </v-flex>
-                </v-flex>
-            </v-layout>
-                <v-layout>
-                  <v-flex>
-                <v-card-actions>
-                  <v-flex>
-                    <v-btn class="red--text text--darken-4" flat @click.stop="dialogBoxAbsence = true">Absence</v-btn>
-                  </v-flex>
-                </v-card-actions>
-                  </v-flex>
-                  <v-flex>
-                <v-card-actions>
-                  <v-flex>
-                    <v-btn class="light-green--text text--darken-4" flat @click.stop="dialogBox = true">Présence</v-btn>
-                  </v-flex>
-                </v-card-actions>
-                  </v-flex>
-            </v-layout>
-          </v-card>
-        </v-flex>
-        </v-flex>
-
-        <v-dialog v-model="dialogBox" max-width="500px">
-          <v-card>
-            <v-flex pt-3 class="indigo--text text-md-center">
-              <h2>
-                Saisie de la présence
-              </h2>
-            </v-flex>
-            <v-card-text>
-              <v-flex>
-
-                <v-form ref="formArrivee">
-                  <v-layout>
-                    <v-flex mt-4 mr-2>
-                      <span>Arrivée :</span>
-                    </v-flex>
-                    <v-flex md2>
-                      <v-select
-                        :items="heures"
-                        v-model="enfant.heureArrivee"
-                        single-line
-                        autocomplete
-                      ></v-select>
-                    </v-flex>
-                    <v-flex mt-4 ml-1 mr-1>
-                      <span>h</span>
-                    </v-flex>
-                    <v-flex md2>
-                      <v-select
-                        :items="minutes"
-                        v-model="enfant.minuteArrivee"
-                        single-line
-                        autocomplete
-                      ></v-select>
-                    </v-flex>
-                    <v-flex md-1 mt-3 ml-1>
-                      <v-btn
-                        small
-                        round
-                        color="orange lighten-3"
-                        @click="submitArrivee(enfant)"
-                      >ok</v-btn>
-                    </v-flex>
-                  </v-layout>
-                </v-form>
-
-                <v-form ref="formDepart">
-                  <v-layout>
-                    <v-flex mt-4 mr-2>
-                      <span>Départ :</span>
-                    </v-flex>
-                    <v-flex md2>
-                      <v-select
-                        :items="heures"
-                        v-model="enfant.heureDepart"
-                        single-line
-                        autocomplete
-                      ></v-select>
-                    </v-flex>
-                    <v-flex mt-4 ml-1 mr-1>
-                      <span>h</span>
-                    </v-flex>
-                    <v-flex md2>
-                      <v-select
-                        :items="minutes"
-                        v-model="enfant.minuteDepart"
-                        single-line
-                        autocomplete
-                      ></v-select>
-                    </v-flex>
-                    <v-flex md-1 mt-3 ml-1>
-                      <v-btn
-                        small
-                        round
-                        :disabled="!(enfant.enregistre)"
-                        color="orange lighten-3"
-                        @click="submitDepart(enfant)">ok</v-btn>
-                    </v-flex>
-                  </v-layout>
-                </v-form>
-
-                <v-form ref="formGouter">
-                  <v-layout>
-                    <v-flex mt-4>
-                      <span>Goûter :</span>
-                    </v-flex>
-                    <v-flex mt-4 offset-md1>
-                      <v-switch
-                        :label="SwitchGouter"
-                        v-model="enfant.a_pris_gouter"
-                        color="indigo"
-                      ></v-switch>
-                    </v-flex>
-                    <v-flex md-1 mt-3 ml-1>
-                      <v-btn
-                        small
-                        round
-                        :disabled="!(enfant.enregistre)"
-                        color="orange lighten-3"
-                        @click="submitGouter(enfant)">ok</v-btn>
-                    </v-flex>
-                  </v-layout>
-                </v-form>
-
-              </v-flex>
-              <v-flex>
-              <v-card-actions>
-                <v-flex>
-                  <v-btn color="primary" flat @click.stop="dialogBox=false">Fermer</v-btn>
-                </v-flex>
-              </v-card-actions>
-              </v-flex>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-
-        <v-dialog v-model="dialogBoxAbsence" max-width="500px">
-          <v-card>
-            <v-flex pt-3 class="indigo--text text-md-center">
-              <h2>
-                L'absence est-elle justifiée?
-              </h2>
-            </v-flex>
-            <v-flex pl-2 offset-md1>
-            <v-layout>
-                <v-card-actions>
-                  <v-flex offset-md1>
-                    <v-btn  color="primary"  flat @click.stop="submitAbsenceJu(enfant)">Oui</v-btn>
-                  </v-flex>
-                </v-card-actions>
-            <v-card-actions>
-              <v-flex>
-                <v-btn  color="primary" flat @click.stop="submitAbsenceNonJu(enfant)">Non</v-btn>
-              </v-flex>
-            </v-card-actions>
-            <v-card-actions>
-              <v-flex>
-                <v-btn  color="primary" flat @click.stop="dialogBoxAbsence=false">Annuler</v-btn>
-              </v-flex>
-            </v-card-actions>
-            </v-layout>
-            </v-flex>
-          </v-card>
-        </v-dialog>
-
+          <h1 class="blue--text">Présences du jour</h1>
+        </v-layout>
       </v-flex>
+      <v-layout>
+        <v-flex md4 mt-5 offset-md1>
+          <v-flex class="text-md-left" offset-md2>
+            <v-btn color="pink darken-1" @click="dialogBoxPresenceExc=true" dark><v-icon>add</v-icon>Présence exceptionnelle</v-btn>
+          </v-flex>
+          <v-flex v-for="(enfant, i) in enfantsDuJour" :key="i">
+            <v-flex>
+              <v-flex md10>
+                <v-card>
+                  <v-layout>
+                    <v-flex class="text-md-center" mt-2>
+                      <h2 class = "orange--text text--darken-1">{{ enfant.prenom_enfant }} {{ enfant.nom_enfant }}</h2>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout>
+                    <v-flex mt-2 class="text-md-left">
+                      <v-flex offset-md1 mb-1>
+                        <v-layout>
+                          <span>{{ enfant.heureArrivee }}h{{ enfant.minuteArrivee }} - {{ enfant.heureDepart}}h{{enfant.minuteDepart}}</span>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex offset-md1 v-if="enfant.prend_gouter == true">
+                        <v-layout>
+                          <span> Prend le goûter</span>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex offset-md1 v-else>
+                        <v-layout>
+                          <span> Ne prend pas le goûter</span>
+                        </v-layout>
+                      </v-flex>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-card-actions>
+                        <v-flex>
+                          <v-btn class="red--text text--darken-4" flat @click.stop="dialogBoxAbsence = true">Absence</v-btn>
+                        </v-flex>
+                      </v-card-actions>
+                    </v-flex>
+                    <v-flex>
+                      <v-card-actions>
+                        <v-flex>
+                          <v-btn class="light-green--text text--darken-4" flat @click.stop="dialogBox = true">Présence</v-btn>
+                        </v-flex>
+                      </v-card-actions>
+                    </v-flex>
+                  </v-layout>
+                </v-card>
+              </v-flex>
+            </v-flex>
+
+            <v-dialog v-model="dialogBox" max-width="500px">
+              <v-card>
+                <v-flex pt-3 class="indigo--text text-md-center">
+                  <h2>
+                    Saisie de la présence
+                  </h2>
+                </v-flex>
+                <v-card-text>
+                  <v-flex>
+
+                    <v-form ref="formArrivee">
+                      <v-layout>
+                        <v-flex mt-4 mr-2>
+                          <span>Arrivée :</span>
+                        </v-flex>
+                        <v-flex md2>
+                          <v-select
+                            :items="heures"
+                            v-model="enfant.heureArrivee"
+                            single-line
+                            autocomplete
+                          ></v-select>
+                        </v-flex>
+                        <v-flex mt-4 ml-1 mr-1>
+                          <span>h</span>
+                        </v-flex>
+                        <v-flex md2>
+                          <v-select
+                            :items="minutes"
+                            v-model="enfant.minuteArrivee"
+                            single-line
+                            autocomplete
+                          ></v-select>
+                        </v-flex>
+                        <v-flex md-1 mt-3 ml-1>
+                          <v-btn
+                            small
+                            round
+                            color="orange lighten-3"
+                            @click="submitArrivee(enfant)"
+                          >ok</v-btn>
+                        </v-flex>
+                      </v-layout>
+                    </v-form>
+
+                    <v-form ref="formDepart">
+                      <v-layout>
+                        <v-flex mt-4 mr-2>
+                          <span>Départ :</span>
+                        </v-flex>
+                        <v-flex md2>
+                          <v-select
+                            :items="heures"
+                            v-model="enfant.heureDepart"
+                            single-line
+                            autocomplete
+                          ></v-select>
+                        </v-flex>
+                        <v-flex mt-4 ml-1 mr-1>
+                          <span>h</span>
+                        </v-flex>
+                        <v-flex md2>
+                          <v-select
+                            :items="minutes"
+                            v-model="enfant.minuteDepart"
+                            single-line
+                            autocomplete
+                          ></v-select>
+                        </v-flex>
+                        <v-flex md-1 mt-3 ml-1>
+                          <v-btn
+                            small
+                            round
+                            :disabled="enfant.heure_arrivee_r==null"
+                            color="orange lighten-3"
+                            @click="submitDepart(enfant)">ok</v-btn>
+                        </v-flex>
+                      </v-layout>
+                    </v-form>
+
+                    <v-form ref="formGouter">
+                      <v-layout>
+                        <v-flex mt-4>
+                          <span>Goûter :</span>
+                        </v-flex>
+                        <v-flex v-if="enfant.a_pris_gouter!=null" mt-4 offset-md1>
+                          <v-switch
+                            v-model="enfant.a_pris_gouter"
+                            color="indigo"
+                          ></v-switch>
+                        </v-flex>
+                        <v-flex v-else mt-4 offset-md1>
+                          <v-switch
+                            v-model="gouterPris"
+                            color="indigo"
+                          ></v-switch>
+                        </v-flex>
+                        <v-flex md-1 mt-3 ml-1>
+                          <v-btn
+                            small
+                            round
+                            :disabled="enfant.heure_arrivee_r==null"
+                            color="orange lighten-3"
+                            @click="submitGouter(enfant)">ok</v-btn>
+                        </v-flex>
+                      </v-layout>
+                    </v-form>
+
+                  </v-flex>
+                  <v-flex>
+                    <v-card-actions>
+                      <v-flex>
+                        <v-btn color="primary" flat @click.stop="dialogBox=false">Fermer</v-btn>
+                      </v-flex>
+                    </v-card-actions>
+                  </v-flex>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogBoxAbsence" max-width="500px">
+              <v-card>
+                <v-flex pt-3 class="indigo--text text-md-center">
+                  <h2>
+                    L'absence est-elle justifiée?
+                  </h2>
+                </v-flex>
+                <v-flex pl-2 offset-md1>
+                  <v-layout>
+                    <v-card-actions>
+                      <v-flex offset-md1>
+                        <v-btn  color="primary"  flat @click.stop="submitAbsenceJu(enfant)">Oui</v-btn>
+                      </v-flex>
+                    </v-card-actions>
+                    <v-card-actions>
+                      <v-flex>
+                        <v-btn  color="primary" flat @click.stop="submitAbsenceNonJu(enfant)">Non</v-btn>
+                      </v-flex>
+                    </v-card-actions>
+                    <v-card-actions>
+                      <v-flex>
+                        <v-btn  color="primary" flat @click.stop="dialogBoxAbsence=false">Annuler</v-btn>
+                      </v-flex>
+                    </v-card-actions>
+                  </v-layout>
+                </v-flex>
+              </v-card>
+            </v-dialog>
+
+          </v-flex>
+
+            <v-dialog v-model="dialogBoxPresenceExc" max-width="500px">
+              <v-card>
+                <v-flex pt-3 class="indigo--text text-md-center">
+                  <h2>
+                    Création d'une présence exceptionnelle
+                  </h2>
+                </v-flex>
+                <v-flex pl-2>
+                  <v-layout>
+                    <v-form>
+                      <v-flex offset-md4>
+                        <v-select
+                          :items="enfantsPasDuJour"
+                          v-model="id_enfant"
+                          label="Enfant"
+                          single-line
+                          item-text="nomComplet"
+                          item-value="id_enfant"
+                          autocomplete
+                        ></v-select>
+                      </v-flex>
+                    </v-form>
+                  </v-layout>
+                  <v-layout>
+                    <v-card-actions>
+                      <v-flex offset-md8>
+                        <v-btn  color="primary" flat @click.stop="submitPresenceExc()">OK</v-btn>
+                      </v-flex>
+                    </v-card-actions>
+                    <v-card-actions>
+                      <v-flex offset-md1>
+                        <v-btn  color="primary" flat @click.stop="dialogBoxPresenceExc=false">Annuler</v-btn>
+                      </v-flex>
+                    </v-card-actions>
+                  </v-layout>
+                </v-flex>
+              </v-card>
+            </v-dialog>
+
+
+        </v-flex>
+        <v-flex ml-5 md5 mt-5>
+          <v-layout>
+            <v-flex class=" light-green--text text--darken-3 text-md-center ">
+              <h2>Enfants présents</h2>
+            </v-flex>
+          </v-layout>
+          <v-layout>
+            <v-flex mt-3>
+              <v-data-table
+                :headers="headers"
+                :items="enfantsDuJour"
+                hide-actions
+                class="elevation-1"
+                no-data-text="Aucun enfant arrivé"
+              >
+                <template slot="items" slot-scope="props">
+                  <td>{{ props.item.nom_enfant + ' ' + props.item.prenom_enfant }}</td>
+                  <td v-if=" props.item.heure_arrivee_r!=null" class="text-xs-center">{{ props.item.heureArriveeR + 'h' + props.item.minuteArriveeR }}</td>
+                  <td v-else class="text-xs-center"></td>
+                  <td v-if="props.item.heure_depart_r" class="text-xs-center">{{ props.item.heureDepartR + 'h' + props.item.minuteDepartR }}</td>
+                  <td v-else class="text-xs-center"></td>
+                  <td v-if="props.item.a_pris_gouter_from_bd==true" class="text-xs-center">pris</td>
+                  <td v-else-if="props.item.a_pris_gouter_from_bd==false" class="text-xs-center">non pris</td>
+                  <td v-else class="text-xs-center"></td>
+                  <td v-if="props.item.absence_justifiee==true" class="red--text text-xs-center">abs justifiée</td>
+                  <td v-else-if="props.item.absence_justifiee==false" class="red--text text-xs-center">abs non justifiée</td>
+                  <td v-else class="text-xs-center"></td>
+                </template>
+              </v-data-table>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
     </v-flex>
-      <v-flex md4 mt-5>
-        <v-data-table
-          :headers="headers"
-          :items="enfantsDuJour"
-          hide-actions
-          class="elevation-1"
-          no-data-text="Aucun enfant arrivé"
-        >
-          <template slot="items" slot-scope="props">
-            <td>{{ props.item.nom_enfant + ' ' + props.item.prenom_enfant }}</td>
-            <td class="text-xs-right">{{ props.item.heureArriveeR + 'h' + props.item.minuteArriveeR }}</td>
-            <td class="text-xs-right">{{ props.item.heureDepartR + 'h' + props.item.minuteDepartR }}</td>
-            <td class="text-xs-right">{{ props.item.a_pris_gouter }}</td>
-            <td class="text-xs-right">{{ props.item.absence_justifiee }}</td>
-          </template>
-        </v-data-table>
-      </v-flex>
-    </v-layout>
-      </v-flex>
   </div>
 </template>
 
@@ -243,16 +311,20 @@ export default {
       minutes: ['00', '30'],
       dialogBox: false,
       dialogBoxAbsence: false,
-      switchGouter: true,
+      dialogBoxPresenceExc: false,
+      switchGouter: false,
+      gouterPris: false,
       minuteArrivee: null,
       heureArrivee: null,
       minuteDepart: null,
       heureDepart: null,
       enfantsDuJour: [],
+      enfantsPasDuJour: [],
+      id_enfant: null,
       headers: [
         {
           text: 'Enfants',
-          align: 'left',
+          align: 'center',
           sortable: true,
           value: 'name'
         },
@@ -260,40 +332,85 @@ export default {
         { text: 'départ', value: 'depart' },
         { text: 'gouter', value: 'gouter' },
         { text: 'absent', value: 'absent' }
-      ]
+      ],
     }
   },
   mounted () {
     this.getAllChildrenOfTheDay()
-    this.dateDuJour()
+    this.getAllChildrenNotOfTheDay()
   },
   methods: {
     async getAllChildrenOfTheDay () {
       try {
         const response = await PresenceService.getAllChildrenOfTheDay()
+        console.log('response.data.   ' + response.data.presencestheoriques )
         this.enfantsDuJour = response.data.presencestheoriques
+        console.log('azertyuiop      ' + this.enfantsDuJour)
         for (var i = 0; i < this.enfantsDuJour.length; i++) {
-          var heureDecoupeeArr = (this.enfantsDuJour[i].heure_arrivee).split(':', 2)
-          this.enfantsDuJour[i].heureArrivee = heureDecoupeeArr[0]
-          this.enfantsDuJour[i].minuteArrivee = heureDecoupeeArr[1]
-          var heureDecoupeeDep = (this.enfantsDuJour[i].heure_depart).split(':', 2)
-          this.enfantsDuJour[i].heureDepart = heureDecoupeeDep[0]
-          this.enfantsDuJour[i].minuteDepart = heureDecoupeeDep[1]
+          console.log('aqwzsxedcrfv leeeeeee ----- ' + i + '---- ' + this.enfantsDuJour[i])
+          if (this.enfantsDuJour[i].heure_arrivee != null) {
+            var heureDecoupeeArr = (this.enfantsDuJour[i].heure_arrivee).split(':', 2)
+            this.enfantsDuJour[i].heureArrivee = heureDecoupeeArr[0]
+            this.enfantsDuJour[i].minuteArrivee = heureDecoupeeArr[1]
+            console.log('////////////////// ' + this.enfantsDuJour[i].minuteArrivee)
+          } else {
+            this.enfantsDuJour[i].heureArrivee = this.heures[0]
+            this.enfantsDuJour[i].minuteArrivee = this.minutes[0]
+            console.log('---------------- ' + this.enfantsDuJour[i].minuteArrivee)
+          }
+          if (this.enfantsDuJour[i].heure_depart != null) {
+            var heureDecoupeeDep = (this.enfantsDuJour[i].heure_depart).split(':', 2)
+            this.enfantsDuJour[i].heureDepart = heureDecoupeeDep[0]
+            this.enfantsDuJour[i].minuteDepart = heureDecoupeeDep[1]
+          } else {
+            this.enfantsDuJour[i].heureDepart = this.heures[this.heures.length - 1]
+            this.enfantsDuJour[i].minuteDepart = this.minutes[this.minutes.length - 1]
+          }
+          if (this.enfantsDuJour[i].prend_gouter == null) {
+            this.enfantsDuJour[i].prend_gouter = false
+          }
           const response2 = await PresenceService.estEnregistreAujourdhui(this.enfantsDuJour[i].id_enfant)
           this.enfantsDuJour[i].enregistre = response2.data.existe
           this.enfantsDuJour[i].id_presence_reelle = response2.data.id_presence
           this.enfantsDuJour[i].heure_arrivee_r = response2.data.heure_arrivee_r
           this.enfantsDuJour[i].heure_depart_r = response2.data.heure_depart_r
+          if(response2.data.heure_arrivee_r != null) {
+            var heureDecoupeeArrR = (this.enfantsDuJour[i].heure_arrivee_r).split(':', 2)
+            this.enfantsDuJour[i].heureArriveeR = heureDecoupeeArrR[0]
+            this.enfantsDuJour[i].minuteArriveeR = heureDecoupeeArrR[1]
+          } else {
+            this.enfantsDuJour[i].heureArriveeR = null
+            this.enfantsDuJour[i].minuteArriveeR = null
+          }
+          if(response2.data.heure_depart_r != null) {
+            var heureDecoupeeDepR = (this.enfantsDuJour[i].heure_depart_r).split(':', 2)
+            this.enfantsDuJour[i].heureDepartR = heureDecoupeeDepR[0]
+            this.enfantsDuJour[i].minuteDepartR = heureDecoupeeDepR[1]
+          } else {
+            this.enfantsDuJour[i].heureDepartR = null
+            this.enfantsDuJour[i].minuteDepartR = null
+          }
           this.enfantsDuJour[i].a_pris_gouter = response2.data.a_pris_gouter
+          this.enfantsDuJour[i].a_pris_gouter_from_bd = response2.data.a_pris_gouter
           this.enfantsDuJour[i].absence_justifiee = response2.data.absence_justifiee
-          console.log(this.enfantsDuJour[i].absence_justifiee)
-          var heureDecoupeeArrR = (this.enfantsDuJour[i].heure_arrivee_r).split(':', 2)
-          this.enfantsDuJour[i].heureArriveeR = heureDecoupeeArrR[0]
-          this.enfantsDuJour[i].minuteArriveeR = heureDecoupeeArrR[1]
-          var heureDecoupeeDepR = (this.enfantsDuJour[i].heure_depart_r).split(':', 2)
-          this.enfantsDuJour[i].heureDepartR = heureDecoupeeDepR[0]
-          this.enfantsDuJour[i].minuteDepartR = heureDecoupeeDepR[1]
+          console.log('(((((((((())))))))))))' + this.enfantsDuJour[i].absence_justifiee)
         }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async getAllChildrenNotOfTheDay () {
+      try {
+        const response = await PresenceService.getAllChildrenNotOfTheDay()
+        console.log(response.data)
+        if (response.data.absencestheoriques != null) {
+          this.enfantsPasDuJour = response.data.absencestheoriques
+          for (var i = 0; i < this.enfantsPasDuJour.length; i++) {
+            this.enfantsPasDuJour[i].nomComplet = this.enfantsPasDuJour[i].nom_enfant + ' ' + this.enfantsPasDuJour[i].prenom_enfant
+            console.log('yihahaaa   ' + this.enfantsPasDuJour[i].nomComplet)
+          }
+        }
+
       } catch (e) {
         console.log(e)
       }
@@ -321,6 +438,7 @@ export default {
               heure_arrivee: this.heureRassemblee(enfant.heureArrivee, enfant.minuteArrivee)
             }
           }
+          enfant.absence_justifiee = null
           let v2 = await PresenceService.majHeureArrivee(data)
           console.log(v2.data)
           this.dialogBox = false
@@ -329,6 +447,7 @@ export default {
         console.log(e)
       }
       this.alert = true
+      this.enfantsDuJour = this.getAllChildrenOfTheDay()
     },
     async submitDepart (enfant) {
       try {
@@ -346,14 +465,18 @@ export default {
         console.log(e)
       }
       this.alert = true
+      this.enfantsDuJour = this.getAllChildrenOfTheDay()
     },
     async submitGouter (enfant) {
+      if (enfant.a_pris_gouter == null) {
+        enfant.a_pris_gouter = this.gouterPris
+      }
       try {
         let data = {
           presence:
             {
               id_presence_reelle: enfant.id_presence_reelle,
-              prend_gouter: enfant.a_pris_gouter
+              a_pris_gouter: enfant.a_pris_gouter
             }
         }
         const v = await PresenceService.majGouter(data)
@@ -363,6 +486,8 @@ export default {
         console.log(e)
       }
       this.alert = true
+      this.enfantsDuJour = this.getAllChildrenOfTheDay()
+      this.gouterPris = false
     },
     async submitAbsenceJu (enfant) {
       try {
@@ -395,6 +520,7 @@ export default {
         console.log(e)
       }
       this.alert = true
+      this.enfantsDuJour = this.getAllChildrenOfTheDay()
     },
     async submitAbsenceNonJu (enfant) {
       try {
@@ -427,6 +553,33 @@ export default {
         console.log(e)
       }
       this.alert = true
+      this.enfantsDuJour = this.getAllChildrenOfTheDay()
+    },
+    async submitPresenceExc () {
+      try {
+        var date = new Date()
+        console.log('iiiidddeeeennnnffff    ' + this.id_enfant)
+        const response = await PresenceService.recupIdPresTheoDuJour(this.id_enfant)
+        var id = response.data.id
+        console.log('iiiiid ' + id)
+        let data = {
+          presence:
+            {
+              datepresencereelle: date,
+              id_presence_theo: id,
+            }
+        }
+        let v = await PresenceService.enregistrerPresenceExc(data)
+        console.log(v.data)
+        console.log('asdnbpx   ')
+        this.dialogBoxPresenceExc = false
+        this.id_enfant = null
+        this.alert = true
+        this.enfantsDuJour = this.getAllChildrenOfTheDay()
+        this.enfantsPasDuJour=this.getAllChildrenNotOfTheDay()
+      } catch (e) {
+        console.log(e)
+      }
     },
     heureRassemblee: function (heure, minute) {
       return (heure + ':' + minute)
