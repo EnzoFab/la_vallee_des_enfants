@@ -238,7 +238,10 @@
               </v-card>
             </v-form>
           </v-dialog>
-
+          <v-btn
+            color="blue--text"
+            @click="exportPDF"
+          >Exporter le contrat au format PDF</v-btn>
         </v-flex>
     </v-flex>
     </v-flex>
@@ -394,6 +397,12 @@ export default {
         console.log('ERREUR' + e)
       }
     }
+    /* exportPDF () {
+      var vm = this
+      var doc = new jsPDF()
+      doc.text(vm.prenomEnfant, vm.nomEnfant)
+      doc.save('test.pdf')
+    } */
   }
 }
 </script>
