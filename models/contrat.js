@@ -54,7 +54,6 @@ let Contrat = {
             'AND co.id_mode_paiement = mp.id_mode AND co.id_employeur = em.id_employeur AND co.id_am = am.id_am;',
             [numeroContrat],
             function (err, rslt){
-                console.log('hello1')
                 retour = {
                     erreur: null,
                     contrats: null,
@@ -64,12 +63,15 @@ let Contrat = {
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    console.log('hello2')
                     retour.type_contrat = rslt.rows[0].nom_type,
                     retour.date_deb_periode_adaptation = rslt.rows[0].date_deb_periode_adaptation,
                     retour.date_fin_periode_adaptation = rslt.rows[0].date_fin_periode_adaptation,
                     retour.modepaiements = rslt.rows[0].nom_mode,
-                    retour.date_debut_contrat = rslt.rows[0].date_debut_contrat
+                    retour.date_debut_contrat = rslt.rows[0].date_debut_contrat,
+                    retour.nb_heures_semaine = rslt.rows[0].nb_heures_semaine,
+                    retour.tarif = rslt.rows[0].tarif,
+                    retour.taux_majore = rslt.rows[0].taux_majore,
+                    retour.jour_paiement = rslt.rows[0].jour_paiement,
                     retour.nom_enfant = rslt.rows[0].nom_enfant,
                     retour.prenom_enfant = rslt.rows[0].prenom_enfant,
                     retour.date_naissance_enfant = rslt.rows[0].date_naissance_enfant,
@@ -99,8 +101,40 @@ let Contrat = {
                     retour.id_employeur = rslt.rows[0].id_employeur,
                     retour.statut = 200;
                 }
-                console.log('coucou')
-                console.log(retour.mail_employeur)
+                callback(retour); // on passe en parametre l'objet retour
+                // il faudra verifier si une erreur existe ou non
+            }
+        );
+    },
+
+    getPresencesByContrat: function (numeroContrat, callback) {
+        db.query(
+            'SELECT * FROM public.contrat as co, public.presencetheorique pt ' +
+            'WHERE co.id_contrat = pt.id_contrat AND co.id_contrat= $1 ' +
+            'ORDER BY pt.id_type_jour',
+            [numeroContrat],
+            function (err, rslt){
+                retour = {
+                    erreur: null,
+                    resultats: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucune présence correspondant');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        array.push({
+                            heureArrivee: rslt.rows[i].heure_arrivee,
+                            heureDepart: rslt.rows[i].heure_depart,
+                            id_type_jour: rslt.rows[i].id_type_jour
+                        });
+                        console.log('array', array)
+                    }
+                    retour.resultats = array;
+                    retour.statut = 200
+                }
                 callback(retour); // on passe en parametre l'objet retour
                 // il faudra verifier si une erreur existe ou non
             }
@@ -118,7 +152,7 @@ let Contrat = {
                 console.log('hellobis')
                 retour = {
                     erreur: null,
-                    contrats: null,
+                    tuteurs: null,
                     statut: null
                 };
                 let e = helper.handleError(err, rslt,'Aucun contrat');

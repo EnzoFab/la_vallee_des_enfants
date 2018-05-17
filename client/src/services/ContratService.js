@@ -14,6 +14,10 @@ export default {
     return Api().get('/contrat/getAllById/' + numContrat)
   },
 
+  getPresencesByContrat (numContrat) {
+    return Api().get('/contrat/getPresences/' + numContrat)
+  },
+
   getAll () {
     return Api().get('/contrat/all')
   },
