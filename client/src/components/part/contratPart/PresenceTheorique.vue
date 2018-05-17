@@ -52,6 +52,7 @@
                           ></v-text-field>
                           <v-time-picker v-model="presence.heureArrivee" landscape scrollable
                                          landscape
+                                         full-width
                                          type="month"
                                          class="mt-3"
                                          @change="$refs.presence.menu.save(presence.heureArrivee)">
@@ -82,7 +83,7 @@
                             :rules="regleHeure"
                           ></v-text-field>
                           <v-time-picker v-model="presence.heureDepart" landscape scrollable
-                                         landscape
+                                         full-width
                                          type="month"
                                          class="mt-3"
                                          @change="$refs.presence.menuDepart.save(presence.heureDepart)">

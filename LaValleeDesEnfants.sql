@@ -315,10 +315,10 @@ WITH (
 CREATE TABLE public.presencetheorique
 (
     prends_gouter boolean,
-    id_contrat character varying COLLATE "default".pg_catalog NOT NULL,
+    id_contrat character varying NOT NULL,
     id_type_jour integer NOT NULL,
     heure_depart time without time zone,
-    id_presence_theorique integer NOT NULL DEFAULT nextval('presencetheorique_id_presence_theorique_seq'::regclass),
+    id_presence_theorique SERIAL,
     heure_arrivee time without time zone,
     CONSTRAINT presencetheorique_pkey PRIMARY KEY (id_presence_theorique),
     CONSTRAINT presencetheorique_id_contrat_fkey FOREIGN KEY (id_contrat)
@@ -333,7 +333,6 @@ CREATE TABLE public.presencetheorique
 WITH (
     OIDS = FALSE
 );
-
 -- table: public."facturemensuelle"
 
 -- drop table public."facturemensuelle";
@@ -367,7 +366,7 @@ CREATE TABLE public.presencereelle
     heure_depart_r time without time zone,
     prends_gouter_r boolean,
     id_presence_theo integer,
-    id_presence_reelle SERIAL NOT NULL DEFAULT,
+    id_presence_reelle SERIAL,
     id_facture integer,
     absence_justifiee boolean,
     CONSTRAINT presencereelle_pkey PRIMARY KEY (id_presence_reelle),
@@ -379,3 +378,17 @@ CREATE TABLE public.presencereelle
 WITH (
     OIDS = FALSE
 );
+
+INSERT INTO public.typetuteur(nom_type_tuteur)
+	VALUES ('Père'),('Mère'),('Tuteur');
+INSERT INTO public.typejour(libelle)
+	VALUES ('Lundi'), ('Mardi'), ('Mercredi'), ('Jeudi'), ('Vendredi'), ('Samedi'), ('Dimanche');
+INSERT INTO public.typecontrat(nom_type)
+	VALUES ('CDI');
+INSERT INTO public.modedepaiement(nom_mode)
+	VALUES ('Virement'), ('Chèque'), ('Espèces');
+INSERT INTO public.frais(nom_frais, tarif)
+    VALUES ('gouter', 1), ('entretien', 4);
+
+INSERT INTO public.frais(nom_frais, tarif)
+	VALUES ('gouter', 1),('entretien', 4);

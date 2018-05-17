@@ -18,7 +18,7 @@
           <v-divider></v-divider>
           <v-stepper-step step="6" :complete="estValideEtape6" editable >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="7" :complete="estValideEtape7" >Tarifs</v-stepper-step>
+          <v-stepper-step step="7" :complete="estValideEtape7" editable>Tarifs</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
@@ -273,7 +273,6 @@ export default {
           if (reponse.data.erreur != null) {
             console.log(reponse.data.erreur)
             this.triggerErreur('Une erreur est survenue')
-          } else {
             erreur = true
           }
         } catch (e) {
@@ -283,7 +282,7 @@ export default {
       }
       if (!erreur) { // s'il n'y a pas eu d'erreur
         this.etape++
-        this.estValideEtape5 = true
+        this.estValideEtape6 = true
       }
     },
     submitTarifs (data) {
