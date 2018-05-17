@@ -312,26 +312,26 @@ WITH (
 
 -- drop table public."presencetheorique";
 
-create table public."presencetheorique"
+CREATE TABLE public.presencetheorique
 (
-    heure_arrivee time without time zone not null,
-    heure_depart time without time zone not null,
-    prends_gouter boolean not null,
-    id_contrat  character varying not null,
-    id_type_jour integer not null,
-    id_presence_theorique SERIAL NOT NULL,
-    constraint "presencetheorique_pkey" primary key (id_presence_theorique),
-    constraint "presencetheorique_id_contrat_fkey" foreign key (id_contrat)
-        references public."contrat" (id_contrat) match simple
-        on update no action
-        on delete no action,
-    constraint "presencetheorique_id_type_jour_fkey" foreign key (id_type_jour)
-        references public."typejour" (id_type) match simple
-        on update no action
-        on delete no action
+    prends_gouter boolean,
+    id_contrat character varying COLLATE "default".pg_catalog NOT NULL,
+    id_type_jour integer NOT NULL,
+    heure_depart time without time zone,
+    id_presence_theorique integer NOT NULL DEFAULT nextval('presencetheorique_id_presence_theorique_seq'::regclass),
+    heure_arrivee time without time zone,
+    CONSTRAINT presencetheorique_pkey PRIMARY KEY (id_presence_theorique),
+    CONSTRAINT presencetheorique_id_contrat_fkey FOREIGN KEY (id_contrat)
+        REFERENCES public.contrat (id_contrat) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT presencetheorique_id_type_jour_fkey FOREIGN KEY (id_type_jour)
+        REFERENCES public.typejour (id_type) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-with (
-    oids = false
+WITH (
+    OIDS = FALSE
 );
 
 -- table: public."facturemensuelle"
@@ -360,34 +360,22 @@ with (
 
 -- drop table public."presencereelle";
 
-create table public."presencereelle"
+CREATE TABLE public.presencereelle
 (
-    "datepresencereelle" date,
+    datepresencereelle date,
     heure_arrivee_r time without time zone,
     heure_depart_r time without time zone,
     prends_gouter_r boolean,
-    absence_justifiee boolean,
     id_presence_theo integer,
-    id_presence_reelle SERIAL NOT NULL primary key,
+    id_presence_reelle SERIAL NOT NULL DEFAULT,
     id_facture integer,
-    constraint "presencereelle_id_facture_fkey" foreign key (id_facture)
-        references public."facturemensuelle" (id_facture) match simple
-        on update no action
-        on delete no action,
-    constraint "presencereelle_id_presence_theo_fkey" foreign key (id_presence_theo)
-        references public."presencetheorique" (id_presence_theorique) match simple
-        on update no action
-        on delete no action
+    absence_justifiee boolean,
+    CONSTRAINT presencereelle_pkey PRIMARY KEY (id_presence_reelle),
+    CONSTRAINT presencereelle_id_facture_fkey FOREIGN KEY (id_facture)
+        REFERENCES public.facturemensuelle (id_facture) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-with (
-    oids = false
+WITH (
+    OIDS = FALSE
 );
-
-INSERT INTO public.typetuteur(nom_type_tuteur)
-	VALUES ('Père'),('Mère'),('Tuteur');
-INSERT INTO public.typejour(libelle)
-	VALUES ('Lundi'), ('Mardi'), ('Mercredi'), ('Jeudi'), ('Vendredi'), ('Samedi'), ('Dimanche');
-INSERT INTO public.typecontrat(nom_type)
-	VALUES ('CDI');
-INSERT INTO public.modedepaiement(nom_mode)
-	VALUES ('Virement'), ('Chèque'), ('Espèces');

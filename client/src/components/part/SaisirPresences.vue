@@ -259,7 +259,6 @@
               </v-card>
             </v-dialog>
 
-
         </v-flex>
         <v-flex ml-5 md5 mt-5>
           <v-layout>
@@ -332,7 +331,7 @@ export default {
         { text: 'départ', value: 'depart' },
         { text: 'gouter', value: 'gouter' },
         { text: 'absent', value: 'absent' }
-      ],
+      ]
     }
   },
   mounted () {
@@ -343,7 +342,7 @@ export default {
     async getAllChildrenOfTheDay () {
       try {
         const response = await PresenceService.getAllChildrenOfTheDay()
-        console.log('response.data.   ' + response.data.presencestheoriques )
+        console.log('response.data.   ' + response.data.presencestheoriques)
         this.enfantsDuJour = response.data.presencestheoriques
         console.log('azertyuiop      ' + this.enfantsDuJour)
         for (var i = 0; i < this.enfantsDuJour.length; i++) {
@@ -374,7 +373,7 @@ export default {
           this.enfantsDuJour[i].id_presence_reelle = response2.data.id_presence
           this.enfantsDuJour[i].heure_arrivee_r = response2.data.heure_arrivee_r
           this.enfantsDuJour[i].heure_depart_r = response2.data.heure_depart_r
-          if(response2.data.heure_arrivee_r != null) {
+          if (response2.data.heure_arrivee_r != null) {
             var heureDecoupeeArrR = (this.enfantsDuJour[i].heure_arrivee_r).split(':', 2)
             this.enfantsDuJour[i].heureArriveeR = heureDecoupeeArrR[0]
             this.enfantsDuJour[i].minuteArriveeR = heureDecoupeeArrR[1]

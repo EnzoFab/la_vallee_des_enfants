@@ -205,7 +205,7 @@ export default {
           message: this.postMessage,
           titre: this.postTitre,
           id_am: this.$store.state.assMat.id_assmat,
-          image_id: image.public_id,
+          image_id: image.public_id
         }
       }
       console.log('=======DATA===', data)
@@ -248,7 +248,7 @@ export default {
             return null
           }
         } catch (e) {
-         this.triggerErreur(e.toString())
+          this.triggerErreur(e.toString())
           return null
         }
       } else {
@@ -259,7 +259,7 @@ export default {
       try {
         let image = await this.saveImg()
         console.log(image)
-        if (image != null ) {
+        if (image != null) {
           let result = await this.creerPost(image)
           if (result != null) {
             let post = {
@@ -286,7 +286,7 @@ export default {
       }
     },
     async deleteHostedImage (imageId) { // supprime l'image du serveur
-      console.log('PUBLIC ID ',imageId)
+      console.log('PUBLIC ID ', imageId)
       try {
         let response = await FileService.deleteImg(imageId)
         if (response.data.erreur == null) {
@@ -325,7 +325,7 @@ export default {
     async initPost () {
       try {
         let response = await PostService.getAll()
-        if (response.data.erreur == null){
+        if (response.data.erreur == null) {
           let loadedPosts = response.data.posts
           let vm = this
           loadedPosts.forEach(function (post) {
