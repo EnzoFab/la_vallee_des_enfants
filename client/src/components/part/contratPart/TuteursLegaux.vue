@@ -340,7 +340,7 @@ export default {
               codePostal: vm.codePostal,
               email: vm.email,
               ville: vm.ville,
-              nombreSemainesSupplementaires: vm.nombreSemainesSupplementaires,
+              nombreSemainesSupplementaires: vm.nombreSemaine,
               nomNaissance: vm.nomDeNaissance
             }
 

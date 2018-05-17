@@ -38,7 +38,7 @@
             slot="activator"
             color="blue"
             label="Date debut du contrat"
-            v-model="dateFr"
+            v-model="dateDebutFr"
             prepend-icon="event"
             required
             :rules="regleDateDebut"
@@ -47,6 +47,72 @@
           <v-date-picker
             locale="fr_FR"
             v-model="date"
+            no-title
+            scrollable
+          >
+            <v-spacer></v-spacer>
+          </v-date-picker>
+        </v-menu>
+      </v-flex>
+      <v-flex xs12 class="ma-3">
+        <h3>Date début période adaptation</h3>
+        <v-menu
+          ref="menu2"
+          lazy
+          :close-on-content-click="false"
+          v-model="menu2"
+          transition="scale-transition"
+          offset-y
+          full-width
+          :nudge-right="40"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            color="blue"
+            label="Date début adaptation"
+            v-model="dateDebutAdaptFr"
+            prepend-icon="event"
+            required
+            :rules="regleDateDebutAdapt"
+            readonly
+          ></v-text-field>
+          <v-date-picker
+            locale="fr_FR"
+            v-model="dateDebutPeriodeAdapt"
+            no-title
+            scrollable
+          >
+            <v-spacer></v-spacer>
+          </v-date-picker>
+        </v-menu>
+      </v-flex>
+      <v-flex xs12 class="ma-3">
+        <h3>Date fin période adaptation</h3>
+        <v-menu
+          ref="menu3"
+          lazy
+          :close-on-content-click="false"
+          v-model="menu3"
+          transition="scale-transition"
+          offset-y
+          full-width
+          :nudge-right="40"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            color="blue"
+            label="Date fin periode adaptation"
+            v-model="dateFinAdaptFr"
+            prepend-icon="event"
+            required
+            :rules="regleDateFinAdapt"
+            readonly
+          ></v-text-field>
+          <v-date-picker
+            locale="fr_FR"
+            v-model="dateFinPeriodeAdapt"
             no-title
             scrollable
           >
@@ -109,16 +175,34 @@ export default {
   data () {
     return {
       menu: false,
+      menu2: false,
+      menu3: false,
       date: null,
       estValide: false,
       typesContrats: [],
       typeDuContrat: null,
       modesPaiements: [],
+      dateDebutPeriodeAdapt: null,
+      dateFinPeriodeAdapt: null,
       modeDePaiementContrat: null,
       jours: [],
       jourPrelevement: 0,
       regleDateDebut: [
         v => !!v || 'Veuillez remplir la date'
+      ],
+      regleDateDebutAdapt: [
+        v => !!v || 'Veuillez remplir la date',
+        v => v < this.date || 'La periode d\'adaptation ne peut pas être avant à la date de début du contrat'
+      ],
+      regleDateFinAdapt: [
+        v => !!v || 'Veuillez remplir la date',
+        function (v) {
+          if (this.dateDebutPeriodeAdapt && this.dateDebutPeriodeAdapt != null) {
+            return new Date(v) < new Date(this.dateDebutPeriodeAdapt) || 'La fin periode d\'adaptation ne peut pas être avant le début de la période'
+          } else {
+            return 'La fin periode d\'adaptation ne peut pas être avant le début de la période'
+          }
+        }
       ],
       regleTypeContrat: [
         v => !!v || 'Veuillez renseigner le type de contrat'
@@ -132,10 +216,32 @@ export default {
     }
   },
   computed: {
-    dateFr () { // transforme la date qui est en format anglaise en format francaise
+    dateDebutFr () { // transforme la date qui est en format anglaise en format francaise
       var dateString = null
       if (this.date != null) {
         var d = new Date(this.date)
+        let day = d.getDate()
+        let month = mois[d.getMonth()]
+        let year = d.getFullYear()
+        dateString = day + ' ' + month + ' ' + year
+      }
+      return dateString
+    },
+    dateDebutAdaptFr () { // transforme la date qui est en format anglaise en format francaise
+      var dateString = null
+      if (this.dateDebutPeriodeAdapt != null) {
+        var d = new Date(this.dateDebutPeriodeAdapt)
+        let day = d.getDate()
+        let month = mois[d.getMonth()]
+        let year = d.getFullYear()
+        dateString = day + ' ' + month + ' ' + year
+      }
+      return dateString
+    },
+    dateFinAdaptFr () { // transforme la date qui est en format anglaise en format francaise
+      var dateString = null
+      if (this.dateFinPeriodeAdapt != null) {
+        var d = new Date(this.dateFinPeriodeAdapt)
         let day = d.getDate()
         let month = mois[d.getMonth()]
         let year = d.getFullYear()
@@ -181,11 +287,14 @@ export default {
       }
     },
     envoyer () {
+      console.log( typeof this.date)
       let data = {
         date: this.date,
         modePaiement: this.modeDePaiementContrat,
         typeContrat: this.typeDuContrat,
-        jourPrelevement: this.jourPrelevement
+        jourPrelevement: this.jourPrelevement,
+        debutAdapt: this.dateDebutPeriodeAdapt,
+        finAdapt: this.dateFinPeriodeAdapt
       }
       this.$emit('submit', data)
     },

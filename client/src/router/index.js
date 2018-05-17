@@ -19,15 +19,26 @@ import store from '../store/store'
 
 Vue.use(Router)
 
-const isConnected = function(to , from, next) {
+/**
+ * verifie si un utilisateur est connecté sinon redirige vers la page de connexion
+ * @param to
+ * @param from
+ * @param next
+ */
+const isConnected = function (to, from, next) {
   if (store.getters.connectedUser != null) {
     next()
   } else {
     next('/employeur/connexion')
   }
-
 }
 
+/**
+ * verifie si l'utilisateur est une assmat sinon redirige vers la page de connexion
+ * @param to
+ * @param from
+ * @param next
+ */
 const isAssmat = function (to, from, next) {
   if (store.getters.connectedUser != null) {
     next()

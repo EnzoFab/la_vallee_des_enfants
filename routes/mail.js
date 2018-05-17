@@ -25,8 +25,6 @@ router.post('/send', function (req, res) {
     let destinataire = req.body.to
     let sujet = req.body.sujet
     let text = req.body.message
-    let lien = req.body.link
-    console.log(sujet, text, lien, destinataire)
     var smtpTransport = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -38,9 +36,9 @@ router.post('/send', function (req, res) {
     var mail = {
         from: "La vallée des enfants <from@gmail.com>",
         to: destinataire,
-        subject: text,
-        text: lien,
-        html: `<a href='${lien}'>Page de connection</a>`
+        subject: sujet,
+        text: '',
+        html: text
     }
 
     smtpTransport.sendMail(mail, function(error, response){

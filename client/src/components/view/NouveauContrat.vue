@@ -14,7 +14,7 @@
           <v-divider></v-divider>
           <v-stepper-step step="4" :complete="estValideEtape4">Employeur</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" :complete="estValideEtape5" >Informations générales</v-stepper-step>
+          <v-stepper-step step="5" :complete="estValideEtape5" editable>Informations générales</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="6" :complete="estValideEtape6" editable >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
@@ -62,7 +62,9 @@ import EnfantService from '../../services/EnfantService'
 import ContratService from '../../services/ContratService'
 import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
+import MailHelper from '../../helper/sendMail'
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
+
 export default {
   name: 'NouveauContrat',
   components: {
@@ -217,16 +219,48 @@ export default {
     async submitEmp (data) {
       console.log(data)
       // store data in DB
-      if (this.saveEmployeur(data)) {
+      var login = data.prenom + '_' + data.nomUsage + generator.generate({length: 3, numbers: true})
+      let donneeEmployeur = { // a modifier
+        nom_naissance_employeur: data.nomNaissance,
+        nom_usage_employeur: data.nomUsage,
+        prenom_employeur: data.prenom,
+        cp_employeur: data.codePostal,
+        telephone_employeur: data.telephone,
+        ville_employeur: data.ville,
+        mail_employeur: data.email,
+        rue: data.rue,
+        nb_semaines_conges: data.nombreSemainesSupplementaires,
+        identifiant_connexion: login.replace(/\s/g, '').toLowerCase(), // login sans espaces et en minuscule
+        mot_de_passe: generator.generate({length: 10, numbers: true}) // mot de passe de taille 10
+      }
+
+      if (this.saveEmployeur(donneeEmployeur)) {
         this.estValideEtape4 = true
         this.etape++
       }
     },
-    submitInfoG (data) {
-      console.log(this.etape)
+    async submitInfoG (data) {
       console.log(data)
-      this.etape++
-      this.estValideEtape4 = true
+      let donnees = {
+        id_type_contrat: data.typeContrat,
+        id_mode_de_paiement: data.modePaiement,
+        date_debut: data.date,
+        date_deb_periode_adaptation: data.debutAdapt,
+        date_fin_periode_adaptation: data.finAdapt,
+        jour_paiement: data.jourPrelevement
+      }
+      try {
+        let response = await ContratService.updateInfoG(this.$store.state.numContrat, donnees)
+        if (response.data.erreur == null) {
+          this.etape++
+          this.estValideEtape5 = true
+        } else {
+          console.log(response.data.erreur)
+          this.triggerErreur('Une erreur est survenue')
+        }
+      } catch (e) {
+        this.triggerErreur(e.toString())
+      }
     },
     submitPresences (data) {
       console.log(this.etape)
@@ -266,7 +300,10 @@ export default {
             nb_semaines_conges_parents: employeur.nb_semaines_conges
           })
           if (r.data.erreur == null) {
-            return true
+            return MailHelper.mailConnexionEmployeur(
+              employeur.identifiant_connexion,
+              employeur.mot_de_passe,
+              employeur.mail_employeur)
           } else {
             return false
           }
