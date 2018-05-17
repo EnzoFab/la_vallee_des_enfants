@@ -91,7 +91,7 @@ router.put('/infosGenerales/:n', function (req, res) {
 });
 
 // Ajout/Modification des données de la SECTION PRESENCES
-router.put('/:n/presence', function (req, res) {
+router.put('/presence/:n', function (req, res) {
     let id_contrat = req.params.n
     let nb_heures = req.body.nb_heures_semaine
     modelContrat.sectionHeuresHebdoCreate(id_contrat, nb_heures, function (retour) {
@@ -100,7 +100,7 @@ router.put('/:n/presence', function (req, res) {
 });
 
 // Ajout/Modification des données de la SECTION TARIFS
-router.put('/:n/tarifs', function (req, res) {
+router.put('/tarifs/:n', function (req, res) {
     let id_contrat = req.params.n
     let tarif = req.body.tarif
     let tauxmaj = req.body.taux_majore

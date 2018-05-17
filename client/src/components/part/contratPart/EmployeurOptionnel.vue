@@ -238,13 +238,6 @@ export default {
         },
         congesSupp: this.congesSupp
       }
-      try {
-        await EmployeurService.createEmployeur(data.employeur)
-        await TuteurService.createTuteur(data.tuteur)
-      } catch (error) {
-        console.log(error)
-        this.error = error.response.data.error
-      }
       this.$emit('submit', data)
     },
     back () {

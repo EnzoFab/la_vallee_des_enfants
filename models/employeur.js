@@ -120,17 +120,18 @@ let Employeur = {
                 var array = []
                 for(var i = 0; i < rslt.rows.length; i++){
                     array.push({
-                        id : rst.rows[0].id_employeur, // peut etre qu'il faut pas le renvoyer
-                        nom_naissance: rst.rows[0].nom_naissance_employeur,
-                        nom_usage: rst.rows[0].nom_usage_employeur,
-                        prenom: rst.rows[0].prenom_employeur,
-                        rue: rst.rows[0].rue_employeur,
-                        cp: rst.rows[0].cp_employeur,
-                        ville: rst.rows[0].ville_employeur,
-                        mail: rst.rows[0].mail_employeur,
-                        tel: rst.rows[0].telephone_employeur,
-                        identifiant: rst.rows[0].identifiant_connexion,
-                        mdp: rst.rows[0].mot_de_passe
+                        id : rst.rows[i].id_employeur, // peut etre qu'il faut pas le renvoyer
+                        nom_naissance: rst.rows[i].nom_naissance_employeur,
+                        nom_usage: rst.rows[i].nom_usage_employeur,
+                        prenom: rst.rows[i].prenom_employeur,
+                        rue: rst.rows[i].rue_employeur,
+                        cp: rst.rows[i].cp_employeur,
+                        ville: rst.rows[i].ville_employeur,
+                        mail: rst.rows[i].mail_employeur,
+                        tel: rst.rows[i].telephone_employeur,
+                        identifiant: rst.rows[i].identifiant_connexion,
+                        mdp: rst.rows[i].mot_de_passe,
+                        nom_complet:  rst.rows[i].prenom_employeur + ' ' + rst.rows[i].nom_usage_employeur
                     })
                 }
                 retour.employeurs = array;

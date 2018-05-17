@@ -276,13 +276,17 @@ export default {
             this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
             this.clearForm()
           } else {
+            this.dialog = false
             this.triggerErreur('Il y a un problème dans la création du post')
           }
         } else {
+          this.dialog = false
           this.triggerErreur('Il y a un problème dans la création du post')
         }
       } catch (e) {
+        this.dialog = false
         console.log(e)
+        this.triggerErreur('Une erreur est survenue')
       }
     },
     async deleteHostedImage (imageId) { // supprime l'image du serveur
@@ -293,7 +297,7 @@ export default {
           return true
         } else {
           console.log('SUPER ERREUR ', response.data.erreur)
-          // this.triggerErreur(response.data.erreur.toString())
+          this.triggerErreur(response.data.erreur.toString())
           return false
         }
       } catch (e) {
@@ -320,6 +324,9 @@ export default {
       if (await this.deleteDBPost(post.id_post) && await this.deleteHostedImage(post.image_id)) {
         this.deletePostFromArray(post)
         this.$socket.emit('suppressionPost', post)
+      } else {
+        this.triggerErreur('Une erreur est survenue')
+        this.dialog = false
       }
     },
     async initPost () {

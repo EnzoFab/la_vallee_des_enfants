@@ -54,6 +54,10 @@ export default {
   },
   mounted () {
     this.initAssMat()
+    if (!this.$store.state.numContrat || this.$store.state.numContrat == null) {
+      let random = randomstring.generate(35) // chaine de charactere aleatoire de taille 15
+      this.$store.dispatch('setNumContrat', random)
+    }
   },
   methods: {
     async initAssMat () {

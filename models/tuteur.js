@@ -79,7 +79,8 @@ let Tuteur = {
                             prenom_enfant: rslt.rows[i].prenom_enfant,
                             nom_enfant: rslt.rows[i].nom_enfant,
                             nom_tuteur: rslt.rows[i].nom_tuteur,
-                            prenom_tuteur: rslt.rows[i].prenom_tuteur
+                            prenom_tuteur: rslt.rows[i].prenom_tuteur,
+                            nom_complet: rslt.rows[i].prenom_tuteur + ' '+ rslt.rows[i].nom_tuteur
                         });
                         console.log('array', array)
                     }

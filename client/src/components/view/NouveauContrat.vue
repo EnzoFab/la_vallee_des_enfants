@@ -8,11 +8,11 @@
         <v-stepper-header>
           <v-stepper-step class="red--text" step="1" :complete="estValideEtape1" >Assistante</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step class="red--text" step="2" :complete="estValideEtape2" >Enfant</v-stepper-step>
+          <v-stepper-step class="red--text" step="2" :complete="estValideEtape2" editable>Enfant</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="3" :complete="estValideEtape3" editable>Tuteur légaux</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="4" :complete="estValideEtape4">Employeur</v-stepper-step>
+          <v-stepper-step step="4" :complete="estValideEtape4" editable>Employeur</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="5" :complete="estValideEtape5" editable>Informations générales</v-stepper-step>
           <v-divider></v-divider>
@@ -281,16 +281,44 @@ export default {
         }
       }
       if (!erreur) { // s'il n'y a pas eu d'erreur
-        this.etape++
-        this.estValideEtape6 = true
+        try {
+          let reponse = await ContratService.updateHeureHebdo(this.$store.state.numContrat,
+            {nb_heures_semaine: data.nbHeureSemaine})
+          if (reponse.data.erreur == null) {
+            this.etape++
+            this.estValideEtape6 = true
+          } else {
+            this.triggerErreur('Une erreur est survenue')
+            console.log(reponse.data.erreur)
+          }
+        } catch (e) {
+          console.log(e.toString())
+          this.triggerErreur('Une erreur est survenue')
+        }
       }
     },
-    submitTarifs (data) {
-      console.log(this.etape)
+    async submitTarifs (data) {
       console.log(data)
+      try {
+        let reponse = await ContratService.updateTarif(this.$store.state.numContrat,
+          {
+            tarif: data.salaireNet,
+            taux_majore: data.majoration
+          })
+        if (reponse.data.erreur == null) {
+          this.$router.push({
+            path: process.env.BASE_URL + '/contrat/' + this.$store.state.numContrat})
+        } else {
+          this.triggerErreur('Une erreur est survenue')
+          console.log(reponse.data.erreur)
+        }
+      } catch (e) {
+        this.triggerErreur('Une erreur est survenue')
+        console.log(e.toString())
+      }
       this.etape++
       this.fin = true
-      this.estValideEtape6 = true
+      this.estValideEtape7 = true
     },
     submitAssMat (data) {
       this.idAssmat = data

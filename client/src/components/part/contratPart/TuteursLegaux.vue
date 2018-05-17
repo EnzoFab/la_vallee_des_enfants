@@ -173,7 +173,7 @@
                     label="Choisissez un tuteur dans la liste"
                     :rules="regleListeTuteurs"
                     v-model="tuteur.informationTuteurExistant"
-                    item-text="nom_tuteur"
+                    item-text="nom_complet"
                     append-icon="search"
                     autocomplete
                     required

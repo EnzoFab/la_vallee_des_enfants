@@ -37,7 +37,6 @@
                           transition="slide-y-transition"
                           :nudge-right="40"
                           top
-                          min-width="10%"
                         >
                           <v-text-field
                             slot="activator"
@@ -68,7 +67,6 @@
                           transition="slide-y-transition"
                           :nudge-right="40"
                           top
-                          min-width="10%"
                         >
                           <v-text-field
                             slot="activator"

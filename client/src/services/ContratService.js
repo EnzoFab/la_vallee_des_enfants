@@ -35,7 +35,13 @@ export default {
   },
 
   updateInfoG (numContrat, credential) {
-    return Api().put('/contrat/infosGenerales/' + numContrat, credential)
+    return Api().put('/contrat/infosGenerales/' + numContrat , credential)
+  },
+  updateHeureHebdo (numContrat, credential) {
+    return Api().put('/contrat/presence/' + numContrat, credential)
+  },
+  updateTarif (numContrat, credential) {
+    return Api().put('/contrat/tarifs/' + numContrat, credential)
   }
 
 }
