@@ -287,7 +287,7 @@ export default {
       }
     },
     envoyer () {
-      console.log( typeof this.date)
+      console.log(typeof this.date)
       let data = {
         date: this.date,
         modePaiement: this.modeDePaiementContrat,

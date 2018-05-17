@@ -11,10 +11,10 @@ export default {
     var day = date.getDay()
     return Api().get('presencetheo/' + day + '/allchildrennp')
   },
-  recupIdPresTheoDuJour(credential) {
+  recupIdPresTheoDuJour (credential) {
     var date = new Date()
     var day = date.getDay()
-    return Api().get('presencetheo/' + credential + '/' + day )
+    return Api().get('presencetheo/' + credential + '/' + day)
   },
   estEnregistreAujourdhui (credential) {
     var date = new Date()
@@ -42,5 +42,5 @@ export default {
   },
   enregistrerPresenceExc (credential) {
     return Api().post('presencereelle/createPresExc', credential)
-  },
+  }
 }
