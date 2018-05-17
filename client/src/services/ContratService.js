@@ -23,15 +23,15 @@ export default {
   },
 
   updateInfosEmp (numContrat, data) {
-    return Api().put('/contrat/' + numContrat + '/employeur', data)
+    return Api().put('/contrat/employeur/' + numContrat, data)
   },
 
   updateEnfant (numContrat, data) {
-    return Api().put('/contrat/' + numContrat + '/enfant', data)
+    return Api().put('/contrat/enfant/' + numContrat , data)
   },
 
   updateInfoG (numContrat, credential) {
-    return Api().put('/contrat/' + numContrat + 'infosGenerales', credential)
+    return Api().put('/contrat/infosGenerales/' + numContrat , credential)
   }
 
 }

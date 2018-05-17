@@ -51,7 +51,7 @@ router.post('/create', function (req, res, next) {
 /* ------------------------------------------ ROUTES PUT ------------------------------------------------------ */
 
 // Ajout/Modification des données de la SECTION ENFANT
-router.put('/:n/enfant', function (req, res) {
+router.put('/enfant/:n', function (req, res) {
     let id_contrat = req.params.n
     let id_enfant = req.body.id_enfant
     modelContrat.sectionEnfantCreate(id_contrat, id_enfant, function (retour) {
@@ -60,7 +60,7 @@ router.put('/:n/enfant', function (req, res) {
 });
 
 // Ajout/Modification des données de la SECTION EMPLOYEUR
-router.put('/:n/employeur', function (req, res) {
+router.put('/employeur/:n', function (req, res) {
     let id_contrat = req.params.n
     let id_emp = req.body.id_employeur
     let nb_conges = req.body.nb_semaines_conges_parents
@@ -70,7 +70,7 @@ router.put('/:n/employeur', function (req, res) {
 });
 
 // Ajout/Modification des données de la SECTION INFOS GENERALES
-router.put('/:n/infosGenerales', function (req, res) {
+router.put('/infosGenerales/:n', function (req, res) {
     let id_contrat = req.params.n
     let id_type = req.body.id_type_contrat
     let id_modePaie = req.body.id_mode_de_paiement
@@ -78,6 +78,7 @@ router.put('/:n/infosGenerales', function (req, res) {
     let dateDebAdapt = req.body.date_deb_periode_adaptation
     let dateFinAdapt = req.body.date_fin_periode_adaptation
     let jourPaie = req.body.jour_paiement
+    console.log('========== ', id_contrat, ' ', id_modePaie, ' ', dateDeb, ' ', dateDebAdapt, ' ', dateFinAdapt, ' ', jourPaie);
     modelContrat.sectionInfosGeneralesCreate(id_contrat, id_type, id_modePaie, dateDeb, dateDebAdapt, dateFinAdapt, jourPaie, function (retour) {
         res.send(retour)
     })

@@ -74,6 +74,9 @@
             v-model="dateDebutAdaptFr"
             prepend-icon="event"
             required
+            :error="erreurDateDebutAdapt"
+            :hint="hintDateDebutAdapt"
+            :persistent-hint="erreurDateDebutAdapt"
             :rules="regleDateDebutAdapt"
             readonly
           ></v-text-field>
@@ -106,6 +109,9 @@
             label="Date fin periode adaptation"
             v-model="dateFinAdaptFr"
             prepend-icon="event"
+            :error="erreurDateFinAdapt"
+            :persistent-hint="erreurDateFinAdapt"
+            :hint="hintDateFinAdapt"
             required
             :rules="regleDateFinAdapt"
             readonly
@@ -150,16 +156,11 @@
           ></v-select>
       </v-flex>
       <v-btn
-        class="light-green lighten-4"
-        depressed large round
-        @click="back"
-      >Précédent</v-btn>
-      <v-btn
         color="green lighten-1"
         depressed large round
-        :dark="estValide"
+        :dark="!isDisabled"
         @click="envoyer"
-        :disabled="!estValide"
+        :disabled="isDisabled"
       >
         Suivant
       </v-btn>
@@ -191,18 +192,10 @@ export default {
         v => !!v || 'Veuillez remplir la date'
       ],
       regleDateDebutAdapt: [
-        v => !!v || 'Veuillez remplir la date',
-        v => v < this.date || 'La periode d\'adaptation ne peut pas être avant à la date de début du contrat'
+        v => !!v || 'Veuillez remplir la date'
       ],
       regleDateFinAdapt: [
-        v => !!v || 'Veuillez remplir la date',
-        function (v) {
-          if (this.dateDebutPeriodeAdapt && this.dateDebutPeriodeAdapt != null) {
-            return new Date(v) < new Date(this.dateDebutPeriodeAdapt) || 'La fin periode d\'adaptation ne peut pas être avant le début de la période'
-          } else {
-            return 'La fin periode d\'adaptation ne peut pas être avant le début de la période'
-          }
-        }
+        v => !!v || 'Veuillez remplir la date'
       ],
       regleTypeContrat: [
         v => !!v || 'Veuillez renseigner le type de contrat'
@@ -212,7 +205,11 @@ export default {
       ],
       regleJourPrelevement: [
         v => !!v || 'Veuillez renseigner le jour de prélèvement'
-      ]
+      ],
+      erreurDateDebutAdapt: false,
+      erreurDateFinAdapt: false,
+      hintDateDebutAdapt: '',
+      hintDateFinAdapt: ''
     }
   },
   computed: {
@@ -248,19 +245,28 @@ export default {
         dateString = day + ' ' + month + ' ' + year
       }
       return dateString
+    },
+    isDisabled () {
+      return this.erreurDateDebutAdapt || this.erreurDateFinAdapt || !this.estValide
     }
   },
   mounted () {
-    /* TypeService.modeDepaiements().then(function (response) {
-      console.log(response.data.modepaiements)
-      // this.modesPaiements = response.data.modepaiements
-      this.modesPaiements = ['1', '2']
-    }).catch(function (er) {
-      console.log(er)
-    }) */
     this.initModePaiement()
     this.initTypeContrat()
     this.initNombreJour()
+
+    /* let vm = this
+    this.regleDateDebutAdapt.push(function (val) {
+        return vm.date != null || new Date(val) < new Date(vm.date) || 'la date début de la période ne peut pas être avant le début du contrat '
+    })
+
+    this.regleDateFinAdapt.push(function (val) {
+      if (vm.dateDebutPeriodeAdapt == null || new Date(val) < new Date(vm.dateDebutPeriodeAdapt)) {
+        return 'la date fin de la période ne peut pas être avant le début de la période'
+      } else {
+        return true
+      }
+    }) */
   },
   methods: {
     async initModePaiement () {
@@ -287,7 +293,6 @@ export default {
       }
     },
     envoyer () {
-      console.log( typeof this.date)
       let data = {
         date: this.date,
         modePaiement: this.modeDePaiementContrat,
@@ -300,6 +305,47 @@ export default {
     },
     back () {
       this.$emit('back')
+    }
+  },
+  watch: {
+    date (val) {
+      let date = new Date(val)
+      if (this.dateFinPeriodeAdapt == null || date > new Date(this.dateFinPeriodeAdapt)) {
+        this.erreurDateDebutAdapt = true
+        this.hintDateDebutAdapt = 'La date de début ne peut pas être avant la date de début du contrat'
+      } else {
+        this.erreurDateDebutAdapt = false
+        this.hintDateDebutAdapt = ''
+      }
+    },
+    dateDebutPeriodeAdapt (val) {
+      let date = new Date(val)
+      if (this.date == null || date < new Date(this.date)) {
+        this.erreurDateDebutAdapt = true
+        this.hintDateDebutAdapt = 'La date de début ne peut pas être avant la date de début du contrat'
+        // this.dateDebutPeriodeAdapt = null
+      } else {
+        this.erreurDateDebutAdapt = false
+        this.hintDateDebutAdapt = ''
+      }
+
+      if (this.dateFinPeriodeAdapt == null || date > new Date(this.dateFinPeriodeAdapt)) {
+        this.erreurDateFinAdapt = true
+        this.hintDateFinAdapt = 'La date de fin de la période d\'adaptation ne peut pas être avant la date de début de la période'
+      } else {
+        this.erreurDateFinAdapt = false
+        this.hintDateFinAdapt = ''
+      }
+    },
+    dateFinPeriodeAdapt (val) { // permet de bloquer l'envoie du formulaire si jamais la date de fin est avant la date debut
+      let date = new Date(val)
+      if (this.dateDebutPeriodeAdapt == null || date < new Date(this.dateDebutPeriodeAdapt)) {
+        this.erreurDateFinAdapt = true
+        this.hintDateFinAdapt = 'La date de fin de la période d\'adaptation ne peut pas être avant la date de début de la période'
+      } else {
+        this.erreurDateFinAdapt = false
+        this.hintDateFinAdapt = ''
+      }
     }
   }
 }

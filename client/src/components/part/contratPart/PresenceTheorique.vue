@@ -10,6 +10,9 @@
         {{msgErreur}}
       </v-alert>
       <v-layout row wrap>
+        <v-flex d-flex md12 lg12 xl12 sm12 xs12>
+          <h1>Nombre d'heures par semaine: {{nbHeureSemaine}}</h1>
+        </v-flex>
         <v-flex d-flex md6 lg6 xl6 sm12 xs12 >
           <v-card v-if="presences.length > 0">
             <h2>Présences</h2>
@@ -47,7 +50,10 @@
                             light
                             :rules="regleHeure"
                           ></v-text-field>
-                          <v-time-picker v-model="presence.heureArrivee"
+                          <v-time-picker v-model="presence.heureArrivee" landscape scrollable
+                                         landscape
+                                         type="month"
+                                         class="mt-3"
                                          @change="$refs.presence.menu.save(presence.heureArrivee)">
                           </v-time-picker>
                         </v-menu>
@@ -75,7 +81,10 @@
                             light
                             :rules="regleHeure"
                           ></v-text-field>
-                          <v-time-picker v-model="presence.heureDepart"
+                          <v-time-picker v-model="presence.heureDepart" landscape scrollable
+                                         landscape
+                                         type="month"
+                                         class="mt-3"
                                          @change="$refs.presence.menuDepart.save(presence.heureDepart)">
                           </v-time-picker>
                         </v-menu>
@@ -174,7 +183,10 @@
           <v-btn>Retour</v-btn>
           <v-btn
             depressed large round
+            :dark="presences.length > 0"
             :disabled="presences.length <= 0"
+            color="pink"
+            @click="submit"
           >
             Suivant</v-btn>
         </v-flex>
@@ -186,6 +198,7 @@
 
 <script>
 import TypeService from '../../../services/TypeService'
+import FonctionMath from '../../../helper/FonctionMath'
 export default {
   name: 'PresenceTheorique',
   data () {
@@ -203,7 +216,8 @@ export default {
         v => !!v || 'Veuillez renseigner le jour'
       ],
       erreur: false,
-      msgErreur: null
+      msgErreur: null,
+      nbHeureSemaine: 0
     }
   },
   methods: {
@@ -249,13 +263,21 @@ export default {
         let data = []
         this.presences.forEach(function (element) {
           data.push({
-            jourChoisi: element.jourChoisi,
+            id_type_jour: element.jourChoisi.id,
             prendGouter: element.prendGouter,
             heureArrivee: element.heureArrivee,
             heureDepart: element.heureDepart
           })
         })
-        this.$emit('submit', data)
+        this.jours.forEach(function (jour) {
+          data.push({
+            id_type_jour: jour.id,
+            prendGouter: null,
+            heureArrivee: null,
+            heureDepart: null
+          })
+        })
+        this.$emit('submit', {presences: data, nbHeureSemaine: this.nbHeureSemaine})
       } else {
         this.msgErreur = 'Erreur aucune présence remplie'
         this.erreur = true
@@ -267,6 +289,39 @@ export default {
   },
   mounted () {
     this.loadJours()
+  },
+  watch: {
+    presences: {
+      handler (val) {
+        console.log('APPEl')
+        var nbHeure = 0
+
+        var heure1 = null
+        var heure2 = null
+
+        var minute1 = null
+        var minute2 = null
+
+        let tempsMinute1 = null // temps total en minute
+        let tempsMinute2 = null // temps total en heure
+        for (var i = 0; i < this.presences.length; i++) {
+          let splitArrive = this.presences[i].heureArrivee.split(':')
+          let splitDepart = this.presences[i].heureDepart.split(':')
+
+          heure1 = splitArrive[0]
+          minute1 = splitArrive[1]
+
+          heure2 = splitDepart[0]
+          minute2 = splitDepart[1]
+
+          tempsMinute1 = parseInt(heure1) * 60 + parseInt(minute1)
+          tempsMinute2 = parseInt(heure2) * 60 + parseInt(minute2)
+          nbHeure = nbHeure + tempsMinute2 - tempsMinute1
+        }
+        this.nbHeureSemaine = FonctionMath.arrondi(nbHeure / 60, 0)
+      },
+      deep: true
+    }
   }
 }
 </script>

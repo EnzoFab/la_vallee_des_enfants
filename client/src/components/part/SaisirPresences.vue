@@ -299,7 +299,7 @@
 </template>
 
 <script>
-import PresenceService from '../../services/PresenceService'
+import PresenceService from '../../services/PresenceReelleService'
 import moment from 'moment'
 moment.locale('fr')
 export default {
@@ -382,7 +382,7 @@ export default {
             this.enfantsDuJour[i].heureArriveeR = null
             this.enfantsDuJour[i].minuteArriveeR = null
           }
-          if(response2.data.heure_depart_r != null) {
+          if (response2.data.heure_depart_r != null) {
             var heureDecoupeeDepR = (this.enfantsDuJour[i].heure_depart_r).split(':', 2)
             this.enfantsDuJour[i].heureDepartR = heureDecoupeeDepR[0]
             this.enfantsDuJour[i].minuteDepartR = heureDecoupeeDepR[1]
@@ -410,7 +410,6 @@ export default {
             console.log('yihahaaa   ' + this.enfantsPasDuJour[i].nomComplet)
           }
         }
-
       } catch (e) {
         console.log(e)
       }
@@ -566,7 +565,7 @@ export default {
           presence:
             {
               datepresencereelle: date,
-              id_presence_theo: id,
+              id_presence_theo: id
             }
         }
         let v = await PresenceService.enregistrerPresenceExc(data)
@@ -576,7 +575,7 @@ export default {
         this.id_enfant = null
         this.alert = true
         this.enfantsDuJour = this.getAllChildrenOfTheDay()
-        this.enfantsPasDuJour=this.getAllChildrenNotOfTheDay()
+        this.enfantsPasDuJour = this.getAllChildrenNotOfTheDay()
       } catch (e) {
         console.log(e)
       }

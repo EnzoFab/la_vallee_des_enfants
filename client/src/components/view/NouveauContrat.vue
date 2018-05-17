@@ -63,6 +63,7 @@ import ContratService from '../../services/ContratService'
 import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
 import MailHelper from '../../helper/sendMail'
+import PresenceTheoriqueService from "../../services/PresenceTheoriqueService";
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
 
 export default {
@@ -155,8 +156,6 @@ export default {
             if (res.data.erreur != null) {
               this.triggerErreur(res.data.erreur)
               return
-            } else {
-
             }
           } else {
             let response = await TuteurService.createTuteur({tuteur: tuteurs[i]}) // creation du tuteur
@@ -221,15 +220,15 @@ export default {
       // store data in DB
       var login = data.prenom + '_' + data.nomUsage + generator.generate({length: 3, numbers: true})
       let donneeEmployeur = { // a modifier
-        nom_naissance_employeur: data.nomNaissance,
-        nom_usage_employeur: data.nomUsage,
-        prenom_employeur: data.prenom,
-        cp_employeur: data.codePostal,
-        telephone_employeur: data.telephone,
-        ville_employeur: data.ville,
-        mail_employeur: data.email,
-        rue: data.rue,
-        nb_semaines_conges: data.nombreSemainesSupplementaires,
+        nom_naissance_employeur: data.employeur.nomNaissance,
+        nom_usage_employeur: data.employeur.nomUsage,
+        prenom_employeur: data.employeur.prenom,
+        cp_employeur: data.employeur.codePostal,
+        telephone_employeur: data.telephone1,
+        ville_employeur: data.employeur.ville,
+        mail_employeur: data.employeur.email,
+        rue: data.employeur.rue,
+        nb_semaines_conges: data.congesSupp,
         identifiant_connexion: login.replace(/\s/g, '').toLowerCase(), // login sans espaces et en minuscule
         mot_de_passe: generator.generate({length: 10, numbers: true}) // mot de passe de taille 10
       }
@@ -262,11 +261,30 @@ export default {
         this.triggerErreur(e.toString())
       }
     },
-    submitPresences (data) {
+    async submitPresences (data) {
       console.log(this.etape)
       console.log(data)
-      this.etape++
-      this.estValideEtape5 = true
+      let erreur = false
+      for (var i = 0; i < data.presences.length; i++) {
+        let presence = data.presences[i]
+        presence.id_contrat = this.$store.state.numContrat
+        try{
+          let reponse = await PresenceTheoriqueService.create({presenceTheorique: presence})
+          if (reponse.data.erreur != null) {
+            console.log(reponse.data.erreur)
+            this.triggerErreur('Une erreur est survenue')
+          } else {
+            erreur = true
+          }
+        } catch (e) {
+          this.triggerErreur(e.toString())
+          erreur = true
+        }
+      }
+      if (!erreur) { // s'il n'y a pas eu d'erreur
+        this.etape++
+        this.estValideEtape5 = true
+      }
     },
     submitTarifs (data) {
       console.log(this.etape)

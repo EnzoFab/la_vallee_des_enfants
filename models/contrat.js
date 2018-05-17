@@ -196,8 +196,8 @@ let Contrat = {
     sectionInfosGeneralesCreate: function (numContrat, numTypeContrat, numModeDePaiement, dateDebutContrat, dateDebAdapt, dateFinAdapt, jourDePaiement, callback) {
         db.query('UPDATE public.contrat ' +
             'SET id_type_contrat = $1, id_mode_paiement = $2, jour_paiement = $3, date_debut = $4, date_deb_periode_adaptation = $5, date_fin_periode_adaptation = $6 ' +
-            'WHERE id_contrat = $5',
-            [numTypeContrat, numModeDePaiement, jourDePaiement, dateDebut, dateDebAdapt, dateFinAdapt, numContrat],
+            'WHERE id_contrat = $7',
+            [numTypeContrat, numModeDePaiement, jourDePaiement, new Date(dateDebutContrat), new Date(dateDebAdapt), new Date(dateFinAdapt), numContrat],
             function (er) {
                 let retour = {erreur: null}
                 if (er) {
