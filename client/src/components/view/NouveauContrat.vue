@@ -306,8 +306,7 @@ export default {
             taux_majore: data.majoration
           })
         if (reponse.data.erreur == null) {
-          this.$router.push({
-            path: process.env.BASE_URL + '/contrat/' + this.$store.state.numContrat})
+          this.$router.push(process.env.BASE_URL + '/contrat/' + this.$store.state.numContrat)
         } else {
           this.triggerErreur('Une erreur est survenue')
           console.log(reponse.data.erreur)

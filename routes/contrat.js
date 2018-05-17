@@ -20,15 +20,9 @@ router.get('/getAllById/:numC', function (req, res, next) {
 });
 
 router.get('/getTuteursById/:numC', function (req, res, next) {
+    console.log('helloroute')
     console.log(req.params.numC)
     modelContrat.getTuteursById(req.params.numC, function (retour) {
-        console.log(retour);
-        res.send(retour)
-    })
-});
-
-router.get('/getPresences/:numC', function (req, res, next) {
-    modelContrat.getPresencesByContrat(req.params.numC, function (retour) {
         console.log(retour);
         res.send(retour)
     })

@@ -14,10 +14,6 @@ export default {
     return Api().get('/contrat/getAllById/' + numContrat)
   },
 
-  getPresencesByContrat (numContrat) {
-    return Api().get('/contrat/getPresences/' + numContrat)
-  },
-
   getAll () {
     return Api().get('/contrat/all')
   },
@@ -31,7 +27,7 @@ export default {
   },
 
   updateEnfant (numContrat, data) {
-    return Api().put('/contrat/enfant/' + numContrat, data)
+    return Api().put('/contrat/enfant/' + numContrat , data)
   },
 
   updateInfoG (numContrat, credential) {
