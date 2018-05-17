@@ -31,11 +31,11 @@ export default {
   },
 
   updateEnfant (numContrat, data) {
-    return Api().put('/contrat/enfant/' + numContrat , data)
+    return Api().put('/contrat/enfant/' + numContrat, data)
   },
 
   updateInfoG (numContrat, credential) {
-    return Api().put('/contrat/infosGenerales/' + numContrat , credential)
+    return Api().put('/contrat/infosGenerales/' + numContrat, credential)
   }
 
 }

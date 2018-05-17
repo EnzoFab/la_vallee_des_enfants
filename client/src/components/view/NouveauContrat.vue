@@ -63,7 +63,7 @@ import ContratService from '../../services/ContratService'
 import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
 import MailHelper from '../../helper/sendMail'
-import PresenceTheoriqueService from "../../services/PresenceTheoriqueService";
+import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
 
 export default {
@@ -268,7 +268,7 @@ export default {
       for (var i = 0; i < data.presences.length; i++) {
         let presence = data.presences[i]
         presence.id_contrat = this.$store.state.numContrat
-        try{
+        try {
           let reponse = await PresenceTheoriqueService.create({presenceTheorique: presence})
           if (reponse.data.erreur != null) {
             console.log(reponse.data.erreur)

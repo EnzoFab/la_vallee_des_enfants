@@ -51,7 +51,6 @@
                             :rules="regleHeure"
                           ></v-text-field>
                           <v-time-picker v-model="presence.heureArrivee" landscape scrollable
-                                         landscape
                                          full-width
                                          type="month"
                                          class="mt-3"
