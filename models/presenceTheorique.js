@@ -42,9 +42,27 @@ let presenceTheorique = {
         console.log('numDuJour : ' + numDay)
         db.query(
             'SELECT * ' +
-            'FROM public.presencetheorique pt, public.contrat co, public.enfant en ' +
-            'WHERE pt.id_contrat = co.id_contrat AND co.id_enfant = en.id_enfant AND pt.id_type_jour = $1 ' +
-            'ORDER BY pt.heure_arrivee',
+            'FROM (( ' +
+            // tous les enfants qui sont theoriquement présents le jour de type 'numDay'
+                'SELECT * ' +
+                'FROM public.presencetheorique pt, public.contrat co, public.enfant en ' +
+                'WHERE pt.id_contrat = co.id_contrat AND co.id_enfant = en.id_enfant AND co.date_fin IS NULL AND pt.heure_arrivee IS NOT NULL AND pt.id_type_jour = $1 ' +
+            ') UNION (' +
+            // tous les enfants qui ne sont pas là theoriquement mais qui viennent exceptionnellement ce jour là
+                'SELECT pt2.prends_gouter, pt2.id_contrat, pt2.id_type_jour, pt2.heure_depart, ' +
+                    'pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut, ' +
+                    'co2.nb_semaines_conges_parents, co2.tarif, co2.nb_heures_semaine, co2.taux_majore, co2.date_deb_periode_adaptation, ' +
+                    'co2.date_fin_periode_adaptation, co2.id_enfant, co2.id_mode_paiement, co2.id_am, co2.id_employeur, co2.jour_paiement, ' +
+                    'co2.id_type_contrat, co2.date_fin, en2.id_enfant, en2.nom_enfant, en2.prenom_enfant, en2.date_naissance_enfant, en2.sexe ' +
+                'FROM public.presencetheorique pt2, public.contrat co2, public.enfant en2, public.presencereelle pr2 ' +
+                'WHERE pt2.id_contrat = co2.id_contrat AND co2.id_enfant = en2.id_enfant ' +
+                    'AND pt2.id_presence_theorique = pr2.id_presence_theo ' +
+                    'AND co2.date_fin IS NULL ' +
+                    'AND pt2.heure_arrivee IS NULL ' +
+                    'AND pr2.datepresencereelle = CURRENT_DATE ' +
+                    'AND pt2.id_type_jour = $1 ' +
+            ')) AS requete ' +
+            'ORDER BY nom_enfant, prenom_enfant',
             [numDay],
             function (err, result) {
                 retour = {
@@ -59,6 +77,7 @@ let presenceTheorique = {
                     var array = []
                     for (var i = 0; i < result.rows.length; i++) {
                         array.push({
+                            sexe: result.rows[i].sexe,
                             id_contrat: result.rows[i].id_contrat,
                             id_enfant: result.rows[i].id_enfant,
                             id_presence_theo: result.rows[i].id_presence_theorique,
@@ -70,9 +89,94 @@ let presenceTheorique = {
                         });
                     }
                     retour.presencestheoriques = array
+                    console.log(retour.presencestheoriques)
                     retour.statut = 200
                 }
 
+                callback(retour);
+            }
+        );
+    },
+
+    getChildrenNonPresentsOfTheDay: function (numDay, callback) {
+        console.log('coucou')
+        console.log('numDuJour : ' + numDay)
+        db.query(
+            '(' +
+                'SELECT * ' +
+                'FROM public.presencetheorique pt, public.contrat co, public.enfant en ' +
+                'WHERE co.id_enfant = en.id_enfant ' +
+                    'AND co.id_contrat=pt.id_contrat ' +
+                    'AND pt.id_type_jour = $1 ' +
+                    'AND pt.heure_arrivee IS NULL ' +
+                    'AND co.date_fin IS NULL ' +
+            ') EXCEPT ( ' +
+                'SELECT pt2.prends_gouter, pt2.id_contrat, pt2.id_type_jour, pt2.heure_depart, pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut, ' +
+                    'co2.nb_semaines_conges_parents, co2.tarif, co2.nb_heures_semaine, co2.taux_majore, co2.date_deb_periode_adaptation, ' +
+                    'co2.date_fin_periode_adaptation, co2.id_enfant, co2.id_mode_paiement, co2.id_am, co2.id_employeur, co2.jour_paiement, ' +
+                    'co2.id_type_contrat, co2.date_fin, en2.id_enfant, en2.nom_enfant, en2.prenom_enfant, en2.date_naissance_enfant, en2.sexe ' +
+                'FROM public.contrat co2, public.enfant en2, public.presencetheorique pt2, public.presencereelle pr2 ' +
+                'WHERE pt2.id_contrat = co2.id_contrat AND co2.id_enfant = en2.id_enfant ' +
+                    'AND pt2.id_presence_theorique = pr2.id_presence_theo ' +
+                    'AND co2.date_fin IS NULL ' +
+                    'AND pt2.heure_arrivee IS NULL ' +
+                    'AND pr2.datepresencereelle = CURRENT_DATE ' +
+                    'AND pt2.id_type_jour = $1' +
+            ')',
+            [numDay],
+            function (err, result) {
+                retour = {
+                    erreur: null,
+                    nonpresencestheoriques: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, result, 'Pas de non presence trouvée')
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if (retour.erreur == null) {
+                    var array = []
+                    for (var i = 0; i < result.rows.length; i++) {
+                        array.push({
+                            sexe: result.rows[i].sexe,
+                            id_contrat: result.rows[i].id_contrat,
+                            id_enfant: result.rows[i].id_enfant,
+                            id_presence_theo: null,
+                            nom_enfant: result.rows[i].nom_enfant,
+                            prenom_enfant: result.rows[i].prenom_enfant,
+                            prend_gouter: null,
+                            heure_arrivee: null,
+                            heure_depart: null,
+                        });
+                    }
+                    retour.absencestheoriques = array
+                    retour.statut = 200
+                }
+
+                callback(retour);
+            }
+        );
+    },
+
+    recupIdTheoDuJour: function (numDay, numEnfant, callback) {
+        db.query(
+            'SELECT id_presence_theorique ' +
+            'FROM public.contrat co, public.enfant en, public.presencetheorique pt ' +
+            'WHERE co.id_contrat = pt.id_contrat AND en.id_enfant = co.id_enfant AND pt.id_type_jour = $1 AND en.id_enfant = $2',
+            [numDay, numEnfant],
+            function (err, result) {
+                retour = {
+                    erreur: null,
+                    id: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, result, 'Pas de non presence trouvée')
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if (retour.erreur == null) {
+                    retour.id = result.rows[0].id_presence_theorique
+                    retour.statut = 200
+                }
+                console.log('ret' + retour.id)
                 callback(retour);
             }
         );

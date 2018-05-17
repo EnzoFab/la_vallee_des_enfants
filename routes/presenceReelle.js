@@ -10,6 +10,15 @@ router.post('/create', function (req, res, next) {
     });
 });
 
+router.post('/createPresExc', function (req, res, next) {
+    let preelle = req.body.presence
+    console.log('azertyuvhbgdtq     ' + preelle.id)
+    preelle.datepresencereelle = new Date(preelle.datepresencereelle)
+    modelPresenceReelle.createPresExc(preelle, function (retour) {
+        res.send(retour);
+    });
+});
+
 router.put('/majHeureArrivee', function (req, res, next) {
     let preelle = req.body.presence
     modelPresenceReelle.updateHeureArrivee(preelle, function (retour) {
@@ -54,9 +63,10 @@ router.post('/createAbs', function (req, res, next) {
     });
 });
 
-router.post('/majAbs', function (req, res, next) {
+router.put('/majAbs', function (req, res, next) {
     let abs = req.body.absence
-    modelPresenceReelle.createAbs(abs, function (retour) {
+    console.log(abs)
+    modelPresenceReelle.updateAbs(abs, function (retour) {
         res.send(retour);
     });
 });
