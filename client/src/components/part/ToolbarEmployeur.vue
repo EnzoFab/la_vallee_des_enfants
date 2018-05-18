@@ -49,10 +49,6 @@
 <script>
 export default {
   name: 'ToolbarEmployeur',
-  data () {
-    return {
-    }
-  },
   methods: {
     logout () {
       this.$store.dispatch('setToken', null)
