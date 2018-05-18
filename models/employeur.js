@@ -142,6 +142,41 @@ let Employeur = {
         });
     },
 
+    getEmployeursEnfants: function (callback) {
+        db.query(
+            'SELECT E2.nom_enfant, E2.prenom_enfant, E.nom_usage_employeur, E.nom_naissance_employeur, E.prenom_employeur ' +
+            'FROM public.employeur E, public.enfant E2, public.contrat C ' +
+            'WHERE C.id_employeur = E.id_employeur AND C.id_enfant = E2.id_enfant ORDER BY E.prenom_employeur',
+            [],
+            function (err, rslt){
+                retour = {
+                    erreur: null,
+                    resultats: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun employeur et enfant');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        array.push({
+                            prenom_enfant: rslt.rows[i].prenom_enfant,
+                            nom_enfant: rslt.rows[i].nom_enfant,
+                            nom_usage_employeur: rslt.rows[i].nom_usage_employeur,
+                            nom_naissance_employeur: rslt.rows[i].nom_naissance_employeur,
+                            prenom_employeur: rslt.rows[i].prenom_employeur
+                        });
+                        console.log('array', array)
+                    }
+                    retour.resultats = array;
+                    retour.statut = 200
+                }
+                callback(retour);
+            }
+        );
+    },
+
     create: function (employeur, callback) {
         bcrypt.hash(employeur.mot_de_passe, 8, function (e, hash) {
             let retour = {

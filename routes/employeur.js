@@ -12,6 +12,13 @@ function jwtSignEmployeur(employeur) {
 
 /* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
 
+router.get('/employeursEnfants', function (req, res, next) {
+    modelEmployeur.getEmployeursEnfants(function (retour) {
+        console.log('============', retour)
+        res.send(retour);
+    });
+});
+
 /* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/login', function (req, res, next) {

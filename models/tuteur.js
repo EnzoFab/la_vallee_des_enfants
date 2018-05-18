@@ -60,7 +60,7 @@ let Tuteur = {
         db.query(
             'SELECT E.nom_enfant, E.prenom_enfant, T.id_tuteur, T.nom_tuteur, T.prenom_tuteur FROM public.tuteur T, public.enfant E, public.apourtuteur A\n' +
             'WHERE T.id_tuteur = A.id_tuteur AND A.id_enfant = E.id_enfant\n' +
-            'GROUP BY E.nom_enfant, E.prenom_enfant, T.id_tuteur, T.nom_tuteur, T.prenom_tuteur ',
+            'GROUP BY E.nom_enfant, E.prenom_enfant, T.id_tuteur, T.nom_tuteur, T.prenom_tuteur ORDER BY T.prenom_tuteur',
             [],
             function (err, rslt){
                 retour = {
