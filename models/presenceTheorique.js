@@ -110,7 +110,6 @@ let presenceTheorique = {
                     'AND pt.id_type_jour = $1 ' +
                     'AND pt.heure_arrivee IS NULL ' +
                     'AND co.date_fin IS NULL ' +
-                'ORDER BY en.nom_enfant, en.prenom_enfant' +
             ') EXCEPT ( ' +
                 'SELECT pt2.prends_gouter, pt2.id_contrat, pt2.id_type_jour, pt2.heure_depart, pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut, ' +
                     'co2.nb_semaines_conges_parents, co2.tarif, co2.nb_heures_semaine, co2.taux_majore, co2.date_deb_periode_adaptation, ' +

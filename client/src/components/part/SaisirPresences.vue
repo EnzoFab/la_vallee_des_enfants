@@ -372,7 +372,7 @@ export default {
       this.enfantcourant = this.enfantsDuJour[i]
       this.dialogBox = true
       if (this.enfantcourant.a_pris_gouter != null) {
-        this.gouterPris = this.enfantcourant.a_pris_gouter
+        this.gouterPris = this.enfantcourant.gouterPris
       }
       console.log('azertyui   ' + this.dialogBox +'  ' + this.enfantcourant)
     },

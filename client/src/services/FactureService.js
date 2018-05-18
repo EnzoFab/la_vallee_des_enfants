@@ -16,6 +16,5 @@ export default {
   },
 
   getPresencesTheorique (idcontrat) {
-    return Api().get('/contrat/') /* VOIR LA ROUTE QU A CREEE MARION */
-  }
+    return Api().get('/contrat/') /* VOIR LA ROUTE QU A CREEE MARION */  }
 }
