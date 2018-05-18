@@ -50,10 +50,10 @@ let presenceTheorique = {
             ') UNION (' +
             // tous les enfants qui ne sont pas là theoriquement mais qui viennent exceptionnellement ce jour là
                 'SELECT pt2.prends_gouter, pt2.id_contrat, pt2.id_type_jour, pt2.heure_depart, ' +
-                    'pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut, ' +
+                    'pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut, co2.date_fin,  ' +
                     'co2.nb_semaines_conges_parents, co2.tarif, co2.nb_heures_semaine, co2.taux_majore, co2.date_deb_periode_adaptation, ' +
                     'co2.date_fin_periode_adaptation, co2.id_enfant, co2.id_mode_paiement, co2.id_am, co2.id_employeur, co2.jour_paiement, ' +
-                    'co2.id_type_contrat, co2.date_fin, en2.id_enfant, en2.nom_enfant, en2.prenom_enfant, en2.date_naissance_enfant, en2.sexe ' +
+                    'co2.id_type_contrat, en2.id_enfant, en2.nom_enfant, en2.prenom_enfant, en2.date_naissance_enfant, en2.sexe ' +
                 'FROM public.presencetheorique pt2, public.contrat co2, public.enfant en2, public.presencereelle pr2 ' +
                 'WHERE pt2.id_contrat = co2.id_contrat AND co2.id_enfant = en2.id_enfant ' +
                     'AND pt2.id_presence_theorique = pr2.id_presence_theo ' +
@@ -111,10 +111,10 @@ let presenceTheorique = {
                     'AND pt.heure_arrivee IS NULL ' +
                     'AND co.date_fin IS NULL ' +
             ') EXCEPT ( ' +
-                'SELECT pt2.prends_gouter, pt2.id_contrat, pt2.id_type_jour, pt2.heure_depart, pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut, ' +
+                'SELECT pt2.prends_gouter, pt2.id_contrat, pt2.id_type_jour, pt2.heure_depart, pt2.id_presence_theorique, pt2.heure_arrivee, co2.id_contrat, co2.date_debut,  co2.date_fin, ' +
                     'co2.nb_semaines_conges_parents, co2.tarif, co2.nb_heures_semaine, co2.taux_majore, co2.date_deb_periode_adaptation, ' +
                     'co2.date_fin_periode_adaptation, co2.id_enfant, co2.id_mode_paiement, co2.id_am, co2.id_employeur, co2.jour_paiement, ' +
-                    'co2.id_type_contrat, co2.date_fin, en2.id_enfant, en2.nom_enfant, en2.prenom_enfant, en2.date_naissance_enfant, en2.sexe ' +
+                    'co2.id_type_contrat, en2.id_enfant, en2.nom_enfant, en2.prenom_enfant, en2.date_naissance_enfant, en2.sexe ' +
                 'FROM public.contrat co2, public.enfant en2, public.presencetheorique pt2, public.presencereelle pr2 ' +
                 'WHERE pt2.id_contrat = co2.id_contrat AND co2.id_enfant = en2.id_enfant ' +
                     'AND pt2.id_presence_theorique = pr2.id_presence_theo ' +
