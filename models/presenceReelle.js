@@ -72,46 +72,6 @@ let presenceReelle = {
             });
     },
 
-    // Toutes les presences reelle d'un mois(d'une annee) pour un contrat
-    getAllPresencesDuMois: function (annee, mois, numContrat, callback) {
-        console.log(mois)
-        console.log(annee)
-        db.query(
-            'SELECT pr.datepresencereelle, pr.heure_arrivee_r, pr.heure_depart_r, pr.prends_gouter_r, pr.absence_justifiee ' +
-            'FROM public.presencereelle pr, public.presencetheorique pt ' +
-            'WHERE pr.id_presence_theo = pt.id_presence_theorique AND pt.id_contrat = $1 ' +
-                'AND EXTRACT(month FROM pr.datepresencereelle) = $2 AND  EXTRACT(year FROM pr.datepresencereelle) = $3 ' +
-            'ORDER BY pr.datepresencereelle ASC',
-            [numContrat, mois, annee],
-            function (err, rslt){
-                retour = {
-                    erreur: null,
-                    statut: null
-                };
-                let e = helper.handleError(err, rslt,'Aucune presence ce mois ci');
-                retour.erreur = e.erreur;
-                retour.presencesreelles = null
-                retour.statut = e.statut;
-                if(retour.erreur == null){
-                    var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
-                        array.push({
-                            datepresencereelle: rslt.rows[i].datepresencereelle,
-                            heure_arrivee_r: rslt.rows[i].heure_arrivee_r,
-                            heure_depart_r: rslt.rows[i].heure_depart_r,
-                            prends_gouter_r: rslt.rows[i].prends_gouter_r,
-                            absence_justifiee: rslt.rows[i].absence_justifiee
-                        })
-                    }retour.presencesreelles = array;
-                    retour.statut = 200
-                }
-                callback(retour);
-
-            });
-
-    },
-
     // mettre à jour l'heure de départ d'une présence réelle
     updateHeureDepart: function (presenceReelle, callback) {
         console.log('coucou    ' + presenceReelle.heure_depart + '  ' + presenceReelle.id_presence_reelle)
