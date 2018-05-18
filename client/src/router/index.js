@@ -10,6 +10,7 @@ import SimulationContrat from '@/components/view/Simulation'
 import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
 import ToolbarAssMat from '@/components/part/ToolbarAssMat'
 import AllContrat from '@/components/view/AllContrat'
+import AllContratEmployeur from '@/components/view/AllContratEmployeur'
 import SaisirPresences from '@/components/part/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
 import ParametresCompte from '@/components/view/ParametresCompte'
@@ -125,6 +126,12 @@ export default new Router({
       component: ConnexionEmp,
       meta: {title: 'ConnexionEmp'},
       beforeEnter: isNotConnected
+    },
+    {
+      path: '/contrat/employeur/:numE',
+      name: 'AllContratsEmployeur',
+      component: AllContratEmployeur,
+      meta: {title: 'Contrats'}
     },
     {
       path: '/contrat/',

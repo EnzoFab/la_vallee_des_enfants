@@ -18,8 +18,17 @@ export default {
     return Api().get('/contrat/all')
   },
 
+  getAllByIdEmployeur (numEmployeur) {
+    console.log('NUMERO EMPLOYEUR', numEmployeur)
+    return Api().get('/contrat/getAllByIdEmployeur/' + numEmployeur)
+  },
+
   create (data) {
     return Api().post('/contrat/create', data)
+  },
+
+  getPresencesByContrat (numContrat) {
+    return Api().get('/contrat/getPresences/' + numContrat)
   },
 
   updateInfosEmp (numContrat, data) {
@@ -27,15 +36,17 @@ export default {
   },
 
   updateEnfant (numContrat, data) {
-    return Api().put('/contrat/enfant/' + numContrat , data)
+    return Api().put('/contrat/enfant/' + numContrat, data)
   },
 
   updateInfoG (numContrat, credential) {
-    return Api().put('/contrat/infosGenerales/' + numContrat , credential)
+    return Api().put('/contrat/infosGenerales/' + numContrat, credential)
   },
+
   updateHeureHebdo (numContrat, credential) {
     return Api().put('/contrat/presence/' + numContrat, credential)
   },
+
   updateTarif (numContrat, credential) {
     return Api().put('/contrat/tarifs/' + numContrat, credential)
   }

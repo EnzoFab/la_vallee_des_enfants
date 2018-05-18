@@ -19,6 +19,21 @@ router.get('/getAllById/:numC', function (req, res, next) {
     })
 });
 
+router.get('/getAllByIdEmployeur/:numE', function (req, res, next) {
+    console.log(req.params.numE)
+    modelContrat.getAllByIdEmployeur(req.params.numE, function (retour) {
+        console.log(retour);
+        res.send(retour)
+    })
+});
+
+router.get('/getPresences/:numC', function (req, res, next) {
+    modelContrat.getPresencesByContrat(req.params.numC, function (retour) {
+        console.log(retour);
+        res.send(retour)
+    })
+});
+
 router.get('/getTuteursById/:numC', function (req, res, next) {
     console.log('helloroute')
     console.log(req.params.numC)

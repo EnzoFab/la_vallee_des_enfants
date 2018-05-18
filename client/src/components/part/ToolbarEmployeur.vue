@@ -2,23 +2,17 @@
   <v-toolbar app fixed tabs clipped-left light dense color="blue-grey lighten-5">
     <v-tabs icons-and-text fixed-tabs slot="extension" light color="blue-grey lighten-5" >
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab>
-        <router-link to="/" tag="v-tab">
-          <h4 class="purple--text">Accueil</h4>
-          <v-icon x-large color="purple">home</v-icon>
-        </router-link>
+      <v-tab to="/" >
+        <h4 class="purple--text">Accueil</h4>
+        <v-icon x-large color="purple">home</v-icon>
       </v-tab>
-      <v-tab>
-        <router-link to="/presence/consulter" tag="v-tab">
+      <v-tab to="/presence/consulter">
           <h4 class="pink--text">Présences</h4>
           <v-icon x-large color="pink">access_time</v-icon>
-        </router-link>
       </v-tab>
-      <v-tab>
-        <router-link to="/contrat" tag="v-tab">
+      <v-tab v-bind:to="'/contrat/employeur/' + $store.state.employeur.id">
           <h4 class="orange--text">Contrats</h4>
           <v-icon x-large color="orange">attach_file</v-icon>
-        </router-link>
       </v-tab>
       <v-tab to="/actualites" class="d-inline-block" ripple>
         <h4 class="blue--text"> Fil d'actualité </h4>
@@ -55,6 +49,10 @@
 <script>
 export default {
   name: 'ToolbarEmployeur',
+  data () {
+    return {
+    }
+  },
   methods: {
     logout () {
       this.$store.dispatch('setToken', null)

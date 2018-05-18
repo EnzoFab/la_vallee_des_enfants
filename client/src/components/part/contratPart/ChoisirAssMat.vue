@@ -40,6 +40,7 @@
 
 <script>
 import AssistanteService from '../../../services/AssistanteService'
+var randomstring = require('randomstring')
 export default {
   name: 'ChoisirAssMat',
   data () {

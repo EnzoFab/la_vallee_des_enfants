@@ -238,11 +238,11 @@
               </v-card>
             </v-form>
           </v-dialog>
-          <v-btn
-            color="blue--text"
-            @click="exportPDF"
-          >Exporter le contrat au format PDF</v-btn>
         </v-flex>
+        <v-btn
+          color="blue--text"
+          @click="exportPDF"
+        >Exporter le contrat au format PDF</v-btn>
     </v-flex>
     </v-flex>
   </v-layout>
@@ -250,10 +250,11 @@
 </template>
 
 <script>
-import jspdf from 'jspdf'
+
 import ContratService from '../../../services/ContratService'
 import EmployeurService from '../../../services/EmployeurService'
 import TuteurService from '../../../services/TuteurService'
+import contratPDF from '../../../helper/contratPDF'
 import { validationMixin } from 'vuelidate'
 import moment from 'moment'
 import 'moment/locale/fr'
@@ -275,6 +276,10 @@ export default {
       dateFinAdapt: null,
       dateDebutContrat: null,
       dateFinContrat: 'Aucune, contrat en cours',
+      nb_heures_semaine: null,
+      tarif: null,
+      taux_majore: null,
+      jour_paiement: null,
       nomUsageAssMat: null,
       prenomAssMat: null,
       nomNaissanceAssMat: null,
@@ -338,6 +343,10 @@ export default {
         } else {
           this.sexeEnfant = 'Garçon'
         }
+        this.nb_heures_semaine = response.data.nb_heures_semaine
+        this.tarif = response.data.tarif
+        this.taux_majore = response.data.taux_majore
+        this.jour_paiement = response.data.jour_paiement
         this.typeContrat = response.data.type_contrat
         this.dateDebAdapt = moment(response.data.date_deb_periode_adaptation).format('L')
         this.dateFinAdapt = moment(response.data.date_fin_periode_adaptation).format('L')
@@ -398,15 +407,21 @@ export default {
         console.log('ERREUR' + e)
       }
     },
-    exportPDF () {
-      let pdfName = 'contrat.pdf'
-      var doc = new jspdf()
-      // doc.text("Hello World", 10, 10)
-      doc.fromHTML(document.querySelector('#monPDF').html(), 15, 15, {
-        'width': 170,
-        'elementHandlers': specialElementHandlers
-      })
-      doc.save(pdfName + '.pdf')
+    async exportPDF () {
+      try {
+        const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
+        console.log('ICIIIIII', presences)
+        console.log('ICIIII 2 ', presences.data.resultats)
+        console.log(this.numeroContrat)
+        let data = {employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nbSemSupp: this.nbSemSupp, nombreSemSupp: this.nombreSemSupp },
+          assmat: {nomNaissanceAssMat: this.nomNaissanceAssMat, nomUsageAssMat: this.nomUsageAssMat, prenomAssMat: this.prenomAssMat, dateNaissanceAssMat: this.dateNaissanceAssMat, villeNaissanceAssMat: this.villeNaissanceAssMat, numeroSS: this.numeroSS, dateAgrement: this.dateAgrement, referenceAgrement: this.referenceAgrement, assurance: this.assurance, numeroPolice: this.numeroPolice, nombreSemaineConges: this.nombreSemaineConges},
+          enfant: {nomEnfant: this.nomEnfant, prenomEnfant: this.prenomEnfant, dateNaissanceEnfant: this.dateNaissanceEnfant},
+          contrat: {dateDebAdapt: this.dateDebAdapt, nb_heures_semaine: this.nb_heures_semaine, tarif: this.tarif, taux_majore: this.taux_majore, jour_paiement: this.jour_paiement, modeDePaiementContrat: this.modeDePaiementContrat}
+        }
+        contratPDF.createContratPdf(data.employeur, this.parents, data.assmat, data.enfant, data.contrat, presences.data.resultats)
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   computed: {

@@ -160,8 +160,6 @@
 </template>
 
 <script>
-import EmployeurService from '../../../services/EmployeurService'
-import TuteurService from '../../../services/TuteurService'
 export default {
   name: 'EmployeurOptionnel',
   data () {
