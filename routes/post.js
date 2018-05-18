@@ -23,6 +23,7 @@ router.get('/',function(req, res, next) {
 router.post('/create', function (req, res, next) {
     var post = req.body.post
     modelPost.create(post, function (retour) {
+        console.log(retour)
         res.send(retour)
     })
 });

@@ -38,162 +38,167 @@
                   label="Choisir un tuteur existant"
                   v-model="tuteur.tuteurExistant">
                 </v-checkbox>
-                <v-layout row wrap v-if="!tuteur.tuteurExistant">
-                  <v-flex md12 xs12>
+                <v-slide-y-transition>
+                  <v-layout row wrap v-if="!tuteur.tuteurExistant">
+                    <v-flex md12 xs12>
+                      <v-select
+                        :items="typeTuteurs"
+                        v-model="tuteur.typeDeTuteur"
+                        label="Type de tuteur"
+                        single-line
+                        item-text="libelle"
+                        auto
+                        :rules="regleTypeTuteur"
+                        required
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex md6 xs6 sm12 xs12>
+                      <v-text-field
+                        label="Nom"
+                        :rules="regleNom"
+                        :counter="15"
+                        v-model="tuteur.nomUsage"
+                      ></v-text-field>
+                    </v-flex>
+
+                    <v-flex md6 lg6 xl6 sm12 xs12>
+                      <v-text-field
+                        label="Prénom"
+                        :rules="reglePrenom"
+                        :counter="15"
+                        v-model="tuteur.prenom"
+                      ></v-text-field>
+                    </v-flex>
+
+                    <v-flex xs12>
+                      <v-text-field
+                        label="Profession"
+                        :counter="20"
+                        :rules="regleProfession"
+                        required
+                        v-model="tuteur.profession"
+                      ></v-text-field>
+                    </v-flex>
+
+                    <v-flex md6 lg6 xl6 sm12 xs12>
+                      <v-text-field
+                        label="Téléphone"
+                        v-model="tuteur.telephone"
+                        :rules="regleTel"
+                        required
+                        prepend-icon="phone"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex md6 lg6 xl6 sm12 xs12>
+                      <v-text-field
+                        label="Téléphone Professionnel"
+                        prepend-icon="phone"
+                        v-model="tuteur.telephonePro"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex md12 lg12 x112 sm12 xs12>
+                      <v-checkbox v-if="!existeAutredemandeur(tuteur)"
+                                  label="Ce tuteur est aussi le demandeur"
+                                  v-model="tuteur.estDemandeur"
+                      ></v-checkbox>
+                    </v-flex>
+                    <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                      <v-text-field
+                        label="Rue"
+                        :rules="regleRue"
+                        v-model="rue"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                      <v-text-field
+                        label="Ville"
+                        :rules="regleVille"
+                        v-model="ville"
+                        required
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                      <v-text-field
+                        required
+                        :rules="regleCodePostal"
+                        v-model="codePostal"
+                        label="Code postal"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                      <v-text-field
+                        required
+                        :rules="regleEmail"
+                        v-model="email"
+                        label="Mail"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
+                      <v-text-field
+                        required
+                        :counter="15"
+                        :rules="regleNom"
+                        v-model="nomDeNaissance"
+                        label="Nom de naissance"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 v-if="tuteur.estDemandeur">
+                      <h3>Nombre de semaine(s) de congé supplémentaire(s): {{nombreSemaine}}</h3>
+                      <v-slider v-model="nombreSemaine"
+                                min="0" max="10"
+                                thumb-label step="1" ticks
+                                required
+                                v-if="inputSemaineDisable"></v-slider>
+                    </v-flex>
+                    <v-flex xs12 v-if="tuteur.estDemandeur">
+                      <a @click="toogleChange">
+                        {{toogleText}}
+                        <v-icon>arrow_drop_down</v-icon>
+                      </a>
+                      <v-text-field
+                        label="Nombre de semaines supplementaire de congé"
+                        color="blue"
+                        type="number"
+                        required
+                        v-model="nombreSemaine"
+                        :rules="regleSemaine"
+                        v-if="!inputSemaineDisable"
+                      ></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-slide-y-transition>
+                <v-slide-y-transition>
+                  <v-layout v-if="tuteur.tuteurExistant">
                     <v-select
-                      :items="typeTuteurs"
-                      v-model="tuteur.typeDeTuteur"
-                      label="Type de tuteur"
-                      single-line
-                      item-text="libelle"
-                      auto
-                      :rules="regleTypeTuteur"
+                      :items="allExistingTuteurs"
+                      label="Choisissez un tuteur dans la liste"
+                      :rules="regleListeTuteurs"
+                      v-model="tuteur.informationTuteurExistant"
+                      item-text="nom_complet"
+                      append-icon="search"
+                      autocomplete
                       required
-                    ></v-select>
-                  </v-flex>
-
-                  <v-flex md6 xs6 sm12 xs12>
-                    <v-text-field
-                      label="Nom"
-                      :rules="regleNom"
-                      :counter="15"
-                      v-model="tuteur.nomUsage"
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex md6 lg6 xl6 sm12 xs12>
-                    <v-text-field
-                      label="Prénom"
-                      :rules="reglePrenom"
-                      :counter="15"
-                      v-model="tuteur.prenom"
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs12>
-                    <v-text-field
-                      label="Profession"
-                      :counter="20"
-                      :rules="regleProfession"
-                      required
-                      v-model="tuteur.profession"
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex md6 lg6 xl6 sm12 xs12>
-                    <v-text-field
-                      label="Téléphone"
-                      v-model="tuteur.telephone"
-                      :rules="regleTel"
-                      required
-                      prepend-icon="phone"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12>
-                    <v-text-field
-                      label="Téléphone Professionnel"
-                      prepend-icon="phone"
-                      v-model="tuteur.telephonePro"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex md12 lg12 x112 sm12 xs12>
-                    <v-checkbox v-if="!existeAutredemandeur(tuteur)"
-                      label="Ce tuteur est aussi le demandeur"
-                      v-model="tuteur.estDemandeur"
-                    ></v-checkbox>
-                  </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field
-                      label="Rue"
-                      :rules="regleRue"
-                      v-model="rue"
-                      required
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field
-                      label="Ville"
-                      :rules="regleVille"
-                      v-model="ville"
-                      required
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field
-                      required
-                      :rules="regleCodePostal"
-                      v-model="codePostal"
-                      label="Code postal"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field
-                      required
-                      :rules="regleEmail"
-                      v-model="email"
-                      label="Mail"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex md6 lg6 xl6 sm12 xs12 v-if="tuteur.estDemandeur">
-                    <v-text-field
-                      required
-                      :counter="15"
-                      :rules="regleNom"
-                      v-model="nomDeNaissance"
-                      label="Nom de naissance"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 v-if="tuteur.estDemandeur">
-                    <h3>Nombre de semaine(s) de congé supplémentaire(s): {{nombreSemaine}}</h3>
-                    <v-slider v-model="nombreSemaine"
-                              min="0" max="10"
-                              thumb-label step="1" ticks
-                              required
-                              v-if="inputSemaineDisable"></v-slider>
-                  </v-flex>
-                  <v-flex xs12 v-if="tuteur.estDemandeur">
-                    <a @click="toogleChange">
-                      {{toogleText}}
-                      <v-icon>arrow_drop_down</v-icon>
-                    </a>
-                    <v-text-field
-                      label="Nombre de semaines supplementaire de congé"
-                      color="blue"
-                      type="number"
-                      required
-                      v-model="nombreSemaine"
-                      :rules="regleSemaine"
-                      v-if="!inputSemaineDisable"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout v-else>
-                  <v-select
-                    :items="allExistingTuteurs"
-                    label="Choisissez un tuteur dans la liste"
-                    :rules="regleListeTuteurs"
-                    v-model="tuteur.informationTuteurExistant"
-                    item-text="nom_complet"
-                    append-icon="search"
-                    autocomplete
-                    required
-                  >
-                    <template slot="item" slot-scope="data">
-                      <template v-if="typeof data.item !== 'object'">
-                        <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                    >
+                      <template slot="item" slot-scope="data">
+                        <template v-if="typeof data.item !== 'object'">
+                          <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                        </template>
+                        <template v-else>
+                          <v-list-tile-avatar color="blue">
+                            <span class="white--text headline">{{getInitiale(data.item)}}</span>
+                          </v-list-tile-avatar>
+                          <v-list-tile-content>
+                            <v-list-tile-title v-html="data.item.prenom_tuteur + ' ' + data.item.nom_tuteur"></v-list-tile-title>
+                            <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant"></v-list-tile-sub-title>
+                          </v-list-tile-content>
+                        </template>
                       </template>
-                      <template v-else>
-                        <v-list-tile-avatar color="blue">
-                          <span class="white--text headline">{{getInitiale(data.item)}}</span>
-                        </v-list-tile-avatar>
-                        <v-list-tile-content>
-                          <v-list-tile-title v-html="data.item.prenom_tuteur + ' ' + data.item.nom_tuteur"></v-list-tile-title>
-                          <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant"></v-list-tile-sub-title>
-                        </v-list-tile-content>
-                      </template>
-                    </template>
-                  </v-select>
-                </v-layout>
+                    </v-select>
+                  </v-layout>
+                </v-slide-y-transition>
+
               </v-container>
             </v-card>
           </v-flex>

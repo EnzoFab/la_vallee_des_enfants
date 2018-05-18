@@ -9,6 +9,19 @@
       v-if="progress !== 0"
       color="teal"
     ></v-progress-circular>
+    <v-snackbar
+      v-model="snackbar"
+      absolute
+      top
+      right
+      :color="snackBarColor"
+    >
+      <span>{{snackbarMessage}}</span>
+      <v-icon dark>check_circle</v-icon>
+      <v-btn dark flat fab @click.native="snackbar = false">
+        <v-icon small dark>fa-times</v-icon>
+      </v-btn>
+    </v-snackbar>
     <v-card>
       <v-container fluid style="min-height: 0;" grid-list-lg>
         <v-alert v-model="erreur" type="error" dismissible>
@@ -22,36 +35,42 @@
             </v-card>
           </v-flex>
           <v-flex v-else v-for="(post,i) in posts" :key="i" xs12 sm6 offset-sm3>
-            <v-card>
-              <v-card-media
-                :src="post.image"
-                height="200px"
-              >
-              </v-card-media>
-              <v-card-title primary-title>
-                <div>
-                  <div class="headline">{{post.titre}}</div>
-                  <span class="grey--text">{{post.date}}</span>
-                </div>
-              </v-card-title>
-              <v-card-actions>
-                <v-btn icon @click.native="post.contentVisible = !post.contentVisible">
-                  <v-icon>{{ post.contentVisible ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-                </v-btn>
-              </v-card-actions>
-              <v-slide-y-transition>
-                <v-card-text v-show="post.contentVisible">
+            <v-slide-y-transition>
+              <v-card>
+                <v-card-media
+                  v-if="post.image != null"
+                  :src="post.image"
+                  height="200px"
+                >
+                </v-card-media>
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">{{post.titre}}</div>
+                    <span class="grey--text">{{post.date}}</span>
+                  </div>
+                </v-card-title>
+                <v-card-actions v-if="post.image != null">
+                  <v-btn icon @click.native="post.contentVisible = !post.contentVisible">
+                    <v-icon>{{ post.contentVisible ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                  </v-btn>
+                </v-card-actions>
+                <v-card-text v-if="post.image == null">
                   {{post.message}}
                 </v-card-text>
-              </v-slide-y-transition>
-              <v-card-text>
-                <v-btn
-                  v-if="isAssMatConnected"
-                  outline color="indigo"
-                  @click="deletePost(post)"
-                >Supprimer ce post</v-btn>
-              </v-card-text>
-            </v-card>
+                <v-slide-y-transition>
+                  <v-card-text v-show="post.contentVisible" v-if="post.image != null">
+                    {{post.message}}
+                  </v-card-text>
+                </v-slide-y-transition>
+                <v-card-text>
+                  <v-btn
+                    v-if="isAssMatConnected"
+                    outline color="indigo"
+                    @click="deletePost(post)"
+                  >Supprimer ce post</v-btn>
+                </v-card-text>
+              </v-card>
+            </v-slide-y-transition>
           </v-flex>
         </v-layout>
       </v-container>
@@ -77,7 +96,7 @@
             <span class="headline">Nouveau post</span>
             <v-spacer></v-spacer>
           </v-toolbar>
-          <v-form ref="form" enctype="multipart/form-data">
+          <v-form ref="form" enctype="multipart/form-data" v-model="estValide">
             <v-card>
               <v-card-text>
                 <v-container grid-list-md>
@@ -89,7 +108,7 @@
                     </v-flex>
                     <v-flex xs12 sm12 md12>
                       <v-badge color="red" overlap v-if="imgPath != null">
-                        <v-btn slot="badge" dark small @click="removeImage" icon>
+                        <v-btn slot="badge" dark @click="removeImage" icon>
                           <v-icon>clear</v-icon>
                         </v-btn>
                         <v-avatar size="110px" color="grey lighten-4">
@@ -111,10 +130,11 @@
                     </v-flex>
                     <v-flex xs12 sm12 md12>
                       <v-text-field
-                        label="Texte"
-                        hint="Texte que vous voulez partager"
+                        label="Message"
+                        hint="Message que vous voulez partager"
                         multi-line
                         v-model="postMessage"
+                        :rules="regleMessage"
                         persistent-hint
                         required
                       ></v-text-field>
@@ -126,7 +146,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" flat @click="clearForm">Annuler</v-btn>
-                <v-btn color="blue darken-1" flat @click="envoyer">Envoyer</v-btn>
+                <v-btn color="blue darken-1" flat @click="envoyer" :disabled="!estValide">Envoyer</v-btn>
               </v-card-actions>
             </v-card>
           </v-form>
@@ -154,7 +174,14 @@ export default {
       postTitre: null,
       progress: 0,
       erreur: false,
-      erreurMessage: ''
+      erreurMessage: '',
+      snackbar: false,
+      snackbarMessage: '',
+      snackBarColor: '',
+      estValide: false,
+      regleMessage: [
+        v => !!v || 'Impossible d\'envoyer un post vide'
+      ]
     }
   },
   sockets: {
@@ -166,6 +193,8 @@ export default {
     },
     nouveauPost (data) {
       this.posts.push(data)
+      this.sortPost()
+      this.triggerSnackBar('Nouveau post', 'success')
     },
     suppressionPost (data) {
       this.deletePost(data)
@@ -198,26 +227,22 @@ export default {
       this.imgPath = null
       this.image = null
     },
-    async creerPost (image) {
-      const data = {
-        post: {
-          image: image.url || this.image.name,
-          message: this.postMessage,
-          titre: this.postTitre,
-          id_am: this.$store.state.assMat.id_assmat,
-          image_id: image.public_id
-        }
-      }
+    async creerPost (data) {
       console.log('=======DATA===', data)
       try {
         let r = await PostService.create(data)
         if (r.data.erreur == null) {
+          console.log('LES DONNEES ', {
+            id_post: r.data.id_post,
+            image_id: r.data.imageID
+          })
           return {
-            id_post: r.id_post,
-            image_id: r.imageID
+            id_post: r.data.id_post,
+            image_id: r.data.imageID
           }
         } else {
           this.triggerErreur('Une erreur est survenue')
+          return null
         }
       } catch (error) {
         this.triggerErreur(error.toString())
@@ -225,7 +250,7 @@ export default {
       }
     },
     async saveImg () { // sauvegarde l'image sur le serveur
-      if (this.image) {
+      if (this.image && this.image != null) {
         const formData = new FormData()
         console.log('IMAGE====', this.image)
         formData.append('image', this.image, this.image.name)
@@ -259,15 +284,24 @@ export default {
       try {
         let image = await this.saveImg()
         console.log(image)
-        if (image != null) {
-          let result = await this.creerPost(image)
+        if (image && image != null) {
+          let data = {
+            post: {
+              image: image.url || this.image.name,
+              message: this.postMessage,
+              titre: this.postTitre,
+              id_am: this.$store.state.assMat.id_assmat,
+              image_id: image.public_id
+            }
+          }
+          let result = await this.creerPost(data)
           if (result != null) {
             let post = {
-              image: image.url, // this.imgPath,
+              image: image.url || null, // this.imgPath,
               message: this.postMessage,
               titre: this.postTitre,
               id_post: result.id_post,
-              image_id: result.image_id,
+              image_id: result.image_id || null,
               date: this.dateFr(new Date()),
               contentVisible: false
             }
@@ -280,8 +314,34 @@ export default {
             this.triggerErreur('Il y a un problème dans la création du post')
           }
         } else {
-          this.dialog = false
-          this.triggerErreur('Il y a un problème dans la création du post')
+          let data = {
+            post: {
+              image: null,
+              message: this.postMessage,
+              titre: this.postTitre || null,
+              id_am: this.$store.state.assMat.id_assmat,
+              image_id: null
+            }
+          }
+          let result = await this.creerPost(data)
+          if (result != null) {
+            let post = {
+              image: null, // this.imgPath,
+              message: this.postMessage,
+              titre: this.postTitre,
+              id_post: result.id_post,
+              image_id: null,
+              date: this.dateFr(new Date()),
+              contentVisible: false
+            }
+            console.log(post)
+            this.posts.push(post)
+            this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+            this.clearForm()
+          } else {
+            this.dialog = false
+            this.triggerErreur('Il y a un problème dans la création du post')
+          }
         }
       } catch (e) {
         this.dialog = false
@@ -290,22 +350,27 @@ export default {
       }
     },
     async deleteHostedImage (imageId) { // supprime l'image du serveur
-      console.log('PUBLIC ID ', imageId)
-      try {
-        let response = await FileService.deleteImg(imageId)
-        if (response.data.erreur == null) {
-          return true
-        } else {
-          console.log('SUPER ERREUR ', response.data.erreur)
-          this.triggerErreur(response.data.erreur.toString())
+      // console.log('PUBLIC ID ', imageId)
+      if (imageId != null) {
+        try {
+          let response = await FileService.deleteImg(imageId)
+          if (response.data.erreur == null) {
+            return true
+          } else {
+            console.log('SUPER ERREUR ', response.data.erreur)
+            this.triggerErreur(response.data.erreur.toString())
+            return false
+          }
+        } catch (e) {
+          this.triggerErreur(e.toString())
           return false
         }
-      } catch (e) {
-        this.triggerErreur(e.toString())
-        return false
+      } else { // s'il n'y a pas d'image alors pas besoin de la supprimer du cloud
+        return true
       }
     },
     async deleteDBPost (idPost) { // permet de supprimer un dans la base de données
+      console.log('DELETE ID')
       try {
         let response = await PostService.delete(idPost)
         if (response.data.erreur == null) {
@@ -320,12 +385,12 @@ export default {
       }
     },
     async deletePost (post) {
-      if (await this.deleteDBPost(post.id_post) && await this.deleteHostedImage(post.image_id)) {
+      if (this.deleteDBPost(post.id_post) && this.deleteHostedImage(post.image_id)) {
         this.deletePostFromArray(post)
+        this.triggerSnackBar('Post supprimé avec succès', 'success')
         this.$socket.emit('suppressionPost', post)
       } else {
         this.triggerErreur('Une erreur est survenue')
-        this.dialog = false
       }
     },
     async initPost () {
@@ -361,8 +426,14 @@ export default {
       this.erreur = true
       this.erreurMessage = erreur
     },
+    triggerSnackBar (message, color) {
+      this.snackbar = true
+      this.snackbarMessage = message
+      this.snackBarColor = color
+    },
     deletePostFromArray (post) { // supprime un post de la liste
       this.posts.splice(this.posts.indexOf(post), 1)
+      this.sortPost() // trie le tableau
     },
     dateFr (date) {
       var dateString = null
@@ -373,6 +444,11 @@ export default {
       dateString = day + ' ' + month + ' ' + year
 
       return dateString
+    },
+    sortPost () {
+      this.posts.sort(function (a, b) {
+        return a.id_post - b.id_post
+      })
     }
   },
   computed: {

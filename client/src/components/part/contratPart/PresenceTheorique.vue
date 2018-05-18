@@ -1,6 +1,6 @@
 <template>
   <v-flex  xs12 class="my-1">
-    <v-toolbar class="pink lighten-4" dark>
+    <v-toolbar class="pink lighten-4">
       <v-spacer></v-spacer>
       <v-toolbar-title>Planning des présences</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -178,7 +178,6 @@
           </v-card>
         </v-flex>
         <v-flex md12 lg12 xl12 sm12 xs12>
-          <v-btn>Retour</v-btn>
           <v-btn
             depressed large round
             :dark="presences.length > 0"

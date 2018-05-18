@@ -153,7 +153,7 @@ export default {
   getAllDaySupposedToBeWorkedForChild(numMois, annee, presencesTheoriques) {
     var nbJours = 0
 
-    var joursTravailles
+    var joursTravailles 
   }
 }
 
