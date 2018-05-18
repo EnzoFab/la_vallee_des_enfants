@@ -15,6 +15,7 @@ router.get('/:n/allchildrennp', function (req, res, next) {
     let day = req.params.n
     console.log(day + ' day')
     modelPresenceTheorique.getChildrenNonPresentsOfTheDay(day, function (retour) {
+        console.log(retour)
         res.send(retour);
     });
 });
