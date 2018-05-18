@@ -93,15 +93,6 @@ export default {
       const data = {login: this.login, mdp: this.mdp}
       this.$emit('formSubmitted', data)
       this.clearForm()
-      /* if (this.estAssMat) { // si c'est une assmatt on passe le connexion et le mot de passe
-        const data = {login: this.login, mdp: this.mdp}
-        this.$emit('formSubmitted', data)
-        // on envoie un evenement
-      } else { // sinon on passe le mail et le mot de passe
-        const data = {email: this.email, mdp: this.mdp}
-        this.$emit('formSubmitted', data)
-        // on envoie un evenement
-      } */
     },
     clearForm () {
       this.$refs.form.reset()

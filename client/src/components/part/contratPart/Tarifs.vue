@@ -142,7 +142,6 @@ export default {
   mounted () {
     this.initIndemnites()
     this.initGouter()
-    console.log('HELLLLOOOOOO')
     return 1
   },
   methods: {
@@ -156,7 +155,6 @@ export default {
     },
     async initGouter () {
       try {
-        console.log('salut')
         const response = await TypeService.gouter()
         this.gouter = response.data.gouter + ' €'
         console.log(response.data)

@@ -320,7 +320,6 @@ export default {
       }
     },
     async deletePost (post) {
-      console.log('POST', post)
       if (await this.deleteDBPost(post.id_post) && await this.deleteHostedImage(post.image_id)) {
         this.deletePostFromArray(post)
         this.$socket.emit('suppressionPost', post)

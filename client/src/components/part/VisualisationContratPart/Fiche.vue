@@ -410,10 +410,9 @@ export default {
     async exportPDF () {
       try {
         const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
-        console.log('ICIIIIII', presences)
         console.log('ICIIII 2 ', presences.data.resultats)
         console.log(this.numeroContrat)
-        let data = {employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nbSemSupp: this.nbSemSupp, nombreSemSupp: this.nombreSemSupp },
+        let data = {employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nombreSemSupp: this.nombreSemSupp },
           assmat: {nomNaissanceAssMat: this.nomNaissanceAssMat, nomUsageAssMat: this.nomUsageAssMat, prenomAssMat: this.prenomAssMat, dateNaissanceAssMat: this.dateNaissanceAssMat, villeNaissanceAssMat: this.villeNaissanceAssMat, numeroSS: this.numeroSS, dateAgrement: this.dateAgrement, referenceAgrement: this.referenceAgrement, assurance: this.assurance, numeroPolice: this.numeroPolice, nombreSemaineConges: this.nombreSemaineConges},
           enfant: {nomEnfant: this.nomEnfant, prenomEnfant: this.prenomEnfant, dateNaissanceEnfant: this.dateNaissanceEnfant},
           contrat: {dateDebAdapt: this.dateDebAdapt, nb_heures_semaine: this.nb_heures_semaine, tarif: this.tarif, taux_majore: this.taux_majore, jour_paiement: this.jour_paiement, modeDePaiementContrat: this.modeDePaiementContrat}

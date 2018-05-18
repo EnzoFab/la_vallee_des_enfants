@@ -287,7 +287,6 @@ export default {
     async initTuteurExistant () {
       try {
         let response = await TuteurService.getListTuteurEnfant()
-        console.log('=======', response.data)
         this.allExistingTuteurs = response.data.resultats
         console.log(this.allExistingTuteurs)
       } catch (e) {
@@ -330,7 +329,6 @@ export default {
       var vm = this
       let data = {tuteurs: [], asEmployeur: false}
       this.tuteurs.forEach(function (tuteur) {
-        console.log(tuteur)
         if (!tuteur.tuteurExistant) {
           if (tuteur.estDemandeur) {
             data.asEmployeur = true

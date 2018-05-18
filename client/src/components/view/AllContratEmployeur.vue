@@ -65,10 +65,8 @@ export default {
       })
     },
     async loadContratEmployeur () {
-      console.log('AVANT LE TRY', this.$route.params.numE)
       try {
         let response = await ContratService.getAllByIdEmployeur(this.$route.params.numE)
-        console.log('NUMERO DE LA ROUTE', this.$route.params.numE)
         this.contrats = response.data.contrats
       } catch (e) {
         console.log(e)

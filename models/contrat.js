@@ -5,7 +5,7 @@ let Contrat = {
 
     getAll: function (callback) {
         db.query(
-            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant',
+            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant ORDER BY C.date_debut, E.nom_enfant',
             [],
             function (err, rslt){
                 retour = {
@@ -101,8 +101,6 @@ let Contrat = {
                     retour.id_employeur = rslt.rows[0].id_employeur,
                     retour.statut = 200;
                 }
-                console.log('coucou')
-                console.log(retour.mail_employeur)
                 callback(retour); // on passe en parametre l'objet retour
                 // il faudra verifier si une erreur existe ou non
             }
@@ -111,7 +109,7 @@ let Contrat = {
 
     getAllByIdEmployeur: function (numeroEmployeur, callback) {
         db.query(
-            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant AND c.id_employeur = $1',
+            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant AND c.id_employeur = $1 ORDER BY C.date_debut, E.nom_enfant',
             [numeroEmployeur],
             function (err, rslt){
                 retour = {

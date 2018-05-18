@@ -248,7 +248,6 @@ export default {
     async loadJours () {
       try {
         let response = await TypeService.joursDeLaSemaine()
-        console.log(response.data)
         this.jours = response.data.typesjour
         console.log(this.jours)
       } catch (e) {

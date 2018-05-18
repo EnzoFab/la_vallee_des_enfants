@@ -37,6 +37,8 @@ export default {
     p += '<th>Mercredi</th>'
     p += '<th>Jeudi</th>'
     p += '<th>Vendredi</th>'
+    p += '<th>Samedi</th>'
+    p += '<th>Dimanche</th>'
     p += '</tr>'
     p += '<tr>'
     p += '<td> Heure d arrivée </td> '
@@ -57,30 +59,6 @@ export default {
     var htmlP1 = `<!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th {
-            background-color: #f1f1c1;
-        }
-        table#t01 {
-            width: 80%;
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        table#t02 {
-            width: 80%;
-        }
-        table#t03 {
-            width: 100%;
-            border: 1px solid black;
-            border-collapse: collapse; 
-        }
-    </style>
 
     <meta charset="UTF-8">
     <center><h2><u>Renseignements personnels</u></h2></center>
