@@ -6,23 +6,9 @@
         <h4 class="purple--text">Accueil</h4>
         <v-icon x-large color="purple">home</v-icon>
       </v-tab>
-      <v-tab>
-        <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
-          <a class="tabs__item" slot="activator" >
-            <h4 class="pink--text">Présences</h4>
-          <v-icon x-large color="pink">access_time</v-icon>
-          </a>
-          <v-list class="grey lighten-3" >
-            <router-link avatar v-for="menu in menusPresence" :key="menu.id" :to="menu.route" tag="v-list-tile">
-              <v-list-tile-avatar>
-                <v-icon medium :class="[menu.iconClass]">{{ menu.icon }}</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ menu.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </router-link>
-          </v-list>
-        </v-menu>
+      <v-tab to="/presence/saisir"  ripple class="d-inline-block">
+        <h4 class="pink--text"> Présences </h4>
+        <v-icon x-large color="pink">access_time</v-icon>
       </v-tab>
       <v-tab to="/contrat"  ripple class="d-inline-block">
         <h4 class="orange--text"> Contrats </h4>
