@@ -14,6 +14,7 @@ import AllContratEmployeur from '@/components/view/AllContratEmployeur'
 import SaisirPresences from '@/components/part/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
 import ParametresCompte from '@/components/view/ParametresCompte'
+import ParametresCompteEmployeur from '@/components/view/ParametresCompteEmployeur'
 import FilActualite from '@/components/view/FilActualite'
 import VisualisationContrat from '@/components/view/VisualisationContrat'
 import store from '../store/store'
@@ -76,6 +77,12 @@ export default new Router({
       name: 'ParametresCompte',
       component: ParametresCompte,
       meta: {title: 'ParametresCompte'}
+    },
+    {
+      path: '/parametres/employeur',
+      name: 'ParametresCompteEmployeur',
+      component: ParametresCompteEmployeur,
+      meta: {title: 'ParametresCompteEmployeur'}
     },
     {
       path: '/accueil',

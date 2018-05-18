@@ -211,6 +211,67 @@ let Employeur = {
                 callback(retour)
             })
     },
+
+    updateMdp: function (idEmp, ancienMdp, nouveauMdp, reecrireMdp, callback) {
+        db.query('SELECT * FROM public.employeur WHERE id_employeur = $1',
+            [idEmp],
+            function (err, result) {
+                let retour = {
+                    erreur : null,
+                    statut: null
+                };
+                if(retour.erreur == null){
+                    // On vérifie que l'ancien mot de passe rentré soit bien celui de la bd
+                    bcrypt.compare(ancienMdp, result.rows[0].mot_de_passe, function(e, res) {
+                        if(e){
+                            retour.erreur = {
+                                texte: e.toString()
+                            }
+                            retour.statut = 500
+                        }else if(!res){
+                            retour.erreur = {
+                                texte: 'Mauvais mot de passe'
+                            }
+                            retour.statut = 500
+                        }else{
+                            if(nouveauMdp === reecrireMdp) {
+                                bcrypt.hash(nouveauMdp, 8, function (e, hash) {
+                                    if (e) {
+                                        retour.erreur = {
+                                            texte: e.toString()
+                                        }
+                                    }
+                                    else {
+                                        db.query("UPDATE public.employeur SET mot_de_passe = $1",
+                                            [hash],
+                                            function (err, result) {
+                                                if (err) {
+                                                    retour.statut = 500
+                                                    retour.erreur = err.toString()
+                                                }
+                                                else {
+                                                    retour.statut = 200
+                                                }
+                                            });
+                                    }
+                                });
+                            }
+                            else {
+                                retour.erreur = {
+                                    texte: 'Les mots de passe ne correspondent pas'
+                                }
+                            }
+                            retour.statut = 200
+                        }
+                        callback(retour);
+                    });
+
+                }else{
+                    callback(retour);
+                }
+
+            });
+    }
 };
 
 module.exports = Employeur;

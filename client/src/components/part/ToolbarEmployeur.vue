@@ -24,7 +24,7 @@
           <v-icon x-large color="teal">account_circle</v-icon>
         </a>
         <v-list class="grey lighten-3" >
-          <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
+          <router-link avatar key="paramcompte" to="/parametres/employeur" tag="v-list-tile">
             <v-list-tile-avatar>
               <v-icon medium class="transparent grey--text">settings</v-icon>
             </v-list-tile-avatar>

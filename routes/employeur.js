@@ -52,4 +52,16 @@ router.put('/modifEmp', function (req, res) {
     })
 });
 
+// Update du mot de passe
+router.put('/modifMdp', function (req, res) {
+    let num_employeur = req.body.id_employeur
+    let ancienMdp = req.body.ancienpwd
+    let nouveauMdp = req.body.nouveaupwd
+    let reecrireMdp = req.body.reecrirepwd
+    modelEmployeur.updateMdp(num_employeur, ancienMdp, nouveauMdp, reecrireMdp, function (retour) {
+        res.send(retour)
+    })
+});
+
+
 module.exports = router;
