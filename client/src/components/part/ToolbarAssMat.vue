@@ -39,7 +39,7 @@
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
           <h4 class="teal--text">Compte</h4>
-          <v-icon x-large color="teal">account_box</v-icon>
+          <v-icon x-large color="teal">account_circle</v-icon>
         </a>
         <v-list class="grey lighten-3" >
           <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
@@ -84,38 +84,6 @@ export default {
           iconClass: 'transparent lighten-1 grey--text',
           title: 'Pointer',
           route: '/presence/saisir'
-        }
-      ],
-      menusContrat: [
-        {
-          id: 'c1',
-          icon: 'edit',
-          iconClass: 'transparent grey--text',
-          title: 'Créer un contrat',
-          route: '/contrat'
-        },
-        {
-          id: 'c2',
-          icon: 'visibility',
-          iconClass: 'transparent lighten-1 grey--text',
-          title: 'Consulter mes contrats',
-          route: '/contrat'
-        }
-      ],
-      menusPost: [
-        {
-          id: 'po1',
-          icon: 'edit',
-          iconClass: 'transparent grey--text',
-          title: 'Éditer un post',
-          route: '/post/creer'
-        },
-        {
-          id: 'po2',
-          icon: 'event',
-          iconClass: 'transparent lighten-1 grey--text',
-          title: 'Mes posts',
-          route: '/post/consulter'
         }
       ]
     }
