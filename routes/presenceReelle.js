@@ -2,6 +2,31 @@ var express = require('express');
 var router = express.Router();
 var modelPresenceReelle = require('../models/presenceReelle');
 
+
+/* --------------------------------------- ROUTES GET ----------------------------------------------------------- */
+
+router.get('/existe', function (req, res, next) {
+    let date = new Date (req.query.date.substring(0,15))
+    let enfant = parseInt(req.query.enfant)
+    modelPresenceReelle.existePresenceReelle(date, enfant, function (retour) {
+        res.send(retour);
+    });
+});
+
+router.get('/all/:annee/:numMois/:numC', function (req, res, next) {
+    let annee = req.params.annee
+    let mois = req.params.numMois
+    let numC = req.params.numC
+    console.log('router' + annee + '  ' + mois + '   ' + numC)
+    modelPresenceReelle.getAllPresencesDuMois(annee, mois, numC, function (retour) {
+        res.send(retour);
+    });
+});
+
+
+
+/* --------------------------------------- ROUTES POST ----------------------------------------------------------- */
+
 router.post('/create', function (req, res, next) {
     let preelle = req.body.presence
     preelle.datepresencereelle = new Date(preelle.datepresencereelle)
@@ -18,6 +43,16 @@ router.post('/createPresExc', function (req, res, next) {
         res.send(retour);
     });
 });
+
+router.post('/createAbs', function (req, res, next) {
+    let abs = req.body.absence
+    abs.datepresencereelle = new Date(abs.datepresencereelle)
+    modelPresenceReelle.createAbs(abs, function (retour) {
+        res.send(retour);
+    });
+});
+
+/* --------------------------------------- ROUTES PUT ----------------------------------------------------------- */
 
 router.put('/majHeureArrivee', function (req, res, next) {
     let preelle = req.body.presence
@@ -43,22 +78,6 @@ router.put('/majGouter', function (req, res, next) {
 router.put('/majFactureAssociee', function (req, res, next) {
     let preelle = req.body.presence
     modelPresenceReelle.updateFactureAssociee(preelle, function (retour) {
-        res.send(retour);
-    });
-});
-
-router.get('/existe', function (req, res, next) {
-    let date = new Date (req.query.date.substring(0,15))
-    let enfant = parseInt(req.query.enfant)
-    modelPresenceReelle.existePresenceReelle(date, enfant, function (retour) {
-        res.send(retour);
-    });
-});
-
-router.post('/createAbs', function (req, res, next) {
-    let abs = req.body.absence
-    abs.datepresencereelle = new Date(abs.datepresencereelle)
-    modelPresenceReelle.createAbs(abs, function (retour) {
         res.send(retour);
     });
 });

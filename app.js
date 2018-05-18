@@ -36,7 +36,8 @@ var presencereelle = require('./routes/presenceReelle');
 var post = require('./routes/post');
 var files = require('./routes/files');
 var mail = require('./routes/mail');
-var typejour = require('./routes/typeJour')
+var typejour = require('./routes/typeJour');
+var facture = require('./routes/facture');
 
 
 
@@ -80,6 +81,7 @@ app.use('/contrat', contrat),
 app.use('/presencetheo', presencetheo),
 app.use('/posts', post)
 app.use('/files', files)
+app.use('/factures', facture)
 
 
 
