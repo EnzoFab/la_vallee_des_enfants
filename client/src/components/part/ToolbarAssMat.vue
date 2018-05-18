@@ -24,50 +24,27 @@
           </v-list>
         </v-menu>
       </v-tab>
-      <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
-        <h4 class="blue--text"> Inscription </h4>
-        <v-icon x-large color="blue">assignment</v-icon>
-      </v-tab>
-      <v-tab>
-        <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
-          <a class="tabs__item" slot="activator" >
-            <h4 class="blue--text">Contrats</h4>
-            <v-icon x-large color="blue">attach_file</v-icon>
-          </a>
-          <v-list class="grey lighten-3" >
-            <v-list-tile avatar @click="nouveauContrat" >
-              <v-list-tile-avatar>
-                <v-icon medium class="transparent grey--text">edit</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Créer un contrat</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile avatar to="/contrat" >
-              <v-list-tile-avatar>
-                <v-icon medium class="transparent lighten-1 grey--text">visibility</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>Consulter mes contrats</v-list-tile-title>
-              </v-list-tile-content>
-
-            </v-list-tile>
-          </v-list>
-        </v-menu>
+      <v-tab to="/contrat"  ripple class="d-inline-block">
+        <h4 class="orange--text"> Contrats </h4>
+        <v-icon x-large color="orange">description</v-icon>
       </v-tab>
       <v-tab to="/actualites" class="d-inline-block" ripple>
-        <h4 class="indigo--text"> Fil d'actualité </h4>
-        <v-icon x-large color="indigo">event</v-icon>
+        <h4 class="blue--text"> Fil d'actualité </h4>
+        <v-icon x-large color="blue">event</v-icon>
+      </v-tab>
+      <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
+        <h4 class="indigo--text"> Inscription </h4>
+        <v-icon x-large color="indigo">assignment</v-icon>
       </v-tab>
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
           <h4 class="teal--text">Compte</h4>
-          <v-icon x-large color="teal">edit</v-icon>
+          <v-icon x-large color="teal">account_box</v-icon>
         </a>
         <v-list class="grey lighten-3" >
           <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
             <v-list-tile-avatar>
-              <v-icon medium class="transparent grey--text">event</v-icon>
+              <v-icon medium class="transparent grey--text">settings</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>Paramètres</v-list-tile-title>
