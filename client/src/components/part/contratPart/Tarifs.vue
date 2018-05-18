@@ -7,108 +7,108 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-flex mt-3>
-      <v-form v-model="estValide">
-        <v-layout>
-          <v-flex offset-md1 md10>
-            <h3>Nombre de semaines d'accueil</h3>
-            <v-text-field
-              v-model="nbSemAccueil"
-              prepend-icon="date_range"
-              disabled
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout>
-          <v-flex md6>
-            <v-flex>
-              <h3>Salaire</h3>
-              <v-flex md11>
+    <v-container fluid grid-list-md>
+      <v-layout row wrap>
+        <v-flex mt-3>
+          <v-form v-model="estValide">
+            <v-layout>
+              <v-flex offset-md1 md10>
+                <h3>Nombre de semaines d'accueil</h3>
                 <v-text-field
-                  label="Salaire Brut"
-                  v-model= "calculerSalBrut"
-                  :rules="regleSalaire"
-                  prepend-icon="monetization_on"
+                  v-model="nbSemAccueil"
+                  prepend-icon="date_range"
                   disabled
                 ></v-text-field>
               </v-flex>
-              <v-flex md11>
-                <v-text-field
-                  label="Salaire Net"
-                  v-model="salaireNet"
-                  :rules="regleSalaire"
-                  prepend-icon="attach_money"
-                  color="yellow darken-2"
-                  required
-                ></v-text-field>
+            </v-layout>
+            <v-layout>
+              <v-flex md6>
+                <v-flex>
+                  <h3>Salaire</h3>
+                  <v-flex md11>
+                    <v-text-field
+                      label="Salaire Brut"
+                      v-model= "calculerSalBrut"
+                      :rules="regleSalaire"
+                      prepend-icon="monetization_on"
+                      disabled
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md11>
+                    <v-text-field
+                      label="Salaire Net"
+                      v-model="salaireNet"
+                      :rules="regleSalaire"
+                      prepend-icon="attach_money"
+                      color="yellow darken-2"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md11>
+                    <v-layout>
+                      <v-text-field
+                        label="Majoration"
+                        v-model="majoration"
+                        :rules="regleMajo"
+                        prepend-icon="add_circle_outline"
+                        color="yellow darken-2"
+                        required
+                      ></v-text-field>
+                      <v-flex mt-4 md1>%</v-flex>
+                    </v-layout>
+                  </v-flex>
+                </v-flex>
               </v-flex>
-              <v-flex md11>
-                <v-layout>
+              <v-flex mt-5 md6>
+                <v-card height="150">
+                  <h2 align="center">Salaire mensuel : </h2>
+                  <span class="display-3"> {{ salaireMensuel }} € </span>
+                </v-card>
+              </v-flex>
+            </v-layout>
+            <v-layout>
+              <v-flex md6>
+                <v-flex md11>
+                  <h3>Indémnités journalières</h3>
                   <v-text-field
-                    label="Majoration"
-                    v-model="majoration"
-                    :rules="regleMajo"
-                    prepend-icon="add_circle_outline"
-                    color="yellow darken-2"
-                    required
+                    v-model="indemniteJour"
+                    :rules="regleTarif"
+                    prepend-icon="bubble_chart"
+                    disabled
                   ></v-text-field>
-                  <v-flex mt-4 md1>%</v-flex>
-                </v-layout>
+                </v-flex>
               </v-flex>
-            </v-flex>
-          </v-flex>
-          <v-flex mt-5 md6>
-            <v-card height="150">
-              <h2 align="center">Salaire mensuel : </h2>
-              <span class="display-3"> {{ salaireMensuel }} € </span>
-            </v-card>
-          </v-flex>
-        </v-layout>
-        <v-layout>
-          <v-flex md6>
-            <v-flex md11>
-              <h3>Indémnités journalières</h3>
-              <v-text-field
-                v-model="indemniteJour"
-                :rules="regleTarif"
-                prepend-icon="bubble_chart"
-                disabled
-              ></v-text-field>
-            </v-flex>
-          </v-flex>
-          <v-flex md6>
-            <v-flex md11>
-              <h3>Goûter</h3>
-              <v-text-field
-                v-model="gouter"
-                :rules="regleTarif"
-                prepend-icon="restaurant"
-                disabled
-              ></v-text-field>
-            </v-flex>
-          </v-flex>
-        </v-layout>
-      </v-form>
-    </v-flex>
-    <v-flex mt-3 xs12>
-      <v-btn
-        class="yellow lighten-2"
-        depressed large round
-        @click="back"
-      >Précédent</v-btn>
-      <v-btn
-        depressed large round
-        class="yellow lighten-2"
-        @click="envoyer"
-        :disabled="!estValide"
-      >Suivant</v-btn>
-    </v-flex>
+              <v-flex md6>
+                <v-flex md11>
+                  <h3>Goûter</h3>
+                  <v-text-field
+                    v-model="gouter"
+                    :rules="regleTarif"
+                    prepend-icon="restaurant"
+                    disabled
+                  ></v-text-field>
+                </v-flex>
+              </v-flex>
+            </v-layout>
+          </v-form>
+        </v-flex>
+        <v-flex md12 lg12 xl12 sm12 xs12>
+          <v-btn
+            depressed large round
+            class="yellow lighten-2"
+            @click="envoyer"
+            :disabled="!estValide"
+          >Suivant</v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-flex>
-
 </template>
 
 <script>
 import TypeService from '../../../services/TypeService'
+import ContratService from '../../../services/ContratService'
+import FonctionMath from '../../../helper/FonctionMath'
 export default {
   name: 'Tarifs',
   data () {
@@ -116,8 +116,9 @@ export default {
       salaireNet: 3.25,
       indemniteJour: null,
       gouter: null,
-      nbSemAccueil: null,
-      salaireMensuel: 100,
+      congeParent: 0,
+      congeAssmat: 0,
+      heureSemaine: 0,
       majoration: 25,
       estValide: false,
       regleSalaire: [
@@ -136,13 +137,19 @@ export default {
   },
   computed: {
     calculerSalBrut () {
-      return this.salaireNet * 2.0
+      return FonctionMath.arrondi(this.salaireNet / 0.77, 2)
+    },
+    salaireMensuel () {
+      return (this.heureSemaine * this.salaireNet * this.nbSemAccueil) / 12
+    },
+    nbSemAccueil () {
+      return 52 - this.congeAssmat - this.congeParent
     }
   },
   mounted () {
     this.initIndemnites()
     this.initGouter()
-    return 1
+    this.initDataFromContrat()
   },
   methods: {
     async initIndemnites () {
@@ -160,6 +167,21 @@ export default {
         console.log(response.data)
       } catch (e) {
         console.log(e)
+      }
+    },
+    async initDataFromContrat () {
+      try {
+        let reponse = await ContratService.findOne(this.$store.state.numContrat)
+        if (reponse.data.erreur == null) {
+          this.heureSemaine = reponse.data.nb_heures_semaine || 0
+          this.congeParent = reponse.data.nb_semaines_conges_parents || 0
+          this.congeAssmat = reponse.data.nb_semaines_conges || 0
+          this.heureSemaine = reponse.data.nb_heures_semaine || 1
+        } else {
+          console.log(reponse.data.erreur)
+        }
+      } catch (e) {
+        console.log(e.toString())
       }
     },
     envoyer () {
