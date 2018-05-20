@@ -55,6 +55,7 @@
 import Fiche from '../part/VisualisationContratPart/Fiche'
 import Calendar from '../part/Calendar'
 import Planning from '../part/Planning'
+import ContratService from '../../services/ContratService'
 export default {
   name: 'VisualisationContrat',
   components: {Planning, Fiche, Calendar},
@@ -71,10 +72,24 @@ export default {
       this.snackbarMessage = message
       this.snackBarColor = color
       this.snackbar = true
-    },
+    }
   },
   mounted () {
     this.$refs.fiche.initDonnees()
+  },
+  beforeRouteEnter (to, from, next) {
+    // verifier que le contrat existe
+    ContratService.donneesContrat(to.params.numC)
+      .then(function (result) {
+        if (result.data.erreur == null) {
+          next()
+        } else {
+          next('/404') // si le contrat n'existe pas redirection vers la page 404
+        }
+      })
+      .catch(function () {
+        next('/404')
+      })
   }
 }
 </script>

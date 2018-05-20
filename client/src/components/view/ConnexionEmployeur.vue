@@ -24,7 +24,7 @@ export default {
   data: () => ({
     error: '',
     alert: false,
-    progress: false,
+    progress: false
   }),
   components: {
     Login

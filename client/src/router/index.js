@@ -198,30 +198,32 @@ router.beforeEach(function (to, from, next) {
   if (store.getters.isAssMatConnected) {
     AssistanteService.findOne(store.state.assMat.id_assmat).then(function (rslt) {
       if (rslt.data.erreur != null) {
-        this.$store.dispatch('setToken', null)
-        this.$store.dispatch('removeAssMat')
+        store.dispatch('setToken', null)
+        store.dispatch('removeAssMat')
       }
+      next()
     })
-      .catch(function (err) {
-        console.log(err)
-        this.$store.dispatch('setToken', null)
-        this.$store.dispatch('removeAssMat')
+      .catch(function () {
+        store.dispatch('setToken', null)
+        store.dispatch('removeAssMat')
+        next()
       })
   } else if (store.getters.isEmployeurConnected) {
     EmployeurService.getListTuteurEnfant(store.state.employeur.id_employeur)
       .then(function (rslt) {
         if (rslt.data.erreur != null) {
-          this.$store.dispatch('setToken', null)
-          this.$store.dispatch('removeEmployeur')
+          store.dispatch('setToken', null)
+          store.dispatch('removeEmployeur')
         }
+        next()
       })
-      .catch(function (err) {
-        if (err.data.erreur != null) {
-          this.$store.dispatch('setToken', null)
-          this.$store.dispatch('removeEmployeur')
-        }
+      .catch(function () {
+        store.dispatch('setToken', null)
+        store.dispatch('removeAssMat')
+        next()
       })
+  } else {
+    next()
   }
-  next()
 })
 export default router

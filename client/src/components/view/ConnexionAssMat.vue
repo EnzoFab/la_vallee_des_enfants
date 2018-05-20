@@ -16,7 +16,6 @@
 
     </v-container>
 
-
     <!-- formSubmitted est un evenement envoyé par le composant login
      on appelle une fonction  lorsque l'evenement intervient et ça
      peut être n'importe qu'elle fonction-->

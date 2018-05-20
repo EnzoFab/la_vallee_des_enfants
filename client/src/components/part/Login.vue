@@ -75,7 +75,7 @@ export default {
     toolbarColor: String,
     btnColor: String,
     titre: {String, required},
-    progress: {Boolean, required:true}
+    progress: {Boolean, required: true}
   },
   data: () => ({
     mdp: '',

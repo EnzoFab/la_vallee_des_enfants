@@ -51,6 +51,7 @@ router.put('/:n/update', function (req, res) {
 // Modification des données d'un parent
 router.put('/modifTuteur', function (req, res) {
     let tuteur = req.body.tuteur
+    console.log(tuteur)
     modelTuteur.updateInfosTuteur(tuteur, function (retour) {
         res.send(retour)
     })
