@@ -22,6 +22,9 @@ export default {
         },
         {
           src: '/static/carousel_image/4.jpg'
+        },
+        {
+          src: '/static/carousel_image/8.jpg'
         }
       ]
     }

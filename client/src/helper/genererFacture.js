@@ -5,9 +5,9 @@ import ContratService from '../services/ContratService'
 
 
 export default {
-  data () {
+  async data () {
     // Recupere toutes les informations générales
-    const basic = FactureService.getInfosBasics(idContrat)
+    const basic = await FactureService.getInfosBasics('monprems1')
     let infosBasiques = basic.data
 
     const gouter = TypeService.gouter()

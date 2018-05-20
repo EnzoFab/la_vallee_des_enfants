@@ -1,6 +1,15 @@
 <template>
   <v-flex md10 offset-md1>
     <v-card>
+      <v-snackbar
+        v-model="snackbar"
+        absolute
+        top
+        right
+        :color="snackBarColor"
+      >
+        <span>{{snackbarMessage}}</span>
+      </v-snackbar>
       <v-alert v-model="erreur" type="error" dismissible>
         {{erreurMessage}}
       </v-alert>
@@ -19,6 +28,8 @@
           <v-stepper-step step="6" :complete="estValideEtape6" editable >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="7" :complete="estValideEtape7" editable>Tarifs</v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="8" :complete="estValideEtape7" editable>Fin</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
@@ -40,7 +51,10 @@
             <PresenceTheorique @back="back" @submit="submitPresences"></PresenceTheorique>
           </v-stepper-content>
           <v-stepper-content step="7">
-            <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
+          <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
+        </v-stepper-content>
+          <v-stepper-content step="8">
+            <FinContrat @back="back" @envoyer="sauvegarderContrat" :progress="showProgress"></FinContrat>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -64,11 +78,13 @@ import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
 import MailHelper from '../../helper/sendMail'
 import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
+import FinContrat from '../part/contratPart/FinContrat'
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
 
 export default {
   name: 'NouveauContrat',
   components: {
+    FinContrat,
     ChoisirAssMat,
     PresenceTheorique,
     TuteursLegaux,
@@ -81,6 +97,12 @@ export default {
   },
   data () {
     return {
+      enfant: null,
+      presenceTheorique: null,
+      tuteurs: null,
+      informationGenerale: null,
+      tarif: null,
+      employeur: null,
       etape: 1,
       estValideEtape1: false,
       estValideEtape2: false,
@@ -93,11 +115,64 @@ export default {
       erreur: false,
       erreurMessage: null,
       idAssmat: null,
-      idEnfant: null
+      idEnfant: null,
+      showProgress: false,
+      snackbar: false,
+      snackBarColor: '',
+      snackbarMessage: ''
     }
   },
   methods: {
-    async submitEnfant (data) {
+    submitEnfant (data) {
+      this.enfant = data
+      this.estValideEtape1 = true
+      this.etape++
+    },
+    submitTuteurs (data) {
+      this.tuteurs = data
+      this.estValideEtape3 = true
+      if (data.asEmployeur) {
+        this.etape = 5
+      } else {
+        this.etape = 4
+      }
+    },
+    submitEmp (data) {
+      this.employeur = data
+      this.estValideEtape4 = true
+      this.etape++
+    },
+    submitInfoG (data) {
+      this.informationGenerale = data
+      this.etape++
+      this.estValideEtape5 = true
+    },
+    submitPresences (data) {
+      this.presenceTheorique = data
+      this.etape++
+      this.estValideEtape6 = true
+    },
+    submitTarifs (data) {
+      this.tarif = data
+      this.etape++
+      this.fin = true
+      this.estValideEtape7 = true
+    },
+    async sauvegarderContrat () {
+      this.showProgress = true
+      if (await this.saveEnfant(this.enfant) && await this.saveTuteurs(this.tuteurs) && this.saveEmployeur(this.employeur) &&
+      await this.saveInformationGenerale(this.informationGenerale) && this.savePresence(this.presenceTheorique) &&
+      this.saveTarif(this.tarif)) {
+        this.triggerSnackBar('Contrat créé avec succès', 'success')
+        this.showProgress = false
+        this.$router.push({
+          path: '/contrat/' + this.$store.state.numContrat}
+        )
+      } else {
+        this.showProgress = false
+      }
+    },
+    async saveEnfant (data) {
       // console.log(this.$store.state.assMat.id_assmat)
       try {
         let response = await EnfantService.findOneByContratID(this.$store.state.numContrat)// on regarde si l'enfant existe deja
@@ -108,10 +183,10 @@ export default {
             data)
           if (result.data.erreur == null) {
             this.idEnfant = response.data.enfant.id
-            this.estValideEtape1 = true
-            this.etape++
+            return true
           } else {
             this.triggerErreur(result.data.erreur)
+            return false
           }
         } else if (response.data.statut === 404) { // l'enfant n'existe pas
           let enfantR = await EnfantService.createContratEnfant(data) // creation d'un nouvel enfant
@@ -127,23 +202,26 @@ export default {
             console.log(updateContrat.data)
             if (updateContrat.data.erreur == null) {
               this.idEnfant = enfantR.data.id_enfant
-              this.estValideEtape1 = true
-              this.etape++
+              return true
             } else {
               this.triggerErreur('Une erreur est survenue')
+              return false
             }
           } else {
             this.triggerErreur('Une erreur est survenue')
+            return false
           }
         } else {
           this.triggerErreur('Une erreur est survenue')
+          return false
         }
       } catch (e) {
         this.triggerErreur(e.toString())
       }
     },
-    async submitTuteurs (data) {
+    async saveTuteurs (data) {
       console.log(data)
+      var estValide = true
       let tuteurs = data.tuteurs
       for (var i = 0; i < tuteurs.length; i++) {
         console.log(tuteurs[i])
@@ -155,7 +233,7 @@ export default {
             })
             if (res.data.erreur != null) {
               this.triggerErreur(res.data.erreur)
-              return
+              estValide = false
             }
           } else {
             let response = await TuteurService.createTuteur({tuteur: tuteurs[i]}) // creation du tuteur
@@ -167,6 +245,7 @@ export default {
               }) // lie le tuteurs et l'enfant
               if (res.data.erreur != null) {
                 this.triggerErreur(res.data.erreur)
+                estValide = false
               } else {
                 if (tuteurs[i].infoDemandeur != null) { // le tuteurs est demandeur
                   var login = tuteurs[i].prenom + '_' + tuteurs[i].nomUsage + generator.generate({length: 3, numbers: true})
@@ -185,19 +264,19 @@ export default {
                     mot_de_passe: generator.generate({length: 10, numbers: true}) // mot de passe de taille 10
                   }
                   console.log('=======', donneeEmployeur)
-                  if (!this.saveEmployeur(donneeEmployeur)) {
-                    return
+                  if (!this.saveEmployeurIntermediare(donneeEmployeur)) {
+                    estValide = false
                   }
                 }
               }
             } else {
               this.triggerErreur(response.data.erreur)
-              return
+              estValide = false
             }
           }
         } catch (e) {
           this.triggerErreur(e.toString())
-          return
+          estValide = false
         }
       }
       /* tuteurs.forEach(function (tuteur) {
@@ -208,37 +287,33 @@ export default {
           this.triggerErreur(er)
         })
       }) */
-      this.estValideEtape3 = true
-      if (data.asEmployeur) {
-        this.etape = 5
+      return estValide
+    },
+    async saveEmployeur (data) {
+      let donneeEmployeur = {}
+      if (data.employeur.employeurExistant == null) {
+        var login = data.employeur.prenom + '_' + data.employeur.nomUsage + generator.generate({length: 3, numbers: true})
+        donneeEmployeur = { // a modifier
+          nom_naissance_employeur: data.employeur.nomNaissance,
+          nom_usage_employeur: data.employeur.nomUsage,
+          prenom_employeur: data.employeur.prenom,
+          cp_employeur: data.employeur.codePostal,
+          telephone_employeur: data.employeur.telephone1,
+          ville_employeur: data.employeur.ville,
+          mail_employeur: data.employeur.email,
+          rue: data.employeur.rue,
+          nb_semaines_conges: data.congesSupp,
+          identifiant_connexion: login.replace(/\s/g, '').toLowerCase(), // login sans espaces et en minuscule
+          mot_de_passe: generator.generate({length: 10, numbers: true})// mot de passe de taille 10
+        }
       } else {
-        this.etape = 4
+        donneeEmployeur = {
+          employeurExistant: data.employeur.employeurExistant
+        }
       }
+      return this.saveEmployeurIntermediare(donneeEmployeur)
     },
-    async submitEmp (data) {
-      console.log(data)
-      // store data in DB
-      var login = data.prenom + '_' + data.nomUsage + generator.generate({length: 3, numbers: true})
-      let donneeEmployeur = { // a modifier
-        nom_naissance_employeur: data.employeur.nomNaissance,
-        nom_usage_employeur: data.employeur.nomUsage,
-        prenom_employeur: data.employeur.prenom,
-        cp_employeur: data.employeur.codePostal,
-        telephone_employeur: data.telephone1,
-        ville_employeur: data.employeur.ville,
-        mail_employeur: data.employeur.email,
-        rue: data.employeur.rue,
-        nb_semaines_conges: data.congesSupp,
-        identifiant_connexion: login.replace(/\s/g, '').toLowerCase(), // login sans espaces et en minuscule
-        mot_de_passe: generator.generate({length: 10, numbers: true}) // mot de passe de taille 10
-      }
-
-      if (this.saveEmployeur(donneeEmployeur)) {
-        this.estValideEtape4 = true
-        this.etape++
-      }
-    },
-    async submitInfoG (data) {
+    async saveInformationGenerale (data) {
       console.log(data)
       let donnees = {
         id_type_contrat: data.typeContrat,
@@ -251,17 +326,18 @@ export default {
       try {
         let response = await ContratService.updateInfoG(this.$store.state.numContrat, donnees)
         if (response.data.erreur == null) {
-          this.etape++
-          this.estValideEtape5 = true
+          return true
         } else {
           console.log(response.data.erreur)
           this.triggerErreur('Une erreur est survenue')
+          return false
         }
       } catch (e) {
         this.triggerErreur(e.toString())
+        return false
       }
     },
-    async submitPresences (data) {
+    async savePresence (data) {
       console.log(this.etape)
       console.log(data)
       let erreur = false
@@ -285,19 +361,20 @@ export default {
           let reponse = await ContratService.updateHeureHebdo(this.$store.state.numContrat,
             {nb_heures_semaine: data.nbHeureSemaine})
           if (reponse.data.erreur == null) {
-            this.etape++
-            this.estValideEtape6 = true
+            return true
           } else {
             this.triggerErreur('Une erreur est survenue')
             console.log(reponse.data.erreur)
+            return false
           }
         } catch (e) {
           console.log(e.toString())
           this.triggerErreur('Une erreur est survenue')
+          return false
         }
       }
     },
-    async submitTarifs (data) {
+    async saveTarif (data) {
       console.log(data)
       try {
         let reponse = await ContratService.updateTarif(this.$store.state.numContrat,
@@ -306,26 +383,24 @@ export default {
             taux_majore: data.majoration
           })
         if (reponse.data.erreur == null) {
-          this.$router.push({
-            path: process.env.BASE_URL + '/contrat/' + this.$store.state.numContrat}
-          )
+          return true
         } else {
           this.triggerErreur('Une erreur est survenue')
           console.log(reponse.data.erreur)
+          return false
         }
       } catch (e) {
         this.triggerErreur('Une erreur est survenue')
         console.log(e.toString())
+        return false
       }
-      this.etape++
-      this.fin = true
-      this.estValideEtape7 = true
     },
     submitAssMat (data) {
       this.idAssmat = data
       console.log(this.idAssmat)
       this.etape++
     },
+
     back () {
       this.etape--
     },
@@ -333,33 +408,50 @@ export default {
       this.erreurMessage = data
       this.erreur = true
     },
+    triggerSnackBar (message, color) {
+      this.snackbarMessage = message
+      this.snackBarColor = color
+      this.snackbar = true
+    },
     annuler () {
       // redirection
     },
-    async saveEmployeur (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
-      try {
-        let response = await EmployeurService.createEmployeur({employeur: employeur})
-        if (response.data.erreur == null) {
-          let idEmployeur = response.data.id
-          let r = await ContratService.updateInfosEmp(this.$store.state.numContrat, {
-            id_employeur: idEmployeur,
-            nb_semaines_conges_parents: employeur.nb_semaines_conges
-          })
-          if (r.data.erreur == null) {
-            return MailHelper.mailConnexionEmployeur(
-              employeur.identifiant_connexion,
-              employeur.mot_de_passe,
-              employeur.mail_employeur)
+    async saveEmployeurIntermediare (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
+      console.log(employeur)
+      if (employeur.employeurExistant == null) {
+        console.log('La') //
+        try {
+          let response = await EmployeurService.createEmployeur({employeur: employeur})
+          if (response.data.erreur == null) {
+            let idEmployeur = response.data.id
+            let r = await ContratService.updateInfosEmp(this.$store.state.numContrat, {
+              id_employeur: idEmployeur,
+              nb_semaines_conges_parents: employeur.nb_semaines_conges
+            })
+            if (r.data.erreur == null) {
+              return MailHelper.mailConnexionEmployeur(
+                employeur.identifiant_connexion,
+                employeur.mot_de_passe,
+                employeur.mail_employeur)
+            } else {
+              return false
+            }
           } else {
+            this.triggerErreur(response.data.erreur)
             return false
           }
-        } else {
-          this.triggerErreur(response.data.erreur)
+        } catch (e) {
+          this.triggerErreur(e.toString())
           return false
         }
-      } catch (e) {
-        this.triggerErreur(e.toString())
-        return false
+      } else {
+        console.log('Ici')
+        try {
+          await ContratService.updateInfosEmp(this.$store.state.numContrat,
+            {id_employeur: employeur.employeurExistant.id_employeur})
+        } catch (e) {
+
+        }
       }
     }
   },

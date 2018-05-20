@@ -19,6 +19,12 @@ router.get('/employeursEnfants', function (req, res, next) {
     });
 });
 
+router.get('/:n', function (req, res) {
+    modelEmployeur.findOne(function (retour) {
+        res.send(retour)
+    })
+})
+
 /* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/login', function (req, res, next) {

@@ -29,6 +29,7 @@
     "vue-full-calendar": "^2.5.4",
     "vue-fullcalendar": "^1.0.9",
     "vue-router": "^3.0.1",
+    "vue-schedule": "^2.0.3",
     "vue-socket.io": "^2.1.1-b",
     "vue2-google-maps": "^0.9.6",
     "vuetify": "^1.0.17",

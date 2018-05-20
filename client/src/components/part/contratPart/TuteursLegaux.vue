@@ -5,10 +5,10 @@
       <v-toolbar-title>Tuteurs légaux</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <span small  class="red--text">
+    <!-- <span small  class="red--text">
       <v-icon>warning</v-icon>
       <i >Attention remplissez bien cette section il ne sera pas possible de revenir en arrière</i>
-    </span>
+    </span> -->
     <div v-if="btnVisible">
       <v-btn icon large dark color="indigo"
              @click="addTuteur">
@@ -204,7 +204,13 @@
           </v-flex>
           <v-flex md12 lg12 xl12 sm12 xs12>
             <v-btn
-              color="green lighten-1"
+              class="light-blue lighten-4"
+              depressed large round
+              @click="back"
+              light
+            >Précédent</v-btn>
+            <v-btn
+              color="light-blue lighten-4"
               depressed large round
               :dark="estValide"
               @click="submit"
@@ -329,7 +335,8 @@ export default {
       }
       return existe
     },
-    async submit () {
+
+    submit () {
       // envoyer
       var vm = this
       let data = {tuteurs: [], asEmployeur: false}
@@ -353,22 +360,6 @@ export default {
         }
         data.tuteurs.push(tuteur)
       })
-      /* for (var tuteur in this.tuteurs) {
-        console.log(tuteur)
-        if (tuteur.estDemandeur) {
-          console.log(tuteur)
-          data.asEmployeur = true
-          tuteur.infoDemandeur = {
-            rue: this.rue,
-            codePostal: this.codePostal,
-            email: this.email,
-            ville: this.ville,
-            nombreSemainesSupplementaires: this.nombreSemainesSupplementaires,
-            nomNaissance: this.nomNaissance
-          }
-        }
-        data.tuteurs.push(tuteur)
-      } */
       this.$emit('submit', data)
     },
     back () {

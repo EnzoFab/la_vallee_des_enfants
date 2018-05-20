@@ -6,7 +6,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-form v-model="estValide" ref="form" class="pa-3">
-      <v-flex xs12 class="ma-3">
+      <v-flex md12 lg12 xl12 sm12 xs12  class="ma-3">
         <h3>Type de contrat</h3>
         <v-select
           :items="typesContrats"
@@ -21,7 +21,7 @@
           :rules="regleTypeContrat"
         ></v-select>
       </v-flex>
-      <v-flex xs12 class="ma-3">
+      <v-flex md12 lg12 xl12 sm12 xs12  class="ma-3">
         <h3>Date de début du contrat</h3>
         <v-menu
           ref="menu"
@@ -45,6 +45,9 @@
             readonly
           ></v-text-field>
           <v-date-picker
+            full-width
+            class="mt-3"
+            reactive
             locale="fr_FR"
             v-model="date"
             no-title
@@ -54,14 +57,14 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <v-flex xs12 class="ma-3">
+      <v-flex md6 lg6 xl6 sm12 xs12  class="ma-3">
         <h3>Date début période adaptation</h3>
         <v-menu
           ref="menu2"
           lazy
           :close-on-content-click="false"
           v-model="menu2"
-          transition="scale-transition"
+          transition="slide-y-transition"
           offset-y
           full-width
           :nudge-right="40"
@@ -82,6 +85,9 @@
           ></v-text-field>
           <v-date-picker
             locale="fr_FR"
+            full-width
+            class="mt-3"
+            reactive
             v-model="dateDebutPeriodeAdapt"
             no-title
             scrollable
@@ -90,7 +96,7 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <v-flex xs12 class="ma-3">
+      <v-flex md6 lg6 xl6 sm12 xs12  class="ma-3">
         <h3>Date fin période adaptation</h3>
         <v-menu
           ref="menu3"
@@ -117,6 +123,9 @@
             readonly
           ></v-text-field>
           <v-date-picker
+            full-width
+            class="mt-3"
+            reactive
             locale="fr_FR"
             v-model="dateFinPeriodeAdapt"
             no-title
@@ -126,7 +135,7 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <v-flex xs12 class="ma-3">
+      <v-flex md6 lg6 xl6 sm12 xs12  class="ma-3">
         <h3>Mode de paiement</h3>
         <v-select
           :items="modesPaiements"
@@ -155,15 +164,22 @@
           prepend-icon="attach_money"
           ></v-select>
       </v-flex>
-      <v-btn
-        color="green lighten-1"
-        depressed large round
-        :dark="!isDisabled"
-        @click="envoyer"
-        :disabled="isDisabled"
-      >
-        Suivant
-      </v-btn>
+      <v-flex md12 lg12 xl12 sm12 xs12 >
+        <v-btn
+          class="green lighten-1"
+          depressed large round
+          @click="back"
+        >Précédent</v-btn>
+        <v-btn
+          color="green lighten-1"
+          depressed large round
+          :dark="!isDisabled"
+          @click="envoyer"
+          :disabled="isDisabled"
+        >
+          Suivant
+        </v-btn>
+      </v-flex>
     </v-form>
   </v-flex>
 </template>

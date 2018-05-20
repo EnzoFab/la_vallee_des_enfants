@@ -18,6 +18,8 @@ import ParametresCompteEmployeur from '@/components/view/ParametresCompteEmploye
 import FilActualite from '@/components/view/FilActualite'
 import VisualisationContrat from '@/components/view/VisualisationContrat'
 import store from '../store/store'
+import AssistanteService from '../services/AssistanteService'
+import EmployeurService from '../services/EmployeurService'
 
 Vue.use(Router)
 
@@ -62,8 +64,7 @@ const isNotConnected = function (to, from, next) {
     next('/')
   }
 }
-
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -189,3 +190,38 @@ export default new Router({
     }
   ]
 })
+
+/**
+ * Avant chaque route on va verifier si la personne est existe
+ */
+router.beforeEach(function (to, from, next) {
+  if (store.getters.isAssMatConnected) {
+    AssistanteService.findOne(store.state.assMat.id_assmat).then(function (rslt) {
+      if (rslt.data.erreur != null) {
+        this.$store.dispatch('setToken', null)
+        this.$store.dispatch('removeAssMat')
+      }
+    })
+      .catch(function (err) {
+        console.log(err)
+        this.$store.dispatch('setToken', null)
+        this.$store.dispatch('removeAssMat')
+      })
+  } else if (store.getters.isEmployeurConnected) {
+    EmployeurService.getListTuteurEnfant(store.state.employeur.id_employeur)
+      .then(function (rslt) {
+        if (rslt.data.erreur != null) {
+          this.$store.dispatch('setToken', null)
+          this.$store.dispatch('removeEmployeur')
+        }
+      })
+      .catch(function (err) {
+        if (err.data.erreur != null) {
+          this.$store.dispatch('setToken', null)
+          this.$store.dispatch('removeEmployeur')
+        }
+      })
+  }
+  next()
+})
+export default router

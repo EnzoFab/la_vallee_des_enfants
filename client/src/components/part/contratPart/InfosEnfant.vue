@@ -86,7 +86,7 @@
             class="light-green lighten-4"
             depressed large round
             @click="back"
-          >Retour</v-btn>
+          >Précédent</v-btn>
           <v-btn
             depressed large round
             class="light-green lighten-4"

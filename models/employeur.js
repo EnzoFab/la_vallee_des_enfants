@@ -9,9 +9,9 @@ let Employeur = {
      * @param email : Mail de l'employeur
      * @param callback : doit prendre un unique parametre
      */
-    findOne: function (email, callback) {
-        db.query('SELECT * FROM public.employeur E WHERE E.mail_employeur=$1',
-            [email],
+    findOne: function (idEmployeur, callback) {
+        db.query('SELECT * FROM public.employeur E WHERE E.id_employeur=$1',
+            [idEmployeur],
             function (err, rst) {
                 retour = {
                     erreur: null,
@@ -144,9 +144,11 @@ let Employeur = {
 
     getEmployeursEnfants: function (callback) {
         db.query(
-            'SELECT E2.nom_enfant, E2.prenom_enfant, E.nom_usage_employeur, E.nom_naissance_employeur, E.prenom_employeur ' +
-            'FROM public.employeur E, public.enfant E2, public.contrat C ' +
-            'WHERE C.id_employeur = E.id_employeur AND C.id_enfant = E2.id_enfant ORDER BY E.prenom_employeur',
+            'SELECT E2.nom_enfant, E2.prenom_enfant, E.nom_usage_employeur, E.nom_naissance_employeur, E.prenom_employeur, E.id_employeur\n' +
+            'FROM public.employeur E, public.enfant E2, public.contrat C \n' +
+            'WHERE C.id_employeur = E.id_employeur AND C.id_enfant = E2.id_enfant\n' +
+            'GROUP BY E2.nom_enfant, E2.prenom_enfant, E.nom_usage_employeur, E.nom_naissance_employeur, E.prenom_employeur, E.id_employeur\n' +
+            'ORDER BY E.prenom_employeur',
             [],
             function (err, rslt){
                 retour = {
@@ -161,11 +163,14 @@ let Employeur = {
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
                         array.push({
+                            id_employeur: rslt.rows[i].id_employeur,
                             prenom_enfant: rslt.rows[i].prenom_enfant,
                             nom_enfant: rslt.rows[i].nom_enfant,
                             nom_usage_employeur: rslt.rows[i].nom_usage_employeur,
                             nom_naissance_employeur: rslt.rows[i].nom_naissance_employeur,
-                            prenom_employeur: rslt.rows[i].prenom_employeur
+                            prenom_employeur: rslt.rows[i].prenom_employeur,
+                            nom_complet: rslt.rows[i].prenom_employeur + ' ' + rslt.rows[i].nom_usage_employeur + ' '
+                                    + rslt.rows[i].nom_naissance_employeur
                         });
                         console.log('array', array)
                     }

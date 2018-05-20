@@ -247,7 +247,9 @@ export default {
     async loadJours () {
       try {
         let response = await TypeService.joursDeLaSemaine()
-        this.jours = response.data.typesjour
+        if (response.data.erreur == null) {
+          this.jours = response.data.typesjour
+        }
         console.log(this.jours)
       } catch (e) {
         this.msgErreur = 'Erreur ' + e.toString()
