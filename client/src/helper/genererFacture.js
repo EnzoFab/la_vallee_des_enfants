@@ -5,9 +5,9 @@ import ContratService from '../services/ContratService'
 
 
 export default {
-  data () {
+  async data () {
     // Recupere toutes les informations générales
-    const basic = FactureService.getInfosBasics('monprems1')
+    const basic = await FactureService.getInfosBasics('monprems1')
     let infosBasiques = basic.data
 
     const gouter = TypeService.gouter()
@@ -153,7 +153,7 @@ export default {
   getAllDaySupposedToBeWorkedForChild(numMois, annee, presencesTheoriques) {
     var nbJours = 0
 
-    var joursTravailles 
+    var joursTravailles
   }
 }
 

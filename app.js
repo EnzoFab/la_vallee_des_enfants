@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cors = require('cors');
 var fileUpload = require('express-fileupload');
 var helmet = require('helmet');
+var expressJwt = require('express-jwt');
 
 
 var app = express();
@@ -52,10 +53,12 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(__dirname + '/public'));
 app.use(fileUpload());
 
+const unlessPath = ['/employeur/login', '/assmats/login']
+app.use(expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
+// verifie le token dans le header sauf pour les routes dans unless
+
 
 /* ======================  ROUTES ================================================ */
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/employeurs', EmployeurRouter);
 app.use('/assmats', assMatRouter);
 app.use('/evenements', evenementRouter);

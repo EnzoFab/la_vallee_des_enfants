@@ -4,14 +4,19 @@
       <v-alert type="error" dismissible v-model="alert">
         {{error}}
       </v-alert>
-      <login id="amlogin"
-             type="assMat"
-             @formSubmitted="connexion"
-             titre="Connexion assistante maternelle"
-             toolbar-color="pink lighten-1"
-             btnColor="pink lighten-2"
-      ></login>
+
+        <login id="amlogin"
+               type="assMat"
+               @formSubmitted="connexion"
+               titre="Connexion assistante maternelle"
+               toolbar-color="pink lighten-1"
+               btnColor="pink lighten-2"
+               :progress="progress"
+        ></login>
+
     </v-container>
+
+
     <!-- formSubmitted est un evenement envoyé par le composant login
      on appelle une fonction  lorsque l'evenement intervient et ça
      peut être n'importe qu'elle fonction-->
@@ -25,24 +30,33 @@ export default {
   name: 'ConnexionAM',
   data: () => ({
     error: '',
-    alert: false
+    alert: false,
+    progress: false
   }),
   components: {
     Login
   },
   methods: {
     async connexion (data) {
+      this.progress = true
       try {
         const response = await AuthentificationService.loginAssMat(data)
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setAssMat', response.data.assmat)
-        console.log(this.$store.state.assMat)
-        this.$router.push({
-          name: 'Accueil'
-        })
+        if (response.data.erreur == null) {
+          this.$store.dispatch('setToken', response.data.token)
+          this.$store.dispatch('setAssMat', response.data.assmat)
+          console.log(this.$store.state.assMat)
+          this.progress = false
+          this.$router.push({
+            name: 'Accueil'
+          })
+        } else {
+          this.showError(response.data.erreur.texte)
+          this.progress = false
+        }
       } catch (error) {
         console.log(error)
-        this.error = error.response.data.error
+        this.showError('Une erreur est survenue')
+        this.progress = false
       }
     },
     showError (erreur) { // affiche l'erreur

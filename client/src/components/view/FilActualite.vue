@@ -1,14 +1,6 @@
 <template>
   <v-container fluid>
     <!-- <Calendar :customEvents="post"></Calendar> -->
-    <v-progress-circular
-      :size="100"
-      :width="15"
-      :rotate="360"
-      :value="progress"
-      v-if="progress !== 0"
-      color="teal"
-    ></v-progress-circular>
     <v-snackbar
       v-model="snackbar"
       absolute
@@ -139,15 +131,24 @@
                         required
                       ></v-text-field>
                     </v-flex>
+                    <v-fade-transition>
+                      <v-flex xs12 sm12 md12>
+                        <v-progress-circular :size="40" :width="7" indeterminate color="purple" v-if="showProgress"></v-progress-circular>
+                      </v-flex>
+                    </v-fade-transition>
+
                   </v-layout>
                 </v-container>
                 <small>*indicates required field</small>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click="clearForm">Annuler</v-btn>
-                <v-btn color="blue darken-1" flat @click="envoyer" :disabled="!estValide">Envoyer</v-btn>
-              </v-card-actions>
+              <v-fade-transition>
+                <v-card-actions v-if="!showProgress">
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat @click="clearForm">Annuler</v-btn>
+                  <v-btn color="blue darken-1" flat @click="envoyer" :disabled="!estValide">Envoyer</v-btn>
+                </v-card-actions>
+              </v-fade-transition>
+
             </v-card>
           </v-form>
         </v-dialog>
@@ -168,11 +169,12 @@ export default {
     return {
       posts: [],
       dialog: false,
+      progress: false,
+      showProgress: false,
       imgPath: null,
       image: null,
       postMessage: null,
       postTitre: null,
-      progress: 0,
       erreur: false,
       erreurMessage: '',
       snackbar: false,
@@ -281,6 +283,7 @@ export default {
       }
     },
     async envoyer () {
+      this.showProgress = true
       try {
         let image = await this.saveImg()
         console.log(image)
@@ -308,9 +311,11 @@ export default {
             console.log(post)
             this.posts.push(post)
             this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
+            this.showProgress = false
             this.clearForm()
           } else {
             this.dialog = false
+            this.showProgress = false
             this.triggerErreur('Il y a un problème dans la création du post')
           }
         } else {
@@ -336,17 +341,20 @@ export default {
             }
             console.log(post)
             this.posts.push(post)
+            this.showProgress = false
             this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
             this.clearForm()
           } else {
             this.dialog = false
             this.triggerErreur('Il y a un problème dans la création du post')
+            this.showProgress = false
           }
         }
       } catch (e) {
         this.dialog = false
         console.log(e)
         this.triggerErreur('Une erreur est survenue')
+        this.showProgress = false
       }
     },
     async deleteHostedImage (imageId) { // supprime l'image du serveur

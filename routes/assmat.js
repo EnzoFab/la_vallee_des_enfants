@@ -18,6 +18,12 @@ router.get('/all', function (req, res, next) {
     })
 });
 
+router.get('/:n', function (req, res) {
+    modelAssMat.findOne(req.params.n, function (retour) {
+        res.send(retour)
+    })
+})
+
 /* --------------------------------------- ROUTES POST --------------------------------------------------------- */
 
 router.post('/register', function (req, res, next) {

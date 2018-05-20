@@ -13,27 +13,25 @@
       </v-layout>
       <v-layout>
         <v-container grid-list-md text-xs-center>
+          <v-layout row wrap>
             <v-flex d-flex
-                    md12 lg12 xl12 sm12 xs12 v-if="contrats.length > 0">
-              <v-flex d-flex
-                      md3 lg3 xl4 sm12 xs12
-                      v-for="(contrat,i) in contrats" :key="i">
-                <router-link v-bind:to="'/contrat/' + contrat.id"><v-card>
-                  <v-flex v-if="contrat.sexeEnfant == 'F'">
-                    <img height="200px" src="/static/fille.png" />
+                    md3 lg3 xl4 sm12 xs12
+                    v-for="(contrat,i) in contrats" :key="i"
+                    v-if="contrats.length > 0">
+              <v-card :to="'/contrat/' + contrat.id">
+                <v-flex v-if="contrat.sexeEnfant == 'F'">
+                  <img height="200px" src="/static/fille.png" />
+                </v-flex>
+                <v-flex v-else>
+                  <img height="200px" src="/static/boy.png" />
+                </v-flex>
+                <v-flex>
+                  <v-divider></v-divider>
+                  <v-flex mt-2>
+                    <h4>{{ contrat.nomEnfant }} {{ contrat.prenomEnfant }}</h4>
                   </v-flex>
-                  <v-flex v-else>
-                    <img height="200px" src="/static/boy.png" />
-                  </v-flex>
-                  <v-flex>
-                    <v-divider></v-divider>
-                    <v-flex mt-2>
-                      <h4>{{ contrat.nomEnfant }} {{ contrat.prenomEnfant }}</h4>
-                    </v-flex>
-                  </v-flex>
-                </v-card>
-                </router-link>
-              </v-flex>
+                </v-flex>
+              </v-card>
             </v-flex>
             <v-flex d-flex
                     md12 lg12 xl12 sm12 xs12 v-else>
@@ -41,6 +39,7 @@
                 <i>Aucun contrat</i>
               </v-card >
             </v-flex>
+          </v-layout>
         </v-container>
       </v-layout>
     </v-container>

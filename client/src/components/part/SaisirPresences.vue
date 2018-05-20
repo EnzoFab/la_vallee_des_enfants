@@ -260,7 +260,6 @@
           </v-card>
         </v-dialog>
 
-
         <v-flex ml-5 md5 mt-5>
           <v-layout>
             <v-flex class=" light-green--text text--darken-3 text-md-center ">
@@ -333,7 +332,7 @@ export default {
         { text: 'gouter', value: 'gouter' },
         { text: 'absent', value: 'absent' }
       ],
-      enfantcourant : {
+      enfantcourant: {
         a_pris_gouter: null,
         a_pris_gouter_from_bd: null,
         absence_justifiee: false,
@@ -374,17 +373,17 @@ export default {
       if (this.enfantcourant.a_pris_gouter != null) {
         this.gouterPris = this.enfantcourant.gouterPris
       }
-      console.log('azertyui   ' + this.dialogBox +'  ' + this.enfantcourant)
+      console.log('azertyui   ' + this.dialogBox + '  ' + this.enfantcourant)
     },
     updateDialogAbs (i) {
       this.enfantcourant = this.enfantsDuJour[i]
       this.dialogBoxAbsence = true
-      console.log('azertyui222   ' + this.dialogBoxAbsence +'  ' + this.enfantcourant)
+      console.log('azertyui222   ' + this.dialogBoxAbsence + '  ' + this.enfantcourant)
     },
     async getAllChildrenOfTheDay () {
       try {
         const response = await PresenceService.getAllChildrenOfTheDay()
-        console.log('response.data.   ' + response.data.presencestheoriques )
+        console.log('response.data.   ' + response.data.presencestheoriques)
         this.enfantsDuJour = response.data.presencestheoriques
         console.log('azertyuiop      ' + this.enfantsDuJour)
         for (var i = 0; i < this.enfantsDuJour.length; i++) {
@@ -413,7 +412,8 @@ export default {
           this.enfantsDuJour[i].id_presence_reelle = response2.data.id_presence
           this.enfantsDuJour[i].heure_arrivee_r = response2.data.heure_arrivee_r
           this.enfantsDuJour[i].heure_depart_r = response2.data.heure_depart_r
-          if(response2.data.heure_arrivee_r != null) {
+
+          if (response2.data.heure_arrivee_r != null) {
             var heureDecoupeeArrR = (this.enfantsDuJour[i].heure_arrivee_r).split(':', 2)
             this.enfantsDuJour[i].heureArriveeR = heureDecoupeeArrR[0]
             this.enfantsDuJour[i].minuteArriveeR = heureDecoupeeArrR[1]
@@ -421,7 +421,8 @@ export default {
             this.enfantsDuJour[i].heureArriveeR = null
             this.enfantsDuJour[i].minuteArriveeR = null
           }
-          if(response2.data.heure_depart_r != null) {
+
+          if (response2.data.heure_depart_r != null) {
             var heureDecoupeeDepR = (this.enfantsDuJour[i].heure_depart_r).split(':', 2)
             this.enfantsDuJour[i].heureDepartR = heureDecoupeeDepR[0]
             this.enfantsDuJour[i].minuteDepartR = heureDecoupeeDepR[1]
@@ -448,7 +449,6 @@ export default {
             console.log('yihahaaa   ' + this.enfantsPasDuJour[i].nomComplet)
           }
         }
-
       } catch (e) {
         console.log(e)
       }
@@ -602,7 +602,7 @@ export default {
           presence:
             {
               datepresencereelle: date,
-              id_presence_theo: id,
+              id_presence_theo: id
             }
         }
         let v = await PresenceService.enregistrerPresenceExc(data)
@@ -612,7 +612,7 @@ export default {
         this.id_enfant = null
         this.alert = true
         this.enfantsDuJour = this.getAllChildrenOfTheDay()
-        this.enfantsPasDuJour=this.getAllChildrenNotOfTheDay()
+        this.enfantsPasDuJour = this.getAllChildrenNotOfTheDay()
       } catch (e) {
         console.log(e)
       }
@@ -622,12 +622,12 @@ export default {
     }
   },
   watch: {
-    enfantsDuJour : {
+    enfantsDuJour: {
       handler (val) {
         console.log('Changement', this.enfantsDuJour)
         console.log('Valeur ', val)
       },
-      deep : true
+      deep: true
     }
   }
 

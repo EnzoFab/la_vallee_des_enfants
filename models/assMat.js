@@ -48,6 +48,38 @@ let AssMats = {
         });
     },
 
+    findOne: function (idAssMat, callback) {
+        db.query('SELECT * FROM public.assmat WHERE id_am = $1',
+           [idAssMat], function (err, rslt) {
+                let retour = {
+                    erreur: null,
+                    assmat: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Cette assmat n\'existe pas');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if (retour.erreur == null) {
+                    retour.assmat = {
+                        id_am: rslt.rows[0].id_am,
+                        nom_naissance_am: rslt.rows[0].nom_naissance_am,
+                        nom_usage_am: rslt.rows[0].prenom_am,
+                        tel_am: rslt.rows[0].tel_am,
+                        nb_semaines_conges: rslt.rows[0].nb_semaines_conges,
+                        date_naissance_am: rslt.rows[0].date_naissance_am,
+                        ville_naissance_am: rslt.rows[0].ville_naissance_am,
+                        numero_ss: rslt.rows[0].numero_ss,
+                        date_agrement: rslt.rows[0].date_agrement,
+                        reference_agrement: rslt.rows[0].reference_agrement,
+                        assurance_resp_civile: rslt.rows[0].assurance_resp_civile,
+                        num_police: rslt.rows[0].num_police,
+                        login: rslt.rows[0].login
+                    }
+                }
+                callback (retour)
+            })
+    },
+
     /**
      *
      * @param login

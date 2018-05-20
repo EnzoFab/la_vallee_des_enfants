@@ -10,6 +10,7 @@
              toolbarColor="teal lighten-2"
              btnColor="teal accent-2"
              titre="Connexion parent"
+             :progress="progress"
       ></login>
     </v-container>
   </div>
@@ -22,7 +23,8 @@ export default {
   name: 'ConnexionEmp',
   data: () => ({
     error: '',
-    alert: false
+    alert: false,
+    progress: false,
   }),
   components: {
     Login
@@ -30,10 +32,12 @@ export default {
   methods: {
     async connexion (data) {
       // est lancée lorsque le compososant envoie l'evenement == lorsqu'on appuie sur le bouton envoyer
+      this.progress = true
       console.log(data)
       try {
         const response = await AuthentificationService.login(data)
         if (response.data.erreur == null) { // connexion reussie
+          this.progress = false
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setEmployeur', response.data.employeur)
           this.$router.push({
@@ -41,11 +45,13 @@ export default {
           })
         } else {
           this.showError(response.data.erreur.texte)
+          this.progress = false
         }
         /*  */
       } catch (error) {
         console.log(error)
-        this.showError(error.response.data.error)
+        this.progress = false
+        this.showError('Une erreur est survenue')
       }
     },
     showError (erreur) { // affiche l'erreur

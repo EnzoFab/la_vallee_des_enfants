@@ -1,15 +1,14 @@
 <template>
-
   <v-flex  xs12 class="my-1">
     <v-toolbar color="red lighten-2" light>
       <v-spacer></v-spacer>
       <v-toolbar-title>Information Employeur</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <span small  class="red--text">
+    <!-- <span small  class="red--text">
       <v-icon>warning</v-icon>
       <i >Attention remplissez bien cette section il ne sera pas possible de revenir en arrière</i>
-    </span>
+    </span> -->
 
     <v-form v-model="estValide" ref="form" class="pa-3">
       <v-checkbox
@@ -21,7 +20,7 @@
           <v-layout>
             <v-select
               :items="allExistingEmployeur"
-              label="Choisissez un employeur dans la liste"
+              label="Choisissez un employeur dans la liste "
               :rules="regleListeEmployeur"
               v-model="employeurExistant"
               item-text="nom_complet"
@@ -30,19 +29,22 @@
               required
             >
               <template slot="item" slot-scope="data">
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                </template>
-                <template v-else>
-                  <v-list-tile-avatar color="blue">
-                    <span class="white--text headline">{{getInitiale(data.item)}}</span>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="data.item.prenom_tuteur + ' ' + data.item.nom_tuteur"></v-list-tile-title>
-                    <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </template>
+              <template v-if="typeof data.item !== 'object'">
+                <v-list-tile-content v-text="data.item"></v-list-tile-content>
               </template>
+              <template v-else>
+                <v-list-tile-avatar color="red">
+                  <span class="white--text headline">{{getInitiale(data.item)}}</span>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title
+                    v-html="data.item.prenom_employeur + ' ' + data.item.nom_usage_employeur + ' ' + data.item.nom_naissance_employeur">
+                  </v-list-tile-title>
+                  <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant">
+                  </v-list-tile-sub-title>
+                </v-list-tile-content>
+              </template>
+            </template>
             </v-select>
           </v-layout>
         </v-container>
@@ -174,6 +176,8 @@
 </template>
 
 <script>
+import EmployeurService from '../../../services/EmployeurService'
+
 export default {
   name: 'EmployeurOptionnel',
   data () {
@@ -228,7 +232,7 @@ export default {
     }
   },
   methods: {
-    async envoyer () {
+    envoyer () {
       let data = {
         employeur: {
           nomNaissance: this.nomNaissance,
@@ -238,15 +242,49 @@ export default {
           codePostal: this.codePostal,
           ville: this.ville,
           email: this.email,
-          telephone1: this.telephonePro
+          telephone1: this.telephonePro,
+          employeurExistant: this.employeurExistant
         },
         congesSupp: this.congesSupp
       }
+      console.log('Employeur', this.employeurExistant)
+      console.log('DATA', data)
       this.$emit('submit', data)
     },
     back () {
       this.$emit('back')
+    },
+    async loadEmployeurEnfant () {
+      console.log('ICI')
+      try {
+        let reponse = await EmployeurService.getListTuteurEnfant()
+        if (reponse.data.erreur == null) {
+          this.allExistingEmployeur = reponse.data.resultats
+          console.log('RESULTAT', reponse.data.resultats)
+        } else {
+          console.log(reponse.data.erreur)
+        }
+      } catch (e) {
+        console.log(e.toString())
+      }
+    },
+    getInitiale (item) {
+      var initiale = ''
+      initiale += item.prenom_employeur.charAt(0)
+      initiale += item.nom_usage_employeur.charAt(0)
+      return initiale.toUpperCase() // console
     }
+  },
+  watch: {
+    employeurExiste (val) {
+      if (!this.employeurExiste) {
+        this.employeurExistant = null
+        // si jamais l'employeur n'existe pas on met à null l'employeur
+      }
+    }
+  },
+  mounted () {
+    this.loadEmployeurEnfant()
   }
 }
 </script>
