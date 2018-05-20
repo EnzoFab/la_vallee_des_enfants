@@ -4,11 +4,21 @@ export default {
   getAllChildrenOfTheDay () {
     var date = new Date()
     var day = date.getDay()
+    if (day == 0) {
+      day = 7
+    } else {
+      day = day - 1
+    }
     return Api().get('presencetheo/' + day + '/allchildren')
   },
   getAllChildrenNotOfTheDay () {
     var date = new Date()
     var day = date.getDay()
+    if (day == 0) {
+      day = 7
+    } else {
+      day = day - 1
+    }
     return Api().get('presencetheo/' + day + '/allchildrennp')
   },
   recupIdPresTheoDuJour (credential) {
