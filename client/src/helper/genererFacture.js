@@ -287,7 +287,7 @@ export default {
 
         // il y a une date reelle non renseignee dans les dates theoriques i.e. presence exceptionnelle
         } else {
-          f ùfacture.nbJoursPresenceExcept = facture.nbJoursPresenceExcept + 1
+          facture.nbJoursPresenceExcept = facture.nbJoursPresenceExcept + 1
 
           j = j + 1
         }
