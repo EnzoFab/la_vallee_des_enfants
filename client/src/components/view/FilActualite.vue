@@ -1,159 +1,161 @@
 <template>
-  <v-container fluid>
-    <!-- <Calendar :customEvents="post"></Calendar> -->
-    <v-snackbar
-      v-model="snackbar"
-      absolute
-      top
-      right
-      :color="snackBarColor"
-    >
-      <span>{{snackbarMessage}}</span>
-      <v-icon dark>check_circle</v-icon>
-      <v-btn dark flat fab @click.native="snackbar = false">
-        <v-icon small dark>fa-times</v-icon>
-      </v-btn>
-    </v-snackbar>
-    <v-card>
-      <v-container fluid style="min-height: 0;" grid-list-lg>
-        <v-alert v-model="erreur" type="error" dismissible>
-         {{erreurMessage}}
-        </v-alert>
-        <v-layout row wrap>
-          <v-flex v-if="posts == 0">
-            <v-card>
-              <v-card-media>
-              </v-card-media>
-            </v-card>
-          </v-flex>
-          <v-flex v-else v-for="(post,i) in posts" :key="i" xs12 sm6 offset-sm3>
-            <v-slide-y-transition>
-              <v-card>
-                <v-card-media
-                  v-if="post.image != null"
-                  :src="post.image"
-                  height="200px"
-                >
-                </v-card-media>
-                <v-card-title primary-title>
-                  <div>
-                    <div class="headline">{{post.titre}}</div>
-                    <span class="grey--text">{{post.date}}</span>
-                  </div>
-                </v-card-title>
-                <v-card-actions v-if="post.image != null">
-                  <v-btn icon @click.native="post.contentVisible = !post.contentVisible">
-                    <v-icon>{{ post.contentVisible ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-                  </v-btn>
-                </v-card-actions>
-                <v-card-text v-if="post.image == null">
-                  {{post.message}}
-                </v-card-text>
-                <v-slide-y-transition>
-                  <v-card-text v-show="post.contentVisible" v-if="post.image != null">
-                    {{post.message}}
-                  </v-card-text>
-                </v-slide-y-transition>
-                <v-card-text>
-                  <v-btn
-                    v-if="isAssMatConnected"
-                    outline color="indigo"
-                    @click="deletePost(post)"
-                  >Supprimer ce post</v-btn>
-                </v-card-text>
-              </v-card>
-            </v-slide-y-transition>
-          </v-flex>
-        </v-layout>
-      </v-container>
-      <v-card-text style="height: 100px; position: relative">
-        <v-dialog v-model="dialog" persistent max-width="500px" v-if="isAssMatConnected">
-          <v-fab-transition slot="activator">
+  <v-container fluid class="my-1">
+    <v-layout column>
+      <v-alert v-model="erreur" type="error" dismissible>
+        {{erreurMessage}}
+      </v-alert>
+      <!-- <Calendar :customEvents="post"></Calendar> -->
+      <v-snackbar
+        v-model="snackbar"
+        absolute
+        top
+        right
+        :color="snackBarColor"
+      >
+        <span>{{snackbarMessage}}</span>
+        <v-icon dark>check_circle</v-icon>
+        <v-btn dark flat fab @click.native="snackbar = false">
+          <v-icon small dark>fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
+      <v-flex xs12 sm6>
+        <v-toolbar color="purple lighten-3" dark>
+          <v-dialog v-model="dialog" persistent max-width="500px" v-if="isAssMatConnected">
             <v-btn
+              slot="activator"
               v-if="isAssMatConnected"
-              color="pink"
+              color="deep-purple lighten-1"
               dark
               large
-              absolute
-              bottom
-              right
-              fab
+              icon
               @click.stop="dialog = true"
             >
-              <v-icon>add</v-icon>
+              <v-icon large>add</v-icon>
             </v-btn>
-          </v-fab-transition>
-          <v-toolbar color="pink" dark>
-            <v-spacer></v-spacer>
-            <span class="headline">Nouveau post</span>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-          <v-form ref="form" enctype="multipart/form-data" v-model="estValide">
-            <v-card>
-              <v-card-text>
-                <v-container grid-list-md>
-                  <v-layout wrap>
-                    <v-flex xs12 sm12 md12>
-                      <v-text-field label="Titre"  v-model="postTitre"
-                                    hint="titre de votre post (pas obligatoire)"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <v-badge color="red" overlap v-if="imgPath != null">
-                        <v-btn slot="badge" dark @click="removeImage" icon>
-                          <v-icon>clear</v-icon>
-                        </v-btn>
-                        <v-avatar size="110px" color="grey lighten-4">
-                          <img :src="imgPath" alt="image"/>
-                        </v-avatar>
-                      </v-badge>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <input label="image" style="display: none" type="file" @change="onFileChange" name="image" accept="image/*"
-                      ref="fileInput"/>
-                      <v-btn
-                        round color="indigo"
-                        outline large
-                        v-if="imgPath == null"
-                        @click="$refs.fileInput.click()"
-                      >
-                        Ajouter une image
-                      </v-btn>
-                    </v-flex>
-                    <v-flex xs12 sm12 md12>
-                      <v-text-field
-                        label="Message"
-                        hint="Message que vous voulez partager"
-                        multi-line
-                        v-model="postMessage"
-                        :rules="regleMessage"
-                        persistent-hint
-                        required
-                      ></v-text-field>
-                    </v-flex>
-                    <v-fade-transition>
+            <v-toolbar color="pink" dark>
+              <v-spacer></v-spacer>
+              <span class="headline">Nouveau post</span>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-form ref="form" enctype="multipart/form-data" v-model="estValide">
+              <v-card>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout wrap>
                       <v-flex xs12 sm12 md12>
-                        <v-progress-circular :size="40" :width="7" indeterminate color="purple" v-if="showProgress"></v-progress-circular>
+                        <v-text-field label="Titre"  v-model="postTitre"
+                                      hint="titre de votre post (pas obligatoire)"
+                        ></v-text-field>
                       </v-flex>
-                    </v-fade-transition>
+                      <v-flex xs12 sm12 md12>
+                        <v-badge color="red" overlap v-if="imgPath != null">
+                          <v-btn slot="badge" dark @click="removeImage" icon>
+                            <v-icon>clear</v-icon>
+                          </v-btn>
+                          <v-avatar size="110px" color="grey lighten-4">
+                            <img :src="imgPath" alt="image"/>
+                          </v-avatar>
+                        </v-badge>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
+                        <input label="image" style="display: none" type="file" @change="onFileChange" name="image" accept="image/*"
+                               ref="fileInput"/>
+                        <v-btn
+                          round color="indigo"
+                          outline large
+                          v-if="imgPath == null"
+                          @click="$refs.fileInput.click()"
+                        >
+                          Ajouter une image
+                        </v-btn>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
+                        <v-text-field
+                          label="Message"
+                          hint="Message que vous voulez partager"
+                          multi-line
+                          v-model="postMessage"
+                          :rules="regleMessage"
+                          persistent-hint
+                          required
+                        ></v-text-field>
+                      </v-flex>
+                      <v-fade-transition>
+                        <v-flex xs12 sm12 md12>
+                          <v-progress-circular :size="40" :width="7" indeterminate color="purple" v-if="showProgress"></v-progress-circular>
+                        </v-flex>
+                      </v-fade-transition>
 
-                  </v-layout>
-                </v-container>
-                <small>*indicates required field</small>
-              </v-card-text>
-              <v-fade-transition>
-                <v-card-actions v-if="!showProgress">
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click="clearForm">Annuler</v-btn>
-                  <v-btn color="blue darken-1" flat @click="envoyer" :disabled="!estValide">Envoyer</v-btn>
-                </v-card-actions>
-              </v-fade-transition>
+                    </v-layout>
+                  </v-container>
+                  <small>*indicates required field</small>
+                </v-card-text>
+                <v-fade-transition>
+                  <v-card-actions v-if="!showProgress">
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" flat @click="clearForm">Annuler</v-btn>
+                    <v-btn color="blue darken-1" flat @click="envoyer" :disabled="!estValide">Envoyer</v-btn>
+                  </v-card-actions>
+                </v-fade-transition>
 
-            </v-card>
-          </v-form>
-        </v-dialog>
-      </v-card-text>
-    </v-card>
+              </v-card>
+            </v-form>
+          </v-dialog>
+          <v-spacer></v-spacer>
+          <v-toolbar-title>Fil d'actualité</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <v-card style="overflow-y: scroll;" height="70vh">
+          <v-container fluid grid-list-md class="grey lighten-3" >
+            <v-layout row wrap>
+              <v-flex v-if="posts.length == 0">
+                <h1>Pas d'actualité pour le moment</h1><br>
+                <img src="/static/baby.png" height="350vh"/>
+              </v-flex>
+              <v-flex v-else v-for="(post,i) in posts" :key="i" v-bind="postLayout(i)" xs12>
+                <v-slide-y-transition>
+                  <v-card class="blue-grey lighten-5 elevation-8" >
+                    <v-card-media
+                      v-if="post.image != null"
+                      :src="post.image"
+                      height="200px"
+                    >
+                    </v-card-media>
+                    <v-card-title primary-title>
+                      <div>
+                        <div class="headline">{{post.titre}}</div>
+                        <span class="grey--text">{{post.date}}</span>
+                      </div>
+                    </v-card-title>
+                    <v-card-actions v-if="post.image != null">
+                      <v-btn icon @click.native="post.contentVisible = !post.contentVisible">
+                        <v-icon>{{ post.contentVisible ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                    <v-card-text v-if="post.image == null">
+                      {{post.message}}
+                    </v-card-text>
+                    <v-slide-y-transition>
+                      <v-card-text v-show="post.contentVisible" v-if="post.image != null">
+                        {{post.message}}
+                      </v-card-text>
+                    </v-slide-y-transition>
+                    <v-card-text>
+                      <v-btn
+                        v-if="isAssMatConnected"
+                        outline color="indigo"
+                        @click="deletePost(post)"
+                      >Supprimer ce post</v-btn>
+                    </v-card-text>
+                  </v-card>
+                </v-slide-y-transition>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+
+    </v-layout>
   </v-container>
 </template>
 
@@ -419,7 +421,7 @@ export default {
             })
           })
         } else {
-          this.triggerErreur(response.data.erreur.texte)
+          console.log(response.data.erreur.texte)
         }
       } catch (e) {
         this.triggerErreur(e.toString())
@@ -455,8 +457,18 @@ export default {
     },
     sortPost () {
       this.posts.sort(function (a, b) {
-        return a.id_post - b.id_post
+        return -(a.id_post - b.id_post)
       })
+    },
+    postLayout (itemI) { // organise les post
+      let mod = itemI % 3
+      let flex = 0
+      if (mod === 0) {
+        flex = 12
+      } else {
+        flex = 6
+      }
+      return [{ [`md${flex}`]: true }, { [`lg${flex}`]: true }, { [`xl${flex}`]: true }]
     }
   },
   computed: {
@@ -467,6 +479,7 @@ export default {
     isAssMatConnected () {
       return this.$store.getters.isAssMatConnected
     }
+
   },
   mounted () {
     this.initPost()

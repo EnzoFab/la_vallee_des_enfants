@@ -4,7 +4,7 @@ export default {
   getAllChildrenOfTheDay () {
     var date = new Date()
     var day = date.getDay()
-    if (day == 0) {
+    if (day === 0) {
       day = 7
     } else {
       day = day - 1
@@ -14,7 +14,7 @@ export default {
   getAllChildrenNotOfTheDay () {
     var date = new Date()
     var day = date.getDay()
-    if (day == 0) {
+    if (day === 0) {
       day = 7
     } else {
       day = day - 1

@@ -4,7 +4,7 @@ let helper = require('../helpers/helper');
 let post = {
     getAll: function (callback) {
         db.query(
-            'SELECT * FROM public.post',
+            'SELECT * FROM public.post ORDER BY date_post DESC, id_post DESC',
             [],
             function (err, rslt){
                 retour = {
