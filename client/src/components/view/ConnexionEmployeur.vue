@@ -37,7 +37,6 @@ export default {
       try {
         const response = await AuthentificationService.login(data)
         if (response.data.erreur == null) { // connexion reussie
-          this.progress = false
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setEmployeur', response.data.employeur)
           this.$router.push({

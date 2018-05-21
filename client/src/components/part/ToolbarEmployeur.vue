@@ -24,22 +24,22 @@
           <v-icon x-large color="teal">account_circle</v-icon>
         </a>
         <v-list class="grey lighten-3" >
-          <router-link avatar key="paramcompte" to="/parametres/employeur" tag="v-list-tile">
+          <v-list-tile avatar to="/employeur/parametres" >
             <v-list-tile-avatar>
               <v-icon medium class="transparent grey--text">settings</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>Paramètres</v-list-tile-title>
             </v-list-tile-content>
-          </router-link>
-          <router-link avatar key="deco" to="/" tag="v-list-tile">
+          </v-list-tile>
+          <v-list-tile avatar  to="/">
             <v-list-tile-avatar>
               <v-icon medium>exit_to_app</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content @click="logout">
               <v-list-tile-title>Deconnexion</v-list-tile-title>
             </v-list-tile-content>
-          </router-link>
+          </v-list-tile>
         </v-list>
       </v-menu>
     </v-tabs>

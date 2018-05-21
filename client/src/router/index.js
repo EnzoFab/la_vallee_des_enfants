@@ -7,8 +7,6 @@ import ConnexionAM from '@/components/view/ConnexionAssMat'
 import InscriptionAM from '@/components/view/Register'
 import ConnexionEmp from '@/components/view/ConnexionEmployeur'
 import SimulationContrat from '@/components/view/Simulation'
-import ToolbarEmployeur from '@/components/part/ToolbarEmployeur'
-import ToolbarAssMat from '@/components/part/ToolbarAssMat'
 import AllContrat from '@/components/view/AllContrat'
 import AllContratEmployeur from '@/components/view/AllContratEmployeur'
 import SaisirPresences from '@/components/part/SaisirPresences'
@@ -44,7 +42,15 @@ const isConnected = function (to, from, next) {
  * @param next
  */
 const isAssmat = function (to, from, next) {
-  if (store.getters.connectedUser != null) {
+  if (store.getters.connectedUser.rang === 'Assmat') {
+    next()
+  } else {
+    next('/employeur/connexion')
+  }
+}
+
+const isEmployeur = function (to, from, next) {
+  if (store.getters.connectedUser.rang === 'Employeur') {
     next()
   } else {
     next('/employeur/connexion')
@@ -74,16 +80,18 @@ const router = new Router({
       meta: {title: 'Accueil'}
     },
     {
-      path: '/parametres',
+      path: '/assistante/parametres',
       name: 'ParametresCompte',
       component: ParametresCompte,
-      meta: {title: 'ParametresCompte'}
+      meta: {title: 'ParametresCompte'},
+      beforeEnter: isAssmat
     },
     {
-      path: '/parametres/employeur',
+      path: '/employeur/parametres',
       name: 'ParametresCompteEmployeur',
       component: ParametresCompteEmployeur,
-      meta: {title: 'ParametresCompteEmployeur'}
+      meta: {title: 'ParametresCompteEmployeur'},
+      beforeEnter: isEmployeur
     },
     {
       path: '/accueil',
@@ -96,18 +104,6 @@ const router = new Router({
       name: 'home',
       component: Accueil,
       meta: {title: 'Accueil'}
-    },
-    {
-      path: '/employeur/accueil',
-      name: 'AccueilEmployeur',
-      component: ToolbarEmployeur,
-      meta: {title: 'AccueilEmployeur'}
-    },
-    {
-      path: '/assMat/accueil',
-      name: 'AccueilAssMat',
-      component: ToolbarAssMat,
-      meta: {title: 'AccueilAssMat'}
     },
     {
       path: '/contact',
@@ -126,7 +122,8 @@ const router = new Router({
       path: '/assistante/inscription',
       name: 'InscriptionAM',
       component: InscriptionAM,
-      meta: {title: 'InscriptionAM'}
+      meta: {title: 'InscriptionAM'} // ,
+      // beforeEnter: isAssmat à valider une fois le site complétement déployé
     },
     {
       path: '/employeur/connexion',

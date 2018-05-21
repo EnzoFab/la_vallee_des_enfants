@@ -18,32 +18,36 @@
         <h4 class="blue--text"> Fil d'actualité </h4>
         <v-icon x-large color="blue">event</v-icon>
       </v-tab>
-      <v-tab to="/assistante/inscription"  ripple class="d-inline-block">
-        <h4 class="indigo--text"> Inscription </h4>
-        <v-icon x-large color="indigo">assignment</v-icon>
-      </v-tab>
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
           <h4 class="teal--text">Compte</h4>
           <v-icon x-large color="teal">account_circle</v-icon>
         </a>
         <v-list class="grey lighten-3" >
-          <router-link avatar key="paramcompte" to="/parametres" tag="v-list-tile">
+          <v-list-tile to="/assistante/inscription">
+            <v-list-tile-avatar >
+              <v-icon medium>assignment</v-icon>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>Inscrire une assistante</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile avatar to="/assistante/parametres" >
             <v-list-tile-avatar>
               <v-icon medium class="transparent grey--text">settings</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>Paramètres</v-list-tile-title>
             </v-list-tile-content>
-          </router-link>
-          <router-link avatar key="deco" to="/" tag="v-list-tile">
+          </v-list-tile>
+          <v-list-tile avatar to="/">
             <v-list-tile-avatar>
               <v-icon medium>exit_to_app</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content @click="logout">
               <v-list-tile-title>Deconnexion</v-list-tile-title>
             </v-list-tile-content>
-          </router-link>
+          </v-list-tile>
         </v-list>
       </v-menu>
     </v-tabs>

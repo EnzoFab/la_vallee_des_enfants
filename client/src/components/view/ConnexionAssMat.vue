@@ -44,7 +44,6 @@ export default {
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setAssMat', response.data.assmat)
           console.log(this.$store.state.assMat)
-          this.progress = false
           this.$router.push({
             name: 'Accueil'
           })
