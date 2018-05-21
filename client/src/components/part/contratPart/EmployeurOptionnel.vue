@@ -255,12 +255,10 @@ export default {
       this.$emit('back')
     },
     async loadEmployeurEnfant () {
-      console.log('ICI')
       try {
         let reponse = await EmployeurService.getListTuteurEnfant()
         if (reponse.data.erreur == null) {
           this.allExistingEmployeur = reponse.data.resultats
-          console.log('RESULTAT', reponse.data.resultats)
         } else {
           console.log(reponse.data.erreur)
         }
