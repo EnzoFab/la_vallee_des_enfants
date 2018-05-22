@@ -83,7 +83,31 @@
               label="Ville de naissance"
               color="light-blue darken-4"
               v-model.trim="villeNaiss"
-              :rules="villeNaissRules"
+              :rules="villeRules"
+              required
+              prepend-icon="assignment_ind"
+            ></v-text-field>
+            <v-text-field
+              label="Rue "
+              color="light-blue darken-4"
+              v-model.trim="rue"
+              :rules="rueRules"
+              required
+              prepend-icon="assignment_ind"
+            ></v-text-field>
+            <v-text-field
+              label="Code postal"
+              color="light-blue darken-4"
+              v-model.trim="cp"
+              :rules="cpRules"
+              required
+              prepend-icon="assignment_ind"
+            ></v-text-field>
+            <v-text-field
+              label="Ville"
+              color="light-blue darken-4"
+              v-model.trim="ville"
+              :rules="villeRules"
               required
               prepend-icon="assignment_ind"
             ></v-text-field>
@@ -223,6 +247,9 @@ export default {
     nbConges: '',
     dateNaiss: null,
     villeNaiss: '',
+    rue: '',
+    cp: '',
+    ville: '',
     numSS: '',
     dateAgr: null,
     refAgr: '',
@@ -252,8 +279,15 @@ export default {
     dateNaissRules: [
       v => !!v || 'Veuillez choisir une date de naissance'
     ],
-    villeNaissRules: [
+    villeRules: [
       v => !!v || 'Veuillez remplir une ville de naissance'
+    ],
+    cpRules: [
+      v => !!v || 'Veuillez saisir le code postal',
+      v => /^[1-9]([0-9]{4})$/.test(v) || 'Le code postal n\'est pas valide'
+    ],
+    rueRules: [
+      v => !!v || 'Veuillez saisir la rue'
     ],
     numSSRules: [
       v => !!v || 'Veuillez remplir le numéro de sécurité sociale'
@@ -305,7 +339,7 @@ export default {
   },
   methods: {
     async inscription () {
-      const data = {assMat: {nomNaissance: this.nomNaissance, nomUsage: this.nomUsage, prenom: this.prenom, tel: this.tel, nbConges: this.nbConges, dateNaiss: this.dateNaiss, villeNaiss: this.villeNaiss, numSS: this.numSS, dateAgr: this.dateAgr, refAgr: this.refAgr, assResp: this.assResp, numPolice: this.numPolice, login: this.login, mdp: this.mdp}}
+      const data = {assMat: {nomNaissance: this.nomNaissance, nomUsage: this.nomUsage, prenom: this.prenom, tel: this.tel, nbConges: this.nbConges, dateNaiss: this.dateNaiss, villeNaiss: this.villeNaiss, numSS: this.numSS, dateAgr: this.dateAgr, refAgr: this.refAgr, assResp: this.assResp, numPolice: this.numPolice, login: this.login, mdp: this.mdp, rue: this.rue, cp: this.cp, ville: this.ville}}
       try {
         await AuthentificationService.registerAssMat(data)
         this.$router.push({

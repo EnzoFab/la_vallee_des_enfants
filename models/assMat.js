@@ -18,8 +18,8 @@ let AssMats = {
                 }
             }
             else {
-                db.query("INSERT INTO public.assmat(nom_naissance_am, nom_usage_am, prenom_am, tel_am, nb_semaines_conges, date_naissance_am, ville_naissance_am, numero_ss, date_agrement, reference_agrement, assurance_resp_civile, num_police, login, mot_de_passe_am) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning id_am",
-                    [assMat.nomNaissance, assMat.nomUsage, assMat.prenom, assMat.tel, assMat.nbConges, assMat.dateNaiss, assMat.villeNaiss, assMat.numSS, assMat.dateAgr, assMat.refAgr, assMat.assResp, assMat.numPolice, assMat.login, hash],
+                db.query("INSERT INTO public.assmat(nom_naissance_am, nom_usage_am, prenom_am, tel_am, nb_semaines_conges, date_naissance_am, ville_naissance_am, numero_ss, date_agrement, reference_agrement, assurance_resp_civile, num_police, login, mot_de_passe_am, rue_am, cp_am, ville_am) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) returning id_am",
+                    [assMat.nomNaissance, assMat.nomUsage, assMat.prenom, assMat.tel, assMat.nbConges, assMat.dateNaiss, assMat.villeNaiss, assMat.numSS, assMat.dateAgr, assMat.refAgr, assMat.assResp, assMat.numPolice, assMat.login, hash, assMat.rue, assMat.cp, assMat.ville],
                     function (err, result) {
                         console.log(result)
                         if (retour.erreur == null) {
@@ -38,7 +38,10 @@ let AssMats = {
                                 assResp: result.rows[0].assurance_resp_civile,
                                 numPolice: result.rows[0].num_police,
                                 login: result.rows[0].login,
-                                mdp: result.rows[0].mot_de_passe_am
+                                mdp: result.rows[0].mot_de_passe_am,
+                                rue: result.rows[0].rue_am,
+                                cp: result.rows[0].cp_am,
+                                ville: result.rows[0].ville_am
                             }
                         }
                         retour.statut = 200
