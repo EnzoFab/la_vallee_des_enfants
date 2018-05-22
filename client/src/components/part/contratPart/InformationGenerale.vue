@@ -26,7 +26,7 @@
         <v-menu
           ref="menu"
           lazy
-          :close-on-content-click="false"
+          :close-on-content-click="true"
           v-model="menu"
           transition="scale-transition"
           offset-y
@@ -62,7 +62,7 @@
         <v-menu
           ref="menu2"
           lazy
-          :close-on-content-click="false"
+          :close-on-content-click="true"
           v-model="menu2"
           transition="slide-y-transition"
           offset-y
@@ -101,7 +101,7 @@
         <v-menu
           ref="menu3"
           lazy
-          :close-on-content-click="false"
+          :close-on-content-click="true"
           v-model="menu3"
           transition="scale-transition"
           offset-y

@@ -1,5 +1,3 @@
-import axios from 'axios'
-import store from '../store/store'
 import Api from './Api'
 
 export default {

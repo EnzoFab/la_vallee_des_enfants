@@ -52,7 +52,7 @@
             <v-menu
               ref="dateNaissMenu"
               lazy
-              :close-on-content-click="false"
+              :close-on-content-click="true"
               v-model="dateNaissMenu"
               transition="scale-transition"
               offset-y
@@ -66,6 +66,7 @@
                 label="Date de naissance"
                 v-model="dateNaissFr"
                 prepend-icon="event"
+                :close-on-content-click="true"
                 required
                 :rules="dateNaissRules"
                 readonly
@@ -78,7 +79,7 @@
               >
                 <v-spacer></v-spacer>
               </v-date-picker>
-            </v-menu>
+              </v-menu>
             <v-text-field
               label="Ville de naissance"
               color="light-blue darken-4"
@@ -122,7 +123,7 @@
             <v-menu
               ref="dateAgrMenu"
               lazy
-              :close-on-content-click="false"
+              :close-on-content-click="true"
               v-model="dateAgrMenu"
               transition="scale-transition"
               offset-y
