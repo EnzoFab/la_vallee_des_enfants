@@ -65,8 +65,15 @@
       </v-flex>
     </v-layout>
     <v-layout>
+      <v-flex lg8>
+        <v-layout>
       <v-flex mt-5>
         <v-btn color="orange darken-1" dark>Générer la facture au format PDF</v-btn>
+      </v-flex>
+      <v-flex mt-5>
+        <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn>
+      </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
 
@@ -127,6 +134,11 @@ export default {
       ],
       absences: [],
       dialogHeureMajo: false
+    }
+  },
+  methods: {
+    retour () {
+      this.$emit('retour')
     }
   }
 }

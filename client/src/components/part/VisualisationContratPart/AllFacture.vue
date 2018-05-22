@@ -3,7 +3,7 @@
   <v-flex md10 offset-md1>
     <v-container fluid grid-list-md>
       <v-layout row wrap>
-        <v-container grid-list-md text-xs-center>
+        <v-container grid-list-md text-xs-center v-if="factureSelectionne == null">
           <v-flex d-flex md12 lg12 xl12 sm12 xs12 mt-3>
             <v-card>
               <h1 class="text-md-center blue--text">Toutes les factures</h1>
@@ -18,9 +18,7 @@
                     md3 lg3 xl4 sm12 xs12
                     v-for="(facture,i) in factures" :key="i"
                     v-if="factures.length > 0 && factureSelectionne == null">
-              <v-card-actions>
-                <v-btn @click="changeFactureSelectionne(facture)">Voir la facture</v-btn>
-              </v-card-actions>
+              <v-card @click.native="changeFactureSelectionne(facture)">
                 <v-flex>
                   <img height="200px" src="/static/invoice.png" />
                 </v-flex>
@@ -30,20 +28,15 @@
                     <h4>{{ facture.mois }} {{ facture.annee }}</h4>
                   </v-flex>
                 </v-flex>
+              </v-card>
              <!-- </v-card> !-->
             </v-flex>
-            <OneFacture :facture="factureSelectionne" v-if="factureSelectionne != null"></OneFacture>
-            <v-flex d-flex
-                    md12 lg12 xl12 sm12 xs12 v-else>
-              <v-card class="elevation-0 transparent">
-                <i>Aucune facture</i>
-              </v-card >
-            </v-flex>
+            <OneFacture :facture="factureSelectionne" v-if="factureSelectionne != null" @retour="fonctionRetour"></OneFacture>
           </v-layout>
         </v-container>
       </v-layout>
     </v-container>
-    <v-btn class="light-blue white--text" @click="nouvelleFacture" v-if="isAssMatConnected">
+    <v-btn class="light-blue white--text" @click="nouvelleFacture" v-if="isAssMatConnected && factureSelectionne == null">
       Nouvelle facture
     </v-btn>
   </v-flex>
@@ -91,6 +84,10 @@ export default {
     },
     changeFactureSelectionne (facture) {
       this.factureSelectionne = facture
+    },
+
+    fonctionRetour () {
+      this.factureSelectionne = null
     }
   },
   computed: {
