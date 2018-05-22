@@ -121,7 +121,11 @@ create table public."assmat"
     assurance_resp_civile character varying not null,
     num_police character varying not null,
     login character varying(255) not null,
-    mot_de_passe_am character varying not null
+    mot_de_passe_am character varying not null,
+    rue_am character varying NOT NULL,
+    cp_am character varying NOT NULL,
+    ville_am character varying NOT NULL
+
 )
 with (
     oids = false
@@ -340,12 +344,15 @@ WITH (
 create table public."facturemensuelle"
 (
     id_facture SERIAL NOT NULL primary key,
-    date_debut date not null,
-    date_fin date not null,
-    nb_jours_activite integer not null,
-    nb_heures_normales numeric not null,
-    nb_heures_supp numeric not null,
+    date_debut date,
+    date_fin date,
+    nb_jours_activite integer,
+    nb_heures_normales numeric,
+    nb_heures_supp numeric,
     nb_jours_conges_payes integer not null,
+    mois integer not null,
+    annee integer not null,
+    nb_heures_majorees numeric,
     id_contrat  character varying not null,
     constraint "facturemensuelle_id_contrat_fkey" foreign key (id_contrat)
         references public."contrat" (id_contrat) match simple
@@ -389,6 +396,3 @@ INSERT INTO public.modedepaiement(nom_mode)
 	VALUES ('Virement'), ('Chèque'), ('Espèces');
 INSERT INTO public.frais(nom_frais, tarif)
     VALUES ('gouter', 1), ('entretien', 4);
-
-INSERT INTO public.frais(nom_frais, tarif)
-	VALUES ('gouter', 1),('entretien', 4);
