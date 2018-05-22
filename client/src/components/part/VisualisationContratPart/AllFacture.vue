@@ -17,9 +17,10 @@
             <v-flex d-flex
                     md3 lg3 xl4 sm12 xs12
                     v-for="(facture,i) in factures" :key="i"
-                    v-if="factures.length > 0">
-              <!-- <v-card :to="'/contrat/' + contrat.id"> !-->
-              <v-card>
+                    v-if="factures.length > 0 && factureSelectionne == null">
+              <v-card-actions>
+                <v-btn @click="changeFactureSelectionne(facture)">Voir la facture</v-btn>
+              </v-card-actions>
                 <v-flex>
                   <img height="200px" src="/static/invoice.png" />
                 </v-flex>
@@ -30,8 +31,8 @@
                   </v-flex>
                 </v-flex>
              <!-- </v-card> !-->
-              </v-card>
             </v-flex>
+            <OneFacture :facture="factureSelectionne" v-if="factureSelectionne != null"></OneFacture>
             <v-flex d-flex
                     md12 lg12 xl12 sm12 xs12 v-else>
               <v-card class="elevation-0 transparent">
@@ -50,12 +51,15 @@
 
 <script>
 import FactureService from '../../../services/FactureService'
+import OneFacture from '../VisualisationContratPart/OneFacture'
 var randomstring = require('randomstring')
 export default {
   name: 'AllContrat',
+  components: {OneFacture},
   data () {
     return {
-      factures: []
+      factures: [],
+      factureSelectionne: null
     }
   },
   mounted () {
@@ -84,6 +88,9 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    changeFactureSelectionne (facture) {
+      this.factureSelectionne = facture
     }
   },
   computed: {

@@ -110,6 +110,9 @@
 <script>
 export default {
   name: 'OneFacture',
+  props: {
+    facture: {Object, required: true}
+  },
   data () {
     return {
       headers: [
