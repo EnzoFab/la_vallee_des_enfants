@@ -79,7 +79,6 @@ export default {
     },
     async loadFacture () {
       try {
-        console.log('coucou')
         let response = await FactureService.getAllByIdContrat(this.$route.params.numC)
         this.factures = response.data.factures
       } catch (e) {

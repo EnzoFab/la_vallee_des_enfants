@@ -23,5 +23,9 @@ export default {
 
   updateHeuresMajo (data) {
     return Api().put('/factures/updateHeuresMajo', data)
+  },
+
+  getAllByIdContrat (numContrat) {
+    return Api().get('/factures/all/' + numContrat)
   }
 }
