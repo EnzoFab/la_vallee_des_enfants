@@ -4,8 +4,9 @@ var modelFacture = require('../models/facture')
 
 /* --------------------------------------- ROUTES GET ----------------------------------------------------------- */
 
-router.get('/all', function (req, res, next) {
-    modelFacture.getAll(function (retour) {
+router.get('/all/:numC', function (req, res, next) {
+    let numContrat = req.params.numC
+    modelFacture.getAllByIdContrat(numContrat, function (retour) {
         res.send(retour);
     });
 });

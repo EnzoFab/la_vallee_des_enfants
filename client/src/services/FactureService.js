@@ -17,8 +17,8 @@ export default {
     return Api().get('/contrat/') /* VOIR LA ROUTE QU A CREEE MARION */
   },
 
-  getAll () {
-    return Api().get('/factures/all')
+  getAllByIdContrat (numContrat) {
+    return Api().get('/factures/all/' + numContrat)
   }
 
 }

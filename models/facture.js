@@ -49,10 +49,10 @@ let Facture = {
         );
     },
 
-    getAll: function (callback) {
+    getAllByIdContrat: function (numContrat, callback) {
         db.query(
-            'SELECT * FROM public.facturemensuelle ORDER BY date_debut DESC ',
-            [],
+            'SELECT * FROM public.facturemensuelle WHERE id_contrat = $1 ORDER BY date_debut DESC ',
+            [numContrat],
             function (err, rslt){
                 retour = {
                     erreur: null,

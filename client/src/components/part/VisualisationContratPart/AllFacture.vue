@@ -19,6 +19,7 @@
                     v-for="(facture,i) in factures" :key="i"
                     v-if="factures.length > 0">
               <!-- <v-card :to="'/contrat/' + contrat.id"> !-->
+              <v-card>
                 <v-flex>
                   <img height="200px" src="/static/invoice.png" />
                 </v-flex>
@@ -29,6 +30,7 @@
                   </v-flex>
                 </v-flex>
              <!-- </v-card> !-->
+              </v-card>
             </v-flex>
             <v-flex d-flex
                     md12 lg12 xl12 sm12 xs12 v-else>
@@ -77,8 +79,11 @@ export default {
     },
     async loadFacture () {
       try {
-        let response = await FactureService.getAll()
+        console.log('coucou')
+        let response = await FactureService.getAllByIdContrat(this.$route.params.numC)
+        console.log('NUMC', this.$route.params.numC)
         this.factures = response.data.factures
+        console.log('FACTURES', this.factures)
       } catch (e) {
         console.log(e)
       }
