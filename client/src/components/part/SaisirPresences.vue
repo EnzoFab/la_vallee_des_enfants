@@ -34,7 +34,7 @@
                     <v-flex mt-2 class="text-md-left">
                       <v-flex offset-md1 mb-1>
                         <v-layout>
-                          <span>{{ enfant.dialogBox }} h{{ enfant.minuteArrivee }} - {{ enfant.heureDepart}}h{{enfant.minuteDepart}}</span>
+                          <span>{{ enfant.heureArrivee }} h{{ enfant.minuteArrivee }} - {{ enfant.heureDepart}}h{{enfant.minuteDepart}}</span>
                         </v-layout>
                       </v-flex>
                       <v-flex offset-md1 v-if="enfant.prend_gouter == true">

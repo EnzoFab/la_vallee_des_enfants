@@ -10,6 +10,13 @@ router.get('/all', function (req, res, next) {
     });
 });
 
+router.get('/all/:numC', function (req, res, next) {
+    let numC = req.params.numC
+    modelPresenceTheorique.getAllPresencesTheoriquesByIdContrat(numC, function (retour) {
+        res.send(retour);
+    });
+});
+
 router.get('/:n/allchildrennp', function (req, res, next) {
     console.log('coucouc route')
     let day = req.params.n

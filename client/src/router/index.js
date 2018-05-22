@@ -18,6 +18,7 @@ import VisualisationContrat from '@/components/view/VisualisationContrat'
 import store from '../store/store'
 import AssistanteService from '../services/AssistanteService'
 import EmployeurService from '../services/EmployeurService'
+import OneFacture from '@/components/part/VisualisationContratPart/OneFacture'
 
 Vue.use(Router)
 
@@ -98,6 +99,12 @@ const router = new Router({
       name: 'Accueil',
       component: Accueil,
       meta: {title: 'Accueil'}
+    },
+    {
+      path: '/factureSeule',
+      name: 'OneFacture',
+      component: OneFacture,
+      meta: {title: 'OneFacture'}
     },
     {
       path: '/home',
