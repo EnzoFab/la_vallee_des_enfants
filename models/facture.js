@@ -150,6 +150,47 @@ let Facture = {
         )
     },
 
+
+    getAllByIdContrat: function (numContrat, callback) {
+        db.query(
+            'SELECT * FROM public.facturemensuelle WHERE id_contrat = $1 ORDER BY date_debut DESC ',
+            [numContrat],
+            function (err, rslt){
+                retour = {
+                    erreur: null,
+                    factures: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun contrats');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        console.log(1)
+                        array.push({
+                            dateDebut: rslt.rows[i].date_debut,
+                            dateFin: rslt.rows[i].date_fin,
+                            nbJoursActivite: rslt.rows[i].nb_jours_activite,
+                            nbHeuresNormales: rslt.rows[i].nb_heures_normales,
+                            nbHeuresSupp: rslt.rows[i].nb_heures_supp,
+                            nbJoursCongesPayes: rslt.rows[i].nb_jours_conges_payes,
+                            mois: rslt.rows[i].mois,
+                            annee: rslt.rows[i].annee,
+                            nbHeuresMajorees: rslt.rows[i].nb_heures_majorees,
+                            idContrat: rslt.rows[i].id_contrat
+                        });
+                        console.log('array', array)
+                    }
+                    retour.factures = array;
+                    retour.statut = 200
+                } // on remplie contrats avec les contrats de la BD
+                callback(retour); // on passe en parametre l'objet retour
+                // il faudra verifier si une erreur existe ou non
+            }
+        );
+    },
+
 }
 
 module.exports = Facture;

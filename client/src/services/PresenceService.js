@@ -36,7 +36,7 @@ export default {
   recupIdPresTheoDuJour (credential) {
     var date = new Date()
     var day = date.getDay()
-    if (day == 0) {
+    if (day === 0) {
       day = 7
     }
     return Api().get('presencetheo/' + credential + '/' + day)

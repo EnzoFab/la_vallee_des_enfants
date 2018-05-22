@@ -28,7 +28,6 @@ router.get('/:n', function (req, res) {
 
 router.post('/register', function (req, res, next) {
     var assMat = req.body.assMat
-    //console.log(req.body.assMat)
     modelAssMat.create(assMat, function (retour) {
         console.log(retour)
         res.send(retour)

@@ -46,6 +46,13 @@
           <!-- <Calendar ref="calendar"></Calendar> -->
         </v-card>
       </v-tab-item>
+      <v-tab-item
+        :id="'tab3'"
+      >
+        <v-card flat>
+          <AllFacture ref="allfacture"></AllFacture>
+        </v-card>
+      </v-tab-item>
     </v-tabs-items>
   </v-tabs>
   </v-flex>
@@ -56,9 +63,10 @@ import Fiche from '../part/VisualisationContratPart/Fiche'
 import Calendar from '../part/Calendar'
 import Planning from '../part/Planning'
 import ContratService from '../../services/ContratService'
+import AllFacture from '../part/VisualisationContratPart/AllFacture'
 export default {
   name: 'VisualisationContrat',
-  components: {Planning, Fiche, Calendar},
+  components: {Planning, Fiche, Calendar, AllFacture},
   data () {
     return {
       model: 'tab-2',
