@@ -32,24 +32,32 @@ export default {
     p += '<table id="t01">'
     p += '<tr>'
     p += '<th>Jour</th>'
-    p += '<th>Lundi</th>'
-    p += '<th>Mardi</th>'
-    p += '<th>Mercredi</th>'
-    p += '<th>Jeudi</th>'
-    p += '<th>Vendredi</th>'
-    p += '<th>Samedi</th>'
-    p += '<th>Dimanche</th>'
+    p += '<th> Lundi</th>'
+    p += '<th> Mardi</th>'
+    p += '<th> Mercredi</th>'
+    p += '<th> Jeudi</th>'
+    p += '<th> Vendredi</th>'
+    p += '<th> Samedi</th>'
+    p += '<th> Dimanche</th>'
     p += '</tr>'
     p += '<tr>'
     p += '<td> Heure d arrivée </td> '
     for (var m = 0; m < presences.length; m++) {
-      p += `<td> ${presences[m].heureArrivee} </td>`
+      if (presences[m].heureArrivee != null) {
+        p += `<td> ${presences[m].heureArrivee} </td>`
+      } else {
+        p += `<td>  </td>`
+      }
     }
     p += '</tr>'
     p += '<tr>'
     p += '<td> Heure de départ </td> '
     for (var n = 0; n < presences.length; n++) {
-      p += `<td> ${presences[n].heureDepart} </td>`
+      if (presences[n].heureDepart != null) {
+        p += `<td> ${presences[n].heureDepart} </td>`
+      } else {
+        p += `<td>  </td>`
+      }
     }
     p += '</tr>'
     p += '</table>'
@@ -59,7 +67,6 @@ export default {
     var htmlP1 = `<!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <center><h2><u>Renseignements personnels</u></h2></center>
     <p> <u> Identification de l'employeur :</u> <i> En qualité de : </i></p>
@@ -67,7 +74,6 @@ export default {
     <p><i>  Adresse :  ${employeur.rueEmp + ' ' + employeur.codePEmp + ' ' + employeur.villeEmp}</i> </p>
     <p><i>  <span> Téléphone du domicile : ${employeur.telephoneEmp}</span> &nbsp; <span> Courriel : ${employeur.emailEmp}</span> </i> </p>
     ${t}
-
     <p> <u> Et la salariée :</u>
     <p><i>  <span> Nom de Naissance : ${assMat.nomNaissanceAssMat}</span> &nbsp; <span> Nom d'usage : ${assMat.nomUsageAssMat}</span> &nbsp; <span> Prénom : ${assMat.prenomAssMat} </span> </i> </p>
     <p><i> <span> Née le : ${assMat.dateNaissanceAssMat}</span> &nbsp; <span> à : ${assMat.villeNaissanceAssMat}</span>  </i> </p>
@@ -93,7 +99,8 @@ export default {
 ${p}
         <li>Accueil annuel : </li>
             <p> Nombre de semaine d'accueil : ${nbSemaineAccueil} semaines </p> 
-    </ul>
+    </ul>`
+    let htmlP3 = `
     <p> <u> Rémunération : </u> </p>
     <ul>
         <li>Salaire horaire de base </li>
@@ -103,8 +110,7 @@ ${p}
         <li>Salaire majoré (à partir de la 46ème heure hebdomadaire) : </li>
             <p> Montant de la majoration : ${contrat.taux_majore} %  Salaire net horaire majoré :  </p>
         <li> Date de paiement du salaire : <b> le ${contrat.jour_paiement} de chaque mois </b> Mode de paiement du salaire : ${contrat.modeDePaiementContrat} </li>
-    </ul>`
-    let htmlP3 = `
+    </ul>
     <p> <u> Congés payés : </u> </p>
     <ul>
         <li> Les parties conviennent que l'assistante maternelle prend des congés avant la fin de la première année </li> de référence. Si l'assistante maternelle prend plus de jours que ceux convenu au contrat. Elle les prend sans rémunération. Il est convenu d'un accord commun pour :
@@ -136,7 +142,6 @@ ${p}
          aux conditions initiales du contrat ou y mettre fin. Le fait pour le salarié de ne pas avoir accepté la modification proposée ne le prive pas de préavis. <br>
         <li> Toute modification doit faire l'objet d'un avenant impérativement daté et signé par les deux contractants. </li>
     </ul> 
-
     <p> <b> Signature de l'employeur </b> </p> 
     <p>(Précédée de la mention "Lu et approuvé")</p>
     <p> A  : </p>
@@ -149,7 +154,6 @@ ${p}
     
 </head>
 <body>
-
 </body>
 </html>`
     let pdfName = 'contrat'
