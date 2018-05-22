@@ -38,7 +38,7 @@ let Contrat = {
                     }
                     retour.contrats = array;
                     retour.statut = 200
-                }
+                } // on remplie contrats avec les contrats de la BD
                 callback(retour); // on passe en parametre l'objet retour
                 // il faudra verifier si une erreur existe ou non
             }

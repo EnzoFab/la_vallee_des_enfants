@@ -6,6 +6,9 @@ export default {
     return Api().get('posts/all')
   },
 
+  getAllLimit (limit, offset) {
+    return Api().get('posts/?limit=' + limit + '&offset=' + offset)
+  },
   create (data) {
     return Api().post('posts/create', data)
   },

@@ -206,7 +206,7 @@ router.beforeEach(function (to, from, next) {
         next()
       })
   } else if (store.getters.isEmployeurConnected) {
-    EmployeurService.getListTuteurEnfant(store.state.employeur.id_employeur)
+    EmployeurService.findOne(store.state.employeur.id_employeur)
       .then(function (rslt) {
         if (rslt.data.erreur != null) {
           store.dispatch('setToken', null)

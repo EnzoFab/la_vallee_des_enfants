@@ -111,14 +111,16 @@ import ContratService from '../../../services/ContratService'
 import FonctionMath from '../../../helper/FonctionMath'
 export default {
   name: 'Tarifs',
+  props: {
+    heureSemaine: {required: true},
+    congeParent: {required: true},
+    congeAssmat: {required: true}
+  },
   data () {
     return {
       salaireNet: 3.25,
       indemniteJour: null,
       gouter: null,
-      congeParent: 0,
-      congeAssmat: 0,
-      heureSemaine: 0,
       majoration: 25,
       estValide: false,
       regleSalaire: [
@@ -149,7 +151,7 @@ export default {
   mounted () {
     this.initIndemnites()
     this.initGouter()
-    this.initDataFromContrat()
+    // this.initDataFromContrat()
   },
   methods: {
     async initIndemnites () {

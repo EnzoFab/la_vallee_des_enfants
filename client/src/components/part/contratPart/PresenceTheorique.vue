@@ -180,6 +180,13 @@
         <v-flex md12 lg12 xl12 sm12 xs12>
           <v-btn
             depressed large round
+            dark
+            color="pink"
+            @click="back"
+          >
+            Suivant</v-btn>
+          <v-btn
+            depressed large round
             :dark="presences.length > 0"
             :disabled="presences.length <= 0"
             color="pink"
@@ -196,10 +203,12 @@
 <script>
 import TypeService from '../../../services/TypeService'
 import FonctionMath from '../../../helper/FonctionMath'
+
 export default {
   name: 'PresenceTheorique',
   data () {
     return {
+      time: null,
       estValide: false,
       presences: [],
       jours: [], // la liste de tous les jours

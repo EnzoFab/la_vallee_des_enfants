@@ -20,15 +20,13 @@ export default {
   name: 'GoogleMap',
   data () {
     return {
-      // default to Montreal to keep it simple
-      // change this to whatever makes sense
       center: {
-        lat: 43.59921168,
-        lng: 3.8744177 },
+        lat: 48.862725,
+        lng: 2.287592 },
       markers: [{
         position: {
-          lat: 43.59921168,
-          lng: 3.8744177
+          lat: 48.862725,
+          lng: 2.287592
         }
       }],
       places: [],
@@ -63,13 +61,13 @@ export default {
       }
     },
     geolocate: function () {
-      navigator.geolocation.getCurrentPosition(position => {
+      /* navigator.geolocation.getCurrentPosition(position => {
         this.center = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         }
         console.log('Geo localisation')
-      })
+      }) */
     }
   }
 }

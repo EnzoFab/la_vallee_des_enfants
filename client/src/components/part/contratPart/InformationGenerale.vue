@@ -57,7 +57,7 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <v-flex md6 lg6 xl6 sm12 xs12  class="ma-3">
+      <v-flex md12 lg12 xl12 sm12 xs12  class="ma-3">
         <h3>Date début période adaptation</h3>
         <v-menu
           ref="menu2"
@@ -96,7 +96,7 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <v-flex md6 lg6 xl6 sm12 xs12  class="ma-3">
+      <v-flex md12 lg12 xl12 sm12 xs12   class="ma-3">
         <h3>Date fin période adaptation</h3>
         <v-menu
           ref="menu3"
@@ -135,7 +135,7 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <v-flex md6 lg6 xl6 sm12 xs12  class="ma-3">
+      <v-flex md12 lg12 xl12 sm12 xs12  class="ma-3">
         <h3>Mode de paiement</h3>
         <v-select
           :items="modesPaiements"

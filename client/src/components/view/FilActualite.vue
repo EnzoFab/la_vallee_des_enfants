@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid class="my-1">
-    <v-layout column>
+  <v-container fluid class="my-1" >
+    <v-layout column >
       <v-alert v-model="erreur" type="error" dismissible>
         {{erreurMessage}}
       </v-alert>
@@ -18,7 +18,7 @@
           <v-icon small dark>fa-times</v-icon>
         </v-btn>
       </v-snackbar>
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 >
         <v-toolbar color="purple lighten-3" dark>
           <v-dialog v-model="dialog" persistent max-width="500px" v-if="isAssMatConnected">
             <v-btn
@@ -105,14 +105,14 @@
           <v-toolbar-title>Fil d'actualité</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
-        <v-card style="overflow-y: scroll;" height="70vh">
-          <v-container fluid grid-list-md class="grey lighten-3" >
+        <v-card style="overflow-y: scroll;" height="70vh" class="grey lighten-3">
+          <v-container fluid grid-list-md >
             <v-layout row wrap>
               <v-flex v-if="posts.length == 0">
                 <h1>Pas d'actualité pour le moment</h1><br>
                 <img src="/static/baby.png" height="350vh"/>
               </v-flex>
-              <v-flex v-else v-for="(post,i) in posts" :key="i" v-bind="postLayout(i)" xs12>
+              <v-flex v-if="posts.length > 0" v-for="(post,i) in posts" :key="i" v-bind="postLayout(i)" xs12>
                 <v-slide-y-transition>
                   <v-card class="blue-grey lighten-5 elevation-8" >
                     <v-card-media
@@ -150,6 +150,13 @@
                   </v-card>
                 </v-slide-y-transition>
               </v-flex>
+              <infinite-loading
+                v-if="posts.length > 0"
+                @infinite="infiniteHandler"
+                force-use-infinite-wrapper="true"
+                spinner="circles">
+                <span slot="no-results"></span>
+              </infinite-loading>
             </v-layout>
           </v-container>
         </v-card>
@@ -163,10 +170,11 @@
 import Calendar from '../part/Calendar'
 import PostService from '../../services/PostService'
 import FileService from '../../services/FileService'
+import InfiniteLoading from 'vue-infinite-loading'
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'Evenements',
-  components: {Calendar},
+  components: {Calendar, InfiniteLoading},
   data () {
     return {
       posts: [],
@@ -205,6 +213,34 @@ export default {
     }
   },
   methods: {
+    infiniteHandler ($state) {
+      let vm = this
+      PostService.getAllLimit(9, this.posts.length).then(function (rslt) {
+        if (rslt.data.erreur == null) {
+          console.log(rslt.data)
+          let loadedPost = rslt.data.posts
+          loadedPost.forEach(function (post) {
+            vm.posts.push({
+              image: post.image, // this.imgPath,
+              message: post.texte,
+              titre: post.titre,
+              id_post: post.id,
+              image_id: post.image_id,
+              date: vm.dateFr(post.date),
+              contentVisible: false
+            })
+            $state.loaded()
+          })
+        } else {
+          $state.complete()
+          // vm.triggerErreur(rslt.data.erreur.texte)
+        }
+      }).catch(function (err) {
+        console.log(err)
+        vm.triggerErreur('Une erreur est survenue')
+        $state.complete()
+      })
+    },
     onFileChange (e) {
       var files = e.target.files || e.dataTransfer.files
       if (files.length !== undefined) {
@@ -403,7 +439,41 @@ export default {
         this.triggerErreur('Une erreur est survenue')
       }
     },
-    async initPost () {
+    loadPost (limit, offset, $state) {
+      let vm = this
+      PostService.getAllLimit(limit, offset).then(function (rslt) {
+        if (rslt.data.erreur == null) {
+          console.log(rslt.data)
+          let loadedPost = rslt.data.posts
+          loadedPost.forEach(function (post) {
+            vm.posts.push({
+              image: post.image, // this.imgPath,
+              message: post.texte,
+              titre: post.titre,
+              id_post: post.id,
+              image_id: post.image_id,
+              date: vm.dateFr(post.date),
+              contentVisible: false
+            })
+            if ($state) {
+              $state.loaded()
+            }
+          })
+        } else {
+          if ($state) {
+            $state.loaded()
+          }
+          vm.triggerErreur(rslt.data.erreur.texte)
+        }
+      }).catch(function (err) {
+        console.log(err)
+        vm.triggerErreur('Une erreur est survenue')
+        if ($state) {
+          $state.loaded()
+        }
+      })
+
+      /*
       try {
         let response = await PostService.getAll()
         if (response.data.erreur == null) {
@@ -426,6 +496,7 @@ export default {
       } catch (e) {
         this.triggerErreur(e.toString())
       }
+      */
     },
     clearForm () {
       this.$refs.form.reset()
@@ -482,7 +553,7 @@ export default {
 
   },
   mounted () {
-    this.initPost()
+    this.loadPost(9, 0)
   }
 }
 
