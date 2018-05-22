@@ -98,6 +98,41 @@ let presenceTheorique = {
         );
     },
 
+    // recupere toutes les presences theoriques d'un contrat
+    getAllPresencesTheoriquesByIdContrat (idContrat, callback) {
+        db.query(
+            'SELECT * ' +
+            'FROM public.presencetheorique ' +
+            'WHERE id_contrat = $1 ',
+            [idContrat],
+            function (err, result){
+                retour = {
+                    erreur: null,
+                    presencestheoriques: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, result,'Aucune présence theorique');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        array.push({
+                            id: result.rows[i].id_presence_theorique,
+                            heure_arrivee: result.rows[i].heure_arrivee,
+                            heure_depart: result.rows[i].heure_depart,
+                            prend_gouter: result.rows[i].prends_gouter,
+                            id_type_jour: result.rows[i].id_type_jour
+                        });
+                    }
+                    retour.presencestheoriques = array;
+                    retour.statut = 200
+                }
+                callback(retour); // on passe en parametre l'objet retour
+                // il faudra verifier si une erreur existe ou non
+            })
+    },
+
     getChildrenNonPresentsOfTheDay: function (numDay, callback) {
         console.log('coucou')
         console.log('numDuJour : ' + numDay)

@@ -1,3 +1,5 @@
+import axios from 'axios'
+import store from '../store/store'
 import Api from './Api'
 
 export default {
@@ -5,20 +7,23 @@ export default {
     return Api().get('/factures/basics/' + idcontrat)
   },
 
-  getDonneesFactureDuMois (idContrat, numMois) {
-    return Api().get('/factures/basics/' + idContrat)
+  getDonneesFactureDuMois (idContrat, numMois, annee) {
+    return Api().get('/factures/infos/' + idContrat + '/' + annee + '/' + numMois)
   },
 
-  getPresencesReellesDuMois (idcontrat, numMois, annee) {
-    return Api().get('/factures/all/' + annee + '/' + numMois + '/' + idcontrat)
+  getExisteFacture (idContrat, annee, mois) {
+    return Api().get('/factures/existe/' + idContrat + '/' + annee + '/' + mois)
   },
 
-  getPresencesTheorique (idcontrat) {
-    return Api().get('/contrat/') /* VOIR LA ROUTE QU A CREEE MARION */
+  createFacture (data) {
+    return Api().post('/factures/create', data)
   },
 
-  getAllByIdContrat (numContrat) {
-    return Api().get('/factures/all/' + numContrat)
+  updateInfosFacture (data) {
+    return Api().put('/factures/updateInfos', data)
+  },
+
+  updateHeuresMajo (data) {
+    return Api().put('/factures/updateHeuresMajo', data)
   }
-
 }

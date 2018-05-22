@@ -82,7 +82,6 @@ let Contrat = {
                     retour.statut = 200
                 } // on remplie contrats avec les contrats de la BD
                 callback(retour); // on passe en parametre l'objet retour
-                // il faudra verifier si une erreur existe ou non
             }
         );
     },
@@ -187,7 +186,6 @@ let Contrat = {
                     retour.statut = 200
                 }
                 callback(retour); // on passe en parametre l'objet retour
-                // il faudra verifier si une erreur existe ou non
             }
         );
     },
