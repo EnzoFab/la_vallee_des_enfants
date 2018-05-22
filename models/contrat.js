@@ -3,9 +3,51 @@ let helper = require('../helpers/helper');
 
 let Contrat = {
 
-    getAll: function (callback) {
+    getAllEnCours: function (callback) {
         db.query(
-            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant ORDER BY C.date_debut, E.nom_enfant',
+            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant AND C.date_fin IS NULL ORDER BY C.date_debut, E.nom_enfant',
+            [],
+            function (err, rslt){
+                retour = {
+                    erreur: null,
+                    contrats: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun contrats');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        console.log(1)
+                        array.push({
+                            id: rslt.rows[i].id_contrat,
+                            dateDebut: rslt.rows[i].date_debut,
+                            nbSemainesCongesParent: rslt.rows[i].nb_semaines_conges_parents,
+                            tarif: rslt.rows[i].tarif,
+                            nbHeuresSemaine: rslt.rows[i].nb_heures_semaine,
+                            taux: rslt.rows[i].taux_majore,
+                            dateDebAdapt: rslt.rows[i].date_deb_periode_adaptation,
+                            dateFinAdapt: rslt.rows[i].date_fin_periode_adaptation,
+                            jourPaiement: rslt.rows[i].jour_paiement,
+                            nomEnfant: rslt.rows[i].nom_enfant,
+                            prenomEnfant: rslt.rows[i].prenom_enfant,
+                            sexeEnfant: rslt.rows[i].sexe
+                        });
+                        console.log('array', array)
+                    }
+                    retour.contrats = array;
+                    retour.statut = 200
+                } // on remplie contrats avec les contrats de la BD
+                callback(retour); // on passe en parametre l'objet retour
+                // il faudra verifier si une erreur existe ou non
+            }
+        );
+    },
+
+    getAllTermines: function (callback) {
+        db.query(
+            'SELECT * FROM public.contrat C, public.enfant E WHERE C.id_enfant=E.id_enfant AND C.date_fin IS NOT NULL ORDER BY C.date_debut, E.nom_enfant',
             [],
             function (err, rslt){
                 retour = {
@@ -67,7 +109,8 @@ let Contrat = {
                     retour.date_deb_periode_adaptation = rslt.rows[0].date_deb_periode_adaptation,
                     retour.date_fin_periode_adaptation = rslt.rows[0].date_fin_periode_adaptation,
                     retour.modepaiements = rslt.rows[0].nom_mode,
-                    retour.date_debut_contrat = rslt.rows[0].date_debut_contrat,
+                    retour.date_debut_contrat = rslt.rows[0].date_debut,
+                    retour.date_fin_contrat = rslt.rows[0].date_fin,
                     retour.nb_heures_semaine = rslt.rows[0].nb_heures_semaine,
                     retour.tarif = rslt.rows[0].tarif,
                     retour.taux_majore = rslt.rows[0].taux_majore,
@@ -305,6 +348,17 @@ let Contrat = {
             function () {
                 console.log('c\'est inséré :)')
                 let retour = 'les tarifs sont ajoutés au contrat'
+                callback(retour)
+            })
+    },
+
+    // Clôture le contrat en mettant la date de fin
+    updateDateFin: function (numContrat, callback) {
+        db.query('UPDATE public.contrat ' +
+            'SET date_fin = Date(now()) WHERE id_contrat = $1',
+            [numContrat],
+            function () {
+                let retour = 'Le contrat est clôturé'
                 callback(retour)
             })
     },

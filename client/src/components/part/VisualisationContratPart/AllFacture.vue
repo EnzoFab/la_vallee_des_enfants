@@ -81,9 +81,7 @@ export default {
       try {
         console.log('coucou')
         let response = await FactureService.getAllByIdContrat(this.$route.params.numC)
-        console.log('NUMC', this.$route.params.numC)
         this.factures = response.data.factures
-        console.log('FACTURES', this.factures)
       } catch (e) {
         console.log(e)
       }

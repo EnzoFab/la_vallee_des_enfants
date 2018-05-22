@@ -4,8 +4,14 @@ var modelContrat = require('../models/contrat')
 
 
 /* --------------------------------------- ROUTES GET ----------------------------------------------------------- */
-router.get('/all', function (req, res, next) {
-    modelContrat.getAll(function (retour) {
+router.get('/allEnCours', function (req, res, next) {
+    modelContrat.getAllEnCours(function (retour) {
+        res.send(retour);
+    });
+});
+
+router.get('/allTermines', function (req, res, next) {
+    modelContrat.getAllTermines(function (retour) {
         res.send(retour);
     });
 });
@@ -114,6 +120,14 @@ router.put('/tarifs/:n', function (req, res) {
     let tarif = req.body.tarif
     let tauxmaj = req.body.taux_majore
     modelContrat.sectionTarifscreate(id_contrat, tarif, tauxmaj, function (retour) {
+        res.send(retour)
+    })
+});
+
+// Clôture le contrat en mettant la date de fin
+router.put('/cloturer/:numC', function (req, res) {
+    let id_contrat = req.params.numC
+    modelContrat.updateDateFin(id_contrat, function (retour) {
         res.send(retour)
     })
 });

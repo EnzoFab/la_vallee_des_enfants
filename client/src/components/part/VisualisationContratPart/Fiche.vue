@@ -79,12 +79,37 @@
                   <span> {{ dateFinContrat }} </span>
                 </v-layout>
                 <v-flex offset-md2>
-                  <v-btn color="blue--text" v-if="isAssMatConnected">Clôturer le contrat</v-btn>
+                  <v-btn color="blue--text" :disabled="dateFinExists" @click.stop="dialogBoxCloturer = true" v-if="isAssMatConnected">Clôturer le contrat</v-btn>
                 </v-flex>
               </v-flex>
             </v-card-text>
           </v-card>
         </v-flex>
+
+        <v-dialog v-model="dialogBoxCloturer" max-width="500px">
+          <v-card>
+            <v-flex pt-3 class="indigo--text text-md-center">
+              <h2>
+                Êtes-vous sûr de vouloir clôturer le contrat ?
+              </h2>
+            </v-flex>
+            <v-flex pl-2>
+              <v-layout>
+                <v-card-actions>
+                  <v-flex offset-md8>
+                    <v-btn  color="primary" flat @click="cloturer" @click.stop="dialogBoxCloturer = false">OK</v-btn>
+                  </v-flex>
+                </v-card-actions>
+                <v-card-actions>
+                  <v-flex offset-md1>
+                    <v-btn  color="primary" flat @click.stop="dialogBoxCloturer=false">Annuler</v-btn>
+                  </v-flex>
+                </v-card-actions>
+              </v-layout>
+            </v-flex>
+          </v-card>
+        </v-dialog>
+
         <v-flex md12 lg12 xl12 sm12 xs12>
           <v-flex>
             <h1 class="blue--text">Assistante maternelle</h1>
@@ -318,7 +343,7 @@ export default {
       dateDebAdapt: null,
       dateFinAdapt: null,
       dateDebutContrat: null,
-      dateFinContrat: 'Aucune, contrat en cours',
+      dateFinContrat: null,
       nb_heures_semaine: null,
       tarif: null,
       taux_majore: null,
@@ -348,6 +373,8 @@ export default {
       nombreSemSupp: null,
       dialogBox: false,
       dialogBox2: false,
+      dialogBoxCloturer: false,
+      dateFinExists: false,
       parents: [],
       parentForDialog: null, // parent modifier par le dialog
       regleRue: [
@@ -400,10 +427,13 @@ export default {
           this.typeContrat = response.data.type_contrat
           this.dateDebAdapt = moment(response.data.date_deb_periode_adaptation).format('L')
           this.dateFinAdapt = moment(response.data.date_fin_periode_adaptation).format('L')
-          this.dateDebutContrat = moment(response.data.date_debut).format('LL')
-          /* if(response.data.date_fin != null){
-            this.dateFinContrat = response.data.date_fin
-          } */
+          this.dateDebutContrat = moment(response.data.date_debut_contrat).format('LL')
+          if (response.data.date_fin_contrat != null) {
+            this.dateFinContrat = moment(response.data.date_fin_contrat).format('LL')
+            this.dateFinExists = true
+          } else {
+            this.dateFinContrat = 'Aucune, contrat en cours'
+          }
           this.nomUsageAssMat = response.data.nom_usage_am
           this.prenomAssMat = response.data.prenom_am
           this.nomNaissanceAssMat = response.data.nom_naissance_am
@@ -494,6 +524,15 @@ export default {
         console.log(e)
         this.triggerErreur('Une erreur est survenue')
         this.loadingPdf = false
+      }
+    },
+    async cloturer () {
+      try {
+        await ContratService.updateDateFin(this.numeroContrat)
+        this.dateFinContrat = moment(new Date()).format('LL')
+        this.dateFinExists = true
+      } catch (e) {
+        console.log(e)
       }
     },
     triggerErreur (erreur) {

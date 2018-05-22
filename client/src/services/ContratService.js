@@ -13,8 +13,12 @@ export default {
     return Api().get('/contrat/getAllById/' + numContrat)
   },
 
-  getAll () {
-    return Api().get('/contrat/all')
+  getAllEnCours () {
+    return Api().get('/contrat/allEnCours')
+  },
+
+  getAllTermines () {
+    return Api().get('/contrat/allTermines')
   },
 
   getAllByIdEmployeur (numEmployeur) {
@@ -48,6 +52,10 @@ export default {
 
   updateTarif (numContrat, credential) {
     return Api().put('/contrat/tarifs/' + numContrat, credential)
+  },
+
+  updateDateFin (numContrat) {
+    return Api().put('/contrat/cloturer/' + numContrat)
   }
 
 }
