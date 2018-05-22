@@ -51,7 +51,8 @@
             <PresenceTheorique @back="back" @submit="submitPresences"></PresenceTheorique>
           </v-stepper-content>
           <v-stepper-content step="7">
-          <Tarifs @back="back" @submit="submitTarifs"></Tarifs>
+          <Tarifs @back="back" @submit="submitTarifs"
+                  :heure-semaine="heureSemaine" :conge-assmat="congeAssmat" :conge-parent="congeParent"></Tarifs>
         </v-stepper-content>
           <v-stepper-content step="8">
             <FinContrat @back="back" @envoyer="sauvegarderContrat" :progress="showProgress"></FinContrat>
@@ -97,6 +98,9 @@ export default {
   },
   data () {
     return {
+      heureSemaine: 0,
+      congeAssmat: 0,
+      congeParent: 0,
       enfant: null,
       presenceTheorique: null,
       tuteurs: null,

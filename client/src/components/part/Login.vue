@@ -3,7 +3,7 @@
   <v-flex  xs12 md6 offset-md3 class="my-5">
     <v-fade-transition>
       <v-card v-if="!progress">
-        <v-toolbar :color="toolbarColor" dark>
+        <v-toolbar :color="toolbarColor" dark card>
           <v-spacer></v-spacer>
           <v-toolbar-title>{{titre}}</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -75,7 +75,7 @@ export default {
     toolbarColor: String,
     btnColor: String,
     titre: {String, required},
-    progress: {Boolean, required:true}
+    progress: {Boolean, required: true}
   },
   data: () => ({
     mdp: '',

@@ -4,7 +4,7 @@ let helper = require('../helpers/helper');
 let post = {
     getAll: function (callback) {
         db.query(
-            'SELECT * FROM public.post',
+            'SELECT * FROM public.post ORDER BY date_post DESC, id_post DESC',
             [],
             function (err, rslt){
                 retour = {
@@ -76,6 +76,40 @@ let post = {
                 callback(retour);
             });
 
+    },
+    getAllLimit: function (limit, offset, callback) {
+        db.query(
+            'SELECT * FROM public.post ORDER BY date_post DESC, id_post DESC LIMIT $1 OFFSET $2',
+            [limit, offset],
+            function (err, rslt){
+                retour = {
+                    erreur: null,
+                    posts: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun post');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    var array = []
+                    for(var i = 0; i < rslt.rows.length; i++){
+                        array.push({
+                            id: rslt.rows[i].id_post,
+                            date: rslt.rows[i].date_post,
+                            texte: rslt.rows[i].texte,
+                            image: rslt.rows[i].image,
+                            titre: rslt.rows[i].titre,
+                            image_id: rslt.rows[i].image_id
+                        });
+                        console.log('array', array)
+                    }
+                    retour.posts = array;
+                    retour.statut = 200
+                }
+                callback(retour); // on passe en parametre l'objet retour
+                // il faudra verifier si une erreur existe ou non
+            }
+        );
     }
 }
 

@@ -1,12 +1,11 @@
 import Api from '../services/Api'
 
 export default {
-  donneesContrat (credentials) {
-    return Api().get('/contrat/getAllById/' + credentials)
+  donneesContrat (numContrat) {
+    return Api().get('/contrat/getAllById/' + numContrat)
   },
 
   donneesParents (credentials) {
-    console.log('contrat service')
     return Api().get('/contrat/getTuteursById/' + credentials)
   },
 

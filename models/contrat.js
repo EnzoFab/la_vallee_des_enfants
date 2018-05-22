@@ -38,7 +38,7 @@ let Contrat = {
                     }
                     retour.contrats = array;
                     retour.statut = 200
-                }
+                } // on remplie contrats avec les contrats de la BD
                 callback(retour); // on passe en parametre l'objet retour
                 // il faudra verifier si une erreur existe ou non
             }
@@ -151,7 +151,7 @@ let Contrat = {
 
     getTuteursById: function (numeroContrat, callback) {
         db.query(
-            'SELECT tu.nom_tuteur, tu.prenom_tuteur, tu.telephone, tu.profession, tu.telephone_pro, nom_type_tuteur ' +
+            'SELECT tu.nom_tuteur, tu.prenom_tuteur, tu.telephone, tu.profession, tu.telephone_pro, nom_type_tuteur, tu.id_tuteur ' +
             'FROM public.contrat as co, public.enfant as en, public.tuteur as tu, public.apourtuteur as apt, public.typetuteur as tt ' +
             'WHERE co.id_contrat = $1 AND co.id_enfant = en.id_enfant AND apt.id_enfant = en.id_enfant AND apt.id_tuteur = tu.id_tuteur ' +
             'AND tt.id_type_tuteur = tu.id_type_tuteur;',
@@ -169,7 +169,6 @@ let Contrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id_tuteur: rslt.rows[i].id_tuteur,
                             nom_tuteur: rslt.rows[i].nom_tuteur,

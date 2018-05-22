@@ -16,7 +16,6 @@
 
     </v-container>
 
-
     <!-- formSubmitted est un evenement envoyé par le composant login
      on appelle une fonction  lorsque l'evenement intervient et ça
      peut être n'importe qu'elle fonction-->
@@ -45,7 +44,6 @@ export default {
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setAssMat', response.data.assmat)
           console.log(this.$store.state.assMat)
-          this.progress = false
           this.$router.push({
             name: 'Accueil'
           })

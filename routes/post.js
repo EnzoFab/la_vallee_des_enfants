@@ -10,13 +10,12 @@ router.get('/all', function (req, res, next) {
     });
 });
 
-router.get('/',function(req, res, next) {
-    // route pour le socket io
-    console.log("yete")
-    req.io.sockets.on('connection',function (socket) {
-        console.log('un client');
+router.get('/', function (req, res) {
+    modelPost.getAllLimit(req.query.limit, req.query.offset, function (retour) {
+        console.log(retour)
+        res.send(retour)
     })
-});
+})
 
 /* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 

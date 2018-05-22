@@ -108,8 +108,8 @@ ${p}
     <p> <u> Congés payés : </u> </p>
     <ul>
         <li> Les parties conviennent que l'assistante maternelle prend des congés avant la fin de la première année </li> de référence. Si l'assistante maternelle prend plus de jours que ceux convenu au contrat. Elle les prend sans rémunération. Il est convenu d'un accord commun pour :
-            <p> Le salarié :  ${assMat.nombreSemaineConges} de congé annuel </p>
-            <p>L'employeur : ${employeur.nombreSemSupp} de congé annuel en plus de son assistante maternelle  </p> 
+            <p> Le salarié :  ${assMat.nombreSemaineConges} semaine de congé annuel </p>
+            <p>L'employeur : ${employeur.nombreSemSupp} semaine de congé annuel en plus de son assistante maternelle  </p> 
         <li> Le délai de prévenance du congé principal est à fixer au plus tard le 1er mars. </li> Si les dates ne sont pas connues à la signature du contrat, un délai de prévenance est fixé : 1 mois <br>
         <li> Modalités de paiement des congés en cas d'année incomplète : Chaque mois. </li> La méthode des 10% est appliquée sur le salaire net. <br>
         <li> Modalités de paiement des congés en cas d'année complète : <u> déjà inclus dans la mensualisation </u> </li>
