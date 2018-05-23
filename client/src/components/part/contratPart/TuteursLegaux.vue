@@ -5,10 +5,6 @@
       <v-toolbar-title>Tuteurs légaux</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <!-- <span small  class="red--text">
-      <v-icon>warning</v-icon>
-      <i >Attention remplissez bien cette section il ne sera pas possible de revenir en arrière</i>
-    </span> -->
     <div v-if="btnVisible">
       <v-btn icon large dark color="indigo"
              @click="addTuteur">
@@ -292,7 +288,7 @@ export default {
         const response = await TypeService.typeTuteur()
         this.typeTuteurs = response.data.typesTuteur
       } catch (e) {
-        console.log('Erreur')
+        console.log(e)
       }
     },
     async initTuteurExistant () {
@@ -344,7 +340,6 @@ export default {
         if (!tuteur.tuteurExistant) {
           if (tuteur.estDemandeur) {
             data.asEmployeur = true
-            console.log('Has employeur', data.asEmployeur)
             tuteur.infoDemandeur = {
               rue: vm.rue,
               codePostal: vm.codePostal,
@@ -353,8 +348,6 @@ export default {
               nombreSemainesSupplementaires: vm.nombreSemaine,
               nomNaissance: vm.nomDeNaissance
             }
-
-            console.log(tuteur)
           }
           tuteur.typeDeTuteur = tuteur.typeDeTuteur.id // on recupere l'id du type tuteur pour la base de données
         }
@@ -370,16 +363,12 @@ export default {
       this.nombreSemaine = 0
       if (this.inputSemaineDisable) {
         this.toogleText = 'Plus de semaines'
-        // this.toogleIcone = 'arrow_drop_down'
       } else {
-        // this.toogleIcone = 'arrow_drop_up'
         this.toogleText = 'Repasser à la barre de selections'
-        console.log('tougle')
       }
     },
     computedNbSemaine (val) {
       this.nombreSemaine = val
-      console.log(this.nombreSemaine)
       if (this.nombreSemaine == null) {
         return 0
       } else {

@@ -151,7 +151,6 @@ export default {
   mounted () {
     this.initIndemnites()
     this.initGouter()
-    // this.initDataFromContrat()
   },
   methods: {
     async initIndemnites () {
@@ -191,7 +190,6 @@ export default {
         salaireNet: this.salaireNet,
         majoration: this.majoration
       }
-      console.log('submit', data)
       this.$emit('submit', data)
     },
     back () {

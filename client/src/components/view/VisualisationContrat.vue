@@ -43,7 +43,6 @@
       >
         <v-card flat>
          <Planning :nomCompletEnfant="nomCompletEnfant" :numContrat="$route.params.numC"></Planning>
-          <!-- <Calendar ref="calendar"></Calendar> -->
         </v-card>
       </v-tab-item>
       <v-tab-item

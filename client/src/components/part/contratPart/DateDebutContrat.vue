@@ -89,7 +89,6 @@ export default {
       menu: false,
       estValide: false,
       toogleText: 'Plus de semaines', // texte affiché sur le lien
-      // toogleIcone: 'arrow_drop_down',
       inputSemaineDisable: true, //
       regleSemaine: [
         v => /^\d+(\d+)?([Ee][+]?\d+)?$/.test(v) || 'Entrez un nombre entier'
@@ -112,11 +111,8 @@ export default {
       this.nombreSemaine = 0
       if (this.inputSemaineDisable) {
         this.toogleText = 'Plus de semaines'
-        // this.toogleIcone = 'arrow_drop_down'
       } else {
-        // this.toogleIcone = 'arrow_drop_up'
         this.toogleText = 'Repasser à la barre de selections'
-        console.log('tougle')
       }
     },
     submit () {
