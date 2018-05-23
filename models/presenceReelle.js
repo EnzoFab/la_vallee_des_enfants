@@ -227,8 +227,10 @@ let presenceReelle = {
                 if(retour.erreur == null){
                     let array = []
                     for (var i = 0; i<res.rows.length; i++) {
+                        var datepresencereelle = new Date(res.rows[i].datepresencereelle)
+                        datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
-                            datepresencereelle: res.rows[i].datepresencereelle,
+                            datepresencereelle:  datepresencereelle,
                             heureArriveeReelle: res.rows[i].heure_arrivee_r,
                             heureDepartRelle: res.rows[i].heure_depart_r,
                             prendsGouterRelle: res.rows[i].prends_gouter_r,
@@ -264,8 +266,10 @@ let presenceReelle = {
                 if(retour.erreur == null){
                     let array = []
                     for (var i = 0; i<res.rows.length; i++) {
+                        var datepresencereelle = new Date(res.rows[i].datepresencereelle)
+                        datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
-                            datepresencereelle: res.rows[i].datepresencereelle,
+                            datepresencereelle:  datepresencereelle,
                             heureArriveeReelle: res.rows[i].heure_arrivee_r,
                             heureDepartReelle: res.rows[i].heure_depart_r,
                             prendsGouterReelle: res.rows[i].prends_gouter_r,
@@ -279,6 +283,7 @@ let presenceReelle = {
                         })
                     }
                     retour.resultats = array
+                    console.log(retour)
                 }
                 callback(retour)
             })
