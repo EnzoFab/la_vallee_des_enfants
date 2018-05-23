@@ -1,5 +1,21 @@
 <template>
   <v-layout row wrap>
+    <v-alert v-model="erreur" type="error" dismissible>
+      {{erreurMessage}}
+    </v-alert>
+    <v-snackbar
+      v-model="snackbar"
+      absolute
+      top
+      right
+      :color="snackBarColor"
+    >
+      <span>{{snackbarMessage}}</span>
+      <v-icon dark>check_circle</v-icon>
+      <v-btn dark flat fab @click.native="snackbar = false">
+        <v-icon small dark>fa-times</v-icon>
+      </v-btn>
+    </v-snackbar>
     <v-flex  xs12 md6 offset-md3 class="my-5">
       <v-card>
         <v-toolbar color="pink lighten-1" dark>
@@ -312,7 +328,13 @@ export default {
       v => !!v || 'Veuillez remplir le mot de passe'
     ],
 
-    estValide: false
+    estValide: false,
+    erreur: false,
+    erreurMessage: '',
+    snackbar: false,
+    snackbarMessage: '',
+    snackBarColor: '',
+    loadingButton: false
   }),
   computed: {
     dateNaissFr () { // transforme la date qui est en format anglaise en format francaise
@@ -340,19 +362,31 @@ export default {
   },
   methods: {
     async inscription () {
+      this.loadingButton = true
       const data = {assMat: {nomNaissance: this.nomNaissance, nomUsage: this.nomUsage, prenom: this.prenom, tel: this.tel, nbConges: this.nbConges, dateNaiss: this.dateNaiss, villeNaiss: this.villeNaiss, numSS: this.numSS, dateAgr: this.dateAgr, refAgr: this.refAgr, assResp: this.assResp, numPolice: this.numPolice, login: this.login, mdp: this.mdp, rue: this.rue, cp: this.cp, ville: this.ville}}
       try {
-        await AuthentificationService.registerAssMat(data)
-        this.$router.push({
-          name: 'Accueil'
-        })
+        let r = await AuthentificationService.registerAssMat(data)
+        if (r.data.erreur == null) {
+          this.triggerSnackBar('Assistante maternelle inscrite', 'success')
+        } else {
+          this.triggerErreur(r.data.erreur.texte)
+        }
       } catch (error) {
+        this.triggerErreur('Une erreur est survenue')
         console.log(error)
         this.error = error.response.data.error
       }
-    },
-    clearForm () {
+      this.loadingButton = false
       this.$refs.form.reset()
+    },
+    triggerErreur (erreur) {
+      this.erreurMessage = erreur
+      this.erreur = true
+    },
+    triggerSnackBar (message, color) {
+      this.snackbar = true
+      this.snackbarMessage = message
+      this.snackBarColor = color
     }
   }
 }
