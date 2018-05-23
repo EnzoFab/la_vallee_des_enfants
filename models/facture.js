@@ -24,6 +24,9 @@ let Facture = {
                     retour.nom_usage_am = rslt.rows[0].nom_usage_am
                     retour.prenom_am = rslt.rows[0].prenom_am
                     retour.nb_semaines_conges = rslt.rows[0].nb_semaines_conges
+                    retour.rue_am = rslt.rows[0].ville_am
+                    retour.cp_am = rslt.rows[0].ville_am
+                    retour.ville_am = rslt.rows[0].ville_am
                     retour.id_contrat = rslt.rows[0].id_contrat
                     retour.nb_semaines_conges_parents = rslt.rows[0].nb_semaines_conges_parents
                     retour.tarif = rslt.rows[0].tarif
@@ -51,7 +54,7 @@ let Facture = {
 
     // Création d'une facture
     create: function (facture, callback) {
-        db.query('INSERT INTO public.facture(mois, annee, id_contrat, nb_jours_conges_payes) VALUES ($1, $2, $3, $4)',
+        db.query('INSERT INTO public.facturemensuelle(mois, annee, id_contrat, nb_jours_conges_payes) VALUES ($1, $2, $3, $4)',
             [facture.mois, facture.annee, facture.id_contrat, 2.5],
             function (e) {
                 retour = {
@@ -69,7 +72,7 @@ let Facture = {
         // return true si existe, false sinon
     existeFacture: function (id_contrat, mois, annee, callback) {
         db.query('SELECT id_facture ' +
-            'FROM public.facture ' +
+            'FROM public.facturemensuelle ' +
             'WHERE mois = $1, annee = $2, id_contrat = $3',
             [mois, annee, id_contrat],
             function (err, rslt) {
@@ -93,7 +96,7 @@ let Facture = {
 
     getInfosFacture: function (id_contrat, mois, annee, callback) {
         db.query('SELECT * ' +
-            'FROM public.facture ' +
+            'FROM public.facturemensuelle ' +
             'WHERE mois = $1, annee = $2, id_contrat = $3',
             [mois, annee, id_contrat],
             function (err, rslt){
@@ -124,7 +127,7 @@ let Facture = {
     },
 
     updateInfosFacture: function (facture, callback) {
-        db.query('UPDATE public.facture ' +
+        db.query('UPDATE public.facturemensuelle ' +
             'SET date_debut = $1, date_fin = $2, nb_jours_activite = $3, nb_heures_normales = $4, ' +
             'nb_heures_supp = $5 ' +
             'WHERE id_contrat = $6, mois = $7, annee = $8',
@@ -138,7 +141,7 @@ let Facture = {
     },
 
     updatenbHeuresMajo: function (facture, callback) {
-        db.query('UPDATE public.facture ' +
+        db.query('UPDATE public.facturemensuelle ' +
             'SET nb_heures_majorees = $1 ' +
             'WHERE id_contrat = $2, mois = $3, annee = $4',
             [facture.nb_heures_majorees, facture.id_contrat, facture.mois, facture.annee],

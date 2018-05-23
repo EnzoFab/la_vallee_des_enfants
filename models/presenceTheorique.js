@@ -116,7 +116,7 @@ let presenceTheorique = {
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
+                    for(var i = 0; i < result.rows.length; i++){
                         array.push({
                             id: result.rows[i].id_presence_theorique,
                             heure_arrivee: result.rows[i].heure_arrivee,

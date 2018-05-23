@@ -40,7 +40,8 @@ router.get('/infos/:numC/:annee/:mois', function (req, res, next) {
 /* --------------------------------------- ROUTES POST --------------------------------------------------------- */
 
 router.post('/create', function (req, res, next) {
-    modelFacture.create(function (retour) {
+    let facture = req.body.facture
+    modelFacture.create(facture, function (retour) {
         res.send(retour);
     });
 });
