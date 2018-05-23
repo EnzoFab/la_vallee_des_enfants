@@ -11,7 +11,7 @@
                     mode="out-in"
                     :duration="500"
         >
-          <router-view />
+          <router-view id="body" />
         </transition>
         <Footer></Footer>
       </v-content>
@@ -68,6 +68,9 @@ export default {
 }
 .lightOpcity{
   opacity: 0.9;
+}
+#body{
+  min-height: 30vw;
 }
 .custom-loader {
   animation: loader 1s infinite;

@@ -18,12 +18,6 @@
               required
               prepend-icon="assignment_ind"
             ></v-text-field>
-            <!--<v-text-field
-              label="E-mail" v-else
-              v-model="email"
-              :rules="emailRules"
-              required
-            ></v-text-field> -->
             <v-text-field
               name="input-10-2"
               label="Mot de passe"

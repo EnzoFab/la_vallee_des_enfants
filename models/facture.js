@@ -67,7 +67,6 @@ let Facture = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
@@ -137,7 +136,6 @@ let Facture = {
             'WHERE id_contrat = $6, mois = $7, annee = $8',
             [facture.date_debut, facture.date_fin, facture.nb_jours_activite, facture.nb_heures_normales, facture.nb_heures_supp, facture.id_contrat, facture.mois, facture.annee],
             function () {
-                console.log('c\'est mis à jour :)')
                 let retour = 'la facture a bien ete mise a jour'
                 callback(retour)
             }
@@ -150,7 +148,6 @@ let Facture = {
             'WHERE id_contrat = $2, mois = $3, annee = $4',
             [facture.nb_heures_majorees, facture.id_contrat, facture.mois, facture.annee],
             function () {
-                console.log('c\'est mis à jour :)')
                 let retour = 'la facture a bien ete mise a jour'
                 callback(retour)
             }
@@ -174,7 +171,6 @@ let Facture = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             dateDebut: rslt.rows[i].date_debut,
                             dateFin: rslt.rows[i].date_fin,
@@ -187,7 +183,6 @@ let Facture = {
                             nbHeuresMajorees: rslt.rows[i].nb_heures_majorees,
                             idContrat: rslt.rows[i].id_contrat
                         });
-                        console.log('array', array)
                     }
                     retour.factures = array;
                     retour.statut = 200

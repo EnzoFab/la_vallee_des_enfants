@@ -19,9 +19,9 @@
       <v-layout>
         <v-flex md4 mt-5 offset-md1>
           <v-flex mb-2 class="text-md-left" offset-md2>
-            <v-btn color="pink darken-1" @click="dialogBoxPresenceExc=true" dark><v-icon>add</v-icon>Présence exceptionnelle</v-btn>
+            <v-btn color="pink darken-1" @click="dialogBoxPresenceExc=true" v-if="enfantsPasDuJour.length != 0" dark><v-icon>add</v-icon>Présence exceptionnelle</v-btn>
           </v-flex>
-          <v-flex v-for="(enfant, i) in enfantsDuJour" :key="i">
+          <v-flex  v-for="(enfant, i) in enfantsDuJour" :key="i">
             <v-flex>
               <v-flex md10 mb-2>
                 <v-card>
@@ -53,14 +53,14 @@
                     <v-flex>
                       <v-card-actions>
                         <v-flex>
-                          <v-btn class="red--text text--darken-4" flat @click="updateDialogAbs(i)">Absence</v-btn>
+                          <v-btn class="red--text text--darken-4" flat @click="updateDialogAbs(i)">Notifier absence</v-btn>
                         </v-flex>
                       </v-card-actions>
                     </v-flex>
                     <v-flex>
                       <v-card-actions>
                         <v-flex>
-                          <v-btn class="light-green--text text--darken-4" flat @click.stop="updateDialog(i)">Présence</v-btn>
+                          <v-btn class="light-green--text text--darken-4" flat @click.stop="updateDialog(i)">Saisir présence</v-btn>
                         </v-flex>
                       </v-card-actions>
                     </v-flex>
@@ -231,7 +231,7 @@
             <v-flex pl-2>
               <v-layout>
                 <v-form>
-                  <v-flex offset-md4>
+                  <v-flex offset-md4 v-if="enfantsPasDuJour.length != 0">
                     <v-select
                       :items="enfantsPasDuJour"
                       v-model="id_enfant"
@@ -363,8 +363,6 @@ export default {
   mounted () {
     this.getAllChildrenOfTheDay()
     this.getAllChildrenNotOfTheDay()
-    console.log(this.enfantcourant)
-    console.log('22222  ' + this.enfantcourant)
   },
   methods: {
     updateDialog (i) {
@@ -373,21 +371,16 @@ export default {
       if (this.enfantcourant.a_pris_gouter != null) {
         this.gouterPris = this.enfantcourant.gouterPris
       }
-      console.log('azertyui   ' + this.dialogBox + '  ' + this.enfantcourant)
     },
     updateDialogAbs (i) {
       this.enfantcourant = this.enfantsDuJour[i]
       this.dialogBoxAbsence = true
-      console.log('azertyui222   ' + this.dialogBoxAbsence + '  ' + this.enfantcourant)
     },
     async getAllChildrenOfTheDay () {
       try {
         const response = await PresenceService.getAllChildrenOfTheDay()
-        console.log('response.data.   ' + response.data.presencestheoriques)
         this.enfantsDuJour = response.data.presencestheoriques
-        console.log('azertyuiop      ' + this.enfantsDuJour)
         for (var i = 0; i < this.enfantsDuJour.length; i++) {
-          console.log('aqwzsxedcrfv leeeeeee ----- ' + i + '---- ' + this.enfantsDuJour[i])
           if (this.enfantsDuJour[i].heure_arrivee != null) {
             var heureDecoupeeArr = (this.enfantsDuJour[i].heure_arrivee).split(':', 2)
             this.enfantsDuJour[i].heureArrivee = heureDecoupeeArr[0]
@@ -441,163 +434,148 @@ export default {
     async getAllChildrenNotOfTheDay () {
       try {
         const response = await PresenceService.getAllChildrenNotOfTheDay()
-        console.log(response.data)
         if (response.data.absencestheoriques != null) {
           this.enfantsPasDuJour = response.data.absencestheoriques
           for (var i = 0; i < this.enfantsPasDuJour.length; i++) {
             this.enfantsPasDuJour[i].nomComplet = this.enfantsPasDuJour[i].nom_enfant + ' ' + this.enfantsPasDuJour[i].prenom_enfant
-            console.log('yihahaaa   ' + this.enfantsPasDuJour[i].nomComplet)
           }
         }
       } catch (e) {
         console.log(e)
       }
     },
-    async submitArrivee (enfant) {
+    async submitArrivee (enfantArr) {
       try {
-        if (enfant.enregistre === false) {
+        if (enfantArr.enregistre === false) {
           var date = new Date()
           let data = {
             presence:
               {
                 datepresencereelle: date,
-                id_presence_theo: enfant.id_presence_theo,
-                heure_arrivee: this.heureRassemblee(enfant.heureArrivee, enfant.minuteArrivee)
+                id_presence_theo: enfantArr.id_presence_theo,
+                heure_arrivee: this.heureRassemblee(enfantArr.heureArrivee, enfantArr.minuteArrivee)
               }
           }
-          let v = await PresenceService.enregistrerPresence(data)
-          console.log(v.data)
+          await PresenceService.enregistrerPresence(data)
           this.dialogBox = false
         } else {
-          console.log(enfant.id_presence_reelle)
           let data = {
             presence: {
-              id_presence_reelle: enfant.id_presence_reelle,
-              heure_arrivee: this.heureRassemblee(enfant.heureArrivee, enfant.minuteArrivee)
+              id_presence_reelle: enfantArr.id_presence_reelle,
+              heure_arrivee: this.heureRassemblee(enfantArr.heureArrivee, enfantArr.minuteArrivee)
             }
           }
-          enfant.absence_justifiee = null
-          let v2 = await PresenceService.majHeureArrivee(data)
-          console.log(v2.data)
+          enfantArr.absence_justifiee = null
+          await PresenceService.majHeureArrivee(data)
           this.dialogBox = false
         }
       } catch (e) {
         console.log(e)
       }
       this.alert = true
-      this.enfantsDuJour = this.getAllChildrenOfTheDay()
+      this.getAllChildrenOfTheDay()
     },
-    async submitDepart (enfant) {
+    async submitDepart (enfantDep) {
       try {
         let data = {
           presence:
             {
-              id_presence_reelle: enfant.id_presence_reelle,
-              heure_depart: this.heureRassemblee(enfant.heureDepart, enfant.minuteDepart)
+              id_presence_reelle: enfantDep.id_presence_reelle,
+              heure_depart: this.heureRassemblee(enfantDep.heureDepart, enfantDep.minuteDepart)
             }
         }
-        const v = await PresenceService.majHeureDepart(data)
-        console.log(v)
+        await PresenceService.majHeureDepart(data)
         this.dialogBox = false
       } catch (e) {
         console.log(e)
       }
       this.alert = true
-      this.enfantsDuJour = this.getAllChildrenOfTheDay()
+      this.getAllChildrenOfTheDay()
     },
-    async submitGouter (enfant) {
+    async submitGouter (enfantGouter) {
       try {
-        enfant.a_pris_gouter = this.gouterPris
+        enfantGouter.a_pris_gouter = this.gouterPris
         let data = {
           presence:
             {
-              id_presence_reelle: enfant.id_presence_reelle,
-              a_pris_gouter: enfant.a_pris_gouter
+              id_presence_reelle: enfantGouter.id_presence_reelle,
+              a_pris_gouter: enfantGouter.a_pris_gouter
             }
         }
-        const v = await PresenceService.majGouter(data)
-        console.log(v)
+        await PresenceService.majGouter(data)
         this.alert = true
         this.gouterPris = false
         this.dialogBox = false
-        this.enfantsDuJour = this.getAllChildrenOfTheDay()
+        this.getAllChildrenOfTheDay()
       } catch (e) {
         console.log(e)
       }
     },
-    async submitAbsenceJu (enfant) {
+    async submitAbsenceJu (enfantAbs) {
       try {
-        if (enfant.enregistre === false) {
+        if (enfantAbs.enregistre === false) {
           var date = new Date()
           let data = {
             absence:
               {
                 datepresencereelle: date,
-                id_presence_theo: enfant.id_presence_theo,
+                id_presence_theo: enfantAbs.id_presence_theo,
                 absence_justifiee: true
               }
           }
-          let v = await PresenceService.enregistrerAbsence(data)
-          console.log(v.data)
+          await PresenceService.enregistrerAbsence(data)
           this.dialogBoxAbsence = false
         } else {
-          console.log(enfant.id_presence_reelle)
           let data = {
             absence: {
-              id_presence_reelle: enfant.id_presence_reelle,
+              id_presence_reelle: enfantAbs.id_presence_reelle,
               absence_justifiee: true
             }
           }
-          let v2 = await PresenceService.majAbsence(data)
-          console.log(v2.data)
+          await PresenceService.majAbsence(data)
           this.dialogBoxAbsence = false
         }
       } catch (e) {
         console.log(e)
       }
       this.alert = true
-      this.enfantsDuJour = this.getAllChildrenOfTheDay()
+      this.getAllChildrenOfTheDay()
     },
-    async submitAbsenceNonJu (enfant) {
+    async submitAbsenceNonJu (enfantAbsNonJ) {
       try {
-        if (enfant.enregistre === false) {
+        if (enfantAbsNonJ.enregistre === false) {
           var date = new Date()
           let data = {
             absence:
               {
                 datepresencereelle: date,
-                id_presence_theo: enfant.id_presence_theo,
+                id_presence_theo: enfantAbsNonJ.id_presence_theo,
                 absence_justifiee: false
               }
           }
-          let v = await PresenceService.enregistrerAbsence(data)
-          console.log(v.data)
+          await PresenceService.enregistrerAbsence(data)
           this.dialogBoxAbsence = false
         } else {
-          console.log(enfant.id_presence_reelle)
           let data = {
             absence: {
-              id_presence_reelle: enfant.id_presence_reelle,
+              id_presence_reelle: enfantAbsNonJ.id_presence_reelle,
               absence_justifiee: false
             }
           }
-          let v2 = await PresenceService.majAbsence(data)
-          console.log(v2.data)
+          await PresenceService.majAbsence(data)
           this.dialogBoxAbsence = false
         }
       } catch (e) {
         console.log(e)
       }
       this.alert = true
-      this.enfantsDuJour = this.getAllChildrenOfTheDay()
+      this.getAllChildrenOfTheDay()
     },
     async submitPresenceExc () {
       try {
         var date = new Date()
-        console.log('iiiidddeeeennnnffff    ' + this.id_enfant)
         const response = await PresenceService.recupIdPresTheoDuJour(this.id_enfant)
         var id = response.data.id
-        console.log('iiiiid ' + id)
         let data = {
           presence:
             {
@@ -605,29 +583,18 @@ export default {
               id_presence_theo: id
             }
         }
-        let v = await PresenceService.enregistrerPresenceExc(data)
-        console.log(v.data)
-        console.log('asdnbpx   ')
+        await PresenceService.enregistrerPresenceExc(data)
         this.dialogBoxPresenceExc = false
         this.id_enfant = null
         this.alert = true
-        this.enfantsDuJour = this.getAllChildrenOfTheDay()
-        this.enfantsPasDuJour = this.getAllChildrenNotOfTheDay()
+        this.enfantsDuJour = await this.getAllChildrenOfTheDay()
+        this.enfantsPasDuJour = await this.getAllChildrenNotOfTheDay()
       } catch (e) {
         console.log(e)
       }
     },
     heureRassemblee: function (heure, minute) {
       return (heure + ':' + minute)
-    }
-  },
-  watch: {
-    enfantsDuJour: {
-      handler (val) {
-        console.log('Changement', this.enfantsDuJour)
-        console.log('Valeur ', val)
-      },
-      deep: true
     }
   }
 

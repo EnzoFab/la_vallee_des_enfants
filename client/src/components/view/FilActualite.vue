@@ -4,7 +4,6 @@
       <v-alert v-model="erreur" type="error" dismissible>
         {{erreurMessage}}
       </v-alert>
-      <!-- <Calendar :customEvents="post"></Calendar> -->
       <v-snackbar
         v-model="snackbar"
         absolute
@@ -217,7 +216,6 @@ export default {
       let vm = this
       PostService.getAllLimit(9, this.posts.length).then(function (rslt) {
         if (rslt.data.erreur == null) {
-          console.log(rslt.data)
           let loadedPost = rslt.data.posts
           loadedPost.forEach(function (post) {
             vm.posts.push({
@@ -268,14 +266,9 @@ export default {
       this.image = null
     },
     async creerPost (data) {
-      console.log('=======DATA===', data)
       try {
         let r = await PostService.create(data)
         if (r.data.erreur == null) {
-          console.log('LES DONNEES ', {
-            id_post: r.data.id_post,
-            image_id: r.data.imageID
-          })
           return {
             id_post: r.data.id_post,
             image_id: r.data.imageID
@@ -292,21 +285,17 @@ export default {
     async saveImg () { // sauvegarde l'image sur le serveur
       if (this.image && this.image != null) {
         const formData = new FormData()
-        console.log('IMAGE====', this.image)
         formData.append('image', this.image, this.image.name)
         try {
           let response = await FileService.postImg(formData,
             {onUploadProgress (e) {
-              console.log(this.progress)
               this.progress += e.loaded * 100 / e.total
               if (this.progress === 100) {
                 this.progress = 0
               }
             }}
           )
-          console.log(response.data)
           if (response.data.erreur == null) {
-            console.log(response.data.resultats)
             return response.data.resultats
           } else {
             this.triggerErreur('Une erreur est survenue')
@@ -324,7 +313,6 @@ export default {
       this.showProgress = true
       try {
         let image = await this.saveImg()
-        console.log(image)
         if (image && image != null) {
           let data = {
             post: {
@@ -346,7 +334,6 @@ export default {
               date: this.dateFr(new Date()),
               contentVisible: false
             }
-            console.log(post)
             this.posts.push(post)
             this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
             this.showProgress = false
@@ -377,7 +364,6 @@ export default {
               date: this.dateFr(new Date()),
               contentVisible: false
             }
-            console.log(post)
             this.posts.push(post)
             this.showProgress = false
             this.$socket.emit('nouveauPost', post) // envoie le nouveau post à tous les autres
@@ -396,14 +382,12 @@ export default {
       }
     },
     async deleteHostedImage (imageId) { // supprime l'image du serveur
-      // console.log('PUBLIC ID ', imageId)
       if (imageId != null) {
         try {
           let response = await FileService.deleteImg(imageId)
           if (response.data.erreur == null) {
             return true
           } else {
-            console.log('SUPER ERREUR ', response.data.erreur)
             this.triggerErreur(response.data.erreur.toString())
             return false
           }
@@ -416,7 +400,6 @@ export default {
       }
     },
     async deleteDBPost (idPost) { // permet de supprimer un dans la base de données
-      console.log('DELETE ID')
       try {
         let response = await PostService.delete(idPost)
         if (response.data.erreur == null) {
@@ -443,7 +426,6 @@ export default {
       let vm = this
       PostService.getAllLimit(limit, offset).then(function (rslt) {
         if (rslt.data.erreur == null) {
-          console.log(rslt.data)
           let loadedPost = rslt.data.posts
           loadedPost.forEach(function (post) {
             vm.posts.push({
@@ -472,31 +454,6 @@ export default {
           $state.loaded()
         }
       })
-
-      /*
-      try {
-        let response = await PostService.getAll()
-        if (response.data.erreur == null) {
-          let loadedPosts = response.data.posts
-          let vm = this
-          loadedPosts.forEach(function (post) {
-            vm.posts.push({
-              image: post.image, // this.imgPath,
-              message: post.texte,
-              titre: post.titre,
-              id_post: post.id,
-              image_id: post.image_id,
-              date: vm.dateFr(post.date),
-              contentVisible: false
-            })
-          })
-        } else {
-          console.log(response.data.erreur.texte)
-        }
-      } catch (e) {
-        this.triggerErreur(e.toString())
-      }
-      */
     },
     clearForm () {
       this.$refs.form.reset()

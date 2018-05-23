@@ -19,7 +19,6 @@ let Contrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_contrat,
                             dateDebut: rslt.rows[i].date_debut,
@@ -34,7 +33,6 @@ let Contrat = {
                             prenomEnfant: rslt.rows[i].prenom_enfant,
                             sexeEnfant: rslt.rows[i].sexe
                         });
-                        console.log('array', array)
                     }
                     retour.contrats = array;
                     retour.statut = 200
@@ -61,7 +59,6 @@ let Contrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_contrat,
                             dateDebut: rslt.rows[i].date_debut,
@@ -76,7 +73,6 @@ let Contrat = {
                             prenomEnfant: rslt.rows[i].prenom_enfant,
                             sexeEnfant: rslt.rows[i].sexe
                         });
-                        console.log('array', array)
                     }
                     retour.contrats = array;
                     retour.statut = 200
@@ -165,7 +161,6 @@ let Contrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_contrat,
                             dateDebut: rslt.rows[i].date_debut,
@@ -180,7 +175,6 @@ let Contrat = {
                             prenomEnfant: rslt.rows[i].prenom_enfant,
                             sexeEnfant: rslt.rows[i].sexe
                         });
-                        console.log('array', array)
                     }
                     retour.contrats = array;
                     retour.statut = 200
@@ -198,7 +192,6 @@ let Contrat = {
             'AND tt.id_type_tuteur = tu.id_type_tuteur;',
             [numeroContrat],
             function (err, rslt){
-                console.log('hellobis')
                 retour = {
                     erreur: null,
                     tuteurs: null,
@@ -219,7 +212,6 @@ let Contrat = {
                             telephone_pro: rslt.rows[i].telephone_pro,
                             nom_type_tuteur: rslt.rows[i].nom_type_tuteur
                         });
-                        console.log('array', array)
                     }
                     retour.tuteurs = array;
                     retour.statut = 200
@@ -253,7 +245,6 @@ let Contrat = {
                             heureDepart: rslt.rows[i].heure_depart,
                             id_type_jour: rslt.rows[i].id_type_jour
                         });
-                        console.log('array', array)
                     }
                     retour.resultats = array;
                     retour.statut = 200
@@ -274,7 +265,6 @@ let Contrat = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
@@ -286,7 +276,6 @@ let Contrat = {
             function (e) {
             let retour = {erreur : null}
                 if (e) {
-                    console.log(e.toString())
                     retour.erreur = e.toString()
                 }
                 callback(retour)
@@ -301,7 +290,6 @@ let Contrat = {
             'WHERE id_contrat = $3',
             [numEmployeur, nombreSemainesCong, numContrat],
             function () {
-                console.log('c\'est inséré :)')
                 let retour = 'l\'employeur et ses conges sont ajoutés au contrat'
                 callback(retour)
             }
@@ -331,7 +319,6 @@ let Contrat = {
             'WHERE id_contrat = $2',
             [nbHeures, numContrat],
             function () {
-                console.log('c\'est inséré :)')
                 let retour = 'le nb d\'heures hebdos est ajouté au contrat'
                 callback(retour)
             })
@@ -344,7 +331,6 @@ let Contrat = {
             'WHERE id_contrat = $3',
             [tarifHoraire, tauxMajoration, numContrat],
             function () {
-                console.log('c\'est inséré :)')
                 let retour = 'les tarifs sont ajoutés au contrat'
                 callback(retour)
             })
@@ -374,7 +360,6 @@ let Contrat = {
                 let e = helper.handleError(err, result, 'Aucun contrat');
                 retour.erreur= e.erreur;
                 retour.statut= e.statut;
-                console.log(result)
                 if (retour.erreur == null) {
                     retour.contrat = {
                         id: result.rows[0].id_contrat,

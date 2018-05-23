@@ -68,7 +68,7 @@
       <v-flex lg8>
         <v-layout>
       <v-flex mt-5>
-        <v-btn color="orange darken-1" dark>Générer la facture au format PDF</v-btn>
+        <v-btn color="orange darken-1" @click="exportPDF" dark>Générer la facture au format PDF</v-btn>
       </v-flex>
       <v-flex mt-5>
         <!-- <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn> !-->
@@ -209,6 +209,14 @@ export default {
   },
   mounted () {
     this.initInfosBasiquesDeLaFacture()
+  },
+  async exportPDF () {
+    let facture = { nombreJoursActivite: this.nombreJoursActivite, nombreHeuresNormales: this.nombreHeuresNormales, nombreHeuresMajorees: this.nombreHeuresMajorees, nombreJoursCongesPayes: this.nombreJoursCongesPayes, salaireHoraireNormal: this.salaireHoraireNormal, dateLimitePaiement: this.dateLimitePaiement, indemnitesMensuelles: this.indemnitesMensuelles, gouter: this.gouter, entretien: this.entretien, coutTotalIndemnitesAbs: this.coutTotalIndemnitesAbs, nbJoursFériés: this.nbJoursFériés, coutTotalIndemnitesJoursFeries: this.coutTotalIndemnitesJoursFeries, nbJoursPresenceExcept: this.nbJoursPresenceExcept, coutTotalJoursExceptionnels: this.coutTotalJoursExceptionnels, salaireNet: this.salaireNet, congePaye10: this.congePaye10, indemEntretien: this.indemEntretien, montant: this.montant }
+    try {
+      await facturePDF.createFacturePdf(facture)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>

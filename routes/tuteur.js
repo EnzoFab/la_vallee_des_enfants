@@ -6,7 +6,6 @@ var modelTuteur = require('../models/tuteur')
 
 router.get('/tuteursEnfants', function (req, res, next) {
     modelTuteur.getTuteursEnfants(function (retour) {
-        console.log('============', retour)
         res.send(retour);
     });
 });
@@ -17,13 +16,12 @@ router.get('/:n', function (req, res) {
         res.send(retour)
     });
 });
+
 /* ------------------------------------------ ROUTES POST ------------------------------------------------------ */
 
 router.post('/create', function (req, res, next) {
     var tuteur = req.body.tuteur
-    console.log()
     modelTuteur.create(tuteur, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });
@@ -51,7 +49,6 @@ router.put('/:n/update', function (req, res) {
 // Modification des données d'un parent
 router.put('/modifTuteur', function (req, res) {
     let tuteur = req.body.tuteur
-    console.log(tuteur)
     modelTuteur.updateInfosTuteur(tuteur, function (retour) {
         res.send(retour)
     })

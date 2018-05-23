@@ -270,25 +270,11 @@ export default {
     this.initModePaiement()
     this.initTypeContrat()
     this.initNombreJour()
-
-    /* let vm = this
-    this.regleDateDebutAdapt.push(function (val) {
-        return vm.date != null || new Date(val) < new Date(vm.date) || 'la date début de la période ne peut pas être avant le début du contrat '
-    })
-
-    this.regleDateFinAdapt.push(function (val) {
-      if (vm.dateDebutPeriodeAdapt == null || new Date(val) < new Date(vm.dateDebutPeriodeAdapt)) {
-        return 'la date fin de la période ne peut pas être avant le début de la période'
-      } else {
-        return true
-      }
-    }) */
   },
   methods: {
     async initModePaiement () {
       try {
         const response = await TypeService.modeDepaiements() // appel au serveur
-        console.log(response.data)
         this.modesPaiements = response.data.modepaiements
       } catch (e) {
         console.log(e)
@@ -298,7 +284,6 @@ export default {
       try {
         const response = await TypeService.typeContrat()
         this.typesContrats = response.data.typescontrat
-        console.log(response.data.typescontrat)
       } catch (e) {
         console.log(e)
       }

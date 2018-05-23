@@ -17,53 +17,34 @@ router.get('/allTermines', function (req, res, next) {
 });
 
 router.get('/getAllById/:numC', function (req, res, next) {
-    console.log('helloroute')
-    console.log(req.params.numC)
     modelContrat.getAllById(req.params.numC, function (retour) {
-        console.log(retour);
         res.send(retour)
     })
 });
 
 router.get('/getAllByIdEmployeur/:numE', function (req, res, next) {
-    console.log(req.params.numE)
     modelContrat.getAllByIdEmployeur(req.params.numE, function (retour) {
-        console.log(retour);
         res.send(retour)
     })
 });
 
 router.get('/getPresences/:numC', function (req, res, next) {
     modelContrat.getPresencesByContrat(req.params.numC, function (retour) {
-        console.log(retour);
         res.send(retour)
     })
 });
 
 router.get('/getTuteursById/:numC', function (req, res, next) {
-    console.log('helloroute')
-    console.log(req.params.numC)
     modelContrat.getTuteursById(req.params.numC, function (retour) {
-        console.log(retour);
         res.send(retour)
     })
 });
 
 /* --------------------------------------- ROUTES POST --------------------------------------------------------- */
-/* router.post('/create2', function (req, res, next) {
-    var contrat = req.body.contrat
-    modelContrat.create2(contrat, function (retour) {
-        console.log(retour)
-        res.send(retour)
-    })
-}); */
 
 // Création du contrat
 router.post('/create', function (req, res, next) {
-    //var contrat = req.body.contrat
-    //console.log('drtyjb ' + contrat.numContrat)
     modelContrat.create(req.body.numContrat, req.body.numAssMat, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });
@@ -99,7 +80,6 @@ router.put('/infosGenerales/:n', function (req, res) {
     let dateDebAdapt = req.body.date_deb_periode_adaptation
     let dateFinAdapt = req.body.date_fin_periode_adaptation
     let jourPaie = req.body.jour_paiement
-    console.log('========== ', id_contrat, ' ', id_modePaie, ' ', dateDeb, ' ', dateDebAdapt, ' ', dateFinAdapt, ' ', jourPaie);
     modelContrat.sectionInfosGeneralesCreate(id_contrat, id_type, id_modePaie, dateDeb, dateDebAdapt, dateFinAdapt, jourPaie, function (retour) {
         res.send(retour)
     })

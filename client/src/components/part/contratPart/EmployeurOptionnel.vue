@@ -5,10 +5,6 @@
       <v-toolbar-title>Information Employeur</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <!-- <span small  class="red--text">
-      <v-icon>warning</v-icon>
-      <i >Attention remplissez bien cette section il ne sera pas possible de revenir en arrière</i>
-    </span> -->
 
     <v-form v-model="estValide" ref="form" class="pa-3">
       <v-checkbox
@@ -247,8 +243,6 @@ export default {
         },
         congesSupp: this.congesSupp
       }
-      console.log('Employeur', this.employeurExistant)
-      console.log('DATA', data)
       this.$emit('submit', data)
     },
     back () {

@@ -18,11 +18,8 @@ router.get('/all/:numC', function (req, res, next) {
 });
 
 router.get('/:n/allchildrennp', function (req, res, next) {
-    console.log('coucouc route')
     let day = req.params.n
-    console.log(day + ' day')
     modelPresenceTheorique.getChildrenNonPresentsOfTheDay(day, function (retour) {
-        console.log(retour)
         res.send(retour);
     });
 });

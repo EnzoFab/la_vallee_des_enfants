@@ -18,12 +18,10 @@ let typeJour = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < result.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: result.rows[i].id_type,
                             libelle: result.rows[i].libelle
                         });
-                        console.log('array', array)
                     }
                     retour.typesjour = array;
                     retour.statut = 200

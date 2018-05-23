@@ -1,6 +1,5 @@
 <template>
   <v-toolbar app fixed tabs clipped-left light dense color="blue-grey lighten-5">
-    <!-- <v-toolbar-side-icon  @click.stop="emitEvent()"></v-toolbar-side-icon> -->
     <v-spacer></v-spacer>
     <v-toolbar-title><h3 class="teal--text">La vallée des enfants</h3></v-toolbar-title>
     <v-spacer></v-spacer>
@@ -58,7 +57,6 @@ export default {
   methods: {
     emitEvent () {
       this.$emit('toogleDrawer')
-      // emet l'enenement qui sera recu par le composant parents
     }
   }
 }

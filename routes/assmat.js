@@ -13,7 +13,6 @@ function jwtSignAssMat(assmat) {
 
 router.get('/all', function (req, res, next) {
     modelAssMat.getAll(function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });
@@ -29,7 +28,6 @@ router.get('/:n', function (req, res) {
 router.post('/register', function (req, res, next) {
     var assMat = req.body.assMat
     modelAssMat.create(assMat, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });
@@ -41,7 +39,6 @@ router.post('/login', function (req, res, next) {
         if(retour.erreur == null){
             retour.token = jwtSignAssMat(retour.assmat)
         }
-        console.log(retour)
         res.send(retour)
     })
 });

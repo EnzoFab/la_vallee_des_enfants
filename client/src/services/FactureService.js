@@ -1,6 +1,9 @@
 import Api from './Api'
 
 export default {
+
+  /* ------------------------------------------ GET ------------------------------------------------------ */
+
   getInfosBasics (idcontrat) {
     return Api().get('/factures/basics/' + idcontrat)
   },
@@ -13,9 +16,17 @@ export default {
     return Api().get('/factures/existe/' + idContrat + '/' + annee + '/' + mois)
   },
 
+  getAllByIdContrat (numContrat) {
+    return Api().get('/factures/all/' + numContrat)
+  },
+
+  /* ------------------------------------------ POST ------------------------------------------------------ */
+
   createFacture (data) {
     return Api().post('/factures/create', data)
   },
+
+  /* ------------------------------------------ PUT ------------------------------------------------------ */
 
   updateInfosFacture (data) {
     return Api().put('/factures/updateInfos', data)
@@ -23,9 +34,5 @@ export default {
 
   updateHeuresMajo (data) {
     return Api().put('/factures/updateHeuresMajo', data)
-  },
-
-  getAllByIdContrat (numContrat) {
-    return Api().get('/factures/all/' + numContrat)
   }
 }

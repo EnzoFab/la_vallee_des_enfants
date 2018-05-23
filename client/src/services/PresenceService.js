@@ -2,17 +2,19 @@ import Api from '../services/Api'
 
 export default {
 
-  // recuperer toutes les presences theo a partir de l id d'un contrat
+  /* --------------------------------------- GET ----------------------------------------------------------- */
+
+  // récupérer toutes les présences théo à partir de l'id d'un contrat
   getAllPresencesTheoriquesByContrat (numContrat) {
     return Api().get('presencetheo/all/' + numContrat)
   },
 
-  // recuperer toutes les presences reelles d'un mois (et annee)
+  // récupérer toutes les présences réelles d'un mois (et année)
   getAllPresencesReellesMoisByContrat (numContrat, mois, annee) {
     return Api().get('presencereelle/all/' + annee + '/' + mois + '/' + numContrat)
   },
 
-  // recupere tous les enfants censés etre presents et etant presents exceptionnellemnt
+  // récupère tous les enfants censés être présents et étant présents exceptionnellemnt
   getAllChildrenOfTheDay () {
     var date = new Date()
     var day = date.getDay()
@@ -22,7 +24,7 @@ export default {
     return Api().get('presencetheo/' + day + '/allchildren')
   },
 
-  // recupere tous les enfants ne devant pas etre presents
+  // récupère tous les enfants ne devant pas être présents
   getAllChildrenNotOfTheDay () {
     var date = new Date()
     var day = date.getDay()
@@ -32,7 +34,7 @@ export default {
     return Api().get('presencetheo/' + day + '/allchildrennp')
   },
 
-  // recupere l'id de la presence reelle du jour
+  // récupère l'id de la présence réelle du jour
   recupIdPresTheoDuJour (credential) {
     var date = new Date()
     var day = date.getDay()
@@ -42,32 +44,25 @@ export default {
     return Api().get('presencetheo/' + credential + '/' + day)
   },
 
-  // dit s'il existe une presence reelle pour l'enfant a la date du jour
+  // dit s'il existe une présence réelle pour l'enfant à la date du jour
   estEnregistreAujourdhui (credential) {
     var date = new Date()
     return Api().get('presencereelle/existe/?date=' + date + '&enfant=' + credential)
   },
 
-  // creer une presence reelle
+  getAllPresenceBefore (date) {
+    return Api().get('/presencereelle/allBefore/' + date)
+  },
+
+  getAllPresenceContratBefore (date, numContrat) {
+    return Api().get('/presencereelle/allBefore/' + date + '/?numContrat=' + numContrat)
+  },
+
+  /* --------------------------------------- POST ----------------------------------------------------------- */
+
+  // creéer une présence réelle
   enregistrerPresence (credential) {
-    console.log(credential.presence.heure_arrivee)
     return Api().post('presencereelle/create', credential)
-  },
-
-  // mettre à jour l'heure d'arrivee reelle
-  majHeureArrivee (credential) {
-    return Api().put('presencereelle/majHeureArrivee', credential)
-  },
-
-  // mettre a jour l heure de depart reelle
-  majHeureDepart (credential) {
-    return Api().put('presencereelle/majHeureDepart', credential)
-  },
-
-  // mettre à jour le gouter de la presence reelle
-  majGouter (credential) {
-    console.log(credential.presence.a_pris_gouter)
-    return Api().put('presencereelle/majGouter', credential)
   },
 
   // enregistrer une absence
@@ -75,19 +70,30 @@ export default {
     return Api().post('presencereelle/createAbs', credential)
   },
 
-  // mettre à jour une absence (ou transformer une presence en absence)
-  majAbsence (credential) {
-    return Api().put('presencereelle/majAbs', credential)
-  },
-
-  // enregistrer une presence exceptionnelle
+  // enregistrer une présence exceptionnelle
   enregistrerPresenceExc (credential) {
     return Api().post('presencereelle/createPresExc', credential)
   },
-  getAllPresenceBefore (date) {
-    return Api().get('/presencereelle/allBefore/' + date)
+
+  /* --------------------------------------- PUT ----------------------------------------------------------- */
+
+  // mettre à jour l'heure d'arrivée réelle
+  majHeureArrivee (credential) {
+    return Api().put('presencereelle/majHeureArrivee', credential)
   },
-  getAllPresenceContratBefore (date, numContrat) {
-    return Api().get('/presencereelle/allBefore/' + date + '/?numContrat=' + numContrat)
+
+  // mettre à jour l'heure de depart réelle
+  majHeureDepart (credential) {
+    return Api().put('presencereelle/majHeureDepart', credential)
+  },
+
+  // mettre à jour le gouter de la presence réelle
+  majGouter (credential) {
+    return Api().put('presencereelle/majGouter', credential)
+  },
+
+  // mettre à jour une absence (ou transformer une présence en absence)
+  majAbsence (credential) {
+    return Api().put('presencereelle/majAbs', credential)
   }
 }
