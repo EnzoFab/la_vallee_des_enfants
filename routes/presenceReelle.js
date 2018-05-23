@@ -12,7 +12,22 @@ router.get('/existe', function (req, res, next) {
         res.send(retour);
     });
 });
-
+router.get('/allBefore/:date', function (req, res) {
+    let date = req.params.date
+    if (req.query.numContrat) {
+        let numContrat = req.query.numContrat
+        console.log("++++°+====", numContrat)
+        modelPresenceReelle.getAllForContratbeofre(numContrat, date, function (retour) {
+            console.log(retour)
+            res.send(retour)
+        })
+    } else {
+        modelPresenceReelle.getAllBefore(date, function (retour) {
+            console.log(retour)
+            res.send(retour)
+        })
+    }
+})
 router.get('/all/:annee/:numMois/:numC', function (req, res, next) {
     let annee = req.params.annee
     let mois = req.params.numMois

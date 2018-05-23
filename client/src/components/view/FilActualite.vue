@@ -118,7 +118,7 @@
                     <v-card-media
                       v-if="post.image != null"
                       :src="post.image"
-                      height="200px"
+                      height="400"
                     >
                     </v-card-media>
                     <v-card-title primary-title>

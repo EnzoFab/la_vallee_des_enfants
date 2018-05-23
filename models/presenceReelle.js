@@ -222,6 +222,81 @@ let presenceReelle = {
                 callback(retour)
             });
     },
+
+    getAllBefore (date, callback) {
+        db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
+            ' WHERE PR.datepresencereelle <= $1 ::date\n' +
+            'AND PR.id_presence_theo = PT.id_presence_theorique',
+            [date],
+            function (er, res) {
+                retour = {
+                    erreur: null,
+                    statut: null
+                };
+                let e = helper.handleError(er, res,'L\'enfant n\'a jamais était présent');
+                retour.erreur = e.erreur;
+                retour.resultats = null
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    let array = []
+                    for (var i = 0; i<res.rows.length; i++) {
+                        array.push({
+                            datepresencereelle: res.rows[i].datepresencereelle,
+                            heureArriveeReelle: res.rows[i].heure_arrivee_r,
+                            heureDepartRelle: res.rows[i].heure_depart_r,
+                            prendsGouterRelle: res.rows[i].prends_gouter_r,
+                            absence_justifiee: res.rows[i].absence_justifiee,
+                            id_presence_relle: res.rows[i].id_presence_relle,
+                            heureArriveePrevue: res.rows[i].heure_arrivee,
+                            heureDepartPrevue: res.rows[i].heure_depart,
+                            prendsGouterPrevue: res.rows[i].prends_gouter,
+                            arriveeRetard: res.rows[i].heure_arrivee_r > res.rows[i].heure_arrivee,
+                            partieAvant: res.rows[i].heure_depart_r < res.rows[i].heure_depart
+                        })
+                    }
+                    retour.resultats = array
+                }
+                callback(retour)
+            })
+    },
+
+    getAllForContratbeofre (numContrat, date, callback) {
+        db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
+            ' WHERE PR.datepresencereelle <= $2 ::date\n' +
+            'AND PR.id_presence_theo = PT.id_presence_theorique AND PT.id_contrat = $1',
+            [numContrat, date],
+            function (er, res) {
+                retour = {
+                    erreur: null,
+                    statut: null
+                };
+                let e = helper.handleError(er, res,'L\'enfant n\'a jamais était présent');
+                retour.erreur = e.erreur;
+                retour.resultats = null
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    let array = []
+                    for (var i = 0; i<res.rows.length; i++) {
+                        array.push({
+                            datepresencereelle: res.rows[i].datepresencereelle,
+                            heureArriveeReelle: res.rows[i].heure_arrivee_r,
+                            heureDepartReelle: res.rows[i].heure_depart_r,
+                            prendsGouterReelle: res.rows[i].prends_gouter_r,
+                            absence_justifiee: res.rows[i].absence_justifiee,
+                            id_presence_reelle: res.rows[i].id_presence_reelle,
+                            heureArriveePrevue: res.rows[i].heure_arrivee,
+                            heureDepartPrevue: res.rows[i].heure_depart,
+                            prendsGouterPrevue: res.rows[i].prends_gouter,
+                            arriveeRetard: res.rows[i].heure_arrivee_r > res.rows[i].heure_arrivee,
+                            partieAvant: res.rows[i].heure_depart_r < res.rows[i].heure_depart,
+                            absence_justifiee: res.rows[i].absence_justifiee
+                        })
+                    }
+                    retour.resultats = array
+                }
+                callback(retour)
+            })
+    }
 }
 
 module.exports = presenceReelle;

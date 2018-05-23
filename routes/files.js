@@ -22,7 +22,9 @@ router.post('/image', function (req, res) {
     } else {
         console.log(req.files.image)
         let img = req.files.image;
-        cloudinary.v2.uploader.upload_stream( {ressource_type: 'rauw'}, function(err, result) {
+        cloudinary.v2.uploader.upload_stream(
+            {ressource_type: 'raw', width: 400, height: 400, crop: "imagga_scale" },
+            function(err, result) {
             retour = {
                 erreur: null,
             }

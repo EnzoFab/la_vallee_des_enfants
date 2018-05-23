@@ -134,9 +134,9 @@ export default {
         {text: 'Modification', value: 'modifier'}
       ],
       absences: [],
-      dialogHeureMajo: false,
-      facture: {
-        /* -- Infos à afficher sur la facture -- */
+      dialogHeureMajo: false
+      /* facture: {
+        // -- Infos à afficher sur la facture --
         debutPeriode: null,
         finPeriode: null,
         nomEnfant: null,
@@ -175,7 +175,7 @@ export default {
         coutcongesPayes: 0, // 10% du salaire net
         totalDesIndemnites: 0,
         montantNetAPayer: 0,
-        /* -- Infos permettant de faire les calculs pour infos à afficher -- */
+        // -- Infos permettant de faire les calculs pour infos à afficher --
         nbJoursPresenceTheo: 0,
         nbSemainesCongesAssMat: null,
         nbSemainesCongesEmployeur: null,
@@ -190,12 +190,7 @@ export default {
         mois: 4,
         annee: 2018,
         idContrat: 'xMxBBUStkKOajkgDdjWFqbnaHCg3EfC5x1N'
-      }
-    }
-  },
-  methods: {
-    retour () {
-      this.$emit('retour')
+      } */
     }
   },
   methods: {
@@ -206,6 +201,9 @@ export default {
       console.log('youpi')
       console.log(Object.values(this.facture))
       console.log('heyyyy ' + this.facture.nbSemainesCongesEmployeur)
+    },
+    retour () {
+      this.$emit('retour')
     }
   },
   mounted () {
