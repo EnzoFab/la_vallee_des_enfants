@@ -192,7 +192,7 @@ export default {
                 heureArriveePrevue: event.heureArriveePrevue,
                 heureDepartPrevue: event.heureDepartPrevue,
                 heureArriveeReelle: event.heureArriveeReelle,
-                heureDepartReelle: event.heureDepartRelle,
+                heureDepartReelle: event.heureDepartReelle,
                 arriveeRetard: event.arriveeRetard,
                 partieAvant: event.partieAvant,
                 id: i,
