@@ -1,4 +1,5 @@
 import Jspdf from 'jspdf'
+require('jspdf-autotable')
 
 export default {
   createContratPdf (employeur, tuteurs, assMat, enfant, contrat, presences) {
@@ -32,7 +33,7 @@ export default {
     p += '<table id="t01">'
     p += '<tr>'
     p += '<th>Jour</th>'
-    p += '<th> Lundi</th>'
+    p += '<th> Lundi </th>'
     p += '<th> Mardi</th>'
     p += '<th> Mercredi</th>'
     p += '<th> Jeudi</th>'
@@ -41,10 +42,11 @@ export default {
     p += '<th> Dimanche</th>'
     p += '</tr>'
     p += '<tr>'
-    p += '<td> Heure d arrivée </td> '
+    p += '<td> <p> Heure d arrivée </p> </td> '
     for (var m = 0; m < presences.length; m++) {
       if (presences[m].heureArrivee != null) {
-        p += `<td> ${presences[m].heureArrivee} </td>`
+        var heureA = presences[m].heureArrivee.split(':', 2)
+        p += `<td> ${heureA[0] + ':' + heureA[1]} </td>`
       } else {
         p += `<td>  </td>`
       }
@@ -54,7 +56,8 @@ export default {
     p += '<td> Heure de départ </td> '
     for (var n = 0; n < presences.length; n++) {
       if (presences[n].heureDepart != null) {
-        p += `<td> ${presences[n].heureDepart} </td>`
+        var heureD = presences[n].heureDepart.split(':', 2)
+        p += `<td> ${heureD[0] + ':' + heureD[1]} </td>`
       } else {
         p += `<td>  </td>`
       }
@@ -158,22 +161,18 @@ ${p}
 </html>`
     let pdfName = 'contrat'
     var doc = new Jspdf('p', 'pt', 'letter')
-    var specialElementHandlers = {'#bypassme': function (element, renderer) {
-      return true
-    }
-    }
     var margins = {
       bottom: 60,
       left: 40,
       width: 522
     }
-    doc.fromHTML(htmlP1, margins.left, {width: margins.width, 'elementHandlers': specialElementHandlers}, margins)
+    doc.fromHTML(htmlP1, margins.left, {width: margins.width}, margins)
     doc.addPage()
-    doc.fromHTML(htmlP2, margins.left, {width: margins.width, 'elementHandlers': specialElementHandlers}, margins)
+    doc.fromHTML(htmlP2, margins.left, {width: margins.width}, margins)
     doc.addPage()
-    doc.fromHTML(htmlP3, margins.left, {width: margins.width, 'elementHandlers': specialElementHandlers}, margins)
+    doc.fromHTML(htmlP3, margins.left, {width: margins.width}, margins)
     doc.addPage()
-    doc.fromHTML(htmlP4, margins.left, {width: margins.width, 'elementHandlers': specialElementHandlers}, margins)
+    doc.fromHTML(htmlP4, margins.left, {width: margins.width}, margins)
     doc.save(pdfName + '.pdf')
   }
 }
