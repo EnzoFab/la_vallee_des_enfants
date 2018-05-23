@@ -3,6 +3,9 @@ import store from '../store/store'
 import Api from './Api'
 
 export default {
+
+  /* ------------------------------------------ POST ------------------------------------------------------ */
+
   /* postImg (formData, actions) {
     return Api().post('files/image', formData, actions)
   } */
@@ -18,6 +21,9 @@ export default {
     })
     // return Api().post('files/image', formData)
   },
+
+  /* ------------------------------------------ DELETE ------------------------------------------------------ */
+
   deleteImg (imageUrl) {
     return Api().delete('/files/image/' + imageUrl)
   }
