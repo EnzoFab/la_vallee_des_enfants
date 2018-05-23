@@ -173,7 +173,6 @@
         <v-btn
           color="green lighten-1"
           depressed large round
-          :dark="!isDisabled"
           @click="envoyer"
           :disabled="isDisabled"
         >

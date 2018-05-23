@@ -96,6 +96,11 @@
           <v-btn
             depressed large round
             class="yellow lighten-2"
+            @click="$emit('back')"
+          >Précédent</v-btn>
+          <v-btn
+            depressed large round
+            class="yellow lighten-2"
             @click="envoyer"
             :disabled="!estValide"
           >Suivant</v-btn>
@@ -113,7 +118,7 @@ export default {
   name: 'Tarifs',
   props: {
     heureSemaine: {required: true},
-    congeParent: {required: true},
+    congeEmployeur: {required: true},
     congeAssmat: {required: true}
   },
   data () {
@@ -142,10 +147,10 @@ export default {
       return FonctionMath.arrondi(this.salaireNet / 0.77, 2)
     },
     salaireMensuel () {
-      return (this.heureSemaine * this.salaireNet * this.nbSemAccueil) / 12
+      return FonctionMath.arrondi(this.heureSemaine * this.salaireNet * this.nbSemAccueil / 12, 2)
     },
     nbSemAccueil () {
-      return 52 - this.congeAssmat - this.congeParent
+      return 52 - this.congeAssmat - this.congeEmployeur
     }
   },
   mounted () {

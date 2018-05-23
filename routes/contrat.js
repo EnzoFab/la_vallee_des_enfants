@@ -65,7 +65,7 @@ router.put('/enfant/:n', function (req, res) {
 router.put('/employeur/:n', function (req, res) {
     let id_contrat = req.params.n
     let id_emp = req.body.id_employeur
-    let nb_conges = req.body.nb_semaines_conges_parents
+    let nb_conges = req.body.congeSupplementaireEmployeur
     modelContrat.sectionEmployeurCreate(id_contrat, nb_conges, id_emp, function (retour) {
         res.send(retour)
     })

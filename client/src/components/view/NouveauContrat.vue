@@ -13,23 +13,23 @@
       <v-alert v-model="erreur" type="error" dismissible>
         {{erreurMessage}}
       </v-alert>
-      <v-stepper v-model="etape" class="my-2" light non-linear>
+      <v-stepper v-model="etape" class="my-2" light>
         <v-stepper-header>
           <v-stepper-step class="red--text" step="1" :complete="estValideEtape1" >Assistante</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step class="red--text" step="2" :complete="estValideEtape2" editable>Enfant</v-stepper-step>
+          <v-stepper-step class="red--text" step="2" :complete="estValideEtape2" >Enfant</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="3" :complete="estValideEtape3" editable>Tuteur légaux</v-stepper-step>
+          <v-stepper-step step="3" :complete="estValideEtape3" >Tuteur légaux</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="4" :complete="estValideEtape4" editable>Employeur</v-stepper-step>
+          <v-stepper-step step="4" :complete="estValideEtape4" >Employeur</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5" :complete="estValideEtape5" editable>Informations générales</v-stepper-step>
+          <v-stepper-step step="5" :complete="estValideEtape5" >Informations générales</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="6" :complete="estValideEtape6" editable >Carnet de présences</v-stepper-step>
+          <v-stepper-step step="6" :complete="estValideEtape6" >Carnet de présences</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="7" :complete="estValideEtape7" editable>Tarifs</v-stepper-step>
+          <v-stepper-step step="7" :complete="estValideEtape7">Tarifs</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="8" :complete="estValideEtape7" editable>Fin</v-stepper-step>
+          <v-stepper-step step="8" :complete="estValideEtape7">Fin</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
@@ -52,7 +52,7 @@
           </v-stepper-content>
           <v-stepper-content step="7">
           <Tarifs @back="back" @submit="submitTarifs"
-                  :heure-semaine="heureSemaine" :conge-assmat="congeAssmat" :conge-parent="congeParent"></Tarifs>
+                  :heure-semaine="heureSemaine" :conge-assmat="congeAssmat" :conge-employeur="congeEmployeur"></Tarifs>
         </v-stepper-content>
           <v-stepper-content step="8">
             <FinContrat @back="back" @envoyer="sauvegarderContrat" :progress="showProgress"></FinContrat>
@@ -67,19 +67,19 @@
 import ChoisirAssMat from '../part/contratPart/ChoisirAssMat'
 import InfosEnfant from '../part/contratPart/InfosEnfant'
 import PlaningPresenceContrat from '../part/contratPart/PlaningPresenceContrat'
-import DateContrat from '../part/contratPart/DateDebutContrat'
 import InformationGenerale from '../part/contratPart/InformationGenerale'
 import EmployeurOptionnel from '../part/contratPart/EmployeurOptionnel'
 import Tarifs from '../part/contratPart/Tarifs'
 import TuteursLegaux from '../part/contratPart/TuteursLegaux'
 import PresenceTheorique from '../part/contratPart/PresenceTheorique'
+import FinContrat from '../part/contratPart/FinContrat'
 import EnfantService from '../../services/EnfantService'
 import ContratService from '../../services/ContratService'
 import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
 import MailHelper from '../../helper/sendMail'
 import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
-import FinContrat from '../part/contratPart/FinContrat'
+
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
 
 export default {
@@ -90,7 +90,6 @@ export default {
     PresenceTheorique,
     TuteursLegaux,
     InformationGenerale,
-    DateContrat,
     PlaningPresenceContrat,
     InfosEnfant,
     EmployeurOptionnel,
@@ -99,8 +98,8 @@ export default {
   data () {
     return {
       heureSemaine: 0,
-      congeAssmat: 0,
-      congeParent: 0,
+      congeAssmat: this.$store.state.assMat.nbConges,
+      congeEmployeur: 0,
       enfant: null,
       presenceTheorique: null,
       tuteurs: null,
@@ -128,14 +127,16 @@ export default {
   },
   methods: {
     submitEnfant (data) {
+      console.log(this.$store.state.assMat)
       this.enfant = data
-      this.estValideEtape1 = true
+      this.estValideEtape2 = true
       this.etape++
     },
     submitTuteurs (data) {
       this.tuteurs = data
       this.estValideEtape3 = true
       if (data.asEmployeur) {
+        this.congeEmployeur = data.infoDemandeur.nombreSemainesSupplementaires
         this.etape = 5
       } else {
         this.etape = 4
@@ -143,6 +144,8 @@ export default {
     },
     submitEmp (data) {
       this.employeur = data
+      console.log(data)
+      this.congeEmployeur = data.congesSupp
       this.estValideEtape4 = true
       this.etape++
     },
@@ -152,7 +155,10 @@ export default {
       this.estValideEtape5 = true
     },
     submitPresences (data) {
+
       this.presenceTheorique = data
+      this.heureSemaine = data.nbHeureSemaine
+      console.log(this.heureSemaine, '  ', this.congeEmployeur, '  ', this.congeAssmat)
       this.etape++
       this.estValideEtape6 = true
     },
@@ -312,7 +318,8 @@ export default {
         }
       } else {
         donneeEmployeur = {
-          employeurExistant: data.employeur.employeurExistant
+          employeurExistant: data.employeur.employeurExistant,
+          nb_semaines_conges: data.congesSupp
         }
       }
       return this.saveEmployeurIntermediare(donneeEmployeur)
@@ -401,7 +408,7 @@ export default {
     },
     submitAssMat (data) {
       this.idAssmat = data
-      console.log(this.idAssmat)
+      this.estValideEtape1 = true
       this.etape++
     },
 
@@ -423,7 +430,6 @@ export default {
     async saveEmployeurIntermediare (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
       console.log(employeur)
       if (employeur.employeurExistant == null) {
-        console.log('La') //
         try {
           let response = await EmployeurService.createEmployeur({employeur: employeur})
           if (response.data.erreur == null) {
@@ -449,10 +455,10 @@ export default {
           return false
         }
       } else {
-        console.log('Ici')
         try {
           await ContratService.updateInfosEmp(this.$store.state.numContrat,
-            {id_employeur: employeur.employeurExistant.id_employeur})
+            {id_employeur: employeur.employeurExistant.id_employeur,
+              congeSupplementaireEmployeur: employeur.nb_semaines_conges})
         } catch (e) {
 
         }

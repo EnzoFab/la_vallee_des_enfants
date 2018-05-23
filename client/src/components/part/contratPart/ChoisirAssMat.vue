@@ -26,7 +26,7 @@
       <v-btn
         class="yellow lighten-2"
         depressed large round
-        @click="annuler"
+        to="/contrat/"
       >Annuler</v-btn>
       <v-btn
         depressed large round
@@ -40,7 +40,7 @@
 
 <script>
 import AssistanteService from '../../../services/AssistanteService'
-var randomstring = require('randomstring')
+const randomstring = require('randomstring')
 export default {
   name: 'ChoisirAssMat',
   data () {
