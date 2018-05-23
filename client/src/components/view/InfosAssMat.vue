@@ -223,7 +223,7 @@ export default {
         if (this.nouveaupwd === this.reecrirepwd) {
           let r = await ModificationMdpService.modifMdp(data)
           if (r.data.erreur == null) {
-            this.triggerSnackBar('mot de passe mis à jour', 'success')
+            this.triggerSnackBar('Mot de passe mis à jour', 'success')
           } else {
             this.triggerErreur(r.data.erreur.texte)
           }
