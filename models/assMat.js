@@ -21,7 +21,6 @@ let AssMats = {
                 db.query("INSERT INTO public.assmat(nom_naissance_am, nom_usage_am, prenom_am, tel_am, nb_semaines_conges, date_naissance_am, ville_naissance_am, numero_ss, date_agrement, reference_agrement, assurance_resp_civile, num_police, login, mot_de_passe_am, rue_am, cp_am, ville_am) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) returning id_am",
                     [assMat.nomNaissance, assMat.nomUsage, assMat.prenom, assMat.tel, assMat.nbConges, assMat.dateNaiss, assMat.villeNaiss, assMat.numSS, assMat.dateAgr, assMat.refAgr, assMat.assResp, assMat.numPolice, assMat.login, hash, assMat.rue, assMat.cp, assMat.ville],
                     function (err, result) {
-                        console.log(result)
                         if (retour.erreur == null) {
                             retour.assmat = {
                                 id_assmat: result.rows[0].id_am,
@@ -162,12 +161,10 @@ let AssMats = {
                 if (retour.erreur == null) {
                     var array = []
                     for (var i = 0; i < rslt.rows.length; i++) {
-                        console.log(1)
                         array.push({
                             id_am: rslt.rows[i].id_am,
                             nom_complet: rslt.rows[i].nom_usage_am + ' ' + rslt.rows[i].nom_naissance_am + ' ' + rslt.rows[i].prenom_am
                         });
-                        console.log('array', array)
                     }
                     retour.assmat = array;
                     retour.statut = 200

@@ -82,7 +82,6 @@ let Tuteur = {
                             prenom_tuteur: rslt.rows[i].prenom_tuteur,
                             nom_complet: rslt.rows[i].prenom_tuteur + ' '+ rslt.rows[i].nom_tuteur
                         });
-                        console.log('array', array)
                     }
                     retour.resultats = array;
                     retour.statut = 200

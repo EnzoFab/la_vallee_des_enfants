@@ -2,6 +2,7 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 
 let presenceTheorique = {
+
     getAll: function (callback) {
         db.query(
             'SELECT * FROM public.presencetheorique',
@@ -39,7 +40,6 @@ let presenceTheorique = {
      * @param callback
      */
     getAllChildrenOfTheDay: function (numDay, callback) {
-        console.log('numDuJour : ' + numDay)
         db.query(
             'SELECT * ' +
             'FROM (( ' +
@@ -89,7 +89,6 @@ let presenceTheorique = {
                         });
                     }
                     retour.presencestheoriques = array
-                    console.log(retour.presencestheoriques)
                     retour.statut = 200
                 }
 
@@ -134,8 +133,6 @@ let presenceTheorique = {
     },
 
     getChildrenNonPresentsOfTheDay: function (numDay, callback) {
-        console.log('coucou')
-        console.log('numDuJour : ' + numDay)
         db.query(
             '(' +
                 'SELECT * ' +
@@ -211,7 +208,6 @@ let presenceTheorique = {
                     retour.id = result.rows[0].id_presence_theorique
                     retour.statut = 200
                 }
-                console.log('ret' + retour.id)
                 callback(retour);
             }
         );

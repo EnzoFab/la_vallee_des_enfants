@@ -18,12 +18,10 @@ let typeContrat = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_type_tuteur,
                             libelle: rslt.rows[i].nom_type_tuteur
                         });
-                        console.log('array', array)
                     }
                     retour.typesTuteur = array;
                     retour.statut = 200

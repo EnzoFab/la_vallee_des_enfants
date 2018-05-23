@@ -13,7 +13,6 @@ let presenceReelle = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-               // console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
@@ -29,7 +28,6 @@ let presenceReelle = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                // console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
@@ -45,16 +43,12 @@ let presenceReelle = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                // console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
 
     // mettre à jour l'heure d'arrivée d'une présence réelle
     updateHeureArrivee: function (presenceReelle, callback) {
-        console.log('coucou toi')
-        console.log(presenceReelle.id_presence_reelle)
-        console.log(presenceReelle.heure_arrivee)
         db.query('UPDATE public.presencereelle ' +
             'SET heure_arrivee_r = $1, absence_justifiee = $3 ' +
             'WHERE id_presence_reelle = $2',
@@ -64,18 +58,15 @@ let presenceReelle = {
                     erreur : null
                 }
                 if (e) {
-                    console.log('erreur ' + e)
+                    console.log(e)
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
 
     // Toutes les presences reelle d'un mois(d'une annee) pour un contrat
     getAllPresencesDuMois: function (annee, mois, numContrat, callback) {
-        console.log(mois)
-        console.log(annee)
         db.query(
             'SELECT pr.datepresencereelle, pr.heure_arrivee_r, pr.heure_depart_r, pr.prends_gouter_r, pr.absence_justifiee ' +
             'FROM public.presencereelle pr, public.presencetheorique pt ' +
@@ -95,7 +86,6 @@ let presenceReelle = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             datepresencereelle: rslt.rows[i].datepresencereelle,
                             heure_arrivee_r: rslt.rows[i].heure_arrivee_r,
@@ -114,7 +104,6 @@ let presenceReelle = {
 
     // mettre à jour l'heure de départ d'une présence réelle
     updateHeureDepart: function (presenceReelle, callback) {
-        console.log('coucou    ' + presenceReelle.heure_depart + '  ' + presenceReelle.id_presence_reelle)
         db.query('UPDATE public.presencereelle ' +
             'SET heure_depart_r = $1 ' +
             'WHERE id_presence_reelle = $2',
@@ -126,14 +115,12 @@ let presenceReelle = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
 
     // mettre à jour le gouter d'une présence réelle
     updateGouter: function (presenceReelle, callback) {
-        console.log(presenceReelle.a_pris_gouter)
         db.query('UPDATE public.presencereelle ' +
             'SET prends_gouter_r = $1 ' +
             'WHERE id_presence_reelle = $2',
@@ -145,7 +132,6 @@ let presenceReelle = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
@@ -163,7 +149,6 @@ let presenceReelle = {
                 if (e) {
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },
@@ -215,10 +200,9 @@ let presenceReelle = {
                     erreur : null
                 }
                 if (e) {
-                    console.log('erreur ' + e)
+                    console.log(e)
                     retour.erreur = e.toString()
                 }
-                console.log('c\'est inséré :)')
                 callback(retour)
             });
     },

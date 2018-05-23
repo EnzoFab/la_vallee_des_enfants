@@ -172,7 +172,6 @@ let Employeur = {
                             nom_complet: rslt.rows[i].prenom_employeur + ' ' + rslt.rows[i].nom_usage_employeur + ' '
                                     + rslt.rows[i].nom_naissance_employeur
                         });
-                        console.log('array', array)
                     }
                     retour.resultats = array;
                     retour.statut = 200

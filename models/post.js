@@ -18,7 +18,6 @@ let post = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_post,
                             date: rslt.rows[i].date_post,
@@ -27,7 +26,6 @@ let post = {
                             titre: rslt.rows[i].titre,
                             image_id: rslt.rows[i].image_id
                         });
-                        console.log('array', array)
                     }
                     retour.posts = array;
                     retour.statut = 200
@@ -101,7 +99,6 @@ let post = {
                             titre: rslt.rows[i].titre,
                             image_id: rslt.rows[i].image_id
                         });
-                        console.log('array', array)
                     }
                     retour.posts = array;
                     retour.statut = 200

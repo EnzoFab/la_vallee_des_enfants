@@ -28,6 +28,7 @@ let Enfant = {
                 callback(retour);
             })
     },
+
     getAll: function (callback) {
         db.query(
             'SELECT * FROM public.enfant',
@@ -44,7 +45,6 @@ let Enfant = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: result.rows[i].id_enfant,
                             nom: result.rows[i].nom_enfant,
@@ -52,7 +52,6 @@ let Enfant = {
                             dateNaiss: result.rows[i].date_naissance_enfant,
                             sexe: result.rows[i].sexe
                         });
-                        console.log('array', array)
                     }
                     retour.enfants = array;
                     retour.statut = 200
@@ -74,7 +73,6 @@ let Enfant = {
                 if (err) {
                     retour.statut = 500
                     retour.erreur = err.toString()
-                    console.log('ici')
                 } else {
                     retour.statut = 200
                     retour.id_enfant = result.rows[0].id_enfant

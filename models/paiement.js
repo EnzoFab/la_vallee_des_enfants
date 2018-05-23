@@ -18,12 +18,10 @@ let modePaiment = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
-                        console.log(1)
                         array.push({
                             id: rslt.rows[i].id_mode,
                             libelle: rslt.rows[i].nom_mode
                         });
-                        console.log('array', array)
                     }
                     retour.modepaiements = array;
                     retour.statut = 200
