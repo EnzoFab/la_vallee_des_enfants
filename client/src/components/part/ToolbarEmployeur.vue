@@ -6,10 +6,6 @@
         <h4 class="purple--text">Accueil</h4>
         <v-icon x-large color="purple">home</v-icon>
       </v-tab>
-      <v-tab to="/presence/consulter">
-          <h4 class="pink--text">Présences</h4>
-          <v-icon x-large color="pink">access_time</v-icon>
-      </v-tab>
       <v-tab v-bind:to="'/contrat/employeur/' + $store.state.employeur.id">
           <h4 class="orange--text">Contrats</h4>
           <v-icon x-large color="orange">attach_file</v-icon>
