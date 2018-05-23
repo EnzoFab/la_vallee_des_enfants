@@ -3,23 +3,7 @@ var router = express.Router();
 const nodemailer = require("nodemailer");
 var send = require('gmail-send')
 
-
-/* nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: "vallee.enfants@gmail.com", // generated ethereal user
-        pass: "V41133enfants" // generated ethereal password
-    }
-}); */
-   /* nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: "vallee.enfants@gmail.com",
-        pass: "V41133enfants"
-    }
-});*/
+/* --------------------------------------- ROUTES POST ----------------------------------------------------------- */
 
 router.post('/send', function (req, res) {
     let destinataire = req.body.to
@@ -50,6 +34,7 @@ router.post('/send', function (req, res) {
         smtpTransport.close();
     });
 })
+
 router.post('/sendMail', function (req, res) {
     let destinataire = req.body.to
     let sujet = req.body.sujet
@@ -69,4 +54,5 @@ router.post('/sendMail', function (req, res) {
         res.send('* [example 1.2] send() callback returned: err:', err, '; res:', rslt);
     });
 })
+
 module.exports = router;

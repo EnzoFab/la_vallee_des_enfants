@@ -14,7 +14,6 @@ function jwtSignEmployeur(employeur) {
 
 router.get('/employeursEnfants', function (req, res, next) {
     modelEmployeur.getEmployeursEnfants(function (retour) {
-        console.log('============', retour)
         res.send(retour);
     });
 });
@@ -41,7 +40,6 @@ router.post('/login', function (req, res, next) {
 router.post('/create', function (req, res, next) {
     var employeur = req.body.employeur
     modelEmployeur.create(employeur, function (retour) {
-        console.log('=======', retour)
         res.send(retour)
     })
 });

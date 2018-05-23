@@ -12,7 +12,6 @@ router.get('/all', function (req, res, next) {
 
 router.get('/', function (req, res) {
     modelPost.getAllLimit(req.query.limit, req.query.offset, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 })
@@ -22,7 +21,6 @@ router.get('/', function (req, res) {
 router.post('/create', function (req, res, next) {
     var post = req.body.post
     modelPost.create(post, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });

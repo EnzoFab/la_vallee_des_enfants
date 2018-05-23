@@ -16,14 +16,11 @@ router.get('/allBefore/:date', function (req, res) {
     let date = req.params.date
     if (req.query.numContrat) {
         let numContrat = req.query.numContrat
-        console.log("++++°+====", numContrat)
         modelPresenceReelle.getAllForContratbeofre(numContrat, date, function (retour) {
-            console.log(retour)
             res.send(retour)
         })
     } else {
         modelPresenceReelle.getAllBefore(date, function (retour) {
-            console.log(retour)
             res.send(retour)
         })
     }
@@ -32,7 +29,6 @@ router.get('/all/:annee/:numMois/:numC', function (req, res, next) {
     let annee = req.params.annee
     let mois = req.params.numMois
     let numC = req.params.numC
-    console.log('router' + annee + '  ' + mois + '   ' + numC)
     modelPresenceReelle.getAllPresencesDuMois(annee, mois, numC, function (retour) {
         res.send(retour);
     });
@@ -52,7 +48,6 @@ router.post('/create', function (req, res, next) {
 
 router.post('/createPresExc', function (req, res, next) {
     let preelle = req.body.presence
-    console.log('azertyuvhbgdtq     ' + preelle.id)
     preelle.datepresencereelle = new Date(preelle.datepresencereelle)
     modelPresenceReelle.createPresExc(preelle, function (retour) {
         res.send(retour);
