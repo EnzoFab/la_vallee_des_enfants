@@ -378,4 +378,3 @@ ${facture.montant}
     doc.save(pdfName + '.pdf')
   }
 }
-

@@ -50,7 +50,6 @@ export default {
 
   // creer une presence reelle
   enregistrerPresence (credential) {
-    console.log(credential.presence.heure_arrivee)
     return Api().post('presencereelle/create', credential)
   },
 
@@ -66,7 +65,6 @@ export default {
 
   // mettre à jour le gouter de la presence reelle
   majGouter (credential) {
-    console.log(credential.presence.a_pris_gouter)
     return Api().put('presencereelle/majGouter', credential)
   },
 
@@ -84,9 +82,11 @@ export default {
   enregistrerPresenceExc (credential) {
     return Api().post('presencereelle/createPresExc', credential)
   },
+
   getAllPresenceBefore (date) {
     return Api().get('/presencereelle/allBefore/' + date)
   },
+
   getAllPresenceContratBefore (date, numContrat) {
     return Api().get('/presencereelle/allBefore/' + date + '/?numContrat=' + numContrat)
   }
