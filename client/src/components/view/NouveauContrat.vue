@@ -136,7 +136,13 @@ export default {
       this.tuteurs = data
       this.estValideEtape3 = true
       if (data.asEmployeur) {
-        this.congeEmployeur = data.infoDemandeur.nombreSemainesSupplementaires
+        let vm = this
+        data.tuteurs.forEach(function (tuteur) {
+          if (tuteur.infoDemandeur) {
+            this.congeEmployeur = tuteur.infoDemandeur.nombreSemainesSupplementaires
+          }
+        })
+
         this.etape = 5
       } else {
         this.etape = 4

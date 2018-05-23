@@ -269,7 +269,6 @@ let presenceReelle = {
                             heureArriveeReelle: res.rows[i].heure_arrivee_r,
                             heureDepartReelle: res.rows[i].heure_depart_r,
                             prendsGouterReelle: res.rows[i].prends_gouter_r,
-                            absence_justifiee: res.rows[i].absence_justifiee,
                             id_presence_reelle: res.rows[i].id_presence_reelle,
                             heureArriveePrevue: res.rows[i].heure_arrivee,
                             heureDepartPrevue: res.rows[i].heure_depart,

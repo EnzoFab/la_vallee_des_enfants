@@ -31,6 +31,7 @@
 
               <v-container fluid class="px-3" >
                 <v-checkbox
+                  v-if="allExistingTuteurs.length > 0"
                   label="Choisir un tuteur existant"
                   v-model="tuteur.tuteurExistant">
                 </v-checkbox>
@@ -166,7 +167,7 @@
                   </v-layout>
                 </v-slide-y-transition>
                 <v-slide-y-transition>
-                  <v-layout v-if="tuteur.tuteurExistant">
+                  <v-layout v-if="allExistingTuteurs.length > 0 && tuteur.tuteurExistant">
                     <v-select
                       :items="allExistingTuteurs"
                       label="Choisissez un tuteur dans la liste"
@@ -208,7 +209,7 @@
             <v-btn
               color="light-blue lighten-4"
               depressed large round
-              :dark="estValide"
+              :disabled="!estValide"
               @click="submit"
             >
               Suivant
@@ -293,8 +294,9 @@ export default {
     async initTuteurExistant () {
       try {
         let response = await TuteurService.getListTuteurEnfant()
-        this.allExistingTuteurs = response.data.resultats
-        console.log(this.allExistingTuteurs)
+        if (response.data.erreur == null) {
+          this.allExistingTuteurs = response.data.resultats
+        }
       } catch (e) {
         console.log(e.toString())
       }

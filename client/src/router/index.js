@@ -84,14 +84,14 @@ const router = new Router({
       path: '/assistante/parametres',
       name: 'InfosAssMat',
       component: InfosAssMat,
-      meta: {title: 'InfosAssMat'},
+      meta: {title: 'Paramètres'},
       beforeEnter: isAssmat
     },
     {
       path: '/employeur/parametres',
       name: 'ParametresCompteEmployeur',
       component: ParametresCompteEmployeur,
-      meta: {title: 'ParametresCompteEmployeur'},
+      meta: {title: 'Parametres'},
       beforeEnter: isEmployeur
     },
     {
@@ -142,7 +142,7 @@ const router = new Router({
       path: '/employeur/connexion',
       name: 'ConnexionEmp',
       component: ConnexionEmp,
-      meta: {title: 'ConnexionEmp'},
+      meta: {title: 'Connexion'},
       beforeEnter: isNotConnected
     },
     {
@@ -181,13 +181,13 @@ const router = new Router({
       path: '/contrat/:numC',
       name: 'VisualisationContrat',
       component: VisualisationContrat,
-      meta: {title: 'VisualisationContrat'}
+      meta: {title: 'Contrat'}
     },
     {
       path: '/presence/saisir',
       name: 'SaisirPresences',
       component: SaisirPresences,
-      meta: {title: 'SaisirPresences'}
+      meta: {title: 'Présences'}
     },
     { path: '/404',
       name: '404',
