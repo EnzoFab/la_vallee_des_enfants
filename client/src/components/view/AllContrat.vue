@@ -12,12 +12,54 @@
         </v-container>
       </v-layout>
       <v-layout>
+        <v-layout>
+        <v-flex>
+          <h2 class="text-md-center blue--text"> Contrats en cours</h2>
+        </v-flex>
+        </v-layout>
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
             <v-flex d-flex
                     md3 lg3 xl4 sm12 xs12
-                    v-for="(contrat,i) in contrats" :key="i"
-                    v-if="contrats.length > 0">
+                    v-for="(contrat,i) in contratsEnCours" :key="i"
+                    v-if="contratsEnCours.length > 0">
+              <v-card :to="'/contrat/' + contrat.id">
+                <v-flex v-if="contrat.sexeEnfant == 'F'">
+                  <img height="200px" src="/static/fille.png" />
+                </v-flex>
+                <v-flex v-else>
+                  <img height="200px" src="/static/boy.png" />
+                </v-flex>
+                <v-flex>
+                  <v-divider></v-divider>
+                  <v-flex mt-2>
+                    <h4>{{ contrat.nomEnfant }} {{ contrat.prenomEnfant }}</h4>
+                  </v-flex>
+                </v-flex>
+              </v-card>
+            </v-flex>
+            <v-flex d-flex
+                    md12 lg12 xl12 sm12 xs12 v-else>
+              <v-card class="elevation-0 transparent">
+                <i>Aucun contrat</i>
+              </v-card >
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-layout>
+      <v-divider></v-divider>
+      <v-layout>
+        <v-layout>
+        <v-flex>
+          <h2 class="text-md-center blue--text"> Contrats terminés</h2>
+        </v-flex>
+        </v-layout>
+        <v-container grid-list-md text-xs-center>
+          <v-layout row wrap>
+            <v-flex d-flex
+                    md3 lg3 xl4 sm12 xs12
+                    v-for="(contrat,i) in contratsTermines" :key="i"
+                    v-if="contratsTermines.length > 0">
               <v-card :to="'/contrat/' + contrat.id">
                 <v-flex v-if="contrat.sexeEnfant == 'F'">
                   <img height="200px" src="/static/fille.png" />
@@ -56,11 +98,14 @@ export default {
   name: 'AllContrat',
   data () {
     return {
-      contrats: []
+      contratsEnCours: [],
+      contratsTermines: []
+
     }
   },
   mounted () {
-    this.loadContrat()
+    this.loadContratEnCours()
+    this.loadContratTermines()
   },
   methods: {
     nouveauContrat () {
@@ -78,10 +123,18 @@ export default {
         name: 'Accueil'
       })
     },
-    async loadContrat () {
+    async loadContratEnCours () {
       try {
-        let response = await ContratService.getAll()
-        this.contrats = response.data.contrats
+        let response = await ContratService.getAllEnCours()
+        this.contratsEnCours = response.data.contrats
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async loadContratTermines () {
+      try {
+        let response = await ContratService.getAllTermines()
+        this.contratsTermines = response.data.contrats
       } catch (e) {
         console.log(e)
       }

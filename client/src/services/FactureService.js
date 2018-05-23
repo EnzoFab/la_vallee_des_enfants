@@ -1,5 +1,3 @@
-import axios from 'axios'
-import store from '../store/store'
 import Api from './Api'
 
 export default {
@@ -25,5 +23,9 @@ export default {
 
   updateHeuresMajo (data) {
     return Api().put('/factures/updateHeuresMajo', data)
+  },
+
+  getAllByIdContrat (numContrat) {
+    return Api().get('/factures/all/' + numContrat)
   }
 }
