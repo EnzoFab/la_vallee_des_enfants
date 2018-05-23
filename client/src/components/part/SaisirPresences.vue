@@ -437,6 +437,7 @@ export default {
         const response = await PresenceService.getAllChildrenNotOfTheDay()
         if (response.data.absencestheoriques != null) {
           this.enfantsPasDuJour = response.data.absencestheoriques
+          console.log('Erreur')
           for (var i = 0; i < this.enfantsPasDuJour.length; i++) {
             this.enfantsPasDuJour[i].nomComplet = this.enfantsPasDuJour[i].nom_enfant + ' ' + this.enfantsPasDuJour[i].prenom_enfant
           }
@@ -588,8 +589,8 @@ export default {
         this.dialogBoxPresenceExc = false
         this.id_enfant = null
         this.alert = true
-        this.enfantsDuJour = await this.getAllChildrenOfTheDay()
-        this.enfantsPasDuJour = await this.getAllChildrenNotOfTheDay()
+        await this.getAllChildrenOfTheDay()
+        await this.getAllChildrenNotOfTheDay()
       } catch (e) {
         console.log(e)
       }

@@ -84,9 +84,9 @@ let presenceReelle = {
                 retour.presencesreelles = null
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
-                        var datepresencereelle = new Date(rslt.rows[i].datepresencereelle)
+                    let array = []
+                    for(let i = 0; i < rslt.rows.length; i++){
+                        let datepresencereelle = new Date(rslt.rows[i].datepresencereelle)
                         datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
                             datepresencereelle,
@@ -226,8 +226,8 @@ let presenceReelle = {
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     let array = []
-                    for (var i = 0; i<res.rows.length; i++) {
-                        var datepresencereelle = new Date(res.rows[i].datepresencereelle)
+                    for (let i = 0; i<res.rows.length; i++) {
+                        let datepresencereelle = new Date(res.rows[i].datepresencereelle)
                         datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
                             datepresencereelle:  datepresencereelle,
@@ -265,8 +265,8 @@ let presenceReelle = {
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     let array = []
-                    for (var i = 0; i<res.rows.length; i++) {
-                        var datepresencereelle = new Date(res.rows[i].datepresencereelle)
+                    for (let i = 0; i<res.rows.length; i++) {
+                        let datepresencereelle = new Date(res.rows[i].datepresencereelle)
                         datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
                             datepresencereelle:  datepresencereelle,
