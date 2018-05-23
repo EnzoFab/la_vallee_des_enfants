@@ -11,7 +11,6 @@ import AllContrat from '@/components/view/AllContrat'
 import AllContratEmployeur from '@/components/view/AllContratEmployeur'
 import SaisirPresences from '@/components/part/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
-import ParametresCompte from '@/components/view/ParametresCompte'
 import ParametresCompteEmployeur from '@/components/view/ParametresCompteEmployeur'
 import FilActualite from '@/components/view/FilActualite'
 import VisualisationContrat from '@/components/view/VisualisationContrat'
@@ -19,6 +18,7 @@ import store from '../store/store'
 import AssistanteService from '../services/AssistanteService'
 import EmployeurService from '../services/EmployeurService'
 import OneFacture from '@/components/part/VisualisationContratPart/OneFacture'
+import InfosAssMat from '@/components/view/InfosAssMat'
 
 Vue.use(Router)
 
@@ -82,9 +82,9 @@ const router = new Router({
     },
     {
       path: '/assistante/parametres',
-      name: 'ParametresCompte',
-      component: ParametresCompte,
-      meta: {title: 'ParametresCompte'},
+      name: 'InfosAssMat',
+      component: InfosAssMat,
+      meta: {title: 'InfosAssMat'},
       beforeEnter: isAssmat
     },
     {

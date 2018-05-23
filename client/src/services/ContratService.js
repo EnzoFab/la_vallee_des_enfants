@@ -1,6 +1,9 @@
 import Api from '../services/Api'
 
 export default {
+
+  /* ------------------------------------------ GET ------------------------------------------------------ */
+
   donneesContrat (numContrat) {
     return Api().get('/contrat/getAllById/' + numContrat)
   },
@@ -25,13 +28,17 @@ export default {
     return Api().get('/contrat/getAllByIdEmployeur/' + numEmployeur)
   },
 
+  getPresencesByContrat (numContrat) {
+    return Api().get('/contrat/getPresences/' + numContrat)
+  },
+
+  /* ------------------------------------------ POST ------------------------------------------------------ */
+
   create (data) {
     return Api().post('/contrat/create', data)
   },
 
-  getPresencesByContrat (numContrat) {
-    return Api().get('/contrat/getPresences/' + numContrat)
-  },
+  /* ------------------------------------------ PUT ------------------------------------------------------ */
 
   updateInfosEmp (numContrat, data) {
     return Api().put('/contrat/employeur/' + numContrat, data)
