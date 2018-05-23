@@ -205,7 +205,7 @@ const router = new Router({
 /**
  * Avant chaque route on va verifier si la personne est existe
  */
-router.beforeEach(function (to, from, next) {
+/* router.beforeEach(function (to, from, next) {
   if (store.getters.isAssMatConnected) {
     AssistanteService.findOne(store.state.assMat.id_assmat).then(function (rslt) {
       if (rslt.data.erreur != null) {
@@ -236,5 +236,5 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
-})
+}) */
 export default router
