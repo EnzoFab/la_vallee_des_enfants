@@ -139,7 +139,7 @@ export default {
         let vm = this
         data.tuteurs.forEach(function (tuteur) {
           if (tuteur.infoDemandeur) {
-            this.congeEmployeur = tuteur.infoDemandeur.nombreSemainesSupplementaires
+            vm.congeEmployeur = tuteur.infoDemandeur.nombreSemainesSupplementaires
           }
         })
 
@@ -434,7 +434,6 @@ export default {
       // redirection
     },
     async saveEmployeurIntermediare (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
-      console.log(employeur)
       if (employeur.employeurExistant == null) {
         try {
           let response = await EmployeurService.createEmployeur({employeur: employeur})
