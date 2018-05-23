@@ -189,12 +189,7 @@ export default {
         mois: 4,
         annee: 2018,
         idContrat: 'xMxBBUStkKOajkgDdjWFqbnaHCg3EfC5x1N'
-      }
-    }
-  },
-  methods: {
-    retour () {
-      this.$emit('retour')
+      } */
     }
   },
   methods: {
@@ -205,6 +200,11 @@ export default {
       console.log('youpi')
       console.log(Object.values(this.factureAAfficher))
       console.log('heyyyy ' + this.factureAAfficher.nbSemainesCongesEmployeur)
+      console.log(Object.values(this.facture))
+      console.log('heyyyy ' + this.facture.nbSemainesCongesEmployeur)
+    },
+    retour () {
+      this.$emit('retour')
     }
   },
   mounted () {

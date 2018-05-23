@@ -23,7 +23,7 @@
     <v-tab
       :href="'#tab2'"
     >
-      Présence
+      Planning des présences
     </v-tab>
     <v-tab
       :href="'#tab3'"
@@ -42,7 +42,7 @@
         :id="'tab2'"
       >
         <v-card flat>
-          <Planning></Planning>
+         <Planning :nomCompletEnfant="nomCompletEnfant" :numContrat="$route.params.numC"></Planning>
           <!-- <Calendar ref="calendar"></Calendar> -->
         </v-card>
       </v-tab-item>
@@ -72,7 +72,8 @@ export default {
       model: 'tab-2',
       snackbarMessage: '',
       snackBarColor: '',
-      snackbar: false
+      snackbar: false,
+      nomCompletEnfant: ''
     }
   },
   methods: {
@@ -83,7 +84,10 @@ export default {
     }
   },
   mounted () {
-    this.$refs.fiche.initDonnees()
+    let vm = this
+    this.$refs.fiche.initDonnees().then(function () {
+      vm.nomCompletEnfant = vm.$refs.fiche.prenomEnfant + ' ' + vm.$refs.fiche.nomEnfant
+    })
   },
   beforeRouteEnter (to, from, next) {
     // verifier que le contrat existe

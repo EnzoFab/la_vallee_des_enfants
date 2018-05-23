@@ -83,5 +83,11 @@ export default {
   // enregistrer une presence exceptionnelle
   enregistrerPresenceExc (credential) {
     return Api().post('presencereelle/createPresExc', credential)
+  },
+  getAllPresenceBefore (date) {
+    return Api().get('/presencereelle/allBefore/' + date)
+  },
+  getAllPresenceContratBefore (date, numContrat) {
+    return Api().get('/presencereelle/allBefore/' + date + '/?numContrat=' + numContrat)
   }
 }
