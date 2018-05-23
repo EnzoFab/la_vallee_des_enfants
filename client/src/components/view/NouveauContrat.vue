@@ -434,14 +434,14 @@ export default {
       // redirection
     },
     async saveEmployeurIntermediare (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
-      if (employeur.employeurExistant == null) {
+      if (!employeur.employeurExistant || employeur.employeurExistant == null) {
         try {
           let response = await EmployeurService.createEmployeur({employeur: employeur})
           if (response.data.erreur == null) {
             let idEmployeur = response.data.id
             let r = await ContratService.updateInfosEmp(this.$store.state.numContrat, {
               id_employeur: idEmployeur,
-              nb_semaines_conges_parents: employeur.nb_semaines_conges
+              congeSupplementaireEmployeur: employeur.nb_semaines_conges
             })
             if (r.data.erreur == null) {
               return MailHelper.mailConnexionEmployeur(
