@@ -5,7 +5,7 @@ let Tuteur = {
 
     create: function (tuteur, callback) {
         db.query("INSERT INTO public.tuteur(nom_tuteur, prenom_tuteur, telephone, profession, telephone_pro, id_type_tuteur) VALUES ($1, $2, $3, $4, $5, $6) returning id_tuteur",
-            [tuteur.nomUsage, tuteur.prenom, tuteur.telephone, tuteur.profession, tuteur.telephonePro, tuteur.typeDeTuteur],
+            [tuteur.nomUsage.toUpperCase(), helper.premiereLettreMaj(tuteur.prenom), tuteur.telephone, tuteur.profession, tuteur.telephonePro, tuteur.typeDeTuteur],
             function (err, result) {
                 let retour = {
                     statut: null,
@@ -22,6 +22,7 @@ let Tuteur = {
                 callback(retour);
             });
     },
+
     getTuteursById: function (numeroContrat, callback) {
         db.query(
             'SELECT tu.nom_tuteur, tu.prenom_tuteur, tu.telephone, tu.profession, tu.telephone_pro, nom_type_tuteur ' +
@@ -113,7 +114,7 @@ let Tuteur = {
 
     update: function (numTuteur, tuteur, callback) {
         db.query('UPDATE public.tuteur SET nom_tuteur = $1, prenom_tuteur = $2, telephone = $3, profession = $4, telephone_pro = $5, id_type_tuteur = $6 WHERE id_tuteur = $7',
-            [tuteur.nomUsage, tuteur.prenom, tuteur.telephone, tuteur.profession, tuteur.telephonePro, tuteur.typeDeTuteur, numTuteur],
+            [tuteur.nomUsage.toUpperCase(), helper.premiereLettreMaj(tuteur.prenom), tuteur.telephone, tuteur.profession, tuteur.telephonePro, tuteur.typeDeTuteur, numTuteur],
             function (e, result) {
                 let retour = {
                     erreur : null,

@@ -63,7 +63,7 @@ let Enfant = {
     },
     create: function (enfant, callback) {
         db.query("INSERT INTO public.enfant (nom_enfant, prenom_enfant, date_naissance_enfant, sexe) VALUES ($1, $2, $3, $4) returning id_enfant",
-            [enfant.nom, enfant.prenom, enfant.date_naissance, enfant.sexe],
+            [enfant.nom.toUpperCase(), helper.premiereLettreMaj(enfant.prenom), enfant.date_naissance, enfant.sexe],
             function (err, result) {
                 let retour = {
                     statut: null,
@@ -83,7 +83,7 @@ let Enfant = {
 
     update: function (numEnfant, enfant, callback) {
         db.query('UPDATE public.enfant SET nom_enfant = $1, prenom_enfant = $2, date_naissance_enfant = $3, sexe = $4 WHERE id_enfant = $5',
-            [enfant.nom, enfant.prenom, enfant.date_naissance, enfant.sexe, numEnfant],
+            [enfant.nom.toUpperCase(), helper.premiereLettreMaj(enfant.prenom), enfant.date_naissance, enfant.sexe, numEnfant],
             function (e, result) {
                 let retour = {
                     erreur : null,

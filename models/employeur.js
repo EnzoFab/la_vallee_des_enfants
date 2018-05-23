@@ -193,8 +193,8 @@ let Employeur = {
                 callback(retour)
             } else {
                 db.query("INSERT INTO public.employeur(nom_naissance_employeur, nom_usage_employeur, prenom_employeur, rue_employeur, cp_employeur, ville_employeur, mail_employeur, telephone_employeur, identifiant_connexion, mot_de_passe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id_employeur",
-                    [employeur.nom_naissance_employeur, employeur.nom_usage_employeur,
-                        employeur.prenom_employeur, employeur.rue,
+                    [employeur.nom_naissance_employeur.toUpperCase(), employeur.nom_usage_employeur.toUpperCase(),
+                        helper.premiereLettreMaj(employeur.prenom_employeur), employeur.rue,
                         employeur.cp_employeur, employeur.ville_employeur, employeur.mail_employeur, employeur.telephone_employeur,
                         employeur.identifiant_connexion,  hash],
                     function (err, result) {
@@ -215,7 +215,7 @@ let Employeur = {
 
     update: function (numEmployeur, employeur, callback) {
         db.query('UPDATE public.employeur SET nom_naissance_employeur = $1, nom_usage_employeur = $2, prenom_employeur = $3, rue_employeur = $4, cp_employeur = $5, ville_employeur = $6, mail_employeur = $7, telephone_employeur = $8, identifiant_connexion = $9, mot_de_passe = $10 WHERE id_employeur = $11',
-            [employeur.nomNaissance, employeur.nomUsage, employeur.prenom, employeur.rue, employeur.codePostal, employeur.ville, employeur.email, employeur.telephone1, employeur.identifiantConnexion, employeur.mdp, numEmployeur],
+            [employeur.nomNaissance.toUpperCase(), employeur.nomUsage.toUpperCase(), helper.premiereLettreMaj(employeur.prenom), employeur.rue, employeur.codePostal, employeur.ville, employeur.email, employeur.telephone1, employeur.identifiantConnexion, employeur.mdp, numEmployeur],
             function (e, result) {
                 let retour = {
                     erreur : null,
