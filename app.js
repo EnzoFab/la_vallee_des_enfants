@@ -52,7 +52,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(__dirname + '/public'));
 app.use(fileUpload());
 
-const unlessPath = ['/employeurs/login', '/assmats/login', '/posts/all', '/post/', '/assmats/register']
+const unlessPath = ['/employeurs/login', '/assmats/login', '/posts/all', '/posts/', '/assmats/register']
 app.use(expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
 // verifie le token dans le header sauf pour les routes dans unless
 
