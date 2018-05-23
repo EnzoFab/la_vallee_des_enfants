@@ -189,7 +189,7 @@ export default {
         mois: 4,
         annee: 2018,
         idContrat: 'xMxBBUStkKOajkgDdjWFqbnaHCg3EfC5x1N'
-      } */
+      }
     }
   },
   methods: {

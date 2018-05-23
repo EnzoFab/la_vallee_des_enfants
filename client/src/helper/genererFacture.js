@@ -26,7 +26,7 @@ export default {
 
       /* ~~~~ recuperation de tous les feries du mois ~~~~ */
       let feries = this.JoursFeries(facture.annee)
-      console.log('FERIIIEES   ', feries)
+      // console.log('FERIIIEES   ', feries)
 
       for( var i = 0; i < feries.length; i++) {
         if (feries[i].getMonth() == facture.mois - 1) {
@@ -37,9 +37,12 @@ export default {
       /* ~~~~ récupération des présences ~~~~ */
       const presencesTheo = await PresenceService.getAllPresencesTheoriquesByContrat(facture.idContrat)
       let presencesTheoriques = presencesTheo.data // tableau des presences theoriques de l'enfant : ajouter .presencestheoriques
+      // console.log('PRESENCES THEOOOOOOOOOO ', presencesTheoriques)
 
       const presencesReelles = await PresenceService.getAllPresencesReellesMoisByContrat(facture.idContrat, facture.mois, facture.annee)
       let presencesreelles = presencesReelles.data // tableau des presences reelles de l'enfant : ajouter .presences
+      // console.log(presencesreelles.presencesreelles)
+      // console.log(presencesreelles)
 
       /* ~~~~ récupération des frais (entretien + gouter ~~~~ */
       /* const gouter = TypeService.gouter()
@@ -63,64 +66,73 @@ export default {
 
       // jours theoriques supposes etre travaillés
       let daySupposedToBeWorked = await this.getAllDaySupposedToBeWorkedForChild(4, 2018, presencesTheoriques)
+      // console.log('DAYS SUPPOSED TO BE WORKED ', daySupposedToBeWorked)
 
       /* ~~~~ coeur du traitement ~~~~ */
       // on regarde si l'enfant a une periode d'adaptation courant du mois
       var datedebadapt = new Date(facture.dateDebAdaptation)
-      console.log(datedebadapt)
+      // console.log('fdatedebfacture', facture.dateDebAdaptation)
+      // console.log('datedebut ', datedebadapt)
       var datefinadapt = new Date(facture.dateFinAdaptation)
-      console.log(datefinadapt)
+      // console.log('datefinadapt ', datefinadapt)
+      // console.log(datefinadapt)
+      // console.log(datefinadapt.getMonth())
 
       // si la periode d adaptation passe par le mois de la facture
+      console.log(datedebadapt.getMonth() <= facture.mois -1 && datedebadapt.getFullYear() == facture.annee)
+      console.log((datefinadapt.getMonth() >= facture.mois - 1 && datefinadapt.getFullYear() == facture.annee))
       if ((datedebadapt.getMonth() <= facture.mois -1 && datedebadapt.getFullYear() == facture.annee)
         && (datefinadapt.getMonth() >= facture.mois - 1 && datefinadapt.getFullYear() == facture.annee)){
-        console.log('et de 1')
+         console.log('et de 1')
 
         // si le debut de la periode d'adaptation se trouve courant du mois
         if (datedebadapt.getMonth() == facture.mois - 1 && datedebadapt.getFullYear() == facture.annee) {
-          console.log('et de 2')
+          // console.log('et de 2')
           debutAdapt = datedebadapt
+          console.log('debhvyvyvyvyfv ', debutAdapt)
         } else {
-          console.log('et de 3')
-          debutAdapt = new Date(facture.annee, facture.mois - 1, 1)
+          // console.log('et de 3')
+          debutAdapt = new Date(facture.annee+'-'+facture.mois+'-1')
         }
 
         // si la fin de periode d'adaptation se trouve courant du mois
-        console.log('avant d entrer ' + datefinadapt)
+        // console.log('avant d entrer ' + datefinadapt)
         if (datefinadapt.getMonth() == facture.mois -1 && datefinadapt.getFullYear() == facture.annee) {
-          console.log('et de 4')
+          // console.log('et de 4')
           finAdapt = datefinadapt
         } else {
-          console.log('et de 5')
-          console.log(this.calcNbJourMois(facture.mois, facture.annee))
-          finAdapt = new Date(facture.annee, facture.mois - 1, this.calcNbJourMois(facture.mois, facture.annee))
+          // console.log('et de 5')
+          // console.log(this.calcNbJourMois(facture.mois, facture.annee))
+          finAdapt = new Date(facture.annee+'-'+facture.mois+'-'+this.calcNbJourMois(facture.mois, facture.annee))
         }
       }
-      console.log('verfytfytdytdt     '+ debutAdapt + ' ' + finAdapt)
+       console.log('verfytfytdytdt     '+ debutAdapt + ' ' + finAdapt)
 
 
       // s'il y a une periode d'adaptation dans le mois :
       if (debutAdapt != null && finAdapt != null) {
         JoursNonAdapt = this.getAllDayNonAdaptDuMois(daySupposedToBeWorked,  debutAdapt, finAdapt, facture)
-        console.log('0000  jour non adapt du mois', JoursNonAdapt)
-        JoursreelsPourNonAdapt = this.getAllDayReelsPourNonAdapt (presencesreelles, datefinadapt)
-        console.log('1111  jour reels non adapt ', JoursreelsPourNonAdapt)
+        // console.log('0000  jour non adapt du mois', JoursNonAdapt)
+        JoursreelsPourNonAdapt = this.getAllDayReelsPourNonAdapt (presencesreelles.presencesreelles, finAdapt)
+        // console.log('1111  jour reels non adapt ', JoursreelsPourNonAdapt)
         dureePourForfait = this.calcNbJourMois(facture.mois, facture.annee) - JoursNonAdapt.length
 
       } else {
         JoursNonAdapt = daySupposedToBeWorked
         JoursreelsPourNonAdapt = presencesreelles.presencesreelles
-        console.log('on traite une presence normale  ', JoursNonAdapt + '   ', JoursreelsPourNonAdapt)
+        // console.log('on traite une presence normale  ', JoursNonAdapt + '   ', JoursreelsPourNonAdapt)
       }
 
       /* ~~~~ On commence par le traitement pour le forfait ~~~~ */
 
-      // calculs des variables pour facture (ou partie de facture au forfait
-      facture = await this.traitementPresencesPourForfait(JoursNonAdapt, JoursreelsPourNonAdapt, presencesTheoriques, facture)
+      // calculs des variables pour facture (ou partie de facture au forfait */
 
+      console.log('--------------------------ICI------------------------------')
+      console.log(JoursNonAdapt)
+      facture = await this.traitementPresencesPourForfait(JoursNonAdapt, JoursreelsPourNonAdapt, presencesTheoriques, facture)
       // Tous les "petits" calculs
-      facture = this.calcNbJoursActivite(facture)
-      facture = this.calcNbHeuresNormales(facture)
+      facture = this.calcNbJoursActivite(facture, dureePourForfait)
+      facture = this.calcNbHeuresNormales(facture, dureePourForfait)
       facture = this.calcDateLimiteDePaiement(facture)
       facture = this.calcTotJoursAbs (facture)
       facture = this.calcTotIndemnitesPourAbs(facture, prixEntretien)
@@ -131,8 +143,10 @@ export default {
       /* ~~~~ traitement pour adaptation lorsqu'il y en a une ~~~~ */
 
       if (debutAdapt != null && finAdapt != null) {
-        let dayOfAdaptReels = this.getAllDayReelsPourAdapt (presencesreelles, datedebadapt, datefinadapt)
-        facture = await this.traitementPresencesPourAdaptation(dayOfAdaptReels, facture)
+        let dayOfAdaptReels = this.getAllDayReelsPourAdapt (presencesreelles.presencesreelles, debutAdapt, finAdapt)
+        console.log('---------------**********  DAY OF ADATRYTIDYYRDYU DRDVDTDRT g  ', dayOfAdaptReels )
+        console.log(datedebadapt  + ' ' + datefinadapt)
+        facture = this.traitementPresencesPourAdaptation(dayOfAdaptReels, facture)
       }
 
       // calculs finaux
@@ -188,16 +202,32 @@ export default {
     return facture
   },
   // calcul du nombre de jours d'activites
-  calcNbJoursActivite(facture) {
-    facture.nombreJoursActivite = facture.nbJoursPresenceTheo * (52 - facture.nbSemainesCongesAssMat - facture.nbSemainesCongesEmployeur)/12 - facture.nbJoursAbsence + facture.nbJoursPresenceExcept
+  calcNbJoursActivite(facture, dureeForfait) {
+
+    // si tout le mois est payé au forfait
+    if (dureeForfait == null) {
+      facture.nombreJoursActivite = facture.nbJoursPresenceTheo * (52 - facture.nbSemainesCongesAssMat - facture.nbSemainesCongesEmployeur)/12 - facture.nbJoursAbsence + facture.nbJoursPresenceExcept
+    } else {
+      facture.nombreJoursActivite = (facture.nbJoursPresenceTheo * (52 - facture.nbSemainesCongesAssMat - facture.nbSemainesCongesEmployeur)/12)*(dureeForfait/30.4) - facture.nbJoursAbsence + facture.nbJoursPresenceExcept
+    }
+
     console.log('calc nb de jours d\'activite ' + facture.nombreJoursActivite)
+
     return facture
   },
 
   // calcul du nombre d'heures normales du mois
-  calcNbHeuresNormales(facture) {
-    facture.nombreHeuresNormales = ((52 - facture.nbSemainesCongesEmployeur - facture.nbSemainesCongesAssMat) / 12) * facture.nbHeureSemaine - facture.nbHeuresAbsencesJust - facture.nbHeuresRetardsJustifies
+  calcNbHeuresNormales(facture, dureeForfait) {
+
+    // si tout le mois est paye au forfait
+    if (dureeForfait != null) {
+      facture.nombreHeuresNormales = ((52 - facture.nbSemainesCongesEmployeur - facture.nbSemainesCongesAssMat) / 12) * facture.nbHeureSemaine - facture.nbHeuresAbsencesJust - facture.nbHeuresRetardsJustifies
+    } else {
+      facture.nombreHeuresNormales = (((52 - facture.nbSemainesCongesEmployeur - facture.nbSemainesCongesAssMat) / 12) * facture.nbHeureSemaine) * (dureeForfait/30.4) - facture.nbHeuresAbsencesJust - facture.nbHeuresRetardsJustifies
+    }
+
     console.log('calc nb heures normales ' + facture.nombreHeuresNormales)
+
     return facture
   },
 
@@ -302,6 +332,8 @@ export default {
     var joursTravailles = [] // tous les jours du mois où l'ass mat est supposée travailler pour l'enfant
     var idTypesJoursTheoriques = [] //tous les id des jours pendant lesquels l'ass mat est supposée travailler pour l'enfant
 
+    // console.log('111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+    // console.log(presencesTheoriques)
 
     // on commence par recuperer tous les id types jours auxquels l'ass mat doit travailler pour l'enfant
     var presTheo
@@ -312,6 +344,8 @@ export default {
           presTheo.id_type_jour = 7
         }
         idTypesJoursTheoriques.push(presTheo.id_type_jour)
+        // console.log('ID TYPES JOUTRS THEO :')
+        // console.log(idTypesJoursTheoriques)
       }
     }
 
@@ -324,11 +358,16 @@ export default {
       }
     } else {
       nbJours = nbJoursMois[numMois - 1]
+      // console.log('nb jours moooooooooooooooooooooooooooooooois   ', nbJours)
     }
-
+    var date2 = new Date('2018-04-01')
+    // console.log(date2.getDay())
+    // console.log('date2  ', date2)
     // on récupère tous les jours du mois supposée être travaillés
     for (var i = 1; i < nbJours + 1; i++) {
-      var date = new Date(annee, numMois - 1, i)
+      var date = new Date(annee+'-'+numMois+'-'+i)
+      // console.log('date du i ', date)
+      // console.log('serais-tu le coupable ', date.getDay())
       if (idTypesJoursTheoriques.includes(date.getDay())) {
         joursTravailles.push(date)
       }
@@ -354,9 +393,16 @@ export default {
     var tempsJournee // contient le nombre d'heures travaillées theoriquement dans la journée
 
 
+    console.log('PRESENCES THEO MOIS ', presencesTheoDuMois)
+    console.log('PRESENCES REELLES MOIS ', presencesReellesDuMois)
     while (i < presencesTheoDuMois.length || j < presencesReellesDuMois.length) {
 
+      console.log('here')
+      console.log('here   ', presencesReellesDuMois)
+      console.log(presencesReellesDuMois)
       datereelle = new Date(presencesReellesDuMois[j].datepresencereelle)
+      console.log('PYREREREREREREERSENCEEEE  ', presencesReellesDuMois[j])
+      console.log('PYREREREREREREERSENCEEEE  ', presencesReellesDuMois[j].datepresencereelle)
 
       // si une presence reelle a bien ete enregistrée pour cette date
       if (datereelle.getDate() == presencesTheoDuMois[i].getDate()) {
@@ -470,45 +516,54 @@ export default {
   },
 
   getAllDayReelsPourNonAdapt (presencesReellesDuMois, dateFinAdapt) {
+    console.log('------------------------------------------------------------')
     var presReellesNonAdapt = []
     var datecourante // date que l on traite dans le for
-    for (var i = 0; i < presencesReellesDuMois.presencesreelles.length; i++) {
-      console.log('on traite la date ', presencesReellesDuMois.presencesreelles[i].datepresencereelle)
-      datecourante = new Date(presencesReellesDuMois.presencesreelles[i].datepresencereelle)
+    for (var i = 0; i < presencesReellesDuMois.length; i++) {
+      // console.log('on traite la date ', presencesReellesDuMois[i].datepresencereelle)
+      datecourante = new Date(presencesReellesDuMois[i].datepresencereelle)
       if (datecourante.getDate() > dateFinAdapt.getDate()) {
-        console.log('hey')
-        presReellesNonAdapt.push(presencesReellesDuMois.presencesreelles[i])
+        // console.log('hey')
+        presReellesNonAdapt.push(presencesReellesDuMois[i])
       }
     }
-    console.log('le retour de presence reelle non adapt = ', presReellesNonAdapt)
-    console.log('le retour de presence reelle non adapt = ', presReellesNonAdapt[0])
+    // console.log('le retour de presence reelle non adapt = ', presReellesNonAdapt)
+    // console.log('le retour de presence reelle non adapt = ', presReellesNonAdapt[0])
     return presReellesNonAdapt
   },
 
   getAllDayReelsPourAdapt (presencesReellesDuMois, dateDebutAdapt, dateFinAdapt) {
-    console.log('coucou1')
     var presReellesAdapt = []
-    for (var i = 0; i < presencesReellesDuMois.presencesreelles.length; i++) {
-      if (presencesReellesDuMois.presencesreelles[i].datepresencereelle < dateFinAdapt.getDate() && presencesReellesDuMois.presencesreelles[i].datepresencereelle > dateDebutAdapt.getDate()) {
-        presReellesAdapt.push(presencesReellesDuMois.presencesreelles[i])
+    var datecourante
+    console.log('LES DAAAATES ' + dateDebutAdapt + '  ' + dateFinAdapt)
+    for (var i = 0; i < presencesReellesDuMois.length; i++) {
+      datecourante = new Date(presencesReellesDuMois[i].datepresencereelle)
+      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa ', presencesReellesDuMois[i])
+      console.log(datecourante)
+      if ( datecourante.getDate() <= dateFinAdapt.getDate() && datecourante.getDate() >= dateDebutAdapt.getDate()) {
+        console.log('coucou toi')
+        presReellesAdapt.push(presencesReellesDuMois[i])
       }
     }
-    console.log('le retour de presence reelle adapt = ' + presencesReellesDuMois)
-    return presencesReellesDuMois
+    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+    console.log('le retour de presence reelle adapt = ' + presReellesAdapt)
+    return presReellesAdapt
   },
 
   // presencesReellesDuMois correspond au tableau des presences reelles trié par dates croissantes
   traitementPresencesPourAdaptation(presencesReellesDuMois, facture) {
-    for (var i = 0; i < presencesReellesDuMois.presencesreelles.length; i++) {
-      if (presencesReellesDuMois.presencesreelles[i].heure_arrivee_r != null) {
-        facture.nombreHeuresNormales = facture.nombreHeuresNormales + this.calcDuree(presencesReellesDuMois.presencesreelles[i].heure_arrivee_r, presencesReellesDuMois.presencesreelles[i].heure_depart_r)
+    for (var i = 0; i < presencesReellesDuMois.length; i++) {
+      console.log('PRESENCEEEEUUUHHH ', presencesReellesDuMois[i].datepresencereelle)
+      if (presencesReellesDuMois[i].heure_arrivee_r != null) {
+        facture.nombreHeuresNormales = facture.nombreHeuresNormales + this.calcDuree(presencesReellesDuMois[i].heure_arrivee_r, presencesReellesDuMois[i].heure_depart_r)
         facture.nombreJoursActivite = facture.nombreJoursActivite + 1
-        if (presencesReellesDuMois.presencesreelles[i].prends_gouter_r == true) {
+        if (presencesReellesDuMois[i].prends_gouter_r == true) {
           facture.nbGouters = facture.nbGouters + 1
         }
-        console.log('hello ' + facture.nombreHeuresNormales)
-        console.log('hello2 ' + facture.nombreJoursActivite)
-        console.log('hello3 ' + facture.nbGouters)
+        // console.log('hello ' + facture.nombreHeuresNormales)
+        // console.log('hello2 ' + facture.nombreJoursActivite)
+        // console.log('hello3 ' + facture.nbGouters)
       }
     }
     return facture

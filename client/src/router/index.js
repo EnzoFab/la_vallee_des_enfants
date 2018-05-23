@@ -101,6 +101,12 @@ const router = new Router({
       meta: {title: 'Accueil'}
     },
     {
+      path: '/onefacture',
+      name: 'OneFacture',
+      component: OneFacture,
+      meta: {title: 'OneFacture'}
+    },
+    {
       path: '/factureSeule',
       name: 'OneFacture',
       component: OneFacture,

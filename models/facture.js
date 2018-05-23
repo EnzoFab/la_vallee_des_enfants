@@ -21,6 +21,10 @@ let Facture = {
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
+                    var debad = new Date(rslt.rows[0].date_deb_periode_adaptation)
+                    debad.setDate(debad.getDate()+1)
+                    var finad = new Date(rslt.rows[0].date_fin_periode_adaptation)
+                    finad.setDate(finad.getDate()+1)
                     retour.nom_usage_am = rslt.rows[0].nom_usage_am
                     retour.prenom_am = rslt.rows[0].prenom_am
                     retour.nb_semaines_conges = rslt.rows[0].nb_semaines_conges
@@ -32,8 +36,8 @@ let Facture = {
                     retour.tarif = rslt.rows[0].tarif
                     retour.nb_heures_semaine = rslt.rows[0].nb_heures_semaine
                     retour.taux_majore = rslt.rows[0].taux_majore
-                    retour.date_deb_periode_adaptation = rslt.rows[0].date_deb_periode_adaptation
-                    retour.date_fin_periode_adaptation = rslt.rows[0].date_fin_periode_adaptation
+                    retour.date_deb_periode_adaptation = debad
+                    retour.date_fin_periode_adaptation = finad
                     retour.jour_paiement = rslt.rows[0].jour_paiement
                     retour.date_fin_contrat = rslt.rows[0].date_fin
                     retour.nom_usage_employeur = rslt.rows[0].nom_usage_employeur
