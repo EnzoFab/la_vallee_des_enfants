@@ -25,7 +25,6 @@ export default {
   },
 
   getAllByIdEmployeur (numEmployeur) {
-    console.log('NUMERO EMPLOYEUR', numEmployeur)
     return Api().get('/contrat/getAllByIdEmployeur/' + numEmployeur)
   },
 

@@ -70,7 +70,6 @@
         <v-btn
           color="teal accent-2"
           depressed large round
-          :dark="!isSubmitStateFalse"
           @click="submit"
           :disabled="isSubmitStateFalse"
         >Suivant</v-btn>

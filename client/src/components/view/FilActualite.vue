@@ -212,7 +212,7 @@ export default {
     }
   },
   methods: {
-    infiniteHandler ($state) {
+    infiniteHandler ($state) { // permet de charger plus de post lorsqu'on arrive en bas de l'écran
       let vm = this
       PostService.getAllLimit(9, this.posts.length).then(function (rslt) {
         if (rslt.data.erreur == null) {
@@ -239,7 +239,7 @@ export default {
         $state.complete()
       })
     },
-    onFileChange (e) {
+    onFileChange (e) { // lorsqu'on charge une image dans le v-dialog
       var files = e.target.files || e.dataTransfer.files
       if (files.length !== undefined) {
         this.image = files[0]
@@ -261,11 +261,11 @@ export default {
       }
       reader.readAsDataURL(file)
     },
-    removeImage (e) {
+    removeImage (e) { // supression de l'image dans le v dialog
       this.imgPath = null
       this.image = null
     },
-    async creerPost (data) {
+    async creerPost (data) { // insertion du post dans la base de données
       try {
         let r = await PostService.create(data)
         if (r.data.erreur == null) {
@@ -312,8 +312,8 @@ export default {
     async envoyer () {
       this.showProgress = true
       try {
-        let image = await this.saveImg()
-        if (image && image != null) {
+        let image = await this.saveImg() // on essaie de créer l'image
+        if (image && image != null) { // si l'image a bien été chargée sur le serveur
           let data = {
             post: {
               image: image.url || this.image.name,
@@ -323,7 +323,7 @@ export default {
               image_id: image.public_id
             }
           }
-          let result = await this.creerPost(data)
+          let result = await this.creerPost(data) // insertion du post dans la base de données
           if (result != null) {
             let post = {
               image: image.url || null, // this.imgPath,
@@ -343,7 +343,7 @@ export default {
             this.showProgress = false
             this.triggerErreur('Il y a un problème dans la création du post')
           }
-        } else {
+        } else { // s'il n'y pas d'image ou qu'elle n'a pas pu être chargée sur le serveur
           let data = {
             post: {
               image: null,
@@ -376,12 +376,12 @@ export default {
         }
       } catch (e) {
         this.dialog = false
-        console.log(e)
         this.triggerErreur('Une erreur est survenue')
         this.showProgress = false
       }
     },
-    async deleteHostedImage (imageId) { // supprime l'image du serveur
+    async deleteHostedImage (imageId) {
+      // supprime l'image du serveur, retourne true si c'est fait avec succès
       if (imageId != null) {
         try {
           let response = await FileService.deleteImg(imageId)
@@ -399,7 +399,8 @@ export default {
         return true
       }
     },
-    async deleteDBPost (idPost) { // permet de supprimer un dans la base de données
+    async deleteDBPost (idPost) {
+      // permet de supprimer un post dans la base de données retourne true si c'est fait avec succès
       try {
         let response = await PostService.delete(idPost)
         if (response.data.erreur == null) {
@@ -413,16 +414,18 @@ export default {
         return false
       }
     },
-    async deletePost (post) {
+    async deletePost (post) { // essaie de supprimer un post
       if (this.deleteDBPost(post.id_post) && this.deleteHostedImage(post.image_id)) {
         this.deletePostFromArray(post)
         this.triggerSnackBar('Post supprimé avec succès', 'success')
-        this.$socket.emit('suppressionPost', post)
+        this.$socket.emit('suppressionPost', post) // notifie le serveur qu'un post a été supprimé
       } else {
         this.triggerErreur('Une erreur est survenue')
       }
     },
-    loadPost (limit, offset, $state) {
+    loadPost (limit, offset) { // charge tout les post de la base de donnée
+      // limit: le nombre limite de post souhaité
+      // offset: à partir de quel post on veut prendre 'limit' nombre de post
       let vm = this
       PostService.getAllLimit(limit, offset).then(function (rslt) {
         if (rslt.data.erreur == null) {
@@ -437,25 +440,18 @@ export default {
               date: vm.dateFr(post.date),
               contentVisible: false
             })
-            if ($state) {
-              $state.loaded()
-            }
           })
         } else {
-          if ($state) {
-            $state.loaded()
+          if (vm.isAssMatConnected) {
+            vm.triggerErreur(rslt.data.erreur.texte)
           }
-          vm.triggerErreur(rslt.data.erreur.texte)
         }
       }).catch(function (err) {
         console.log(err)
         vm.triggerErreur('Une erreur est survenue')
-        if ($state) {
-          $state.loaded()
-        }
       })
     },
-    clearForm () {
+    clearForm () { // remet à 0 le formulaire
       this.$refs.form.reset()
       this.imgPath = null
       this.dialog = false
@@ -473,7 +469,7 @@ export default {
       this.posts.splice(this.posts.indexOf(post), 1)
       this.sortPost() // trie le tableau
     },
-    dateFr (date) {
+    dateFr (date) { // renvoie la date en français
       var dateString = null
       date = new Date(date)
       let day = date.getDate()

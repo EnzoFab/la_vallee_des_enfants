@@ -11,16 +11,29 @@
         </v-flex>
         </v-container>
       </v-layout>
-      <v-layout>
+      <v-layout row wrap>
         <v-layout>
         <v-flex>
           <h2 class="text-md-center blue--text"> Contrats en cours</h2>
         </v-flex>
         </v-layout>
-        <v-container grid-list-md text-xs-center>
+        <v-container grid-list-md text-xs-center style="max-height: 30vw" class="scroll-y">
           <v-layout row wrap>
+            <v-flex d-flex md4 lg4 xl4 sm12 xs12>
+              <v-card to="/contrat/creation" ripple class="grey lighten-3">
+                <v-flex>
+                  <img height="200px" src="/static/ajouter.png" />
+                </v-flex>
+                <v-flex>
+                  <v-divider></v-divider>
+                  <v-flex mt-2>
+                    <h4>Nouveau contrat</h4>
+                  </v-flex>
+                </v-flex>
+              </v-card>
+            </v-flex>
             <v-flex d-flex
-                    md3 lg3 xl4 sm12 xs12
+                    md4 lg4 xl4 sm12 xs12
                     v-for="(contrat,i) in contratsEnCours" :key="i"
                     v-if="contratsEnCours.length > 0">
               <v-card :to="'/contrat/' + contrat.id">
@@ -48,13 +61,13 @@
         </v-container>
       </v-layout>
       <v-divider></v-divider>
-      <v-layout>
+      <v-layout row wrap>
         <v-layout>
         <v-flex>
           <h2 class="text-md-center blue--text"> Contrats terminés</h2>
         </v-flex>
         </v-layout>
-        <v-container grid-list-md text-xs-center>
+        <v-container grid-list-md text-xs-center style="max-height: 30vw" class="scroll-y">
           <v-layout row wrap>
             <v-flex d-flex
                     md3 lg3 xl4 sm12 xs12
