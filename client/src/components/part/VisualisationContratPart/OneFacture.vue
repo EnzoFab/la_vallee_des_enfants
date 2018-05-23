@@ -68,7 +68,7 @@
       <v-flex lg8>
         <v-layout>
       <v-flex mt-5>
-        <v-btn color="orange darken-1" dark>Générer la facture au format PDF</v-btn>
+        <v-btn color="orange darken-1" @click="exportPDF" dark>Générer la facture au format PDF</v-btn>
       </v-flex>
       <v-flex mt-5>
         <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn>
@@ -116,6 +116,7 @@
 
 <script>
 import genererFacture from '../../../helper/genererFacture'
+import facturePDF from '../../../helper/facturePDF'
 export default {
   name: 'OneFacture',
   props: {
@@ -134,63 +135,60 @@ export default {
         {text: 'Modification', value: 'modifier'}
       ],
       absences: [],
-      dialogHeureMajo: false
-      /* facture: {
-        // -- Infos à afficher sur la facture --
-        debutPeriode: null,
-        finPeriode: null,
-        nomEnfant: null,
-        prenomEnfant: null,
-        nomEmployeur: null,
-        prenomEmployeur: null,
-        rueEmployeur: null,
-        cpEmployeur: null,
-        villeEmployeur: null,
-        nomAssMat: null,
-        prenomAssMat: null,
-        rueAssMat: null,
-        cpAssMat: null,
-        villeAssMat: null,
-        nombreJoursActivite: 0,
-        nombreHeuresSupp: 0,
-        nombreHeuresNormales: 0, // va etre initier à facture.nombre heure normales qui est le nb d heures supp choisies a taux normal
-        nombreHeuresMajorees: 0,
-        nombreJoursCongesPayes: 2.5,
-        salaireHoraireNormal: null,
-        taux_majore: null,
-        dateLimitePaiement: null,
-        nbJoursAbsJust: 0, // nb jours absences justifiée
-        nbJoursAbsNonJust: 0, // nb jours absences non justifiée
-        nbJoursAbsence: 0, // nb jours abs justifiées et non justifiées
-        nbJoursFériés: 0,
-        nbJoursPresenceExcept: 0, // nb de jours où l'enfant est venu exceptionnellement
-        nbGoutersSupp: 0, // nombre de gouters
-        nbGoutersADeduire: 0, // en attente repons leo**
-        indemnitesMensuelles: 0, // cout des indemnites
-        coutTotalGouterSupp: 0, // en attente reponse leo**
-        coutTotalIndemnitesAbs: 0, // cout total des indemnites a deduire pour absence
-        coutTotalIndemnitesJoursFeries: 0, // cout total des indemnites a deduire pour feries
-        coutTotalJoursExceptionnels: 0, // cout total des frais d'entretien a ajouter pour presences suplementaires
-        salaireNet: 0,
-        coutcongesPayes: 0, // 10% du salaire net
-        totalDesIndemnites: 0,
-        montantNetAPayer: 0,
-        // -- Infos permettant de faire les calculs pour infos à afficher --
-        nbJoursPresenceTheo: 0,
-        nbSemainesCongesAssMat: null,
-        nbSemainesCongesEmployeur: null,
-        nbJourFeriesNonPayes: 0, // nombre de jours feries où l assmat ne doit pas etre payee (concerne le 1 er mai)
-        nbHeuresAbsencesJust: 0,
-        nbHeuresRetardsJustifies: 0, // nombre d'heures de retard à decompter car consideres comme justifies par l ass mat
-        nbHeuresSemaine: 0,
-        datesJoursFeries: [], // sera initialisé avec les jours feries du mois (uniquement les jours - pas mois/annee)
-        dateDebAdaptation: null,
-        dateFinAdaptation: null,
-        dateFinContrat: null,
-        mois: 4,
-        annee: 2018,
-        idContrat: 'xMxBBUStkKOajkgDdjWFqbnaHCg3EfC5x1N'
-      } */
+      dialogHeureMajo: false,
+      debutPeriode: null,
+      finPeriode: null,
+      nomEnfant: null,
+      prenomEnfant: null,
+      nomEmployeur: null,
+      prenomEmployeur: null,
+      rueEmployeur: null,
+      cpEmployeur: null,
+      villeEmployeur: null,
+      nomAssMat: null,
+      prenomAssMat: null,
+      rueAssMat: null,
+      cpAssMat: null,
+      villeAssMat: null,
+      nombreJoursActivite: 0,
+      nombreHeuresSupp: 0,
+      nombreHeuresNormales: 0, // va etre initier à facture.nombre heure normales qui est le nb d heures supp choisies a taux normal
+      nombreHeuresMajorees: 0,
+      nombreJoursCongesPayes: 2.5,
+      salaireHoraireNormal: null,
+      taux_majore: null,
+      dateLimitePaiement: null,
+      nbJoursAbsJust: 0, // nb jours absences justifiée
+      nbJoursAbsNonJust: 0, // nb jours absences non justifiée
+      nbJoursAbsence: 0, // nb jours abs justifiées et non justifiées
+      nbJoursFériés: 0,
+      nbJoursPresenceExcept: 0, // nb de jours où l'enfant est venu exceptionnellement
+      nbGoutersSupp: 0, // nombre de gouters
+      nbGoutersADeduire: 0, // en attente repons leo**
+      indemnitesMensuelles: 0, // cout des indemnites
+      coutTotalGouterSupp: 0, // en attente reponse leo**
+      coutTotalIndemnitesAbs: 0, // cout total des indemnites a deduire pour absence
+      coutTotalIndemnitesJoursFeries: 0, // cout total des indemnites a deduire pour feries
+      coutTotalJoursExceptionnels: 0, // cout total des frais d'entretien a ajouter pour presences suplementaires
+      salaireNet: 0,
+      coutcongesPayes: 0, // 10% du salaire net
+      totalDesIndemnites: 0,
+      montantNetAPayer: 0,
+      // -- Infos permettant de faire les calculs pour infos à afficher --
+      nbJoursPresenceTheo: 0,
+      nbSemainesCongesAssMat: null,
+      nbSemainesCongesEmployeur: null,
+      nbJourFeriesNonPayes: 0, // nombre de jours feries où l assmat ne doit pas etre payee (concerne le 1 er mai)
+      nbHeuresAbsencesJust: 0,
+      nbHeuresRetardsJustifies: 0, // nombre d'heures de retard à decompter car consideres comme justifies par l ass mat
+      nbHeuresSemaine: 0,
+      datesJoursFeries: [], // sera initialisé avec les jours feries du mois (uniquement les jours - pas mois/annee)
+      dateDebAdaptation: null,
+      dateFinAdaptation: null,
+      dateFinContrat: null,
+      mois: 4,
+      annee: 2018,
+      idContrat: 'xMxBBUStkKOajkgDdjWFqbnaHCg3EfC5x1N'
     }
   },
   methods: {
@@ -208,6 +206,14 @@ export default {
   },
   mounted () {
     this.initInfosBasiquesDeLaFacture()
+  },
+  async exportPDF () {
+    let facture = { nombreJoursActivite: this.nombreJoursActivite, nombreHeuresNormales: this.nombreHeuresNormales, nombreHeuresMajorees: this.nombreHeuresMajorees, nombreJoursCongesPayes: this.nombreJoursCongesPayes, salaireHoraireNormal: this.salaireHoraireNormal, dateLimitePaiement: this.dateLimitePaiement, indemnitesMensuelles: this.indemnitesMensuelles, gouter: this.gouter, entretien: this.entretien, coutTotalIndemnitesAbs: this.coutTotalIndemnitesAbs, nbJoursFériés: this.nbJoursFériés, coutTotalIndemnitesJoursFeries: this.coutTotalIndemnitesJoursFeries, nbJoursPresenceExcept: this.nbJoursPresenceExcept, coutTotalJoursExceptionnels: this.coutTotalJoursExceptionnels, salaireNet: this.salaireNet, congePaye10: this.congePaye10, indemEntretien: this.indemEntretien, montant: this.montant }
+    try {
+      await facturePDF.createFacturePdf(facture)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>

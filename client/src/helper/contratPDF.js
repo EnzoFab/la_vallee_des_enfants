@@ -1,5 +1,4 @@
 import Jspdf from 'jspdf'
-require('jspdf-autotable')
 
 export default {
   createContratPdf (employeur, tuteurs, assMat, enfant, contrat, presences) {
