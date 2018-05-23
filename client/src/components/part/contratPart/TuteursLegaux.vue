@@ -210,7 +210,6 @@
               depressed large round
               :dark="estValide"
               @click="submit"
-              :disabled="!estValide"
             >
               Suivant
             </v-btn>

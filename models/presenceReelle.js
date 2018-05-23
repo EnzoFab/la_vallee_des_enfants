@@ -86,13 +86,16 @@ let presenceReelle = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
+                        var datepresencereelle = new Date(rslt.rows[i].datepresencereelle)
+                        datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
-                            datepresencereelle: rslt.rows[i].datepresencereelle,
+                            datepresencereelle,
                             heure_arrivee_r: rslt.rows[i].heure_arrivee_r,
                             heure_depart_r: rslt.rows[i].heure_depart_r,
                             prends_gouter_r: rslt.rows[i].prends_gouter_r,
                             absence_justifiee: rslt.rows[i].absence_justifiee
                         })
+                        console.log(datepresencereelle)
                     }retour.presencesreelles = array;
                     retour.statut = 200
                 }

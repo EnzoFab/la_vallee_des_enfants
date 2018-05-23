@@ -13,35 +13,45 @@
       </v-checkbox>
       <v-slide-y-transition>
         <v-container v-if="employeurExiste">
-          <v-layout>
-            <v-select
-              :items="allExistingEmployeur"
-              label="Choisissez un employeur dans la liste "
-              :rules="regleListeEmployeur"
-              v-model="employeurExistant"
-              item-text="nom_complet"
-              append-icon="search"
-              autocomplete
-              required
-            >
-              <template slot="item" slot-scope="data">
-              <template v-if="typeof data.item !== 'object'">
-                <v-list-tile-content v-text="data.item"></v-list-tile-content>
-              </template>
-              <template v-else>
-                <v-list-tile-avatar color="red">
-                  <span class="white--text headline">{{getInitiale(data.item)}}</span>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title
-                    v-html="data.item.prenom_employeur + ' ' + data.item.nom_usage_employeur + ' ' + data.item.nom_naissance_employeur">
-                  </v-list-tile-title>
-                  <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant">
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </template>
-            </template>
-            </v-select>
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-select
+                :items="allExistingEmployeur"
+                label="Choisissez un employeur dans la liste "
+                :rules="regleListeEmployeur"
+                v-model="employeurExistant"
+                item-text="nom_complet"
+                append-icon="search"
+                autocomplete
+                required
+              >
+                <template slot="item" slot-scope="data">
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                  </template>
+                  <template v-else>
+                    <v-list-tile-avatar color="red">
+                      <span class="white--text headline">{{getInitiale(data.item)}}</span>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title
+                        v-html="data.item.prenom_employeur + ' ' + data.item.nom_usage_employeur + ' ' + data.item.nom_naissance_employeur">
+                      </v-list-tile-title>
+                      <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant">
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </template>
+                </template>
+              </v-select>
+            </v-flex>
+           <v-flex xs12>
+             <v-subheader>Nombre semaine supplémentaire: {{congesSupp}}</v-subheader>
+             <v-slider v-model="congesSupp"
+                       min="0" max="10"
+                       thumb-label step="1" ticks
+                       required
+             ></v-slider>
+           </v-flex>
           </v-layout>
         </v-container>
       </v-slide-y-transition>
@@ -163,7 +173,6 @@
       <v-btn
         depressed large round
         class="red lighten-2"
-        :dark="estValide"
         @click="envoyer"
         :disabled="!estValide"
       >Suivant</v-btn>

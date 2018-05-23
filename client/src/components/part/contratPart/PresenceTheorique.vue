@@ -184,7 +184,7 @@
             color="pink"
             @click="back"
           >
-            Suivant</v-btn>
+            Précédent</v-btn>
           <v-btn
             depressed large round
             :dark="presences.length > 0"
