@@ -71,7 +71,7 @@
         <v-btn color="orange darken-1" dark>Générer la facture au format PDF</v-btn>
       </v-flex>
       <v-flex mt-5>
-        <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn>
+        <!-- <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn> !-->
       </v-flex>
         </v-layout>
       </v-flex>
@@ -98,7 +98,7 @@
         <v-layout>
           <v-card-actions>
             <v-flex offset-md1>
-              <v-btn  color="primary"  flat @click.stop="submitHeuresMajo">Valider</v-btn>
+              <!-- <v-btn  color="primary"  flat @click.stop="submitHeuresMajo">Valider</v-btn> !-->
             </v-flex>
           </v-card-actions>
           <v-card-actions>
@@ -135,7 +135,7 @@ export default {
       ],
       absences: [],
       dialogHeureMajo: false,
-      facture: {
+      factureAAfficher: {
         /* -- Infos à afficher sur la facture -- */
         debutPeriode: null,
         finPeriode: null,
@@ -164,8 +164,7 @@ export default {
         nbJoursAbsence: 0, // nb jours abs justifiées et non justifiées
         nbJoursFériés: 0,
         nbJoursPresenceExcept: 0, // nb de jours où l'enfant est venu exceptionnellement
-        nbGoutersSupp: 0, // nombre de gouters
-        nbGoutersADeduire: 0, // en attente repons leo**
+        nbGouters: 0, // nombre de gouters pris dans le mois
         indemnitesMensuelles: 0, // cout des indemnites
         coutTotalGouterSupp: 0, // en attente reponse leo**
         coutTotalIndemnitesAbs: 0, // cout total des indemnites a deduire pour absence
@@ -200,12 +199,12 @@ export default {
   },
   methods: {
     async initInfosBasiquesDeLaFacture () {
-      console.log('initiale  :    ' + Object.values(this.facture))
-      let r = await genererFacture.generationFacture(this.facture)
-      this.facture = r
+      console.log('initiale  :    ' + Object.values(this.factureAAfficher))
+      let r = await genererFacture.generationFacture(this.factureAAfficher)
+      this.factureAAfficher = r
       console.log('youpi')
-      console.log(Object.values(this.facture))
-      console.log('heyyyy ' + this.facture.nbSemainesCongesEmployeur)
+      console.log(Object.values(this.factureAAfficher))
+      console.log('heyyyy ' + this.factureAAfficher.nbSemainesCongesEmployeur)
     }
   },
   mounted () {
