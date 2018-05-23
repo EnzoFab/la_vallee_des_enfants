@@ -187,7 +187,8 @@ const router = new Router({
       path: '/presence/saisir',
       name: 'SaisirPresences',
       component: SaisirPresences,
-      meta: {title: 'Présences'}
+      meta: {title: 'Présences'},
+      beforeEnter: isAssmat
     },
     { path: '/404',
       name: '404',
