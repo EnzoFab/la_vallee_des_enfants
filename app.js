@@ -89,7 +89,7 @@ app.use('/api/factures', facture)
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
-var chat = io
+/* var chat = io
     .of('/post')
     .on('connection', function (socket) {
         console.log('Nouveau client')
@@ -111,8 +111,8 @@ var chat = io
         chat.emit('message', {
             everyone: 'in'
             , '/post': 'will get'
-        });*/
-    });
+        });
+    }); */
 
 
 app.use(function(req, res, next) {
