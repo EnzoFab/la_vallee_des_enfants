@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(__dirname + '/public'));
-// catch 404 and forward to error handler
+app.use(fileUpload());
 
 const unlessPath = ['/api/employeurs/login', '/api/assmats/login', '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
 app.use('/api/',expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
@@ -114,7 +114,7 @@ var chat = io
         }); */
     });
 
-
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
     //next(createError(404));
