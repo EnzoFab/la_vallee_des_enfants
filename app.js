@@ -89,8 +89,8 @@ app.use('/api/factures', facture)
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
-/* var chat = io
-    .of('/post')
+var chat = io
+    .of('/api/post')
     .on('connection', function (socket) {
         console.log('Nouveau client')
         socket.on('nouveauPost', function (data) {
@@ -112,7 +112,7 @@ app.use('/api/factures', facture)
             everyone: 'in'
             , '/post': 'will get'
         });
-    }); */
+    });
 
 
 app.use(function(req, res, next) {
