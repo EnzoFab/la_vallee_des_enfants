@@ -33,22 +33,19 @@
       <v-flex md8 offset-md1 mt-4>
         <v-layout>
           <v-flex light-green--text text--darken-3 offset-md1 class="text-md-left">
-            <h2>Informations de facture</h2>
+            <h2>Informations sur les heures</h2>
           </v-flex>
         </v-layout>
         <v-layout md4 mt-2>
           <v-flex class="text-md-left">
-            <h3>Nombre d'heures normales : </h3>
+            <h3>Nombre d'heures normales : {{(this.factureAAfficher.nombreHeuresNormales).toFixed(2)}}</h3>
           </v-flex>
         </v-layout>
         <v-layout>
           <v-flex class="text-md-left">
             <v-layout>
-              <v-flex md4>
-                <h3>Nombre d'heures supplémentaires : </h3>
-              </v-flex>
-              <v-flex md3 mt-1>
-                <span>{{this.factureAAfficher.nombreHeuresSupp}} h dont {{this.factureAAfficher.nombreHeuresMajorees}} h au taux majoré</span>
+              <v-flex>
+                <h3>Nombre d'heures supplémentaires : {{this.factureAAfficher.nombreHeuresSupp}} h dont {{this.factureAAfficher.nombreHeuresMajorees}} h au taux majoré</h3>
               </v-flex>
               <v-flex md2>
                 <v-btn class="indigo--text" @click.stop="dialogHeureMajo=true">Modifier</v-btn>
@@ -58,8 +55,8 @@
         </v-layout>
         <v-divider></v-divider>
         <v-layout>
-          <v-flex md4 mt-3 class="text-md-left">
-          <h3>Total des heures : </h3>
+          <v-flex mt-3 class="text-md-left">
+          <h3>Total des heures : {{(this.factureAAfficher.nombreHeuresNormales + this.factureAAfficher.nombreHeuresSupp).toFixed(2)}}</h3>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -90,6 +87,7 @@
         </v-flex>
           <v-flex offset-md4 md2 xs8>
             <v-text-field
+              v-model="factureAAfficher.nombreHeuresMajorees"
               name="heuresAMaj"
               align="center"
             ></v-text-field>
@@ -97,7 +95,7 @@
         <v-layout>
           <v-card-actions>
             <v-flex offset-md1>
-               <v-btn  color="primary"  flat @click.stop="submitHeuresMajo">Valider</v-btn>
+               <v-btn color="primary" flat @click="submitHeuresMajo">Valider</v-btn>
             </v-flex>
           </v-card-actions>
           <v-card-actions>
@@ -191,26 +189,33 @@ export default {
         mois: null,
         annee: null,
         idContrat: null
-      }
+      },
+      nbHeuresMajo:0
     }
   },
   methods: {
 
     initialiserDonnees () {
-      this.factureAAfficher.id_contrat = this.facture.idContrat
+      console.log('joihi   ', this.facture.idContrat)
+      this.factureAAfficher.idContrat = this.facture.idContrat
       this.factureAAfficher.mois = this.facture.mois
       this.factureAAfficher.annee = this.facture.annee
+      console.log('zertyfg   ', this.factureAAfficher.idContrat)
+    },
+
+    async initHeuresMaj () {
+      let r0 = await FactureService.getDonneesFactureDuMois(this.factureAAfficher.idContrat, this.factureAAfficher.mois, this.factureAAfficher.annee)
+      this.nbHeuresMajo = r0.data.nb_heures_majorees
+      this.facture.nombreHeuresMajorees = this.nbHeuresMajo
     },
 
     async initInfosBasiquesDeLaFacture () {
       try {
-        // let r0 = await FactureService.getDonneesFactureDuMois(this.factureAAfficher.idContrat, this.factureAAfficher.mois, this.factureAAfficher.annee)
-        // this.factureAAfficher.nombreHeuresMajorees = r0.data.nb_heures_majorees
         console.log('initiale  :    ' + Object.values(this.factureAAfficher))
         let r = await genererFacture.generationFacture(this.factureAAfficher)
         this.factureAAfficher = r
         console.log('youpi')
-        console.log(Object.values(this.factureAAfficher))
+        console.log('lalalala ', this.factureAAfficher)
       } catch (e) {
         console.log(e)
       }
@@ -222,8 +227,10 @@ export default {
   },
   mounted () {
     this.initialiserDonnees()
+    console.log(this.facture.mois)
+    this.initHeuresMaj()
     this.initInfosBasiquesDeLaFacture()
-  }
+  },
   /* ,
   async exportPDF () {
     let facture = { nombreJoursActivite: this.nombreJoursActivite, nombreHeuresNormales: this.nombreHeuresNormales, nombreHeuresMajorees: this.nombreHeuresMajorees, nombreJoursCongesPayes: this.nombreJoursCongesPayes, salaireHoraireNormal: this.salaireHoraireNormal, dateLimitePaiement: this.dateLimitePaiement, indemnitesMensuelles: this.indemnitesMensuelles, gouter: this.gouter, entretien: this.entretien, coutTotalIndemnitesAbs: this.coutTotalIndemnitesAbs, nbJoursFériés: this.nbJoursFériés, coutTotalIndemnitesJoursFeries: this.coutTotalIndemnitesJoursFeries, nbJoursPresenceExcept: this.nbJoursPresenceExcept, coutTotalJoursExceptionnels: this.coutTotalJoursExceptionnels, salaireNet: this.salaireNet, congePaye10: this.congePaye10, indemEntretien: this.indemEntretien, montant: this.montant }
@@ -233,6 +240,25 @@ export default {
       console.log(e)
     }
   }*/
+
+  submitHeuresMajo() {
+    try {
+      let data = {
+        facture:
+          {
+            nombreHeuresMajorees: factureAAfficher.nombreHeuresMajorees,
+            idContrat: factureAAfficher.idContrat,
+            annee: factureAAfficher.annee,
+            mois: factureAAfficher.mois
+          }
+      }
+      FactureService.updateHeuresMajo(data)
+      this.dialogHeureMajo = false
+    } catch (e) {
+      console.log(e)
+    }
+
+  }
 }
 </script>
 

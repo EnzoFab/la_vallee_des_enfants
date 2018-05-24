@@ -100,7 +100,7 @@ let Facture = {
     getInfosFacture: function (id_contrat, mois, annee, callback) {
         db.query('SELECT * ' +
             'FROM public.facturemensuelle ' +
-            'WHERE mois = $1, annee = $2, id_contrat = $3',
+            'WHERE mois = $1 AND annee = $2 AND id_contrat = $3',
             [mois, annee, id_contrat],
             function (err, rslt){
                 retour = {
@@ -145,8 +145,8 @@ let Facture = {
     updatenbHeuresMajo: function (facture, callback) {
         db.query('UPDATE public.facturemensuelle ' +
             'SET nb_heures_majorees = $1 ' +
-            'WHERE id_contrat = $2, mois = $3, annee = $4',
-            [facture.nb_heures_majorees, facture.id_contrat, facture.mois, facture.annee],
+            'WHERE id_contrat = $2 AND mois = $3 AND annee = $4',
+            [facture.nombreHeuresMajorees, facture.idContrat, facture.mois, facture.annee],
             function () {
                 let retour = 'la facture a bien ete mise a jour'
                 callback(retour)
@@ -157,7 +157,8 @@ let Facture = {
 
     getAllByIdContrat: function (numContrat, callback) {
         db.query(
-            'SELECT * FROM public.facturemensuelle WHERE id_contrat = $1 ORDER BY date_debut DESC ',
+            'SELECT * FROM public.facturemensuelle WHERE id_contrat = $1' +
+            'ORDER BY annee DESC, mois DESC ',
             [numContrat],
             function (err, rslt){
                 retour = {
