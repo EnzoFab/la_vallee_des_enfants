@@ -259,7 +259,6 @@ export default {
         if (response.data.erreur == null) {
           this.jours = response.data.typesjour
         }
-        console.log(this.jours)
       } catch (e) {
         this.msgErreur = 'Erreur ' + e.toString()
         this.erreur = true
@@ -300,7 +299,6 @@ export default {
   watch: {
     presences: {
       handler (val) {
-        console.log('APPEl')
         var nbHeure = 0
 
         var heure1 = null

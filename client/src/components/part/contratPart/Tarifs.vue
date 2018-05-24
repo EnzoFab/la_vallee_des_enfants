@@ -169,8 +169,9 @@ export default {
     async initGouter () {
       try {
         const response = await TypeService.gouter()
-        this.gouter = response.data.gouter + ' €'
-        console.log(response.data)
+        if (response.data.erreur == null) {
+          this.gouter = response.data.gouter + ' €'
+        }
       } catch (e) {
         console.log(e)
       }

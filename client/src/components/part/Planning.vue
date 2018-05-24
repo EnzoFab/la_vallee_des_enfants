@@ -177,7 +177,6 @@ export default {
     eventClick (event) {
       this.dialog = true
       this.eventInDialog = event.originalEvent
-      console.log(this.eventInDialog)
     },
     loadEvent () {
       let vm = this
@@ -185,7 +184,6 @@ export default {
         .then(function (rslt) {
           if (rslt.data.erreur == null) {
             rslt.data.resultats.forEach(function (event, i) {
-              console.log(event)
               let data = {
                 startDate: event.datepresencereelle,
                 endDate: event.datepresencereelle,

@@ -318,8 +318,6 @@ export default {
       }
     },
     remove (tuteur) {
-      // supprime un element de la liste
-      console.log(tuteur)
       this.tuteurs.splice(this.tuteurs.indexOf(tuteur), 1)
     },
     existeAutredemandeur (tuteur) {

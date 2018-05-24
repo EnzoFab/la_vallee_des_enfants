@@ -33,7 +33,6 @@ export default {
     async connexion (data) {
       // est lancée lorsque le compososant envoie l'evenement == lorsqu'on appuie sur le bouton envoyer
       this.progress = true
-      console.log(data)
       try {
         const response = await AuthentificationService.login(data)
         if (response.data.erreur == null) { // connexion reussie

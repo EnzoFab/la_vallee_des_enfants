@@ -380,7 +380,6 @@ export default {
       try {
         const response = await PresenceService.getAllChildrenOfTheDay()
         this.enfantsDuJour = response.data.presencestheoriques
-        console.log('ICI TEST', response.data.presencestheoriques)
         for (var i = 0; i < this.enfantsDuJour.length; i++) {
           if (this.enfantsDuJour[i].heure_arrivee != null) {
             var heureDecoupeeArr = (this.enfantsDuJour[i].heure_arrivee).split(':', 2)
@@ -437,7 +436,6 @@ export default {
         const response = await PresenceService.getAllChildrenNotOfTheDay()
         if (response.data.absencestheoriques != null) {
           this.enfantsPasDuJour = response.data.absencestheoriques
-          console.log('Erreur')
           for (var i = 0; i < this.enfantsPasDuJour.length; i++) {
             this.enfantsPasDuJour[i].nomComplet = this.enfantsPasDuJour[i].nom_enfant + ' ' + this.enfantsPasDuJour[i].prenom_enfant
           }
