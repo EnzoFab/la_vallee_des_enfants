@@ -52,8 +52,8 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(__dirname + '/public'));
 // catch 404 and forward to error handler
 
-// const unlessPath = ['/api/employeurs/login', '/api/assmats/login', '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
-// app.use('/api/',expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
+const unlessPath = ['/api/employeurs/login', '/api/assmats/login', '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
+app.use('/api/',expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
 
 /* ======================  ROUTES ================================================ */
 app.use('/api/employeurs', EmployeurRouter);
