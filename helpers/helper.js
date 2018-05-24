@@ -21,4 +21,8 @@ function handleError(e, rst, message){
     }
 }
 
-module.exports = {handleError};
+function premiereLettreMaj (s) {
+    return s && s[0].toUpperCase() + s.slice(1)
+}
+
+module.exports = {handleError, premiereLettreMaj};

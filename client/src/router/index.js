@@ -84,14 +84,14 @@ const router = new Router({
       path: '/assistante/parametres',
       name: 'InfosAssMat',
       component: InfosAssMat,
-      meta: {title: 'InfosAssMat'},
+      meta: {title: 'Paramètres'},
       beforeEnter: isAssmat
     },
     {
       path: '/employeur/parametres',
       name: 'ParametresCompteEmployeur',
       component: ParametresCompteEmployeur,
-      meta: {title: 'ParametresCompteEmployeur'},
+      meta: {title: 'Parametres'},
       beforeEnter: isEmployeur
     },
     {
@@ -142,7 +142,7 @@ const router = new Router({
       path: '/employeur/connexion',
       name: 'ConnexionEmp',
       component: ConnexionEmp,
-      meta: {title: 'ConnexionEmp'},
+      meta: {title: 'Connexion'},
       beforeEnter: isNotConnected
     },
     {
@@ -181,13 +181,14 @@ const router = new Router({
       path: '/contrat/:numC',
       name: 'VisualisationContrat',
       component: VisualisationContrat,
-      meta: {title: 'VisualisationContrat'}
+      meta: {title: 'Contrat'}
     },
     {
       path: '/presence/saisir',
       name: 'SaisirPresences',
       component: SaisirPresences,
-      meta: {title: 'SaisirPresences'}
+      meta: {title: 'Présences'},
+      beforeEnter: isAssmat
     },
     { path: '/404',
       name: '404',
@@ -204,7 +205,7 @@ const router = new Router({
 /**
  * Avant chaque route on va verifier si la personne est existe
  */
-router.beforeEach(function (to, from, next) {
+/* router.beforeEach(function (to, from, next) {
   if (store.getters.isAssMatConnected) {
     AssistanteService.findOne(store.state.assMat.id_assmat).then(function (rslt) {
       if (rslt.data.erreur != null) {
@@ -235,5 +236,5 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
-})
+}) */
 export default router

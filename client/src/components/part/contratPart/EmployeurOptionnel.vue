@@ -8,6 +8,7 @@
 
     <v-form v-model="estValide" ref="form" class="pa-3">
       <v-checkbox
+        v-if="this.allExistingEmployeur.length > 0"
         label="Choisir un employeur existant"
         v-model="employeurExiste">
       </v-checkbox>

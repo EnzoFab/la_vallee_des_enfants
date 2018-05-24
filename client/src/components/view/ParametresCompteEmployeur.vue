@@ -1,4 +1,21 @@
 <template>
+  <v-container grid-list-xl>
+  <v-alert v-model="erreur" type="error" dismissible>
+    {{erreurMessage}}
+  </v-alert>
+  <v-snackbar
+    v-model="snackbar"
+    absolute
+    top
+    right
+    :color="snackBarColor"
+  >
+    <span>{{snackbarMessage}}</span>
+    <v-icon dark>check_circle</v-icon>
+    <v-btn dark flat fab @click.native="snackbar = false">
+      <v-icon small dark>fa-times</v-icon>
+    </v-btn>
+  </v-snackbar>
   <v-layout row wrap>
     <v-flex xs12 md6 offset-md3 class="my-5">
       <v-card>
@@ -64,6 +81,7 @@
       </v-card>
     </v-flex>
   </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -88,22 +106,46 @@ export default {
     e3: true,
     pwdRules: [
       v => !!v || 'Veuillez remplir le mot de passe'
-    ]
+    ],
+    erreur: false,
+    erreurMessage: '',
+    snackbar: false,
+    snackbarMessage: '',
+    snackBarColor: '',
+    loadingButton: false,
+    modifierMotDePasse: false
   }),
   methods: {
     async envoyer () {
+      this.loadingButton = true
       const data = {id_employeur: this.$store.state.employeur.id, ancienpwd: this.ancienpwd, nouveaupwd: this.nouveaupwd, reecrirepwd: this.reecrirepwd}
       try {
         if (this.nouveaupwd === this.reecrirepwd) {
-          await ModificationMdpService.modifMdpEmployeur(data)
-          this.$router.push({
-            name: 'Accueil'
-          })
+          let r = await ModificationMdpService.modifMdpEmployeur(data)
+          if (r.data.erreur == null) {
+            this.triggerSnackBar('Mot de passe mis à jour', 'success')
+          } else {
+            this.triggerErreur(r.data.erreur.texte)
+          }
+        } else {
+          this.triggerErreur('Les mots de passes sont différents')
         }
       } catch (error) {
+        this.triggerErreur('Une erreur est survenue')
         console.log(error)
         this.error = error.response.data.error
       }
+      this.loadingButton = false
+      this.$refs.form.reset()
+    },
+    triggerErreur (erreur) {
+      this.erreurMessage = erreur
+      this.erreur = true
+    },
+    triggerSnackBar (message, color) {
+      this.snackbar = true
+      this.snackbarMessage = message
+      this.snackBarColor = color
     }
   }
 }

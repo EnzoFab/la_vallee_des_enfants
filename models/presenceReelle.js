@@ -84,9 +84,9 @@ let presenceReelle = {
                 retour.presencesreelles = null
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
-                        var datepresencereelle = new Date(rslt.rows[i].datepresencereelle)
+                    let array = []
+                    for(let i = 0; i < rslt.rows.length; i++){
+                        let datepresencereelle = new Date(rslt.rows[i].datepresencereelle)
                         datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
                             datepresencereelle,
@@ -226,9 +226,11 @@ let presenceReelle = {
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     let array = []
-                    for (var i = 0; i<res.rows.length; i++) {
+                    for (let i = 0; i<res.rows.length; i++) {
+                        let datepresencereelle = new Date(res.rows[i].datepresencereelle)
+                        datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
-                            datepresencereelle: res.rows[i].datepresencereelle,
+                            datepresencereelle:  datepresencereelle,
                             heureArriveeReelle: res.rows[i].heure_arrivee_r,
                             heureDepartRelle: res.rows[i].heure_depart_r,
                             prendsGouterRelle: res.rows[i].prends_gouter_r,
@@ -263,13 +265,14 @@ let presenceReelle = {
                 retour.statut = e.statut;
                 if(retour.erreur == null){
                     let array = []
-                    for (var i = 0; i<res.rows.length; i++) {
+                    for (let i = 0; i<res.rows.length; i++) {
+                        let datepresencereelle = new Date(res.rows[i].datepresencereelle)
+                        datepresencereelle.setDate(datepresencereelle.getDate()+1)
                         array.push({
-                            datepresencereelle: res.rows[i].datepresencereelle,
+                            datepresencereelle:  datepresencereelle,
                             heureArriveeReelle: res.rows[i].heure_arrivee_r,
                             heureDepartReelle: res.rows[i].heure_depart_r,
                             prendsGouterReelle: res.rows[i].prends_gouter_r,
-                            absence_justifiee: res.rows[i].absence_justifiee,
                             id_presence_reelle: res.rows[i].id_presence_reelle,
                             heureArriveePrevue: res.rows[i].heure_arrivee,
                             heureDepartPrevue: res.rows[i].heure_depart,
@@ -280,6 +283,7 @@ let presenceReelle = {
                         })
                     }
                     retour.resultats = array
+                    console.log(retour)
                 }
                 callback(retour)
             })

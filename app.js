@@ -50,49 +50,47 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(__dirname + '/public'));
-app.use(fileUpload());
+// catch 404 and forward to error handler
 
-const unlessPath = ['/employeurs/login', '/assmats/login', '/posts/all', '/post/', '/assmats/register']
-app.use(expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
-// verifie le token dans le header sauf pour les routes dans unless
-
+// const unlessPath = ['/api/employeurs/login', '/api/assmats/login', '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
+// app.use('/api/',expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
 
 /* ======================  ROUTES ================================================ */
-app.use('/employeurs', EmployeurRouter);
-app.use('/assmats', assMatRouter);
-app.use('/evenements', evenementRouter);
-app.use('/modepaiements', modeDePaiement);
-app.use('/typeContrat', typeDeContrat);
-app.use('/typeTuteur', typeTuteur);
-app.use('/frais', frais);
-app.use('/enfants', enfant);
-app.use('/tuteurs', tuteur);
-app.use('/employeurs', employeur);
-app.use('/contrat', contrat);
-app.use('/presencetheo', presencetheo);
-app.use('/posts', post);
-app.use('/files', files);
-app.use('/mail', mail);
-app.use('/typeJour', typejour)
-app.use('/employeurs', employeur);
-app.use('/contrat', contrat);
-app.use('/presencetheo', presencetheo);
-app.use('/presencereelle', presencereelle);
-app.use('/employeurs', employeur)
-app.use('/contrat', contrat),
-app.use('/presencetheo', presencetheo),
-app.use('/posts', post)
-app.use('/files', files)
-app.use('/factures', facture)
+app.use('/api/employeurs', EmployeurRouter);
+app.use('/api/assmats', assMatRouter);
+app.use('/api/evenements', evenementRouter);
+app.use('/api/modepaiements', modeDePaiement);
+app.use('/api/typeContrat', typeDeContrat);
+app.use('/api/typeTuteur', typeTuteur);
+app.use('/api/frais', frais);
+app.use('/api/enfants', enfant);
+app.use('/api/tuteurs', tuteur);
+app.use('/api/employeurs', employeur);
+app.use('/api/contrat', contrat);
+app.use('/api/presencetheo', presencetheo);
+app.use('/api/posts', post);
+app.use('/api/files', files);
+app.use('/api/mail', mail);
+app.use('/api/typeJour', typejour)
+app.use('/api/employeurs', employeur);
+app.use('/api/contrat', contrat);
+app.use('/api/presencetheo', presencetheo);
+app.use('/api/presencereelle', presencereelle);
+app.use('/api/employeurs', employeur)
+app.use('/api/contrat', contrat),
+app.use('/api/presencetheo', presencetheo),
+app.use('/api/posts', post)
+app.use('/api/files', files)
+app.use('/api/factures', facture)
 
 
-
+// verifie le token dans le header sauf pour les routes dans unless
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
 var chat = io
-    .of('/post')
+    .of('/api/post')
     .on('connection', function (socket) {
         console.log('Nouveau client')
         socket.on('nouveauPost', function (data) {
@@ -113,14 +111,13 @@ var chat = io
         chat.emit('message', {
             everyone: 'in'
             , '/post': 'will get'
-        });*/
+        }); */
     });
 
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
-  //next(createError(404));
+    //next(createError(404));
 });
 
 // rends socket io accessible a toutes les routes

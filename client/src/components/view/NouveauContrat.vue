@@ -81,7 +81,7 @@ import MailHelper from '../../helper/sendMail'
 import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
 
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
-
+const randomstring = require('randomstring')
 export default {
   name: 'NouveauContrat',
   components: {
@@ -122,7 +122,8 @@ export default {
       showProgress: false,
       snackbar: false,
       snackBarColor: '',
-      snackbarMessage: ''
+      snackbarMessage: '',
+      numContrat: randomstring.generate(35)
     }
   },
   methods: {
@@ -136,7 +137,13 @@ export default {
       this.tuteurs = data
       this.estValideEtape3 = true
       if (data.asEmployeur) {
-        this.congeEmployeur = data.infoDemandeur.nombreSemainesSupplementaires
+        let vm = this
+        data.tuteurs.forEach(function (tuteur) {
+          if (tuteur.infoDemandeur) {
+            vm.congeEmployeur = tuteur.infoDemandeur.nombreSemainesSupplementaires
+          }
+        })
+
         this.etape = 5
       } else {
         this.etape = 4
@@ -170,22 +177,37 @@ export default {
     },
     async sauvegarderContrat () {
       this.showProgress = true
-      if (await this.saveEnfant(this.enfant) && await this.saveTuteurs(this.tuteurs) && this.saveEmployeur(this.employeur) &&
-      await this.saveInformationGenerale(this.informationGenerale) && this.savePresence(this.presenceTheorique) &&
-      this.saveTarif(this.tarif)) {
-        this.triggerSnackBar('Contrat créé avec succès', 'success')
-        this.showProgress = false
-        this.$router.push({
-          path: '/contrat/' + this.$store.state.numContrat}
-        )
+      if (this.employeur != null) {
+        if (await this.saveEnfant(this.enfant) && await this.saveTuteurs(this.tuteurs) && this.saveEmployeur(this.employeur) &&
+          await this.saveInformationGenerale(this.informationGenerale) && this.savePresence(this.presenceTheorique) &&
+          this.saveTarif(this.tarif)) {
+          this.triggerSnackBar('Contrat créé avec succès', 'success')
+          this.showProgress = false
+          this.$router.push({
+            path: '/contrat/' + this.numContrat}
+          )
+        } else {
+          this.showProgress = false
+        }
       } else {
-        this.showProgress = false
+        if (await this.saveEnfant(this.enfant) && await this.saveTuteurs(this.tuteurs) &&
+          await this.saveInformationGenerale(this.informationGenerale) && this.savePresence(this.presenceTheorique) &&
+          this.saveTarif(this.tarif)) {
+          this.triggerSnackBar('Contrat créé avec succès', 'success')
+          this.showProgress = false
+          this.$router.push({
+            path: '/contrat/' + this.numContrat}
+          )
+        } else {
+          this.showProgress = false
+        }
       }
+
     },
     async saveEnfant (data) {
       // console.log(this.$store.state.assMat.id_assmat)
       try {
-        let response = await EnfantService.findOneByContratID(this.$store.state.numContrat)// on regarde si l'enfant existe deja
+        let response = await EnfantService.findOneByContratID(this.numContrat)// on regarde si l'enfant existe deja
         if (response.data.statut === 200) { // il existe un enfant on le mets à jour
           console.log(data)
           let result = await EnfantService.updateEnfant(
@@ -201,13 +223,13 @@ export default {
         } else if (response.data.statut === 404) { // l'enfant n'existe pas
           let enfantR = await EnfantService.createContratEnfant(data) // creation d'un nouvel enfant
           let r = await ContratService.create({
-            numContrat: this.$store.state.numContrat,
+            numContrat: this.numContrat,
             numAssMat: this.idAssmat || this.$store.state.assMat.id_assmat
           }) // creation du contrat
 
           if (r.data.erreur == null) {
             let updateContrat = await ContratService.updateEnfant(
-              this.$store.state.numContrat, {id_enfant: enfantR.data.id_enfant}
+              this.numContrat, {id_enfant: enfantR.data.id_enfant}
             ) // liaison entre le contrat et l'enfant
             console.log(updateContrat.data)
             if (updateContrat.data.erreur == null) {
@@ -335,7 +357,7 @@ export default {
         jour_paiement: data.jourPrelevement
       }
       try {
-        let response = await ContratService.updateInfoG(this.$store.state.numContrat, donnees)
+        let response = await ContratService.updateInfoG(this.numContrat, donnees)
         if (response.data.erreur == null) {
           return true
         } else {
@@ -354,7 +376,7 @@ export default {
       let erreur = false
       for (var i = 0; i < data.presences.length; i++) {
         let presence = data.presences[i]
-        presence.id_contrat = this.$store.state.numContrat
+        presence.id_contrat = this.numContrat
         try {
           let reponse = await PresenceTheoriqueService.create({presenceTheorique: presence})
           if (reponse.data.erreur != null) {
@@ -369,7 +391,7 @@ export default {
       }
       if (!erreur) { // s'il n'y a pas eu d'erreur
         try {
-          let reponse = await ContratService.updateHeureHebdo(this.$store.state.numContrat,
+          let reponse = await ContratService.updateHeureHebdo(this.numContrat,
             {nb_heures_semaine: data.nbHeureSemaine})
           if (reponse.data.erreur == null) {
             return true
@@ -388,7 +410,7 @@ export default {
     async saveTarif (data) {
       console.log(data)
       try {
-        let reponse = await ContratService.updateTarif(this.$store.state.numContrat,
+        let reponse = await ContratService.updateTarif(this.numContrat,
           {
             tarif: data.salaireNet,
             taux_majore: data.majoration
@@ -428,15 +450,14 @@ export default {
       // redirection
     },
     async saveEmployeurIntermediare (employeur) { // essaie de creer un employeur, retourne vrai si c'est reussi faux sinon
-      console.log(employeur)
-      if (employeur.employeurExistant == null) {
+      if (!employeur.employeurExistant || employeur.employeurExistant == null) {
         try {
           let response = await EmployeurService.createEmployeur({employeur: employeur})
           if (response.data.erreur == null) {
             let idEmployeur = response.data.id
-            let r = await ContratService.updateInfosEmp(this.$store.state.numContrat, {
+            let r = await ContratService.updateInfosEmp(this.numContrat, {
               id_employeur: idEmployeur,
-              nb_semaines_conges_parents: employeur.nb_semaines_conges
+              congeSupplementaireEmployeur: employeur.nb_semaines_conges
             })
             if (r.data.erreur == null) {
               return MailHelper.mailConnexionEmployeur(
@@ -456,7 +477,7 @@ export default {
         }
       } else {
         try {
-          await ContratService.updateInfosEmp(this.$store.state.numContrat,
+          await ContratService.updateInfosEmp(this.numContrat,
             {id_employeur: employeur.employeurExistant.id_employeur,
               congeSupplementaireEmployeur: employeur.nb_semaines_conges})
         } catch (e) {
@@ -465,9 +486,7 @@ export default {
       }
     }
   },
-  mounted () {
-    console.log(this.$store.state.numContrat)
-  }
+  mounted () {}
 }
 </script>
 

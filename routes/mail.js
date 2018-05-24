@@ -10,10 +10,10 @@ router.post('/send', function (req, res) {
     let sujet = req.body.sujet
     let text = req.body.message
     var smtpTransport = nodemailer.createTransport({
-        service: "gmail",
+        service: 'gmail',//process.env.SERVICE_MAIL,
         auth: {
-            user: "vallee.enfants@gmail.com",
-            pass: "V41133enfants"
+            user: 'vallee.enfants@gmail.com',// process.env.USER_MAIL,
+            pass: 'V41133enfants' //process.env.USER_MAIL_PWD
         }
     });
 

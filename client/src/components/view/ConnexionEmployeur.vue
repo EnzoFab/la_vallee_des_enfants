@@ -40,7 +40,7 @@ export default {
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setEmployeur', response.data.employeur)
           this.$router.push({
-            name: 'AccueilEmployeur'
+            name: 'Accueil'
           })
         } else {
           this.showError(response.data.erreur.texte)

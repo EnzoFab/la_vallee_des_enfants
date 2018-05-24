@@ -32,9 +32,7 @@
     "nodemailer": "^4.6.4",
     "pg": "^7.4.1",
     "socket.io": "^2.1.0",
-    "vue-responsive-calendar": "^1.1.9"
-    "socket.io": "^2.1.0",
-    "vue-infinite-loading": "^2.3.1"
+    "socketio-jwt": "^4.5.0"
   },
   "engines": {
     "node": "8.11.1"

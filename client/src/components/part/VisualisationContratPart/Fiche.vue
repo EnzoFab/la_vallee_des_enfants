@@ -459,7 +459,6 @@ export default {
           this.nombreSemSupp = response.data.nb_semaines_conges_parents
         }
       } catch (e) {
-        console.log('erreur')
         console.log(e)
         this.triggerErreur('Une erreur est survenue')
       }
@@ -467,7 +466,6 @@ export default {
     async initParents () {
       try {
         const response = await ContratService.donneesParents(this.numeroContrat)
-        console.log(response.data)
         if (response.data.erreur != null) {
           this.triggerErreur('Une erreur est survenue')
         } else {
@@ -493,7 +491,6 @@ export default {
     async enregistrerParent (parent) {
       try {
         let data = {tuteur: { telParent: parent.telephone, profession: parent.profession, telProParent: parent.telephone_pro, id_tuteur: parent.id_tuteur }}
-        console.log(this.parents)
         let r = await TuteurService.updateTuteur(data)
         if (r.data.erreur != null) {
           console.log(r.data.erreur)
