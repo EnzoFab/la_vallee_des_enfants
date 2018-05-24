@@ -48,7 +48,7 @@
                 <h3>Nombre d'heures supplémentaires : </h3>
               </v-flex>
               <v-flex md3 mt-1>
-                <span>36 h dont 5 h au taux majoré</span>
+                <span>{{this.factureAAfficher.nombreHeuresSupp}} h dont {{this.factureAAfficher.nombreHeuresMajorees}} h au taux majoré</span>
               </v-flex>
               <v-flex md2>
                 <v-btn class="indigo--text" @click.stop="dialogHeureMajo=true">Modifier</v-btn>
@@ -68,10 +68,10 @@
       <v-flex lg8>
         <v-layout>
       <v-flex mt-5>
-        <v-btn color="orange darken-1" @click="exportPDF" dark>Générer la facture au format PDF</v-btn>
+       <!-- <v-btn color="orange darken-1" @click="exportPDF" dark>Générer la facture au format PDF</v-btn> !-->
       </v-flex>
       <v-flex mt-5>
-        <!-- <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn> !-->
+        <v-btn @click="retour" color="orange darken-1" dark>Retour</v-btn>
       </v-flex>
         </v-layout>
       </v-flex>
@@ -89,7 +89,6 @@
           <p>Veuillez indiquer le nombre d'heures à majorer :</p>
         </v-flex>
           <v-flex offset-md4 md2 xs8>
-            <!-- v-model="" !-->
             <v-text-field
               name="heuresAMaj"
               align="center"
@@ -98,7 +97,7 @@
         <v-layout>
           <v-card-actions>
             <v-flex offset-md1>
-              <!-- <v-btn  color="primary"  flat @click.stop="submitHeuresMajo">Valider</v-btn> !-->
+               <v-btn  color="primary"  flat @click.stop="submitHeuresMajo">Valider</v-btn>
             </v-flex>
           </v-card-actions>
           <v-card-actions>
@@ -116,6 +115,7 @@
 
 <script>
 import genererFacture from '../../../helper/genererFacture'
+import FactureService from '../../../services/FactureService'
 export default {
   name: 'OneFacture',
   props: {
@@ -166,10 +166,11 @@ export default {
         nbJoursPresenceExcept: 0, // nb de jours où l'enfant est venu exceptionnellement
         nbGouters: 0, // nombre de gouters pris dans le mois
         indemnitesMensuelles: 0, // cout des indemnites
-        coutTotalGouterSupp: 0, // en attente reponse leo**
+        coutGouter: 0,
         coutTotalIndemnitesAbs: 0, // cout total des indemnites a deduire pour absence
         coutTotalIndemnitesJoursFeries: 0, // cout total des indemnites a deduire pour feries
         coutTotalJoursExceptionnels: 0, // cout total des frais d'entretien a ajouter pour presences suplementaires
+        coutIndemniteAuReel: 0,
         salaireNet: 0,
         coutcongesPayes: 0, // 10% du salaire net
         totalDesIndemnites: 0,
@@ -186,30 +187,44 @@ export default {
         dateDebAdaptation: null,
         dateFinAdaptation: null,
         dateFinContrat: null,
-        mois: 4,
-        annee: 2018,
-        idContrat: 'xMxBBUStkKOajkgDdjWFqbnaHCg3EfC5x1N'
+        nombreJoursAuReel: 0,
+        mois: null,
+        annee: null,
+        idContrat: null
       }
     }
   },
   methods: {
+
+    initialiserDonnees () {
+      this.factureAAfficher.id_contrat = this.facture.idContrat
+      this.factureAAfficher.mois = this.facture.mois
+      this.factureAAfficher.annee = this.facture.annee
+    },
+
     async initInfosBasiquesDeLaFacture () {
-      console.log('initiale  :    ' + Object.values(this.factureAAfficher))
-      let r = await genererFacture.generationFacture(this.factureAAfficher)
-      this.factureAAfficher = r
-      console.log('youpi')
-      console.log(Object.values(this.factureAAfficher))
-      console.log('heyyyy ' + this.factureAAfficher.nbSemainesCongesEmployeur)
-      console.log(Object.values(this.facture))
-      console.log('heyyyy ' + this.facture.nbSemainesCongesEmployeur)
+      try {
+        // let r0 = await FactureService.getDonneesFactureDuMois(this.factureAAfficher.idContrat, this.factureAAfficher.mois, this.factureAAfficher.annee)
+        // this.factureAAfficher.nombreHeuresMajorees = r0.data.nb_heures_majorees
+        console.log('initiale  :    ' + Object.values(this.factureAAfficher))
+        let r = await genererFacture.generationFacture(this.factureAAfficher)
+        this.factureAAfficher = r
+        console.log('youpi')
+        console.log(Object.values(this.factureAAfficher))
+      } catch (e) {
+        console.log(e)
+      }
+
     },
     retour () {
       this.$emit('retour')
     }
   },
   mounted () {
+    this.initialiserDonnees()
     this.initInfosBasiquesDeLaFacture()
-  },
+  }
+  /* ,
   async exportPDF () {
     let facture = { nombreJoursActivite: this.nombreJoursActivite, nombreHeuresNormales: this.nombreHeuresNormales, nombreHeuresMajorees: this.nombreHeuresMajorees, nombreJoursCongesPayes: this.nombreJoursCongesPayes, salaireHoraireNormal: this.salaireHoraireNormal, dateLimitePaiement: this.dateLimitePaiement, indemnitesMensuelles: this.indemnitesMensuelles, gouter: this.gouter, entretien: this.entretien, coutTotalIndemnitesAbs: this.coutTotalIndemnitesAbs, nbJoursFériés: this.nbJoursFériés, coutTotalIndemnitesJoursFeries: this.coutTotalIndemnitesJoursFeries, nbJoursPresenceExcept: this.nbJoursPresenceExcept, coutTotalJoursExceptionnels: this.coutTotalJoursExceptionnels, salaireNet: this.salaireNet, congePaye10: this.congePaye10, indemEntretien: this.indemEntretien, montant: this.montant }
     try {
@@ -217,7 +232,7 @@ export default {
     } catch (e) {
       console.log(e)
     }
-  }
+  }*/
 }
 </script>
 

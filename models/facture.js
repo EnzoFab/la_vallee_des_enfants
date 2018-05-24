@@ -108,20 +108,20 @@ let Facture = {
                     contrats: null,
                     statut: null
                 };
-                let e = helper.handleError(err, rslt,'Aucune facture');
+                let e = helper.handleError(err, rslt,'Aucune facture')
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    retour.id_facture = rslt.rows[0].id_facture,
-                    retour.date_debut = rslt.rows[0].date_debut,
-                    retour.date_fin = rslt.rows[0].date_fin,
-                    retour.nb_jours_activite = rslt.rows[0].nb_jours_activite,
-                    retour.nb_heures_normales = rslt.rows[0].nb_heures_normales,
-                    retour.nb_heures_supp = rslt.rows[0].nb_heures_supp,
-                    retour.nb_jours_conges_payes = rslt.rows[0].nb_heures_supp,
-                    retour.mois = rslt.rows[0].mois,
-                    retour.annee = rslt.rows[0].annee,
-                    retour.nb_heures_majorees = rslt.rows[0].nb_heures_majorees,
+                    retour.id_facture = rslt.rows[0].id_facture
+                    retour.date_debut = rslt.rows[0].date_debut
+                    retour.date_fin = rslt.rows[0].date_fin
+                    retour.nb_jours_activite = rslt.rows[0].nb_jours_activite
+                    retour.nb_heures_normales = rslt.rows[0].nb_heures_normales
+                    retour.nb_heures_supp = rslt.rows[0].nb_heures_supp
+                    retour.nb_jours_conges_payes = rslt.rows[0].nb_jours_conges_payes
+                    retour.mois = rslt.rows[0].mois
+                    retour.annee = rslt.rows[0].annee
+                    retour.nb_heures_majorees = rslt.rows[0].nb_heures_majorees
                     retour.id_contrat = rslt.rows[0].id_contrat
                     }
                     retour.statut = 200
