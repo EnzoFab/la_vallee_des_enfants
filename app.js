@@ -111,7 +111,7 @@ var chat = io
         chat.emit('message', {
             everyone: 'in'
             , '/post': 'will get'
-        });
+        }); */
     });
 
 
