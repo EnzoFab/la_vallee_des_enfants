@@ -80,7 +80,6 @@ export default {
   },
   methods: {
     logout () {
-      console.log('logout')
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('removeAssMat')
       this.$router.push({

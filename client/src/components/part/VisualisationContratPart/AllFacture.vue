@@ -75,12 +75,24 @@ export default {
       })
     },
     async loadFacture () {
+      let vm = this
+      FactureService.getAllByIdContrat(this.$route.params.numC).then(function (rslt) {
+        if(rslt.data.erreur == null){
+          vm.factures = response.data.factures
+        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+      /*
       try {
         let response = await FactureService.getAllByIdContrat(this.$route.params.numC)
-        this.factures = response.data.factures
+        if (response.data.erreur == null) {
+          this.factures = response.data.factures
+        }
       } catch (e) {
         console.log(e)
       }
+      */
     },
     changeFactureSelectionne (facture) {
       this.factureSelectionne = facture

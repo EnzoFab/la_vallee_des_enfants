@@ -98,7 +98,6 @@ export default {
   methods: {
     computedNbSemaine (val) {
       this.nombreSemaine = val
-      console.log(this.nombreSemaine)
       if (this.nombreSemaine == null) {
         return 0
       } else {

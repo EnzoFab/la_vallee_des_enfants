@@ -211,7 +211,6 @@ export default {
         this.numeroPolice = response.data.assmat.num_police
         this.nombreSemaineConges = response.data.assmat.nb_semaines_conges
       } catch (e) {
-        console.log('erreur')
         console.log(e)
         this.triggerErreur('Une erreur est survenue')
       }

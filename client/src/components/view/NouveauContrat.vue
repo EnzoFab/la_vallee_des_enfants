@@ -128,7 +128,6 @@ export default {
   },
   methods: {
     submitEnfant (data) {
-      console.log(this.$store.state.assMat)
       this.enfant = data
       this.estValideEtape2 = true
       this.etape++
@@ -151,7 +150,6 @@ export default {
     },
     submitEmp (data) {
       this.employeur = data
-      console.log(data)
       this.congeEmployeur = data.congesSupp
       this.estValideEtape4 = true
       this.etape++
@@ -165,7 +163,6 @@ export default {
 
       this.presenceTheorique = data
       this.heureSemaine = data.nbHeureSemaine
-      console.log(this.heureSemaine, '  ', this.congeEmployeur, '  ', this.congeAssmat)
       this.etape++
       this.estValideEtape6 = true
     },
@@ -209,7 +206,6 @@ export default {
       try {
         let response = await EnfantService.findOneByContratID(this.numContrat)// on regarde si l'enfant existe deja
         if (response.data.statut === 200) { // il existe un enfant on le mets à jour
-          console.log(data)
           let result = await EnfantService.updateEnfant(
             response.data.enfant.id,
             data)
@@ -231,7 +227,7 @@ export default {
             let updateContrat = await ContratService.updateEnfant(
               this.numContrat, {id_enfant: enfantR.data.id_enfant}
             ) // liaison entre le contrat et l'enfant
-            console.log(updateContrat.data)
+
             if (updateContrat.data.erreur == null) {
               this.idEnfant = enfantR.data.id_enfant
               return true
@@ -252,11 +248,9 @@ export default {
       }
     },
     async saveTuteurs (data) {
-      console.log(data)
       var estValide = true
       let tuteurs = data.tuteurs
       for (var i = 0; i < tuteurs.length; i++) {
-        console.log(tuteurs[i])
         try {
           if (tuteurs[i].tuteurExistant) {
             let res = await TuteurService.lierTuteurEnfant({
@@ -295,7 +289,6 @@ export default {
                     identifiant_connexion: login.replace(/\s/g, '').toLowerCase(), // login sans espaces et en minuscule
                     mot_de_passe: generator.generate({length: 10, numbers: true}) // mot de passe de taille 10
                   }
-                  console.log('=======', donneeEmployeur)
                   if (!this.saveEmployeurIntermediare(donneeEmployeur)) {
                     estValide = false
                   }
@@ -347,7 +340,6 @@ export default {
       return this.saveEmployeurIntermediare(donneeEmployeur)
     },
     async saveInformationGenerale (data) {
-      console.log(data)
       let donnees = {
         id_type_contrat: data.typeContrat,
         id_mode_de_paiement: data.modePaiement,
@@ -371,8 +363,6 @@ export default {
       }
     },
     async savePresence (data) {
-      console.log(this.etape)
-      console.log(data)
       let erreur = false
       for (var i = 0; i < data.presences.length; i++) {
         let presence = data.presences[i]
@@ -408,7 +398,6 @@ export default {
       }
     },
     async saveTarif (data) {
-      console.log(data)
       try {
         let reponse = await ContratService.updateTarif(this.numContrat,
           {
