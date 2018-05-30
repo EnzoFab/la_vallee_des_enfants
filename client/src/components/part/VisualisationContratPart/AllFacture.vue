@@ -12,7 +12,7 @@
         </v-container>
       </v-layout>
       <v-layout>
-        <v-container grid-list-md text-xs-center>
+        <v-container grid-list-md text-xs-center v-if="factures.length > 0">
           <v-layout row wrap>
             <v-flex d-flex
                     md3 lg3 xl4 sm12 xs12
@@ -25,30 +25,33 @@
                 <v-flex>
                   <v-divider></v-divider>
                   <v-flex mt-2>
-                    <h4>{{ facture.mois }} {{ facture.annee }}</h4>
+                    <h4>{{ moisFr(facture.mois)}} {{ facture.annee }}</h4>
                   </v-flex>
                 </v-flex>
               </v-card>
              <!-- </v-card> !-->
             </v-flex>
-            <OneFacture :facture="factureSelectionne" v-if="factureSelectionne != null" @retour="fonctionRetour"></OneFacture>
+            <Facture :facture="factureSelectionne" v-if="factureSelectionne != null" @retour="fonctionRetour"></Facture>
           </v-layout>
+        </v-container>
+        <v-container>
+          <v-flex>
+            Aucune factures disponibles
+          </v-flex>
         </v-container>
       </v-layout>
     </v-container>
-    <v-btn class="light-blue white--text" @click="nouvelleFacture" v-if="isAssMatConnected && factureSelectionne == null">
-      Nouvelle facture
-    </v-btn>
   </v-flex>
 </template>
 
 <script>
 import FactureService from '../../../services/FactureService'
-import OneFacture from '../VisualisationContratPart/OneFacture'
-var randomstring = require('randomstring')
+import Facture from '../VisualisationContratPart/Facture'
+const randomstring = require('randomstring')
+const mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'AllContrat',
-  components: {OneFacture},
+  components: {Facture},
   data () {
     return {
       factures: [],
@@ -65,6 +68,9 @@ export default {
         name: 'NouvelleFacture'
       })
     },
+    moisFr (i) {
+      return mois[i]
+    },
     storeRandomString () {
       let random = randomstring.generate(35) // chaine de charactere aleatoire de taille 15
       this.$store.dispatch('setNumContrat', random)
@@ -74,11 +80,12 @@ export default {
         name: 'Accueil'
       })
     },
-    async loadFacture () {
+    loadFacture () {
       let vm = this
       FactureService.getAllByIdContrat(this.$route.params.numC).then(function (rslt) {
         if(rslt.data.erreur == null){
-          vm.factures = response.data.factures
+          vm.factures = rslt.data.factures
+          console.log('FACTURES', vm.factures)
         }
       }).catch(function (err) {
         console.log(err)

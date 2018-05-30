@@ -556,19 +556,26 @@
       }
     },
     methods: {
-
-      initialiserDonnees () {
-        console.log('joihi   ', this.facture.idContrat)
+      initialiserDonnees () { // inutile
         this.factureAAfficher.idContrat = this.facture.idContrat
         this.factureAAfficher.mois = this.facture.mois
         this.factureAAfficher.annee = this.facture.annee
-        console.log('zertyfg   ', this.factureAAfficher.idContrat)
       },
 
-      async initHeuresMaj () {
-        let r0 = await FactureService.getDonneesFactureDuMois(this.factureAAfficher.idContrat, this.factureAAfficher.mois, this.factureAAfficher.annee)
-        this.nbHeuresMajo = r0.data.nb_heures_majorees
-        this.facture.nombreHeuresMajorees = this.nbHeuresMajo
+      initHeuresMaj () {
+        let vm = this
+        FactureService.getDonneesFactureDuMois(this.facture.idContrat, this.facture.mois,this.facture.annee)
+          .then(function (rst) {
+            if (rst.data.erreur == null) {
+              console.log('=======================e=== ', rst.data)
+              vm.nbHeuresMajo = rst.data.nb_heures_majorees // n'existe pas
+              vm.facture.nombreHeuresMajorees = vm.nbHeuresMajo
+              console.log('=======', vm.facture)
+            }
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
       },
 
       async initInfosBasiquesDeLaFacture () {
@@ -576,7 +583,6 @@
           console.log('initiale  :    ' + Object.values(this.factureAAfficher))
           let r = await genererFacture.generationFacture(this.factureAAfficher)
           this.factureAAfficher = r
-          console.log('youpi')
           console.log('lalalala ', this.factureAAfficher)
         } catch (e) {
           console.log(e)
@@ -596,6 +602,7 @@
       console.log(this.facture.mois)
       this.initHeuresMaj()
       this.initInfosBasiquesDeLaFacture()
+      console.log('FACTURE', this.factureAAfficher)
     },
     /* ,
     async exportPDF () {
@@ -623,7 +630,6 @@
       } catch (e) {
         console.log(e)
       }
-
     }
   }
 </script>

@@ -2,6 +2,38 @@ let db = require('../config/db');
 let helper = require('../helpers/helper');
 
 let Contrat = {
+    findOne: function (numContrat, callback) {
+        db.query('SELECT * FROM public.contrat WHERE id_contrat = $1',
+            [numContrat], function (err, rslt) {
+                retour = {
+                    erreur: null,
+                    contrat: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucun contrats');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    retour.contrat = {
+                        id: rslt.rows[0].id_contrat,
+                        dateDebut: rslt.rows[0].date_debut,
+                        nbSemainesCongesParent: rslt.rows[0].nb_semaines_conges_parents,
+                        tarif: rslt.rows[0].tarif,
+                        nbHeuresSemaine: rslt.rows[0].nb_heures_semaine,
+                        taux: rslt.rows[0].taux_majore,
+                        dateDebAdapt: rslt.rows[0].date_deb_periode_adaptation,
+                        dateFinAdapt: rslt.rows[0].date_fin_periode_adaptation,
+                        jourPaiement: rslt.rows[0].jour_paiement,
+                        nomEnfant: rslt.rows[0].nom_enfant,
+                        prenomEnfant: rslt.rows[0].prenom_enfant,
+                        sexeEnfant: rslt.rows[0].sexe,
+                        date_fin : rslt.rows[0].date_fin
+                    }
+                    retour.statut = 200
+                }
+                callback(retour);
+            });
+    },
 
     getAllEnCours: function (callback) {
         db.query(
@@ -376,7 +408,55 @@ let Contrat = {
                 }
                 callback(retour);
             });
+    },
+
+    informationFacture (numContrat, callback) {
+        db.query('SELECT C.nb_semaines_conges_parents, C.nb_heures_semaine, A.nb_semaines_conges\n' +
+            ', C.tarif, F.tarif as tarif_gouter, F1.tarif as tarif_entretien,\n' +
+            'Count(P.id_presence_theorique) as jour_semaine, SUM(P.heure_depart - P.heure_arrivee) as heure_semaine\n' +
+            'FROM public.contrat C, public.assmat A, public.presencetheorique P, public.frais F, public.frais F1\n' +
+            'WHERE C.id_contrat = $1 and C.id_am = A.id_am AND C.id_contrat = P.id_contrat AND P.heure_arrivee is not null\n' +
+            'AND F.nom_frais = $2 AND F1.nom_frais = $3 \n' +
+            'GROUP BY C.nb_semaines_conges_parents, C.nb_heures_semaine, A.nb_semaines_conges, C.tarif, F.tarif, F1.tarif',
+            [numContrat,'gouter' , 'entretien'],
+            function (err, rslt) {
+                retour = {
+                    erreur: null,
+                    resultat: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucune information');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    retour.resultat = rslt.rows[0]
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
+    },
+
+    informationContrat (numContrat, callback) {
+        db.query('SELECT * FROM public.contrat C, public.enfant E, public.employeur Emp\n' +
+            'WHERE C.id_contrat = $1 and C.id_enfant = E.id_enfant AND C.id_employeur = Emp.id_employeur',
+            [numContrat],
+            function (err, rslt) {
+                retour = {
+                    erreur: null,
+                    resultat: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, rslt,'Aucune information');
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    retour.resultat = rslt.rows[0]
+                    retour.statut = 200
+                }
+                callback(retour)
+            })
     }
+
 }
 
 module.exports = Contrat;

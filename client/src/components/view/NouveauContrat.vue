@@ -45,7 +45,7 @@
             <EmployeurOptionnel @back="back" @submit="submitEmp"></EmployeurOptionnel>
           </v-stepper-content>
           <v-stepper-content step="5">
-            <InformationGenerale nom="" @back="back" @submit="submitInfoG"></InformationGenerale>
+            <InformationGenerale nom="" @back="backInfoG" @submit="submitInfoG"></InformationGenerale>
           </v-stepper-content>
           <v-stepper-content step="6">
             <PresenceTheorique @back="back" @submit="submitPresences"></PresenceTheorique>
@@ -79,6 +79,7 @@ import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
 import MailHelper from '../../helper/sendMail'
 import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
+import FactureService from "../../services/FactureService";
 
 const generator = require('generate-password') // module pour generer un mot de passe aleatoire
 const randomstring = require('randomstring')
@@ -103,6 +104,7 @@ export default {
       enfant: null,
       presenceTheorique: null,
       tuteurs: null,
+      asEmployeur: false,
       informationGenerale: null,
       tarif: null,
       employeur: null,
@@ -136,6 +138,7 @@ export default {
       this.tuteurs = data
       this.estValideEtape3 = true
       if (data.asEmployeur) {
+        this.asEmployeur = true
         let vm = this
         data.tuteurs.forEach(function (tuteur) {
           if (tuteur.infoDemandeur) {
@@ -145,7 +148,15 @@ export default {
 
         this.etape = 5
       } else {
+        this.asEmployeur = false
         this.etape = 4
+      }
+    },
+    backInfoG () {
+      if (this.asEmployeur) {
+        this.etape -= 2 // permet d'éviter de tomber sur la page employeur si un tuteur est employeur
+      } else {
+        this.etape--
       }
     },
     submitEmp (data) {
@@ -160,7 +171,6 @@ export default {
       this.estValideEtape5 = true
     },
     submitPresences (data) {
-
       this.presenceTheorique = data
       this.heureSemaine = data.nbHeureSemaine
       this.etape++
@@ -180,6 +190,11 @@ export default {
           this.saveTarif(this.tarif)) {
           this.triggerSnackBar('Contrat créé avec succès', 'success')
           this.showProgress = false
+          FactureService.initFacture({numContrat: this.numContrat})
+            .then(function () {})
+            .catch(function (e) {
+              console.log(e)
+            })
           this.$router.push({
             path: '/contrat/' + this.numContrat}
           )
@@ -192,6 +207,11 @@ export default {
           this.saveTarif(this.tarif)) {
           this.triggerSnackBar('Contrat créé avec succès', 'success')
           this.showProgress = false
+          FactureService.initFacture({numContrat: this.numContrat})
+            .then(function () {})
+            .catch(function (e) {
+              console.log(e)
+            })
           this.$router.push({
             path: '/contrat/' + this.numContrat}
           )
@@ -199,7 +219,6 @@ export default {
           this.showProgress = false
         }
       }
-
     },
     async saveEnfant (data) {
       // console.log(this.$store.state.assMat.id_assmat)

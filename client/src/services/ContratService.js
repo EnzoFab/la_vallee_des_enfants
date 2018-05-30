@@ -32,6 +32,14 @@ export default {
     return Api().get('/contrat/getPresences/' + numContrat)
   },
 
+  getInformationFacture (numContrat) {
+    return Api().get('/contrat/informationFacture/' + numContrat)
+  },
+
+  getInformationContrat (numContrat) {
+    return Api().get('/contrat/informationContrat/' + numContrat)
+  },
+
   /* ------------------------------------------ POST ------------------------------------------------------ */
 
   create (data) {

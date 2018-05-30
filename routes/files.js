@@ -6,9 +6,9 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
 cloudinary.config({
-    cloud_name:'lavalleedesenfants', //process.env.CLOUD_NAME,
-    api_key: '337826874111464', // process.env.CLOUD_API_KEY,
-    api_secret: 'KUugFmibndrnnhONBLvCZddiwM8'// process.env.CLOUD_API_SECRET
+    cloud_name: process.env.CLOUD_NAME, //process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY, // process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET // process.env.CLOUD_API_SECRET
 });
 
 

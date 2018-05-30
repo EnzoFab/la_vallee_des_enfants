@@ -318,7 +318,6 @@
 </template>
 
 <script>
-
 import ContratService from '../../../services/ContratService'
 import EmployeurService from '../../../services/EmployeurService'
 import TuteurService from '../../../services/TuteurService'

@@ -11,6 +11,6 @@ export default {
   },
 
   aronndiA05 (nombre) {
-    var y = Math.round(2 * nombre) / 2;
+    var y = Math.round(2 * nombre) / 2
   }
 }

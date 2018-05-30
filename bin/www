@@ -3,7 +3,6 @@
 /**
  * Module dependencies.
  */
-
 var app = require('../app').app;
 var debug = require('debug')('la vallee des enfants:server');
 var http = require('http');
@@ -26,11 +25,12 @@ app.set('port', port);
 //var server = http.createServer(app); before
 var server = require('../app').server;
 
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, factureAuto);
 
 
 
@@ -95,4 +95,39 @@ function onListening() {
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
+}
+
+/**
+ * Pour chaque contrat non cloturé redémarre la création automatique
+ */
+function factureAuto() {
+    let schedule = require('node-schedule');
+    let modelContrat = require('../models/contrat');
+    let modelFacture = require('../models/facture');
+    modelContrat.getAllEnCours(function (retour) {
+        if (retour.erreur == null) {
+            retour.contrats.forEach(function (contrat) {
+                console.log(contrat)
+                schedule.scheduleJob('0 0 1 * *', function(){ // tous les premiers du mois a minuit
+                    // TODO verifier que le contrat existe et qu'il n'est pas cloturé
+                    modelContrat.findOne(contrat.id, function (retour) {
+                        if (retour.erreur == null && retour.contrat.date_fin == null) {
+                            let d = new Date()
+                            let facture = {
+                                mois: d.getMonth(),
+                                annee: d.getFullYear(),
+                                id_contrat: numContrat
+                            }
+                            modelFacture.create(facture, function (retour) {
+                                console.log(retour)
+                            })
+                        } else {
+                            this.cancel()
+                        }
+                    })
+
+                });
+            })
+        }
+    })
 }

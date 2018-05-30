@@ -59,7 +59,7 @@ let Facture = {
     // Création d'une facture
     create: function (facture, callback) {
         db.query('INSERT INTO public.facturemensuelle(mois, annee, id_contrat, nb_jours_conges_payes) VALUES ($1, $2, $3, $4)',
-            [facture.mois, facture.annee, facture.id_contrat, 2.5],
+            [facture.mois, facture.annee, facture.id_contrat, 2],
             function (e) {
                 retour = {
                     erreur : null
@@ -105,24 +105,24 @@ let Facture = {
             function (err, rslt){
                 retour = {
                     erreur: null,
-                    contrats: null,
+                    facture: null,
                     statut: null
                 };
                 let e = helper.handleError(err, rslt,'Aucune facture')
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    retour.id_facture = rslt.rows[0].id_facture
-                    retour.date_debut = rslt.rows[0].date_debut
-                    retour.date_fin = rslt.rows[0].date_fin
-                    retour.nb_jours_activite = rslt.rows[0].nb_jours_activite
-                    retour.nb_heures_normales = rslt.rows[0].nb_heures_normales
-                    retour.nb_heures_supp = rslt.rows[0].nb_heures_supp
-                    retour.nb_jours_conges_payes = rslt.rows[0].nb_jours_conges_payes
-                    retour.mois = rslt.rows[0].mois
-                    retour.annee = rslt.rows[0].annee
-                    retour.nb_heures_majorees = rslt.rows[0].nb_heures_majorees
-                    retour.id_contrat = rslt.rows[0].id_contrat
+                    retour.facture.id_facture = rslt.rows[0].id_facture
+                    retour.facture.date_debut = rslt.rows[0].date_debut
+                    retour.facture.date_fin = rslt.rows[0].date_fin
+                    retour.facture.nb_jours_activite = rslt.rows[0].nb_jours_activite
+                    retour.facture.nb_heures_normales = rslt.rows[0].nb_heures_normales
+                    retour.facture.nb_heures_supp = rslt.rows[0].nb_heures_supp
+                    retour.facture.nb_jours_conges_payes = rslt.rows[0].nb_jours_conges_payes
+                    retour.facture.mois = rslt.rows[0].mois
+                    retour.facture.annee = rslt.rows[0].annee
+                    retour.facture.nb_heures_majorees = rslt.rows[0].nb_heures_majorees
+                    retour.facture.id_contrat = rslt.rows[0].id_contrat
                     }
                     retour.statut = 200
                 })
@@ -154,11 +154,11 @@ let Facture = {
         )
     },
 
-
     getAllByIdContrat: function (numContrat, callback) {
         db.query(
-            'SELECT * FROM public.facturemensuelle WHERE id_contrat = $1' +
-            'ORDER BY annee DESC, mois DESC ',
+            'SELECT * FROM public.facturemensuelle F, public.contrat C\n' +
+            'WHERE F.id_contrat = $1 AND C.id_contrat = F.id_contrat\n' +
+            'ORDER BY F.annee DESC, F.mois DESC ',
             [numContrat],
             function (err, rslt){
                 retour = {
@@ -172,6 +172,11 @@ let Facture = {
                 if(retour.erreur == null){
                     var array = []
                     for(var i = 0; i < rslt.rows.length; i++){
+                        let d = (rslt.rows[i].date_fin_periode_adaptation)
+                        let pendantAdaptation = d >= new Date(rslt.rows[i].annee, rslt.rows[i].mois)
+                        console.log('DATE DAPT',d);
+                        console.log('DATE FACture', new Date(rslt.rows[i].annee, rslt.rows[i].mois+1));
+                            // true si on est dans la periode d'adaption
                         array.push({
                             dateDebut: rslt.rows[i].date_debut,
                             dateFin: rslt.rows[i].date_fin,
@@ -182,7 +187,8 @@ let Facture = {
                             mois: rslt.rows[i].mois,
                             annee: rslt.rows[i].annee,
                             nbHeuresMajorees: rslt.rows[i].nb_heures_majorees,
-                            idContrat: rslt.rows[i].id_contrat
+                            idContrat: rslt.rows[i].id_contrat,
+                            pendantAdaptation: pendantAdaptation
                         });
                     }
                     retour.factures = array;
@@ -192,7 +198,7 @@ let Facture = {
                 // il faudra verifier si une erreur existe ou non
             }
         );
-    },
+    }
 
 }
 

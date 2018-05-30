@@ -1,44 +1,42 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-var fileUpload = require('express-fileupload');
-var helmet = require('helmet');
-var expressJwt = require('express-jwt');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const fileUpload = require('express-fileupload');
+const helmet = require('helmet');
+const expressJwt = require('express-jwt');
 
 
-var app = express();
-var server = require('http').Server(app);
+const app = express();
+const server = require('http').Server(app);
 
-var io = require('socket.io').listen(server); // chargement de socket io qui permet le temps réel
+const io = require('socket.io').listen(server); // chargement de socket io qui permet le temps réel
 
 require('dotenv').config();
 
 /*
 ============================ ROUTERS ========================================
  */
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var EmployeurRouter = require('./routes/employeur');
-var assMatRouter = require('./routes/assmat');
-var evenementRouter = require('./routes/post');
-var modeDePaiement = require('./routes/modeDePaiement');
-var typeDeContrat = require('./routes/typeDeContrat');
-var typeTuteur = require('./routes/typeTuteurs');
-var enfant = require('./routes/enfant');
-var frais = require('./routes/frais');
-var tuteur = require('./routes/tuteur');
-var employeur = require('./routes/employeur');
-var contrat = require('./routes/contrat');
-var presencetheo = require('./routes/presenceTheorique');
-var presencereelle = require('./routes/presenceReelle');
-var post = require('./routes/post');
-var files = require('./routes/files');
-var mail = require('./routes/mail');
-var typejour = require('./routes/typeJour');
-var facture = require('./routes/facture');
+const EmployeurRouter = require('./routes/employeur');
+const assMatRouter = require('./routes/assmat');
+const evenementRouter = require('./routes/post');
+const modeDePaiement = require('./routes/modeDePaiement');
+const typeDeContrat = require('./routes/typeDeContrat');
+const typeTuteur = require('./routes/typeTuteurs');
+const enfant = require('./routes/enfant');
+const frais = require('./routes/frais');
+const tuteur = require('./routes/tuteur');
+const employeur = require('./routes/employeur');
+const contrat = require('./routes/contrat');
+const presencetheo = require('./routes/presenceTheorique');
+const presencereelle = require('./routes/presenceReelle');
+const post = require('./routes/post');
+const files = require('./routes/files');
+const mail = require('./routes/mail');
+const typejour = require('./routes/typeJour');
+const facture = require('./routes/facture');
 
 
 // use it before all view definitions
@@ -52,7 +50,8 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(__dirname + '/public'));
 app.use(fileUpload());
 
-const unlessPath = ['/api/employeurs/login', '/api/assmats/login', '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
+const unlessPath = ['/api/employeurs/login', '/api/assmats/login',
+    '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
 app.use('/api/',expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
 
 /* ======================  ROUTES ================================================ */
@@ -89,7 +88,7 @@ app.use('/api/factures', facture)
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
-var chat = io
+const chat = io
     .of('/api/post')
     .on('connection', function (socket) {
         console.log('Nouveau client')

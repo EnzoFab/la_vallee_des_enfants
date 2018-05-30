@@ -10,6 +10,30 @@ router.get('/allEnCours', function (req, res, next) {
     });
 });
 
+router.get('/informationFacture/:n', function (req, res) {
+    let numContrat = req.params.n
+    modelContrat.informationFacture(numContrat, function (retour) {
+        console.log(retour)
+        res.send(retour)
+    })
+});
+
+router.get('/informationContrat/:n', function (req, res) {
+    let numContrat = req.params.n;
+    modelContrat.informationContrat(numContrat, function (retour) {
+        res.send(retour)
+    });
+})
+
+/* router.get('/allPresenceMonth/:n', function (req, res) {
+    let numContrat = req.params.n
+    let mois = req.query.mois
+    let annee = req.query.annee
+    modelContrat.getAllPresenceMois(numContrat, mois, annee, function (retour) {
+        res.send(retour)
+    })
+}) */
+
 router.get('/allTermines', function (req, res, next) {
     modelContrat.getAllTermines(function (retour) {
         res.send(retour);

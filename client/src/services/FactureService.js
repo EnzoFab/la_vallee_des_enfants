@@ -26,6 +26,10 @@ export default {
     return Api().post('/factures/create', data)
   },
 
+  initFacture (data) {
+    return Api().post('/factures/initFacture', data)
+  },
+
   /* ------------------------------------------ PUT ------------------------------------------------------ */
 
   updateInfosFacture (data) {
