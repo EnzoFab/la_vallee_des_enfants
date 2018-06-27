@@ -26,5 +26,9 @@ export default {
 
   deleteImg (imageUrl) {
     return Api().delete('/files/image/' + imageUrl)
+  },
+
+  createPDF (data) {
+    return Api().post('/pdf/create', data)
   }
 }

@@ -1,13 +1,14 @@
 <template>
   <v-flex v-if="load" xs12>
     <v-flex xs12>
-      <h1 class="orange--text text--darken-1 mr-1">{{moisFr}} {{facture.annee}}</h1>
+      <h1 class="orange--text text--darken-1 mr-1">{{facture.mois_fr.toUpperCase()}} {{facture.annee}}</h1>
       <v-btn color="blue darken-2" flat large dark @click.native="$emit('retour')">
         <v-icon dark left large>arrow_back</v-icon>Retour
       </v-btn>
+      <v-btn large depressed color="blue" dark @click="facturePDF">Télécharger facture</v-btn>
     </v-flex>
-    <v-container fluid grid-list-md>
-      <v-layout row wrap>
+    <v-container fluid grid-list-md >
+      <v-layout row wrap >
         <v-flex xs12>
           <v-expansion-panel popout>
             <v-expansion-panel-content class="blue lighten-5" v-if="infoContrat != null">
@@ -91,7 +92,7 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-flex>
-        <v-flex xs12>
+        <v-flex xs12 id="facture">
           <v-list>
             <v-list-tile v-for="(fact,i) in champsFacture" :key="i">
               <v-list-tile-content :class="fact.color">
@@ -121,9 +122,33 @@ import FonctionMath from '../../../helper/FonctionMath'
 import ContratService from '../../../services/ContratService'
 import moment from 'moment'
 import 'moment/locale/fr'
-import PresenceService from "../../../services/PresenceService";
+import PresenceService from '../../../services/PresenceService'
+// import jsPDF from 'jspdf'
+import * as jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+import * as rasterizeHTML from 'rasterizehtml';
+const $ = window.jQuery = require('jquery')
 moment.locale('fr')
-const mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
+window.html2canvas = html2canvas
+window.rasterizeHTML = rasterizeHTML
+
+function startPrintProcess(canvasObj, fileName, callback) {
+  let pdf = new jsPDF('l', 'pt', 'a4'),
+    pdfConf = {
+      pagesplit: false,
+      background: '#fff'
+    };
+  document.body.appendChild(canvasObj); //appendChild is required for html to add page in pdf
+  pdf.addHTML(canvasObj.text(), 0, 0, pdfConf).then(function() {
+    document.body.removeChild(canvasObj);
+    pdf.addPage();
+    setTimeout(function(){
+      pdf.save(fileName + '.pdf');
+    },2000)
+    callback();
+  });
+}
+
 export default {
   name: 'Facture',
   props: {
@@ -157,7 +182,6 @@ export default {
         .then(function (r) {
           if (r.data.erreur == null) {
             vm.presenceDumois = r.data.presencesreelles
-            console.log(r.data.presencesreelles)
           }
         })
         .catch(function (e) {
@@ -170,7 +194,6 @@ export default {
         .then(function (r) {
           if (r.data.erreur == null) {
             vm.factureAAfficher = r.data.resultat
-            console.log(vm.factureAAfficher)
             vm.load = true
           }
         })
@@ -210,6 +233,24 @@ export default {
       } else {
         return 'Présent'
       }
+    },
+    facturePDF () {
+      console.log($('#facture').get(0))
+      html2canvas($('#facture').get(0).hmtl).then(function (canvas) {
+        let pdf = new jsPDF('p', 'pt', 'a4');
+        pdf.addHTML(canvas, function () {
+          pdf.save('facture.pdf')
+        });
+      })
+      /*html2canvas(document.getElementById('facture'), {
+      }).then(function(canvasObj) {
+        startPrintProcess(canvasObj, 'printedPDF',function (){
+          alert('PDF saved');
+        });
+        //save this object to the pdf
+      }); */
+
+
     }
   },
   mounted () {
@@ -218,9 +259,6 @@ export default {
     this.loadPresenceDuMois()
   },
   computed: {
-    moisFr () {
-      return mois[this.facture.mois].toUpperCase()
-    },
     dateAnniversaireFr () {
       let date = this.infoContrat.date_naissance_enfant
       return moment(date).format('LL') // dateFr

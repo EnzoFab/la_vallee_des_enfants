@@ -37,6 +37,7 @@ const files = require('./routes/files');
 const mail = require('./routes/mail');
 const typejour = require('./routes/typeJour');
 const facture = require('./routes/facture');
+const pdfCreator = require('./routes/pdf_generator');
 
 
 // use it before all view definitions
@@ -51,7 +52,7 @@ app.use('/static', express.static(__dirname + '/public'));
 app.use(fileUpload());
 
 const unlessPath = ['/api/employeurs/login', '/api/assmats/login',
-    '/api/posts/all', '/api/posts/', '/api/assmats/register', '/favicon.ico']
+    '/api/posts/all', '/api/posts/', '/api/assmats/register', '/api/pdf/create' ,'/favicon.ico']
 app.use('/api/',expressJwt({ secret: process.env.JWT_SECRET }).unless({ path: unlessPath}));
 
 /* ======================  ROUTES ================================================ */
@@ -70,17 +71,18 @@ app.use('/api/presencetheo', presencetheo);
 app.use('/api/posts', post);
 app.use('/api/files', files);
 app.use('/api/mail', mail);
-app.use('/api/typeJour', typejour)
+app.use('/api/typeJour', typejour);
 app.use('/api/employeurs', employeur);
 app.use('/api/contrat', contrat);
 app.use('/api/presencetheo', presencetheo);
 app.use('/api/presencereelle', presencereelle);
-app.use('/api/employeurs', employeur)
-app.use('/api/contrat', contrat),
-app.use('/api/presencetheo', presencetheo),
-app.use('/api/posts', post)
-app.use('/api/files', files)
-app.use('/api/factures', facture)
+app.use('/api/employeurs', employeur);
+app.use('/api/contrat', contrat);
+app.use('/api/presencetheo', presencetheo);
+app.use('/api/posts', post);
+app.use('/api/files', files);
+app.use('/api/factures', facture);
+app.use('/api/pdf', pdfCreator);
 
 
 // verifie le token dans le header sauf pour les routes dans unless
@@ -99,18 +101,6 @@ const chat = io
         socket.on('suppressionPost', function (data){
             socket.broadcast.emit('suppressionPost', data)
         })
-        /*socket.on('post', function (val) {
-            console.log(val)
-            this.emit('nouveauPost', {msg: 'Contrat'})
-        })
-        socket.emit('message', {
-            that: 'only'
-            , '/post': 'will get'
-        });
-        chat.emit('message', {
-            everyone: 'in'
-            , '/post': 'will get'
-        }); */
     });
 
 // catch 404 and forward to error handler

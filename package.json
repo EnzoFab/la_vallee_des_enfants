@@ -22,6 +22,7 @@
     "fs": "0.0.1-security",
     "gmail-send": "^1.2.14",
     "helmet": "^3.12.0",
+    "html-pdf": "^2.2.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "joi": "^13.2.0",
@@ -33,7 +34,8 @@
     "nodemailer": "^4.6.4",
     "pg": "^7.4.1",
     "socket.io": "^2.1.0",
-    "socketio-jwt": "^4.5.0"
+    "socketio-jwt": "^4.5.0",
+    "wkhtmltopdf": "^0.3.4"
   },
   "engines": {
     "node": "8.11.1"

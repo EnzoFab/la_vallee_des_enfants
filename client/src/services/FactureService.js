@@ -3,6 +3,9 @@ import Api from './Api'
 export default {
 
   /* ------------------------------------------ GET ------------------------------------------------------ */
+  factureExistante (idContrat, mois, annee) {
+    return Api().get(`/factures/existe?numcontrat=${idContrat}&mois=${mois}&annee=${annee}`)
+  },
 
   getInfosBasics (idcontrat) {
     return Api().get('/factures/basics/' + idcontrat)
@@ -10,10 +13,6 @@ export default {
 
   getDonneesFactureDuMois (idContrat, numMois, annee) {
     return Api().get('/factures/infos/' + idContrat + '/' + annee + '/' + numMois)
-  },
-
-  getExisteFacture (idContrat, annee, mois) {
-    return Api().get('/factures/existe/' + idContrat + '/' + annee + '/' + mois)
   },
 
   getAllByIdContrat (numContrat) {

@@ -4,6 +4,15 @@ const modelFacture = require('../models/facture');
 const modelContrat = require('../models/contrat')
 const schedule = require('node-schedule');
 /* --------------------------------------- ROUTES GET ----------------------------------------------------------- */
+router.get('/existe', function (req, res, next) {
+    let numC = req.query.numcontrat
+    let annee = req.query.annee
+    let mois = req.query.mois
+    modelFacture.existeFacture(numC, mois, annee, function (retour) {
+        console.log(retour)
+        res.send(retour);
+    });
+});
 
 router.get('/all/:numC', function (req, res, next) {
     let numContrat = req.params.numC
@@ -20,14 +29,6 @@ router.get('/basics/:numC', function (req, res, next) {
     });
 });
 
-router.get('/existe/:numC/:annee/:mois', function (req, res, next) {
-    let numC = req.params.numC
-    let annee = req.params.annee
-    let mois = req.params.mois
-    modelFacture.existeFacture(numC, mois, annee, function (retour) {
-        res.send(retour);
-    });
-});
 
 router.get('/infos/:numC/:annee/:mois', function (req, res, next) {
     let numC = req.params.numC
@@ -42,8 +43,12 @@ router.get('/infos/:numC/:annee/:mois', function (req, res, next) {
 /* --------------------------------------- ROUTES POST --------------------------------------------------------- */
 
 router.post('/create', function (req, res, next) {
-    let facture = req.body.facture
-    modelFacture.create(facture, function (retour) {
+    let mois = req.body.mois
+    let annee = req.body.annee
+    let id_contrat = req.body.id_contrat
+    console.log(mois, annee)
+    modelFacture.create(id_contrat, mois, annee, function (retour) {
+        console.log(retour)
         res.send(retour);
     });
 });

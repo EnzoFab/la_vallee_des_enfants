@@ -57,9 +57,10 @@ let Facture = {
     },
 
     // Création d'une facture
-    create: function (facture, callback) {
-        db.query('INSERT INTO public.facturemensuelle(mois, annee, id_contrat, nb_jours_conges_payes) VALUES ($1, $2, $3, $4)',
-            [facture.mois, facture.annee, facture.id_contrat, 2],
+    create: function (id_contrat, mois, annee, callback) {
+        db.query('INSERT INTO public.facturemensuelle(mois, annee, id_contrat, nb_jours_conges_payes) VALUES ($1, $2, $3, $4)\n' +
+            'returning mois, annee, id_contrat, nb_jours_conges_payes',
+            [mois, annee, id_contrat, 2],
             function (e) {
                 retour = {
                     erreur : null
@@ -76,7 +77,7 @@ let Facture = {
     existeFacture: function (id_contrat, mois, annee, callback) {
         db.query('SELECT id_facture ' +
             'FROM public.facturemensuelle ' +
-            'WHERE mois = $1, annee = $2, id_contrat = $3',
+            'WHERE mois = $1 AND annee = $2 AND id_contrat = $3',
             [mois, annee, id_contrat],
             function (err, rslt) {
                 retour = {

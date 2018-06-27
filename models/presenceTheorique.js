@@ -34,6 +34,120 @@ let presenceTheorique = {
             }
         );
     },
+
+    /**
+     * renvoie tous les enfants qui sont censé être présents aujourd'hui en enlevant ceux qui ont été emargés
+     * @param weekDay :jour de la semaine, est une chaine de caractere
+     * @param callback: callback qui sera executer
+     */
+    getEnfantsDuJour (weekDay, callback) {
+        db.query(
+            'SELECT *\n' +
+            'FROM (\n' +
+                '(SELECT Distinct E.id_enfant\n' + // tous les enfants censés être présents
+                    'FROM public.enfant E, public.contrat C, public.presencetheorique P, public.typejour TJ\n' +
+                    'WHERE E.id_enfant = C.id_enfant AND C.id_contrat = P.id_contrat\n' +
+                        'AND P.id_type_jour = TJ.id_type AND TJ.libelle = $1 AND P.heure_depart is not null\n' +
+                ')\n' +
+                'EXCEPT (SELECT Distinct E2.id_enfant\n' + // tous les enfants qui ont déjà été emargés
+                    'FROM public.enfant E2, public.contrat C2, public.presencetheorique P2,\n' +
+                        'public.presencereelle PR, public.typejour TJ2\n' +
+                    'WHERE E2.id_enfant = C2.id_enfant AND C2.id_contrat = P2.id_contrat\n' +
+                        'AND P2.id_type_jour = TJ2.id_type AND TJ2.libelle = $1\n' +
+                        'AND P2.id_presence_theorique = PR.id_presence_theo AND PR.heure_arrivee_r IS NOT NULL\n' +
+                ')\n' +
+            ') PRESENT, public.enfant Enf, public.contrat C3, public.presencetheorique P3, public.typejour TJ3\n' +
+            'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant AND\n' +
+                'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
+                'AND P3.heure_arrivee is not null',
+            [weekDay],
+            function (err, result) {
+                console.log(weekDay)
+                retour = {
+                    erreur: null,
+                    resultats: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, result, 'Pas de presence prévue')
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if (retour.erreur == null) {
+                    let array = []
+                    for (let i = 0; i < result.rows.length; i++) {
+                        array.push({
+                            sexe: result.rows[i].sexe,
+                            id_contrat: result.rows[i].id_contrat,
+                            id_enfant: result.rows[i].id_enfant,
+                            id_presence_theo: result.rows[i].id_presence_theorique,
+                            nom_enfant: result.rows[i].nom_enfant,
+                            prenom_enfant: result.rows[i].prenom_enfant,
+                            prend_gouter: result.rows[i].prends_gouter,
+                            heure_arrivee: result.rows[i].heure_arrivee,
+                            heure_depart: result.rows[i].heure_depart,
+                            nomComplet: result.rows[i].prenom_enfant + ' ' + result.rows[i].nom_enfant
+                        });
+                    }
+                    retour.resultats = array
+                    retour.statut = 200
+                }
+
+                callback(retour);
+            }
+        )
+    },
+
+    getEnfantsNonPresendDuJour (weekDay, callback) { // TODO ne pas compter les enfants dont le contrat est cloturé
+            db.query(
+                'SELECT *\n' +
+                'FROM (\n' +
+                '(SELECT Distinct E.id_enfant\n' + // tous les enfants pas censés être présents
+                'FROM public.enfant E, public.contrat C, public.presencetheorique P, public.typejour TJ\n' +
+                'WHERE E.id_enfant = C.id_enfant AND C.id_contrat = P.id_contrat\n' +
+                'AND P.id_type_jour = TJ.id_type AND TJ.libelle = $1 AND P.heure_depart is null\n' +
+                ')\n' +
+                'EXCEPT (SELECT Distinct E2.id_enfant\n' + // tous les enfants qui ont déjà été emargés
+                'FROM public.enfant E2, public.contrat C2, public.presencetheorique P2,\n' +
+                'public.presencereelle PR, public.typejour TJ2\n' +
+                'WHERE E2.id_enfant = C2.id_enfant AND C2.id_contrat = P2.id_contrat\n' +
+                'AND P2.id_type_jour = TJ2.id_type AND TJ2.libelle = $1\n' +
+                'AND P2.id_presence_theorique = PR.id_presence_theo AND PR.heure_arrivee_r IS NOT NULL\n' +
+                ')\n' +
+                ') PRESENT, public.enfant Enf, public.contrat C3\n' +
+                'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant',
+                [weekDay],
+                function (err, result) {
+                    console.log(weekDay)
+                    retour = {
+                        erreur: null,
+                        resultats: null,
+                        statut: null
+                    };
+                    let e = helper.handleError(err, result, 'Aucun resultat')
+                    retour.erreur = e.erreur;
+                    retour.statut = e.statut;
+                    if (retour.erreur == null) {
+                        let array = []
+                        for (let i = 0; i < result.rows.length; i++) {
+                            array.push({
+                                sexe: result.rows[i].sexe,
+                                id_contrat: result.rows[i].id_contrat,
+                                id_enfant: result.rows[i].id_enfant,
+                                id_presence_theo: result.rows[i].id_presence_theorique,
+                                nom_enfant: result.rows[i].nom_enfant,
+                                prenom_enfant: result.rows[i].prenom_enfant,
+                                nomComplet: result.rows[i].prenom_enfant + ' ' + result.rows[i].nom_enfant
+                            });
+                        }
+                        retour.resultats = array
+                        retour.statut = 200
+                    }
+
+                    callback(retour);
+                }
+            )
+        },
+
+
     /**
      * Recupère tous les enfants qui doivent être présent aujourd'hui
      * @param numDay

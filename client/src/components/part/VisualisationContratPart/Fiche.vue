@@ -68,7 +68,7 @@
                     <v-icon class="orange--text text--darken-1">event</v-icon>
                     Date de début du contrat :
                   </h4>
-                  <span> {{ dateDebutContrat }} </span>
+                  <span> {{ dateDebutFr }} </span>
                 </v-layout>
 
                 <v-layout pb-2 mt-1>
@@ -318,238 +318,247 @@
 </template>
 
 <script>
-import ContratService from '../../../services/ContratService'
-import EmployeurService from '../../../services/EmployeurService'
-import TuteurService from '../../../services/TuteurService'
-import contratPDF from '../../../helper/contratPDF'
-import { validationMixin } from 'vuelidate'
-import moment from 'moment'
-import 'moment/locale/fr'
-moment.locale('fr')
-export default {
-  mixins: [validationMixin],
-  name: 'Fiche',
-  data () {
-    return {
-      estValide: false,
-      prenomEnfant: null,
-      nomEnfant: null,
-      dateNaissanceEnfant: null,
-      sexeEnfant: null,
-      numeroContrat: this.$route.params.numC,
-      typeContrat: null,
-      modeDePaiementContrat: null,
-      dateDebAdapt: null,
-      dateFinAdapt: null,
-      dateDebutContrat: null,
-      dateFinContrat: null,
-      nb_heures_semaine: null,
-      tarif: null,
-      taux_majore: null,
-      jour_paiement: null,
-      nomUsageAssMat: null,
-      prenomAssMat: null,
-      nomNaissanceAssMat: null,
-      dateNaissanceAssMat: null,
-      villeNaissanceAssMat: null,
-      telephoneAssMat: null,
-      numeroSS: null,
-      dateAgrement: null,
-      referenceAgrement: null,
-      assurance: null,
-      numeroPolice: null,
-      nombreSemaineConges: null,
-      id_employeur: null,
-      nomUsageEmp: null,
-      prenomEmp: null,
-      nomNaissanceEmp: null,
-      rueEmp: null,
-      codePEmp: null,
-      villeEmp: null,
-      telephoneEmp: null,
-      emailEmp: null,
-      identifiantEmp: null,
-      nombreSemSupp: null,
-      dialogBox: false,
-      dialogBox2: false,
-      dialogBoxCloturer: false,
-      dateFinExists: false,
-      parents: [],
-      parentForDialog: null, // parent modifier par le dialog
-      regleRue: [
-        v => !!v || 'Veuillez saisir la rue'
-      ],
-      regleCodeP: [
-        v => !!v || 'Veuillez saisir le code postal',
-        v => /^[1-9]([0-9]{4})$/.test(v) || 'Le code postal n\'est pas valide'
-      ],
-      regleVille: [
-        v => !!v || 'Veuillez saisir la ville'
-      ],
-      regleTel: [
-        v => !!v || 'Veuillez saisir un téléphone',
-        v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
-      ],
-      regleProfession: [
-        v => !!v || 'Veuillez saisir la profession'
-      ],
-      loadingPdf: false,
-      erreur: false,
-      erreurMessage: ''
-    }
-  },
-  mounted () {
-    this.initDonnees()
-    this.initParents()
-  },
-  methods: {
-    async initDonnees () {
-      try {
-        const response = await ContratService.donneesContrat(this.numeroContrat)
-        // this.numeroContrat = this.numeroContrat
-        if (response.data.erreur != null) {
-          this.triggerErreur('Une erreur est survenue')
-        } else {
-          this.modeDePaiementContrat = response.data.modepaiements
-          this.nomEnfant = response.data.nom_enfant
-          this.prenomEnfant = response.data.prenom_enfant
-          this.dateNaissanceEnfant = moment(response.data.date_naissance_enfant).format('LL')
-          if (response.data.sexe === 'F') {
-            this.sexeEnfant = 'Fille'
+  import ContratService from '../../../services/ContratService'
+  import EmployeurService from '../../../services/EmployeurService'
+  import TuteurService from '../../../services/TuteurService'
+  import contratPDF from '../../../helper/contratPDF'
+  import { validationMixin } from 'vuelidate'
+  import moment from 'moment'
+  import 'moment/locale/fr'
+  moment.locale('fr')
+  export default {
+    mixins: [validationMixin],
+    name: 'Fiche',
+    data () {
+      return {
+        estValide: false,
+        prenomEnfant: null,
+        nomEnfant: null,
+        dateNaissanceEnfant: null,
+        sexeEnfant: null,
+        numeroContrat: this.$route.params.numC,
+        typeContrat: null,
+        modeDePaiementContrat: null,
+        dateDebAdapt: null,
+        dateFinAdapt: null,
+        dateDebutContrat: null,
+        dateFinContrat: null,
+        nb_heures_semaine: null,
+        tarif: null,
+        taux_majore: null,
+        jour_paiement: null,
+        nomUsageAssMat: null,
+        prenomAssMat: null,
+        nomNaissanceAssMat: null,
+        dateNaissanceAssMat: null,
+        villeNaissanceAssMat: null,
+        telephoneAssMat: null,
+        numeroSS: null,
+        dateAgrement: null,
+        referenceAgrement: null,
+        assurance: null,
+        numeroPolice: null,
+        nombreSemaineConges: null,
+        id_employeur: null,
+        nomUsageEmp: null,
+        prenomEmp: null,
+        nomNaissanceEmp: null,
+        rueEmp: null,
+        codePEmp: null,
+        villeEmp: null,
+        telephoneEmp: null,
+        emailEmp: null,
+        identifiantEmp: null,
+        nombreSemSupp: null,
+        dialogBox: false,
+        dialogBox2: false,
+        dialogBoxCloturer: false,
+        dateFinExists: false,
+        parents: [],
+        parentForDialog: null, // parent modifier par le dialog
+        regleRue: [
+          v => !!v || 'Veuillez saisir la rue'
+        ],
+        regleCodeP: [
+          v => !!v || 'Veuillez saisir le code postal',
+          v => /^[1-9]([0-9]{4})$/.test(v) || 'Le code postal n\'est pas valide'
+        ],
+        regleVille: [
+          v => !!v || 'Veuillez saisir la ville'
+        ],
+        regleTel: [
+          v => !!v || 'Veuillez saisir un téléphone',
+          v => /^0[1-9]([0-9]{8})$/.test(v) || 'Le numéro n\'est pas valide'
+        ],
+        regleProfession: [
+          v => !!v || 'Veuillez saisir la profession'
+        ],
+        loadingPdf: false,
+        erreur: false,
+        erreurMessage: ''
+      }
+    },
+    mounted () {
+      this.initDonnees()
+      this.initParents()
+    },
+    methods: {
+      async initDonnees () {
+        try {
+          const response = await ContratService.donneesContrat(this.numeroContrat)
+          // this.numeroContrat = this.numeroContrat
+          if (response.data.erreur != null) {
+            this.triggerErreur('Une erreur est survenue')
           } else {
-            this.sexeEnfant = 'Garçon'
+            this.modeDePaiementContrat = response.data.modepaiements
+            this.nomEnfant = response.data.nom_enfant
+            this.prenomEnfant = response.data.prenom_enfant
+            this.dateNaissanceEnfant = moment(response.data.date_naissance_enfant).format('LL')
+            if (response.data.sexe === 'F') {
+              this.sexeEnfant = 'Fille'
+            } else {
+              this.sexeEnfant = 'Garçon'
+            }
+            this.nb_heures_semaine = response.data.nb_heures_semaine
+            this.tarif = response.data.tarif
+            this.taux_majore = response.data.taux_majore
+            this.jour_paiement = response.data.jour_paiement
+            this.typeContrat = response.data.type_contrat
+            this.dateDebAdapt = moment(response.data.date_deb_periode_adaptation).format('L')
+            this.dateFinAdapt = moment(response.data.date_fin_periode_adaptation).format('L')
+            this.dateDebutContrat = response.data.date_debut_contrat
+            if (response.data.date_fin_contrat != null) {
+              this.dateFinContrat = moment(response.data.date_fin_contrat).format('LL')
+              this.dateFinExists = true
+            } else {
+              this.dateFinContrat = 'Aucune, contrat en cours'
+            }
+            this.nomUsageAssMat = response.data.nom_usage_am
+            this.prenomAssMat = response.data.prenom_am
+            this.nomNaissanceAssMat = response.data.nom_naissance_am
+            this.dateNaissanceAssMat = moment(response.data.date_naissance_am).format('LL')
+            this.villeNaissanceAssMat = response.data.ville_naissance_am
+            this.telephoneAssMat = response.data.tel_am
+            this.numeroSS = response.data.numero_ss
+            this.dateAgrement = moment(response.data.date_agrement).format('L')
+            this.referenceAgrement = response.data.reference_agrement
+            this.assurance = response.data.assurance_resp_civile
+            this.numeroPolice = response.data.num_police
+            this.nombreSemaineConges = response.data.nb_semaines_conges
+            this.id_employeur = response.data.id_employeur
+            this.nomUsageEmp = response.data.nom_usage_employeur
+            this.prenomEmp = response.data.prenom_employeur
+            this.nomNaissanceEmp = response.data.nom_naissance_employeur
+            this.rueEmp = response.data.rue_employeur
+            this.codePEmp = response.data.cp_employeur
+            this.villeEmp = response.data.ville_employeur
+            this.telephoneEmp = response.data.telephone_employeur
+            this.emailEmp = response.data.mail_employeur
+            this.identifiantEmp = response.data.identifiant_connexion
+            this.nombreSemSupp = response.data.nb_semaines_conges_parents
           }
-          this.nb_heures_semaine = response.data.nb_heures_semaine
-          this.tarif = response.data.tarif
-          this.taux_majore = response.data.taux_majore
-          this.jour_paiement = response.data.jour_paiement
-          this.typeContrat = response.data.type_contrat
-          this.dateDebAdapt = moment(response.data.date_deb_periode_adaptation).format('L')
-          this.dateFinAdapt = moment(response.data.date_fin_periode_adaptation).format('L')
-          this.dateDebutContrat = moment(response.data.date_debut_contrat).format('LL')
-          if (response.data.date_fin_contrat != null) {
-            this.dateFinContrat = moment(response.data.date_fin_contrat).format('LL')
-            this.dateFinExists = true
+        } catch (e) {
+          console.log(e)
+          this.triggerErreur('Une erreur est survenue')
+        }
+      },
+      async initParents () {
+        try {
+          const response = await ContratService.donneesParents(this.numeroContrat)
+          if (response.data.erreur != null) {
+            this.triggerErreur('Une erreur est survenue')
           } else {
-            this.dateFinContrat = 'Aucune, contrat en cours'
+            this.parents = response.data.tuteurs
           }
-          this.nomUsageAssMat = response.data.nom_usage_am
-          this.prenomAssMat = response.data.prenom_am
-          this.nomNaissanceAssMat = response.data.nom_naissance_am
-          this.dateNaissanceAssMat = moment(response.data.date_naissance_am).format('LL')
-          this.villeNaissanceAssMat = response.data.ville_naissance_am
-          this.telephoneAssMat = response.data.tel_am
-          this.numeroSS = response.data.numero_ss
-          this.dateAgrement = moment(response.data.date_agrement).format('L')
-          this.referenceAgrement = response.data.reference_agrement
-          this.assurance = response.data.assurance_resp_civile
-          this.numeroPolice = response.data.num_police
-          this.nombreSemaineConges = response.data.nb_semaines_conges
-          this.id_employeur = response.data.id_employeur
-          this.nomUsageEmp = response.data.nom_usage_employeur
-          this.prenomEmp = response.data.prenom_employeur
-          this.nomNaissanceEmp = response.data.nom_naissance_employeur
-          this.rueEmp = response.data.rue_employeur
-          this.codePEmp = response.data.cp_employeur
-          this.villeEmp = response.data.ville_employeur
-          this.telephoneEmp = response.data.telephone_employeur
-          this.emailEmp = response.data.mail_employeur
-          this.identifiantEmp = response.data.identifiant_connexion
-          this.nombreSemSupp = response.data.nb_semaines_conges_parents
-        }
-      } catch (e) {
-        console.log(e)
-        this.triggerErreur('Une erreur est survenue')
-      }
-    },
-    async initParents () {
-      try {
-        const response = await ContratService.donneesParents(this.numeroContrat)
-        if (response.data.erreur != null) {
-          this.triggerErreur('Une erreur est survenue')
-        } else {
-          this.parents = response.data.tuteurs
-        }
-      } catch (e) {
-        console.log(e)
-        this.triggerErreur('Une erreur est survenue')
-      }
-    },
-    async enregistrer () {
-      try {
-        let data = {employeur: { rue: this.rueEmp, codePostal: this.codePEmp, ville: this.villeEmp, tel: this.telephoneEmp, id_employeur: this.id_employeur }}
-        let r = await EmployeurService.updateEmp(data)
-        if (r.data.erreur != null) {
+        } catch (e) {
+          console.log(e)
           this.triggerErreur('Une erreur est survenue')
         }
-      } catch (e) {
-        console.log('ERREUR' + e)
-        this.triggerErreur('Une erreur est survenue')
-      }
-    },
-    async enregistrerParent (parent) {
-      try {
-        let data = {tuteur: { telParent: parent.telephone, profession: parent.profession, telProParent: parent.telephone_pro, id_tuteur: parent.id_tuteur }}
-        let r = await TuteurService.updateTuteur(data)
-        if (r.data.erreur != null) {
-          console.log(r.data.erreur)
+      },
+      async enregistrer () {
+        try {
+          let data = {employeur: { rue: this.rueEmp, codePostal: this.codePEmp, ville: this.villeEmp, tel: this.telephoneEmp, id_employeur: this.id_employeur }}
+          let r = await EmployeurService.updateEmp(data)
+          if (r.data.erreur != null) {
+            this.triggerErreur('Une erreur est survenue')
+          }
+        } catch (e) {
+          console.log('ERREUR' + e)
           this.triggerErreur('Une erreur est survenue')
         }
-      } catch (e) {
-        console.log('ERREUR' + e)
-        this.triggerErreur('Une erreur est survenue')
-      }
-    },
-    async exportPDF () {
-      this.loadingPdf = true
-      try {
-        const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
-        let data = {employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nombreSemSupp: this.nombreSemSupp },
+      },
+      async enregistrerParent (parent) {
+        try {
+          let data = {tuteur: { telParent: parent.telephone, profession: parent.profession, telProParent: parent.telephone_pro, id_tuteur: parent.id_tuteur }}
+          let r = await TuteurService.updateTuteur(data)
+          if (r.data.erreur != null) {
+            console.log(r.data.erreur)
+            this.triggerErreur('Une erreur est survenue')
+          }
+        } catch (e) {
+          console.log('ERREUR' + e)
+          this.triggerErreur('Une erreur est survenue')
+        }
+      },
+      async exportPDF () {
+        this.loadingPdf = true
+        console.log({employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nombreSemSupp: this.nombreSemSupp },
           assmat: {nomNaissanceAssMat: this.nomNaissanceAssMat, nomUsageAssMat: this.nomUsageAssMat, prenomAssMat: this.prenomAssMat, dateNaissanceAssMat: this.dateNaissanceAssMat, villeNaissanceAssMat: this.villeNaissanceAssMat, numeroSS: this.numeroSS, dateAgrement: this.dateAgrement, referenceAgrement: this.referenceAgrement, assurance: this.assurance, numeroPolice: this.numeroPolice, nombreSemaineConges: this.nombreSemaineConges},
           enfant: {nomEnfant: this.nomEnfant, prenomEnfant: this.prenomEnfant, dateNaissanceEnfant: this.dateNaissanceEnfant},
           contrat: {dateDebAdapt: this.dateDebAdapt, nb_heures_semaine: this.nb_heures_semaine, tarif: this.tarif, taux_majore: this.taux_majore, jour_paiement: this.jour_paiement, modeDePaiementContrat: this.modeDePaiementContrat}
         }
-        if (presences.data.erreur == null) {
-          await contratPDF.createContratPdf(data.employeur, this.parents, data.assmat, data.enfant, data.contrat, presences.data.resultats)
-          this.loadingPdf = false
-        } else {
-          this.loadingPdf = false
+      ) // rr
+        try {
+          const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
+          let data = {employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nombreSemSupp: this.nombreSemSupp },
+            assmat: {nomNaissanceAssMat: this.nomNaissanceAssMat, nomUsageAssMat: this.nomUsageAssMat, prenomAssMat: this.prenomAssMat, dateNaissanceAssMat: this.dateNaissanceAssMat, villeNaissanceAssMat: this.villeNaissanceAssMat, numeroSS: this.numeroSS, dateAgrement: this.dateAgrement, referenceAgrement: this.referenceAgrement, assurance: this.assurance, numeroPolice: this.numeroPolice, nombreSemaineConges: this.nombreSemaineConges},
+            enfant: {nomEnfant: this.nomEnfant, prenomEnfant: this.prenomEnfant, dateNaissanceEnfant: this.dateNaissanceEnfant},
+            contrat: {dateDebAdapt: this.dateDebAdapt, nb_heures_semaine: this.nb_heures_semaine, tarif: this.tarif, taux_majore: this.taux_majore, jour_paiement: this.jour_paiement, modeDePaiementContrat: this.modeDePaiementContrat}
+          }
+          if (presences.data.erreur == null) {
+            await contratPDF.createContratPdf(data.employeur, this.parents, data.assmat, data.enfant, data.contrat, presences.data.resultats)
+            this.loadingPdf = false
+          } else {
+            this.loadingPdf = false
+            this.triggerErreur('Une erreur est survenue')
+          }
+        } catch (e) {
+          console.log(e)
           this.triggerErreur('Une erreur est survenue')
+          this.loadingPdf = false
         }
-      } catch (e) {
-        console.log(e)
-        this.triggerErreur('Une erreur est survenue')
-        this.loadingPdf = false
+      },
+      async cloturer () {
+        try {
+          await ContratService.updateDateFin(this.numeroContrat)
+          this.dateFinContrat = moment(new Date()).format('LL')
+          this.dateFinExists = true
+        } catch (e) {
+          console.log(e)
+        }
+      },
+      triggerErreur (erreur) {
+        this.erreurMessage = erreur
+        this.erreur = true
+      },
+      showDialog (parent) {
+        this.parentForDialog = parent
+        this.dialogBox2 = true
       }
     },
-    async cloturer () {
-      try {
-        await ContratService.updateDateFin(this.numeroContrat)
-        this.dateFinContrat = moment(new Date()).format('LL')
-        this.dateFinExists = true
-      } catch (e) {
-        console.log(e)
+    computed: {
+      /**
+       * verifie si une assMat est connectée
+       * @returns {boolean}
+       */
+      isAssMatConnected () {
+        return this.$store.getters.isAssMatConnected
+      },
+      dateDebutFr () {
+        return moment(this.dateDebutContrat).format('LL')
       }
-    },
-    triggerErreur (erreur) {
-      this.erreurMessage = erreur
-      this.erreur = true
-    },
-    showDialog (parent) {
-      this.parentForDialog = parent
-      this.dialogBox2 = true
-    }
-  },
-  computed: {
-    /**
-     * verifie si une assMat est connectée
-     * @returns {boolean}
-     */
-    isAssMatConnected () {
-      return this.$store.getters.isAssMatConnected
     }
   }
-}
 </script>
 
 <style scoped>

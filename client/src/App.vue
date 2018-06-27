@@ -30,7 +30,6 @@ export default {
   components: {
     Footer,
     Toolbar,
-    Drawer,
     ToolbarAssMat,
     ToolbarEmployeur},
   data () {
@@ -40,7 +39,6 @@ export default {
   },
   methods: {
     toogleDrawer: function () {
-      console.log('Toogle')
       this.drawer = !this.drawer // affiche ou masque le navigation drawer
     }
   },
@@ -66,6 +64,36 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+/* Custom scrollbar */
+body::-webkit-scrollbar {
+  width: 9px;
+  background-color: #BDBDBD;
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #BDBDBD;
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  background-color: #ECEFF1;
+}
+
+/* Custom scrollbar */
+.scroll-y::-webkit-scrollbar {
+  width: 6px;
+  background-color: #E1F5FE;
+  border-radius: 45px;
+}
+.scroll-y::-webkit-scrollbar-thumb {
+  background-color: #E1F5FE;
+  border-radius: 45px;
+}
+.scroll-y::-webkit-scrollbar-track {
+  background-color: #ECEFF1;
+}
+
+
 .lightOpcity{
   opacity: 0.9;
 }

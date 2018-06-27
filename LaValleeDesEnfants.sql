@@ -366,6 +366,25 @@ with (
 
 -- drop table public."presencereelle";
 
+CREATE TABLE public.presencereelle
+(
+    datepresencereelle date,
+    heure_arrivee_r time without time zone,
+    heure_depart_r time without time zone,
+    prends_gouter_r boolean,
+    id_presence_theo integer,
+    id_presence_reelle SERIAL,
+    id_facture integer,
+    absence_justifiee boolean,
+    CONSTRAINT presencereelle_pkey PRIMARY KEY (id_presence_reelle),
+    CONSTRAINT presencereelle_id_facture_fkey FOREIGN KEY (id_facture)
+        REFERENCES public.facturemensuelle (id_facture) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+);
 
 INSERT INTO public.typetuteur(nom_type_tuteur)
 	VALUES ('Père'),('Mère'),('Tuteur');

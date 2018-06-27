@@ -22,7 +22,12 @@ router.post('/send', function (req, res) {
         to: destinataire,
         subject: sujet,
         text: '',
-        html: text
+        html: `<div style="margin: auto; text-align: center"><img src="cid:unique@kreata.ee"/><p>${text}</p></div>`,
+        attachments: [{
+            filename: 'image.png',
+            path: 'public/image/logo.png',
+            cid: 'unique@kreata.ee' //same cid value as in the html img src
+        }]
     }
 
     smtpTransport.sendMail(mail, function(error, response){

@@ -1,8 +1,24 @@
 var express = require('express');
 var router = express.Router();
 var modelPresenceTheorique = require('../models/presenceTheorique')
+const jour = ['Dimanche', 'Lundi','Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 
 /* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
+router.get('/enfantDuJour', function (req, res) {
+    let dateDujour = new Date();
+    modelPresenceTheorique.getEnfantsDuJour(jour[dateDujour.getDay()], function (retour) {
+        console.log(retour)
+        res.send(retour);
+    })
+});
+
+router.get('/enfantNonPresentDuJour', function (req, res) {
+    let dateDujour = new Date();
+    modelPresenceTheorique.getEnfantsNonPresendDuJour(jour[dateDujour.getDay()], function (retour) {
+        console.log(retour)
+        res.send(retour);
+    })
+});
 
 router.get('/all', function (req, res, next) {
     modelPresenceTheorique.getAll(function (retour) {
@@ -30,6 +46,7 @@ router.get('/:n/allchildren', function (req, res, next) {
         res.send(retour);
     });
 });
+
 
 router.get('/:e/:n', function (req, res, next) {
     let enfant = req.params.e

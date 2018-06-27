@@ -5,7 +5,7 @@
  */
 var app = require('../app').app;
 var debug = require('debug')('la vallee des enfants:server');
-var http = require('http');
+var http = require('https');
 
 /**
  * Get port from environment and store in Express.

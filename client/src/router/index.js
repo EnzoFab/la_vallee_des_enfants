@@ -9,7 +9,7 @@ import ConnexionEmp from '@/components/view/ConnexionEmployeur'
 import SimulationContrat from '@/components/view/Simulation'
 import AllContrat from '@/components/view/AllContrat'
 import AllContratEmployeur from '@/components/view/AllContratEmployeur'
-import SaisirPresences from '@/components/part/SaisirPresences'
+import SaisirPresences from '@/components/view/SaisirPresences'
 import NouveauContrat from '@/components/view/NouveauContrat'
 import ParametresCompteEmployeur from '@/components/view/ParametresCompteEmployeur'
 import FilActualite from '@/components/view/FilActualite'
@@ -19,6 +19,7 @@ import AssistanteService from '../services/AssistanteService'
 import EmployeurService from '../services/EmployeurService'
 import OneFacture from '@/components/part/VisualisationContratPart/OneFacture'
 import InfosAssMat from '@/components/view/InfosAssMat'
+import Emargement from '@/components/view/Emargement'
 
 Vue.use(Router)
 
@@ -74,11 +75,17 @@ const isNotConnected = function (to, from, next) {
 const router = new Router({
   mode: 'history',
   routes: [
+    { // test
+      path: '/emargement',
+      name: 'Emargement',
+      component: Emargement,
+      meta: {title: 'Réaliser l\'émargement d\'un enfant'}
+    },
     {
       path: '/',
       name: 'index',
       component: Accueil,
-      meta: {title: 'Accueil'}
+      meta: {title: 'la vallée des enfants'}
     },
     {
       path: '/assistante/parametres',
@@ -91,21 +98,14 @@ const router = new Router({
       path: '/employeur/parametres',
       name: 'ParametresCompteEmployeur',
       component: ParametresCompteEmployeur,
-      meta: {title: 'Parametres'},
+      meta: {title: 'paramètres employeur'},
       beforeEnter: isEmployeur
     },
     {
       path: '/accueil',
       name: 'Accueil',
       component: Accueil,
-      meta: {title: 'Accueil'}
-    },
-    {
-      path: '/factureSeule',
-      name: 'OneFacture',
-      component: OneFacture,
-      meta: {title: 'OneFacture'},
-      beforeEnter: isConnected
+      meta: {title: 'La Vallée Des Enfants'}
     },
     {
       path: '/home',
@@ -117,54 +117,54 @@ const router = new Router({
       path: '/contact',
       name: 'Contact',
       component: Contact,
-      meta: {title: 'Contact'}
+      meta: {title: 'La Vallée Des Enfants'}
     },
     {
       path: '/assistante/connexion',
       name: 'ConnexionAM',
       component: ConnexionAM,
-      meta: {title: 'ConnexionAM'},
+      meta: {title: 'Se connecter à La Vallée Des Enfants'},
       beforeEnter: isNotConnected
     },
     {
       path: '/assistante/inscription',
       name: 'InscriptionAM',
       component: InscriptionAM,
-      meta: {title: 'InscriptionAM'} // ,
+      meta: {title: 'Inscription d\'une nouvelle assitante maternelle'} // ,
       // beforeEnter: isAssmat à valider une fois le site complétement déployé
     },
     {
       path: '/employeur/connexion',
       name: 'ConnexionEmp',
       component: ConnexionEmp,
-      meta: {title: 'Connexion'},
+      meta: {title: 'Se connecter à La Vallée Des Enfants'},
       beforeEnter: isNotConnected
     },
     {
       path: '/contrat/employeur/:numE',
       name: 'AllContratsEmployeur',
       component: AllContratEmployeur,
-      meta: {title: 'Contrats'}
+      meta: {title: 'Tous mes contrats'}
     },
     {
       path: '/contrat/',
       name: 'AllContrats',
       component: AllContrat,
-      meta: {title: 'Contrats'},
+      meta: {title: 'Tous les contrats'},
       beforeEnter: isConnected
     },
     {
       path: '/contrat/creation',
       name: 'NouveauContrat',
       component: NouveauContrat,
-      meta: {title: 'nouveau contrat'},
+      meta: {title: 'Création d\'un nouveau contrat'},
       beforeEnter: isAssmat
     },
     {
       path: '/contrat/simulation',
       name: 'Simulation',
       component: SimulationContrat,
-      meta: {title: 'Simulation'}
+      meta: {title: 'Simulation d\'un contrat'}
     },
     {
       path: '/actualites',
@@ -176,13 +176,13 @@ const router = new Router({
       path: '/contrat/:numC',
       name: 'VisualisationContrat',
       component: VisualisationContrat,
-      meta: {title: 'Contrat'}
+      meta: {title: 'Toute l\'actualité de La Vallée Des Enfants'}
     },
     {
       path: '/presence/saisir',
       name: 'SaisirPresences',
       component: SaisirPresences,
-      meta: {title: 'Présences'},
+      meta: {title: 'Effectuer l\'émargement d\'un enfant'},
       beforeEnter: isAssmat
     },
     { path: '/404',

@@ -11,7 +11,7 @@
         <span>{{snackbarMessage}}</span>
       </v-snackbar>
       <v-alert v-model="erreur" type="error" dismissible>
-        {{erreurMessage}}
+      {{erreurMessage}}
       </v-alert>
       <v-stepper v-model="etape" class="my-2" light>
         <v-stepper-header>
@@ -77,7 +77,7 @@ import EnfantService from '../../services/EnfantService'
 import ContratService from '../../services/ContratService'
 import TuteurService from '../../services/TuteurService'
 import EmployeurService from '../../services/EmployeurService'
-import MailHelper from '../../helper/sendMail'
+import MailHelper from '../../helper/SendMail'
 import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
 import FactureService from "../../services/FactureService";
 

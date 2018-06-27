@@ -49,7 +49,7 @@
         :id="'tab3'"
       >
         <v-card flat>
-          <AllFacture ref="allfacture"></AllFacture>
+          <AllFacture ref="allfacture" :debut_contrat="dateDebutContrat"></AllFacture>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -72,7 +72,8 @@ export default {
       snackbarMessage: '',
       snackBarColor: '',
       snackbar: false,
-      nomCompletEnfant: ''
+      nomCompletEnfant: '',
+      dateDebutContrat: null
     }
   },
   methods: {
@@ -86,6 +87,8 @@ export default {
     let vm = this
     this.$refs.fiche.initDonnees().then(function () {
       vm.nomCompletEnfant = vm.$refs.fiche.prenomEnfant + ' ' + vm.$refs.fiche.nomEnfant
+      vm.$refs.allfacture.dateDebutContrat = vm.$refs.fiche.dateDebutContrat
+      console.log(vm.$refs.fiche.dateDebutContrat)
     })
   },
   beforeRouteEnter (to, from, next) {

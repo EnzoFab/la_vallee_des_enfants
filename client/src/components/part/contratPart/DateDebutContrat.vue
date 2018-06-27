@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import DateHelper from '../../../helper/DateHelper'
+
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'dateContrat',
@@ -136,13 +138,10 @@ export default {
   },
   computed: {
     dateFr () { // transforme la date qui est en format anglaise en format francaise
-      var dateString = null
+      let dateString = null
       if (this.date != null) {
-        var d = new Date(this.date)
-        let day = d.getDate()
-        let month = mois[d.getMonth()]
-        let year = d.getFullYear()
-        dateString = day + ' ' + month + ' ' + year
+        let d = new Date(this.date)
+        dateString = DateHelper.getDateFr(d)
       }
       return dateString
     },

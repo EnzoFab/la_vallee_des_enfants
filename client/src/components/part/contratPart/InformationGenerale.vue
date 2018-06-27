@@ -185,7 +185,8 @@
 
 <script>
 import TypeService from '../../../services/TypeService'
-let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
+import DateHelper from "../../../helper/DateHelper";
+
 export default {
   name: 'InformationGenerale',
   data () {
@@ -229,35 +230,26 @@ export default {
   },
   computed: {
     dateDebutFr () { // transforme la date qui est en format anglaise en format francaise
-      var dateString = null
+      let dateString = null
       if (this.date != null) {
-        var d = new Date(this.date)
-        let day = d.getDate()
-        let month = mois[d.getMonth()]
-        let year = d.getFullYear()
-        dateString = day + ' ' + month + ' ' + year
+        let d = new Date(this.date)
+        dateString = DateHelper.getDateFr(d)
       }
       return dateString
     },
     dateDebutAdaptFr () { // transforme la date qui est en format anglaise en format francaise
-      var dateString = null
+      let dateString = null
       if (this.dateDebutPeriodeAdapt != null) {
-        var d = new Date(this.dateDebutPeriodeAdapt)
-        let day = d.getDate()
-        let month = mois[d.getMonth()]
-        let year = d.getFullYear()
-        dateString = day + ' ' + month + ' ' + year
+        let d = new Date(this.dateDebutPeriodeAdapt)
+        dateString = DateHelper.getDateFr(d)
       }
       return dateString
     },
     dateFinAdaptFr () { // transforme la date qui est en format anglaise en format francaise
-      var dateString = null
+      let dateString = null
       if (this.dateFinPeriodeAdapt != null) {
-        var d = new Date(this.dateFinPeriodeAdapt)
-        let day = d.getDate()
-        let month = mois[d.getMonth()]
-        let year = d.getFullYear()
-        dateString = day + ' ' + month + ' ' + year
+        let d = new Date(this.dateFinPeriodeAdapt)
+        dateString = DateHelper.getDateFr(d)
       }
       return dateString
     },
@@ -288,7 +280,7 @@ export default {
       }
     },
     initNombreJour () { // remplit avec 28 jours
-      for (var i = 1; i < 29; i++) {
+      for (let i = 1; i < 29; i++) {
         this.jours.push(i)
       }
     },
