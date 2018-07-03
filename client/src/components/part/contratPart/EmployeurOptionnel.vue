@@ -24,6 +24,7 @@
                 item-text="nom_complet"
                 append-icon="search"
                 autocomplete
+                chips
                 required
               >
                 <template slot="item" slot-scope="data">
@@ -42,6 +43,21 @@
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
                   </template>
+                </template>
+                <template
+                  slot="selection"
+                  slot-scope="data"
+                >
+                  <v-chip
+                    :selected="data.selected"
+                    color="red"
+                    outline
+                  >
+                    <v-avatar color="red">
+                      <span class="white--text">{{getInitiale(data.item)}}</span>
+                    </v-avatar>
+                    {{data.item.prenom_employeur}} {{data.item.nom_usage_employeur}} {{data.item.nom_naissance_employeur}}
+                  </v-chip>
                 </template>
               </v-select>
             </v-flex>
@@ -271,7 +287,7 @@ export default {
       }
     },
     getInitiale (item) {
-      var initiale = ''
+      let initiale = ''
       initiale += item.prenom_employeur.charAt(0)
       initiale += item.nom_usage_employeur.charAt(0)
       return initiale.toUpperCase() // console

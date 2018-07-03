@@ -9,7 +9,6 @@
         append-icon="search"
         auto-grow
         clearable
-        prepend-icon-cb="search"
         :box="box"
         :solo-inverted="inverted"
         color="orange darken-1"
@@ -39,7 +38,7 @@ export default {
         return []
       }
     },
-    itemAttribute: {type: String, required: true}, // attribut sur lequel on va effectuer la recherche
+    itemAttribute: {required: true}, // attribut sur lequel on va effectuer la recherche
     label: {type: String},
     box: {type: Boolean, default: false},
     inverted: {type:Boolean, default: false}
@@ -63,8 +62,18 @@ export default {
         let vm = this
         this.elements = []
         this.items.forEach(function (item) {
-          if (item[vm.itemAttribute].toLowerCase().startsWith(val.trim().toLowerCase())) {
-            vm.elements.push(item)
+          if (Array.isArray(vm.itemAttribute)) {
+            let found = false
+            for (let i = 0; i < vm.itemAttribute.length && !found; i++) {
+              if (item[vm.itemAttribute[i]].toLowerCase().startsWith(val.trim().toLowerCase())) {
+                found = true
+                vm.elements.push(item)
+              }
+            }
+          } else if (typeof vm.itemAttribute === 'string'){
+            if (item[vm.itemAttribute].toLowerCase().startsWith(val.trim().toLowerCase())) {
+              vm.elements.push(item)
+            }
           }
         })
       }

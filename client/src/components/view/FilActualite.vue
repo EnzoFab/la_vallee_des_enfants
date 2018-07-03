@@ -170,10 +170,11 @@ import Calendar from '../part/Calendar'
 import PostService from '../../services/PostService'
 import FileService from '../../services/FileService'
 import InfiniteLoading from 'vue-infinite-loading'
+import ParallaxCard from "../part/Parallax-card";
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'Evenements',
-  components: {Calendar, InfiniteLoading},
+  components: {ParallaxCard, Calendar, InfiniteLoading},
   data () {
     return {
       posts: [],

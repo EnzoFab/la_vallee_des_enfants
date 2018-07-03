@@ -45,6 +45,7 @@
                         single-line
                         item-text="libelle"
                         auto
+                        chips
                         :rules="regleTypeTuteur"
                         required
                       ></v-select>
@@ -175,8 +176,10 @@
                       v-model="tuteur.informationTuteurExistant"
                       item-text="nom_complet"
                       append-icon="search"
+                      chips
                       autocomplete
                       required
+                      clearable
                     >
                       <template slot="item" slot-scope="data">
                         <template v-if="typeof data.item !== 'object'">
@@ -191,6 +194,21 @@
                             <v-list-tile-sub-title v-html="data.item.prenom_enfant + ' ' + data.item.nom_enfant"></v-list-tile-sub-title>
                           </v-list-tile-content>
                         </template>
+                      </template>
+                      <template
+                        slot="selection"
+                        slot-scope="data"
+                      >
+                        <v-chip
+                          :selected="data.selected"
+                          color="indigo"
+                          outline
+                        >
+                          <v-avatar color="blue">
+                            <span class="white--text">{{getInitiale(data.item)}}</span>
+                          </v-avatar>
+                          {{data.item.prenom_tuteur}} {{data.item.nom_tuteur}}
+                        </v-chip>
                       </template>
                     </v-select>
                   </v-layout>
@@ -245,7 +263,14 @@ export default {
         v => !!v || 'Veuillez renseigner le type de tuteur'
       ],
       regleListeTuteurs: [
-        v => !!v || 'Veuillez choisir un tuteurs dans la liste'
+        v => !!v || 'Veuillez choisir un tuteurs dans la liste',
+        function (v) {
+          if (v == null || v.length === 0) {
+            return 'Veuillez choisir un tuteurs dans la liste'
+          } else {
+            return true
+          }
+        }
       ],
       regleNom: [
         v => !!v || 'Veuillez renseigner le nom du tuteur',
@@ -313,7 +338,8 @@ export default {
           estDemandeur: false,
           tuteurExistant: false,
           informationTuteurExistant: null,
-          infoDemandeur: null
+          infoDemandeur: null,
+          chips: false
         })
       }
     },
@@ -322,8 +348,8 @@ export default {
     },
     existeAutredemandeur (tuteur) {
       // idée: Si jamais il y a un demandeur autre que moi alors on cache le checkbox
-      var existe = false
-      for (var i = 0; i < this.tuteurs.length; i++) {
+      let existe = false
+      for (let i = 0; i < this.tuteurs.length; i++) {
         if (this.tuteurs[i] !== tuteur && !existe) {
           existe = this.tuteurs[i].estDemandeur
         }
@@ -333,7 +359,7 @@ export default {
 
     submit () {
       // envoyer
-      var vm = this
+      let vm = this
       let data = {tuteurs: [], asEmployeur: false}
       this.tuteurs.forEach(function (tuteur) {
         if (!tuteur.tuteurExistant) {
@@ -352,6 +378,7 @@ export default {
         }
         data.tuteurs.push(tuteur)
       })
+      console.log(data)
       this.$emit('submit', data)
     },
     back () {

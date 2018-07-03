@@ -10,7 +10,11 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
 import VueSocketIO from 'vue-socket.io'
+// import VueSpinners from 'vue-spinners'
+import 'vue-spinners/dist/vue-spinners.css'
+import VueSpinners from 'vue-spinners/dist/vue-spinners.common'
 
+Vue.use(VueSpinners)
 Vue.use(VueSocketIO, process.env.BASE_URL + '/post')
 
 Vue.use(VueGoogleMaps, {

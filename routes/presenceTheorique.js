@@ -6,7 +6,7 @@ const jour = ['Dimanche', 'Lundi','Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Sam
 /* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
 router.get('/enfantDuJour', function (req, res) {
     let dateDujour = new Date();
-    modelPresenceTheorique.getEnfantsDuJour(jour[dateDujour.getDay()], function (retour) {
+    modelPresenceTheorique.getEnfantsDuJour(/*jour[dateDujour.getDay()]*/ 'Mardi', function (retour) {
         console.log(retour)
         res.send(retour);
     })
@@ -14,7 +14,7 @@ router.get('/enfantDuJour', function (req, res) {
 
 router.get('/enfantNonPresentDuJour', function (req, res) {
     let dateDujour = new Date();
-    modelPresenceTheorique.getEnfantsNonPresendDuJour(jour[dateDujour.getDay()], function (retour) {
+    modelPresenceTheorique.getEnfantsNonPresendDuJour(/*jour[dateDujour.getDay()]*/ 'Mardi', function (retour) {
         console.log(retour)
         res.send(retour);
     })

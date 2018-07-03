@@ -5,7 +5,7 @@
         <h1 class="headline text-xs-center orange--text text--darken-1 mr-1"><b>{{dateFr}}</b></h1>
       </v-flex>
       <v-flex md6 lg6 xl6 sm12 xs12 pa-1>
-        <Searcher item-attribute="nomComplet" :items="enfants_presents" label="Prenom ou nom" box>
+        <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_presents" label="Prenom ou nom" box>
           <!--  liste des enfants censés être présents -->
           <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
             <v-card-title>
@@ -21,13 +21,13 @@
                     <img src="/static/fille.png" v-else/>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
-                    <v-list-tile-title ><h3 primary-title>{{el.nomComplet}}</h3></v-list-tile-title>
+                    <v-list-tile-title ><h3>{{el.nomComplet}}</h3></v-list-tile-title>
                     <v-list-tile-sub-title>
                       <v-layout row align-center>
                         <v-flex xs6><h4><u>Heure d'arrivée</u></h4></v-flex>
-                        <v-flex xs6>{{el.heure_arrivee}}</v-flex>
+                        <v-flex xs6>{{formatDate(el.heure_arrivee)}}</v-flex>
                         <v-flex xs6><h4><u>Heure de départ </u></h4></v-flex>
-                        <v-flex xs6>{{el.heure_depart}}</v-flex>
+                        <v-flex xs6>{{formatDate(el.heure_depart)}}</v-flex>
                         <v-flex xs6><h4><u>Prend le goûter  </u></h4></v-flex>
                         <v-flex xs6>
                           <span v-if="el.prend_gouter">Oui</span>
@@ -46,7 +46,7 @@
         </Searcher>
       </v-flex>
       <v-flex md6 lg6 xl6 sm12 xs12 pa-1>
-        <Searcher item-attribute="nomComplet" :items="enfants_non_presents" label="Prénom ou nom" box>
+        <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_non_presents" label="Prénom ou nom" box>
           <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
             <v-card-title>
               <h3 class="orange--text text--darken-1 mr-1">
@@ -96,13 +96,59 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-dialog
+      v-model="dialogEnfantPresent"
+      hide-overlay
+      scrollable
+      transition="dialog-bottom-transition"
+      v-if="enfantPresentChoisi != null"
+      max-width="1000"
+    >
+      <v-card height="600" class="scroll-y">
+        <v-toolbar card dark color="orange darken-1">
+          <v-spacer></v-spacer>
+          <v-toolbar-title>Emarger {{enfantPresentChoisi.nomComplet}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <v-card-text>
+          <v-container justify-center>
+            <v-layout row wrap justify-center>
+              <v-flex xs12>
+                <!-- <v-text-field :value="enfantPresentChoisi.heure_arrivee">
+                 </v-text-field> -->
+                <TimePicker required
+                            :heureDebut="8"
+                            :heureFin="19"  label="Heure d'arrivee"
+                            v-model="enfantPresentChoisi.heure_arrivee"/>
+              </v-flex>
+              <v-flex xs12>
+                <TimePicker required
+                            :heureDebut="8" :heureFin="19"  label="Heure de départ"
+                            v-model="enfantPresentChoisi.heure_depart"/>
+              </v-flex>
+              <v-flex xs6 d-inline-flex offset-xs3>
+                <img src="/static/petitDej.png" style="height: 40px;" v-if="enfantPresentChoisi.prend_gouter"/>
+                <v-checkbox v-model="enfantPresentChoisi.prend_gouter" color="green">
+                  <h4 slot="label" v-if="enfantPresentChoisi.prend_gouter" class="green--text">Prend le gouter</h4>
+                  <h4 slot="label" v-else class="red--text">Ne prend pas le gouter</h4>
+                </v-checkbox>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn outline large round color="teal lighten-2" class="mx-auto" >Emarger cet enfant</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import Searcher from '../part/Searcher'
 import PresenceService from '../../services/PresenceService'
-import DateHelper from "../../helper/DateHelper";
+import DateHelper from '../../helper/DateHelper'
+import TimePicker from '../part/timepicker/TimePicker'
 
 const statePresence = {
   normale: {class:'green', type: 'PRESENCE'},
@@ -113,17 +159,30 @@ const statePresence = {
 }
 export default {
   name: 'Emargement',
-  components: {Searcher},
+  components: {TimePicker, Searcher},
   data () {
     return {
       enfants_presents: [],
       enfants_non_presents: [],
-      enfants_emarges: []
+      enfants_emarges: [],
+      dialogEnfantPresent: false,
+      enfantPresentChoisi: {}, // pour le dialog enfant present
+      enfantAbsentChoisi: null, // pour le dialog enfant absent
+      enfantEmargeChoisi: null // pour le dialog enfants emargé
     }
   },
   methods: {
     emargement (enfant) {
       let e = enfant
+      this.enfantPresentChoisi = JSON.parse(JSON.stringify(e))
+      // attribut par default qui ne vont pas changer
+      // ils permettront de comparer les heures d'arrivée réelle et théoriques par ex
+      this.enfantPresentChoisi.heure_arrivee_theorique = this.enfantPresentChoisi.heure_arrivee
+      this.enfantPresentChoisi.heure_depart_theorique= this.enfantPresentChoisi.heure_depart
+      this.enfantPresentChoisi.prend_gouter_r_theorique = this.enfantPresentChoisi.prend_gouter
+
+      // creation d'une copie de l'objet pour ne pas modifier e quand on mddifie enfantPresentChoisi
+      this.dialogEnfantPresent = true
       // TODO appel au serveur pour sauvegarder la donnée pour chaque cas
       if (this.removeAbsentsFromList(enfant)) {
         e.state = statePresence.exceptionnelle // la présence est exceptionnelle
@@ -178,8 +237,6 @@ export default {
         .then(function (rst) {
          if (rst.data.erreur == null) {
            rst.data.resultats.forEach(function (r) {
-             r.heure_arrivee = DateHelper.formatTime(r.heure_arrivee)
-             r.heure_depart = DateHelper.formatTime(r.heure_depart)
              vm.enfants_presents.push(r)
            });
            console.log(vm.enfants_presents)
@@ -210,10 +267,25 @@ export default {
 
     sortArray (array) { // trie en fonction du nom de l'enfant
       array.sort(function (a, b) {
-        if(a.nomComplet < b.nomComplet) return -1;
-        if(a.nomComplet > b.nomComplet) return 1;
+        if (a.nomComplet < b.nomComplet) {
+          return -1
+        }
+        if (a.nomComplet > b.nomComplet) {
+          return 1
+        }
         return 0;
       })
+    },
+
+    formatDate (date) {
+      return DateHelper.formatTime(date)
+    },
+    prendGouter (v) {
+      if (v) {
+        return 'Prend le gouter'
+      } else {
+        return 'Ne prend pas le gouter'
+      }
     }
   },
   computed: {

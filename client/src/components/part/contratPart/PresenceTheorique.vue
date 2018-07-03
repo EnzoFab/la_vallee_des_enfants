@@ -15,9 +15,9 @@
         </v-flex>
         <v-flex d-flex md6 lg6 xl6 sm12 xs12 >
           <v-card v-if="presences.length > 0">
-            <h2>Présences</h2>
+            <h2 class="text--white">Présences</h2>
             <v-flex md12 lg12 xl12 sm12 xs12>
-              <v-expansion-panel popout dark>
+              <v-expansion-panel popout>
                 <v-expansion-panel-content v-for="(presence,i) in presences" :key="i" ripple class="pink lighten-4">
                   <div slot="header" class="text-xs-center">
                     {{presence.jourChoisi.libelle}}
@@ -25,40 +25,30 @@
                       <v-icon>delete</v-icon>
                     </v-btn>
                   </div>
-                  <v-card class="elevation-0 white" light>
+                  <v-card class="elevation-0 white">
                     <v-card-text>
                       <v-flex md12 lg6 xl6 sm12 xs12>
-                        <v-menu
-                          ref="presence.menu"
-                          lazy
-                          full-width
-                          :close-on-content-click="false"
-                          v-model="presence.menu"
-                          transition="slide-y-transition"
-                          :nudge-right="40"
-                          top
-                        >
-                          <v-text-field
-                            slot="activator"
-                            label="Heure d'arrivee"
-                            v-model="presence.heureArrivee"
-                            prepend-icon="schedule"
-                            readonly
-                            color="light-green darken-2"
-                            required
-                            light
-                            :rules="regleHeure"
-                          ></v-text-field>
-                          <v-time-picker v-model="presence.heureArrivee" landscape scrollable
-                                         full-width
-                                         type="month"
-                                         class="mt-3"
-                                         @change="$refs.presence.menu.save(presence.heureArrivee)">
-                          </v-time-picker>
-                        </v-menu>
+                        <TimePicker
+                          label="Heure d'arrivee"
+                          v-model="presence.heureArrivee"
+                          :heureDebut="8" :heureFin="19"
+                          :rules="regleHeure"
+                          color-hour="pink accent-1"
+                          color-minute="pink lighten-4"
+                          required
+                        />
                       </v-flex>
                       <v-flex md12 lg6 xl6 sm12 xs12>
-                        <v-menu
+                        <TimePicker
+                          label="Heure d'arrivee"
+                          v-model="presence.heureDepart"
+                          :heureDebut="8" :heureFin="19"
+                          :rules="regleHeure"
+                          color-hour="pink accent-1"
+                          color-minute="pink lighten-4"
+                          required
+                        />
+                        <!--<v-menu
                           ref="presence.menuDepart"
                           lazy
                           full-width
@@ -85,7 +75,7 @@
                                          class="mt-3"
                                          @change="$refs.presence.menuDepart.save(presence.heureDepart)">
                           </v-time-picker>
-                        </v-menu>
+                        </v-menu> -->
                       </v-flex>
                       <v-flex light>
                         <v-switch light label="Gouter" v-model="presence.prendGouter"></v-switch>
@@ -119,7 +109,17 @@
               </v-flex>
               <v-divider ></v-divider>
               <v-flex>
-                <v-menu
+                <TimePicker
+                  label="Heure d'arrivee"
+                  v-model="heureArrivee"
+                  :heureDebut="8" :heureFin="19"
+                  :rules="regleHeure"
+                  color-hour="pink accent-1"
+                  color-minute="pink lighten-4"
+                  required
+                />
+
+                <!--<v-menu
                   ref="menuArrivee"
                   lazy
                   full-width
@@ -141,10 +141,10 @@
                     :rules="regleHeure"
                   ></v-text-field>
                   <v-time-picker v-model="heureArrivee" @change="$refs.menuArrivee.save(heureArrivee)"></v-time-picker>
-                </v-menu>
+                </v-menu> -->
               </v-flex>
               <v-flex>
-                <v-menu
+                <!-- <v-menu
                   ref="menuDepart"
                   lazy
                   full-width
@@ -166,7 +166,17 @@
                     :rules="regleHeure"
                   ></v-text-field>
                   <v-time-picker v-model="heureDepart" @change="$refs.menuDepart.save(heureDepart)"></v-time-picker>
-                </v-menu>
+                </v-menu> -->
+                <TimePicker
+                  label="Heure d'arrivee"
+                  v-model="heureDepart"
+                  :heureDebut="8" :heureFin="19"
+                  :rules="regleHeure"
+                  color-hour="pink accent-1"
+                  color-minute="pink lighten-4"
+                  required
+                />
+
               </v-flex>
               <v-flex md12 lg12 xl12 sm12 xs12>
                 <v-btn icon color="pink" dark  @click="addJour"
@@ -203,9 +213,11 @@
 <script>
 import TypeService from '../../../services/TypeService'
 import FonctionMath from '../../../helper/FonctionMath'
+import TimePicker from "../timepicker/TimePicker";
 
 export default {
   name: 'PresenceTheorique',
+  components: {TimePicker},
   data () {
     return {
       time: null,
@@ -219,7 +231,7 @@ export default {
       menuArrivee: false,
       menuDepart: false,
       regleHeure: [
-        v => !!v || 'Veuillez renseigner le jour'
+        v => !!v || 'Veuillez renseigner le l\'heure'
       ],
       erreur: false,
       msgErreur: null,

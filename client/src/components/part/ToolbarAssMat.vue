@@ -26,7 +26,7 @@
         <v-list class="grey lighten-3" >
           <v-list-tile to="/assistante/inscription">
             <v-list-tile-avatar >
-              <v-icon medium>assignment</v-icon>
+              <v-icon medium>person_add</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>Inscrire une assistante</v-list-tile-title>

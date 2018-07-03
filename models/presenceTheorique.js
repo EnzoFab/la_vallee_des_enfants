@@ -132,7 +132,6 @@ let presenceTheorique = {
                                 sexe: result.rows[i].sexe,
                                 id_contrat: result.rows[i].id_contrat,
                                 id_enfant: result.rows[i].id_enfant,
-                                id_presence_theo: result.rows[i].id_presence_theorique,
                                 nom_enfant: result.rows[i].nom_enfant,
                                 prenom_enfant: result.rows[i].prenom_enfant,
                                 nomComplet: result.rows[i].prenom_enfant + ' ' + result.rows[i].nom_enfant
