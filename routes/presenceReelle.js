@@ -16,7 +16,7 @@ router.get('/allBefore/:date', function (req, res) {
     let date = req.params.date
     if (req.query.numContrat) {
         let numContrat = req.query.numContrat
-        modelPresenceReelle.getAllForContratbeofre(numContrat, date, function (retour) {
+        modelPresenceReelle.getAllForContratbefore(numContrat, date, function (retour) {
             res.send(retour)
         })
     } else {
@@ -40,7 +40,7 @@ router.get('/all/:annee/:numMois/:numC', function (req, res, next) {
 
 router.post('/create', function (req, res, next) {
     let preelle = req.body.presence
-    preelle.datepresencereelle = new Date(preelle.datepresencereelle)
+    preelle.datepresencereelle = preelle.datepresencereelle
     modelPresenceReelle.create(preelle, function (retour) {
         res.send(retour);
     });
@@ -64,40 +64,20 @@ router.post('/createAbs', function (req, res, next) {
 
 /* --------------------------------------- ROUTES PUT ----------------------------------------------------------- */
 
-router.put('/majHeureArrivee', function (req, res, next) {
-    let preelle = req.body.presence
-    modelPresenceReelle.updateHeureArrivee(preelle, function (retour) {
-        res.send(retour);
-    });
+router.put('/update', function (req, res) {
+    let presence = req.body.presence
+    console.log('UPDATE', presence)
+    modelPresenceReelle.update(presence, function (retour) {
+        res.send(retour)
+    })
 });
 
-router.put('/majHeureDepart', function (req, res, next) {
-    let preelle = req.body.presence
-    modelPresenceReelle.updateHeureDepart(preelle, function (retour) {
-        res.send(retour);
-    });
-});
+/* --------------------------------------- ROUTES DELETE -------------------------------------------------------- */
 
-router.put('/majGouter', function (req, res, next) {
-    let preelle = req.body.presence
-    modelPresenceReelle.updateGouter(preelle, function (retour) {
-        res.send(retour);
-    });
-});
-
-router.put('/majFactureAssociee', function (req, res, next) {
-    let preelle = req.body.presence
-    modelPresenceReelle.updateFactureAssociee(preelle, function (retour) {
-        res.send(retour);
-    });
-});
-
-router.put('/majAbs', function (req, res, next) {
-    let abs = req.body.absence
-    console.log(abs)
-    modelPresenceReelle.updateAbs(abs, function (retour) {
-        res.send(retour);
-    });
+router.delete('/supprimer/:id', function (req, res) {
+    modelPresenceReelle.delete(req.params.id, function (retour) {
+        res.send(retour)
+    })
 });
 
 module.exports = router;

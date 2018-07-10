@@ -567,7 +567,7 @@
         FactureService.getDonneesFactureDuMois(this.facture.idContrat, this.facture.mois,this.facture.annee)
           .then(function (rst) {
             if (rst.data.erreur == null) {
-              console.log('=======================e=== ', rst.data)
+              console.log(rst.data)
               vm.nbHeuresMajo = rst.data.nb_heures_majorees // n'existe pas
               vm.facture.nombreHeuresMajorees = vm.nbHeuresMajo
               console.log('=======', vm.facture)

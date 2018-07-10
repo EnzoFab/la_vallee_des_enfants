@@ -188,16 +188,25 @@ export default {
         if (await this.saveEnfant(this.enfant) && await this.saveTuteurs(this.tuteurs) && this.saveEmployeur(this.employeur) &&
           await this.saveInformationGenerale(this.informationGenerale) && this.savePresence(this.presenceTheorique) &&
           this.saveTarif(this.tarif)) {
-          this.triggerSnackBar('Contrat créé avec succès', 'success')
+          // this.triggerSnackBar('Contrat créé avec succès', 'success')
           this.showProgress = false
           FactureService.initFacture({numContrat: this.numContrat})
             .then(function () {})
             .catch(function (e) {
               console.log(e)
             })
+          this.$notify({
+            group: 'assistante',
+            title: 'Contrat créé',
+            text: 'Le contrat a été créé avec succès',
+            duration: 4000,
+            speed: 500,
+            type: 'success'
+          })
           this.$router.push({
             path: '/contrat/' + this.numContrat}
           )
+
         } else {
           this.showProgress = false
         }
@@ -205,13 +214,21 @@ export default {
         if (await this.saveEnfant(this.enfant) && await this.saveTuteurs(this.tuteurs) &&
           await this.saveInformationGenerale(this.informationGenerale) && this.savePresence(this.presenceTheorique) &&
           this.saveTarif(this.tarif)) {
-          this.triggerSnackBar('Contrat créé avec succès', 'success')
+          // this.triggerSnackBar('Contrat créé avec succès', 'success')
           this.showProgress = false
           FactureService.initFacture({numContrat: this.numContrat})
             .then(function () {})
             .catch(function (e) {
               console.log(e)
             })
+          this.$notify({
+            group: 'assistante',
+            title: 'Contrat créé',
+            text: 'Le contrat a été créé avec succès',
+            duration: 4000,
+            speed: 500,
+            type: 'success'
+          })
           this.$router.push({
             path: '/contrat/' + this.numContrat}
           )
@@ -267,7 +284,7 @@ export default {
       }
     },
     async saveTuteurs (data) {
-      var estValide = true
+      let estValide = true
       let tuteurs = data.tuteurs
       for (var i = 0; i < tuteurs.length; i++) {
         try {
@@ -383,7 +400,7 @@ export default {
     },
     async savePresence (data) {
       let erreur = false
-      for (var i = 0; i < data.presences.length; i++) {
+      for (let i = 0; i < data.presences.length; i++) {
         let presence = data.presences[i]
         presence.id_contrat = this.numContrat
         try {
@@ -446,8 +463,16 @@ export default {
       this.etape--
     },
     triggerErreur (data) {
-      this.erreurMessage = data
-      this.erreur = true
+      //this.erreurMessage = data
+      //this.erreur = true
+      this.$notify({
+        group: 'assistante',
+        title: 'Erreur',
+        text: data,
+        duration: 4000,
+        speed: 500,
+        type: 'error'
+      })
     },
     triggerSnackBar (message, color) {
       this.snackbarMessage = message

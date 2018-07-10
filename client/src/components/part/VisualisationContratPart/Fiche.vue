@@ -321,6 +321,7 @@
   import ContratService from '../../../services/ContratService'
   import EmployeurService from '../../../services/EmployeurService'
   import TuteurService from '../../../services/TuteurService'
+  import PDF_creator from '../../../helper/PDF_creator'
   import contratPDF from '../../../helper/contratPDF'
   import { validationMixin } from 'vuelidate'
   import moment from 'moment'
@@ -508,13 +509,52 @@
           contrat: {dateDebAdapt: this.dateDebAdapt, nb_heures_semaine: this.nb_heures_semaine, tarif: this.tarif, taux_majore: this.taux_majore, jour_paiement: this.jour_paiement, modeDePaiementContrat: this.modeDePaiementContrat}
         }
       ) // rr
-        try {
-          const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
-          let data = {employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nombreSemSupp: this.nombreSemSupp },
-            assmat: {nomNaissanceAssMat: this.nomNaissanceAssMat, nomUsageAssMat: this.nomUsageAssMat, prenomAssMat: this.prenomAssMat, dateNaissanceAssMat: this.dateNaissanceAssMat, villeNaissanceAssMat: this.villeNaissanceAssMat, numeroSS: this.numeroSS, dateAgrement: this.dateAgrement, referenceAgrement: this.referenceAgrement, assurance: this.assurance, numeroPolice: this.numeroPolice, nombreSemaineConges: this.nombreSemaineConges},
-            enfant: {nomEnfant: this.nomEnfant, prenomEnfant: this.prenomEnfant, dateNaissanceEnfant: this.dateNaissanceEnfant},
-            contrat: {dateDebAdapt: this.dateDebAdapt, nb_heures_semaine: this.nb_heures_semaine, tarif: this.tarif, taux_majore: this.taux_majore, jour_paiement: this.jour_paiement, modeDePaiementContrat: this.modeDePaiementContrat}
-          }
+        const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
+        let data = {
+          employeur:
+            {nomNaissanceEmp: this.nomNaissanceEmp,
+              nomUsageEmp: this.nomUsageEmp,
+              prenomEmp: this.prenomEmp,
+              rueEmp: this.rueEmp,
+              codePEmp: this.codePEmp,
+              villeEmp: this.villeEmp,
+              telephoneEmp: this.telephoneEmp,
+              emailEmp: this.emailEmp,
+              nom_complet: this.prenomEmp + ' ' + this.nomNaissanceEmp,
+              nombreSemSupp: this.nombreSemSupp
+            },
+          assmat:
+            {nomNaissanceAssMat: this.nomNaissanceAssMat,
+              nomUsageAssMat: this.nomUsageAssMat,
+              prenomAssMat: this.prenomAssMat,
+              dateNaissanceAssMat: this.dateNaissanceAssMat,
+              villeNaissanceAssMat: this.villeNaissanceAssMat,
+              numeroSS: this.numeroSS,
+              dateAgrement: this.dateAgrement,
+              referenceAgrement: this.referenceAgrement,
+              assurance: this.assurance,
+              numeroPolice: this.numeroPolice,
+              nombreSemaineConges: this.nombreSemaineConges
+            },
+          enfant:
+            {nomEnfant: this.nomEnfant,
+              nom_complet: this.prenomEnfant + ' ' + this.nomEnfant,
+              prenomEnfant: this.prenomEnfant,
+              dateNaissanceEnfant: this.dateNaissanceEnfant
+            },
+          contrat:
+            {dateDebAdapt: this.dateDebAdapt,
+              num_contrat: this.numeroContrat,
+              nb_heures_semaine: this.nb_heures_semaine,
+              tarif: this.tarif,
+              taux_majore: this.taux_majore,
+              jour_paiement: this.jour_paiement,
+              modeDePaiementContrat: this.modeDePaiementContrat
+            }
+        }
+        PDF_creator.contratPdf(data)
+        /*try {
+
           if (presences.data.erreur == null) {
             await contratPDF.createContratPdf(data.employeur, this.parents, data.assmat, data.enfant, data.contrat, presences.data.resultats)
             this.loadingPdf = false
@@ -526,7 +566,7 @@
           console.log(e)
           this.triggerErreur('Une erreur est survenue')
           this.loadingPdf = false
-        }
+        }*/
       },
       async cloturer () {
         try {

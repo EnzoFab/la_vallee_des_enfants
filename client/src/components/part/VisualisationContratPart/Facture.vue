@@ -133,17 +133,17 @@ window.html2canvas = html2canvas
 window.rasterizeHTML = rasterizeHTML
 
 function startPrintProcess(canvasObj, fileName, callback) {
-  let pdf = new jsPDF('l', 'pt', 'a4'),
+  let PDF_creator = new jsPDF('l', 'pt', 'a4'),
     pdfConf = {
       pagesplit: false,
       background: '#fff'
     };
-  document.body.appendChild(canvasObj); //appendChild is required for html to add page in pdf
-  pdf.addHTML(canvasObj.text(), 0, 0, pdfConf).then(function() {
+  document.body.appendChild(canvasObj); //appendChild is required for html to add page in PDF_creator
+  PDF_creator.addHTML(canvasObj.text(), 0, 0, pdfConf).then(function() {
     document.body.removeChild(canvasObj);
-    pdf.addPage();
+    PDF_creator.addPage();
     setTimeout(function(){
-      pdf.save(fileName + '.pdf');
+      PDF_creator.save(fileName + '.PDF_creator');
     },2000)
     callback();
   });
@@ -237,9 +237,9 @@ export default {
     facturePDF () {
       console.log($('#facture').get(0))
       html2canvas($('#facture').get(0).hmtl).then(function (canvas) {
-        let pdf = new jsPDF('p', 'pt', 'a4');
-        pdf.addHTML(canvas, function () {
-          pdf.save('facture.pdf')
+        let PDF_creator = new jsPDF('p', 'pt', 'a4');
+        PDF_creator.addHTML(canvas, function () {
+          PDF_creator.save('facture.PDF_creator')
         });
       })
       /*html2canvas(document.getElementById('facture'), {
@@ -247,7 +247,7 @@ export default {
         startPrintProcess(canvasObj, 'printedPDF',function (){
           alert('PDF saved');
         });
-        //save this object to the pdf
+        //save this object to the PDF_creator
       }); */
 
 

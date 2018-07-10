@@ -17,8 +17,8 @@ let presenceTheorique = {
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
+                    let array = []
+                    for(let i = 0; i < rslt.rows.length; i++){
                         array.push({
                             id: result.rows[i].id_presence_theorique,
                             heureArrivee: result.rows[i].heure_arrivee,
@@ -54,12 +54,13 @@ let presenceTheorique = {
                         'public.presencereelle PR, public.typejour TJ2\n' +
                     'WHERE E2.id_enfant = C2.id_enfant AND C2.id_contrat = P2.id_contrat\n' +
                         'AND P2.id_type_jour = TJ2.id_type AND TJ2.libelle = $1\n' +
-                        'AND P2.id_presence_theorique = PR.id_presence_theo AND PR.heure_arrivee_r IS NOT NULL\n' +
+                        'AND P2.id_presence_theorique = PR.id_presence_theo\n' +
                 ')\n' +
             ') PRESENT, public.enfant Enf, public.contrat C3, public.presencetheorique P3, public.typejour TJ3\n' +
             'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant AND\n' +
                 'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
-                'AND P3.heure_arrivee is not null',
+                'AND P3.heure_arrivee is not null AND C3.date_fin IS NULL\n' +
+            'ORDER BY Enf.prenom_enfant, Enf.nom_enfant',
             [weekDay],
             function (err, result) {
                 console.log(weekDay)
@@ -96,7 +97,7 @@ let presenceTheorique = {
         )
     },
 
-    getEnfantsNonPresendDuJour (weekDay, callback) { // TODO ne pas compter les enfants dont le contrat est cloturé
+    getEnfantsNonPresentsDuJour (weekDay, callback) { // TODO ne pas compter les enfants dont le contrat est cloturé
             db.query(
                 'SELECT *\n' +
                 'FROM (\n' +
@@ -112,11 +113,13 @@ let presenceTheorique = {
                 'AND P2.id_type_jour = TJ2.id_type AND TJ2.libelle = $1\n' +
                 'AND P2.id_presence_theorique = PR.id_presence_theo AND PR.heure_arrivee_r IS NOT NULL\n' +
                 ')\n' +
-                ') PRESENT, public.enfant Enf, public.contrat C3\n' +
-                'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant',
+                ') PRESENT, public.enfant Enf, public.contrat C3, public.presencetheorique P3, public.typejour TJ3\n' +
+                'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant AND\n' +
+                'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
+                'AND C3.date_fin IS NULL\n' +
+                'ORDER BY Enf.prenom_enfant, Enf.nom_enfant',
                 [weekDay],
                 function (err, result) {
-                    console.log(weekDay)
                     retour = {
                         erreur: null,
                         resultats: null,
@@ -134,7 +137,11 @@ let presenceTheorique = {
                                 id_enfant: result.rows[i].id_enfant,
                                 nom_enfant: result.rows[i].nom_enfant,
                                 prenom_enfant: result.rows[i].prenom_enfant,
-                                nomComplet: result.rows[i].prenom_enfant + ' ' + result.rows[i].nom_enfant
+                                nomComplet: result.rows[i].prenom_enfant + ' ' + result.rows[i].nom_enfant,
+                                prend_gouter: result.rows[i].prends_gouter,
+                                heure_arrivee: result.rows[i].heure_arrivee,
+                                heure_depart: result.rows[i].heure_depart,
+                                id_presence_theo: result.rows[i].id_presence_theorique
                             });
                         }
                         retour.resultats = array
@@ -145,6 +152,54 @@ let presenceTheorique = {
                 }
             )
         },
+
+
+    getEnfantsEmargesDuJour (weekDay, callback) {
+        db.query('SELECT * \n' +
+            'FROM public.enfant E, public.contrat C, public.presencereelle PR, public.presencetheorique P,\n' +
+            'public.typejour TJ \n' +
+            'WHERE E.id_enfant = C.id_enfant AND C.id_contrat = P.id_contrat AND \n' +
+            'P.id_type_jour = TJ.id_type AND TJ.libelle = $1 AND P.id_presence_theorique = PR.id_presence_theo\n' +
+            'AND C.date_fin IS NULL\n' +
+            'ORDER BY E.prenom_enfant, E.nom_enfant',
+            [weekDay],
+            function (err, result) {
+                retour = {
+                    erreur: null,
+                    resultats: null,
+                    statut: null
+                };
+                let e = helper.handleError(err, result, 'Aucun resultat')
+                retour.erreur = e.erreur;
+                retour.statut = e.statut;
+                if (retour.erreur == null) {
+                    let array = []
+                    for (let i = 0; i < result.rows.length; i++) {
+                        array.push({
+                            sexe: result.rows[i].sexe,
+                            id_contrat: result.rows[i].id_contrat,
+                            id_enfant: result.rows[i].id_enfant,
+                            nom_enfant: result.rows[i].nom_enfant,
+                            prenom_enfant: result.rows[i].prenom_enfant,
+                            nomComplet: result.rows[i].prenom_enfant + ' ' + result.rows[i].nom_enfant,
+                            prend_gouter: result.rows[i].prends_gouter,
+                            heure_arrivee: result.rows[i].heure_arrivee,
+                            heure_depart: result.rows[i].heure_depart,
+                            id_presence_theo: result.rows[i].id_presence_theorique,
+                            id_presence_reelle: result.rows[i].id_presence_reelle,
+                            heure_arrivee_r: result.rows[i].heure_arrivee_r,
+                            heure_depart_r: result.rows[i].heure_depart_r,
+                            prend_gouter_r: result.rows[i].prends_gouter_r,
+                        });
+                    }
+                    retour.resultats = array
+                    retour.statut = 200
+                }
+
+                callback(retour);
+            }
+        );
+    },
 
 
     /**

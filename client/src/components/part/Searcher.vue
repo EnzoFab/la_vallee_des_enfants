@@ -56,6 +56,7 @@ export default {
       }
     },
     recherche (val) {
+      console.log(typeof this.itemAttribute)
       if (val == null || val.trim() === '') {
         this.elements = this.items
       } else {
@@ -65,13 +66,13 @@ export default {
           if (Array.isArray(vm.itemAttribute)) {
             let found = false
             for (let i = 0; i < vm.itemAttribute.length && !found; i++) {
-              if (item[vm.itemAttribute[i]].toLowerCase().startsWith(val.trim().toLowerCase())) {
+              if ((item[vm.itemAttribute[i]] + '').toLowerCase().startsWith(val.trim().toLowerCase())) {
                 found = true
                 vm.elements.push(item)
               }
             }
           } else if (typeof vm.itemAttribute === 'string'){
-            if (item[vm.itemAttribute].toLowerCase().startsWith(val.trim().toLowerCase())) {
+            if ((item[vm.itemAttribute] + '').toLowerCase().startsWith((val + '').trim().toLowerCase())) {
               vm.elements.push(item)
             }
           }

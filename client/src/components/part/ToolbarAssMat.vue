@@ -6,8 +6,8 @@
         <h4 class="purple--text">Accueil</h4>
         <v-icon x-large color="purple">home</v-icon>
       </v-tab>
-      <v-tab to="/presence/saisir"  ripple class="d-inline-block">
-        <h4 class="pink--text"> Présences </h4>
+      <v-tab to="/assistante/emargement"  ripple class="d-inline-block">
+        <h4 class="pink--text"> Emargement </h4>
         <v-icon x-large color="pink">access_time</v-icon>
       </v-tab>
       <v-tab to="/contrat"  ripple class="d-inline-block">
@@ -82,9 +82,18 @@ export default {
     logout () {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('removeAssMat')
+      this.$notify({
+        group: 'assistante',
+        title: 'Déconnexion',
+        text: 'Vous venez de vous déconnecter',
+        duration: 4000,
+        speed: 500,
+        type: 'warn'
+      })
       this.$router.push({
         name: 'Accueil'
       })
+
     },
     nouveauContrat () {
       this.storeRandomString() // crée une chaine de charactere aleatoire et la stocke dans le store

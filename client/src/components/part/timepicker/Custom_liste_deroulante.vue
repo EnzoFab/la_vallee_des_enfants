@@ -1,11 +1,11 @@
 <template>
-  <v-card :height="height" class="scroll-y" flat>
+  <v-card :height="height" class="scroll-y transparent" flat>
     <v-card-title v-if="title != null">
       <h2 class="mx-auto">{{title}}</h2>
     </v-card-title>
     <v-card-text>
-      <v-list dense>
-        <v-list-tile avatar v-for="(item,i) in custom_items"  class="mx-auto" :key="i" >
+      <v-list dense class="transparent">
+        <v-list-tile avatar v-for="(item,i) in custom_items"  class="mx-auto transparent" :key="i" >
           <v-list-tile-avatar tile :size="item.size" class="mx-auto"
                               @mouseover.stop="hover(item)"
                               @mouseout.stop="reset(item)"
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+const hoverColor = 'brown lighten-3'
+
 export default {
   name: 'custom_liste_deroulante',
   props: {
@@ -49,23 +51,24 @@ export default {
     hover(item) {
       if (!item.selected) {
         item.class = 'white--text upperSize'
-        item.color = 'blue lighten-5'
+        item.color = hoverColor
         item.size = 75
       }
     },
     reset(item) {
       if (!item.selected) {
         item.class = 'headline'
-        item.color = 'white'
+        item.color = 'transparent'
         item.size = 60
         item.selected = false
       }
     },
     init_custom_item () {
+      this.custom_items = []
       for (let i = 0; i < this.items.length; i++) {
         this.custom_items.push({
           number: this.items[i],
-          color: 'white',
+          color: 'transparent',
           class: 'headline',
           size: 60,
           selected: false
@@ -73,10 +76,9 @@ export default {
       }
     },
     resetSelectedItem () {
-      let vm = this
       this.custom_items.forEach(function (item) {
         item.class = 'headline'
-        item.color = 'white'
+        item.color = 'transparent'
         item.size = 70
         item.selected = false
       })
@@ -86,11 +88,8 @@ export default {
     this.init_custom_item()
   },
   watch: {
-    items: {
-      handle (v) {
-        this.init_custom_item()
-      },
-      deep: true
+    items (val) {
+      this.init_custom_item()
     }
   }
 }

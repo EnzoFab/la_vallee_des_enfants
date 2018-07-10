@@ -5,6 +5,8 @@
       <ToolbarEmployeur class="lightOpcity" v-if="employeurConnecte"></ToolbarEmployeur>
       <Toolbar class="lightOpcity" v-if="!assMatConnecte && !employeurConnecte"></Toolbar>
       <v-content>
+        <notifications group="employeur" position="top center" width="40%"/>
+        <notifications group="assistante" position="top center" width="40%"/>
         <transition name="custom-classes-transition"
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated bounceOutDown"

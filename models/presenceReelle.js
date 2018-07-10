@@ -4,15 +4,62 @@ let helper = require('../helpers/helper');
 let presenceReelle = {
     // creer une presence reelle
     create: function (presenceReelle, callback) {
-        db.query('INSERT INTO public.presencereelle (datepresencereelle, id_presence_theo, heure_arrivee_r, heure_depart_r, prends_gouter_r, id_facture, absence_justifiee) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-            [presenceReelle.datepresencereelle, presenceReelle.id_presence_theo, presenceReelle.heure_arrivee, null, null, null, null],
-            function (e) {
+        db.query('INSERT INTO public.presencereelle (datepresencereelle, id_presence_theo, heure_arrivee_r,\n' +
+            'heure_depart_r, prends_gouter_r, id_facture, absence_justifiee) \n' +
+            'VALUES ($1, $2, $3, $4, $5, $6, $7) returning id_presence_reelle',
+            [presenceReelle.datepresencereelle, presenceReelle.id_presence_theo, presenceReelle.heure_arrivee,
+                presenceReelle.heure_depart, presenceReelle.prend_gouter, presenceReelle.id_facture,
+                presenceReelle.absence_justifiee],
+            function (e, r) {
                 let retour = {
                     erreur : null
                 }
                 if (e) {
                     retour.erreur = e.toString()
+                } else {
+                    retour.resultat = r.rows[0]
                 }
+                console.log(r.rows[0])
+                callback(retour)
+            });
+    },
+
+    update (presenceReelle, callback) {
+        db.query('UPDATE public.presencereelle \n' +
+            'SET datepresencereelle= $2, heure_arrivee_r= $3, heure_depart_r= $4, prends_gouter_r= $5,\n' +
+            'id_presence_theo= $6, id_facture= $7, absence_justifiee= $8 \n' +
+            'WHERE id_presence_reelle = $1 returning id_presence_reelle;',
+            [presenceReelle.id_presence_reelle, presenceReelle.datepresencereelle, presenceReelle.heure_arrivee,
+                presenceReelle.heure_depart, presenceReelle.prend_gouter, presenceReelle.id_presence_theo,
+                presenceReelle.id_facture, presenceReelle.absence_justifiee],
+            function (e, r) {
+                let retour = {
+                    erreur : null
+                }
+                if (e) {
+                    retour.erreur = e.toString()
+                } else {
+                    retour.resultat = r.rows[0]
+                }
+                console.log(r.rows[0])
+                callback(retour)
+            });
+    },
+
+    delete (presence_id, callback) {
+        db.query('DELETE FROM public.presencereelle \n' +
+            'WHERE id_presence_reelle = $1 returning id_presence_reelle;',
+            [presence_id],
+            function (e, r) {
+                let retour = {
+                    erreur : null
+                }
+                if (e) {
+                    retour.erreur = e.toString()
+                } else {
+                    retour.resultat = r.rows[0]
+                }
+                console.log(r.rows)
                 callback(retour)
             });
     },
@@ -216,7 +263,7 @@ let presenceReelle = {
         db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
             ' WHERE PR.datepresencereelle <= $1 ::date\n' +
             'AND PR.id_presence_theo = PT.id_presence_theorique',
-            [date],
+            [new Date(date)],
             function (er, res) {
                 retour = {
                     erreur: null,
@@ -251,7 +298,7 @@ let presenceReelle = {
             })
     },
 
-    getAllForContratbeofre (numContrat, date, callback) {
+    getAllForContratbefore (numContrat, date, callback) {
         db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
             ' WHERE PR.datepresencereelle <= $2 ::date\n' +
             'AND PR.id_presence_theo = PT.id_presence_theorique AND PT.id_contrat = $1',
@@ -285,7 +332,7 @@ let presenceReelle = {
                         })
                     }
                     retour.resultats = array
-                    console.log(retour)
+                    console.log('Presence', retour)
                 }
                 callback(retour)
             })

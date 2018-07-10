@@ -18,12 +18,13 @@
     <v-card height="35vw">
       <calendar-view
         :events="events"
-        :startingDayOfWeek="1"
         :show-date="date"
         @show-date-change="setShowDate"
         class="theme-default holiday-us-traditional holiday-us-official"
         :displayPeriodUom="typeAffichage"
         @click-event="eventClick"
+        weekdayNameFormat="long"
+        ref="calendar"
       >
       </calendar-view>
     </v-card>
@@ -137,6 +138,7 @@
 <script>
 import CalendarView from 'vue-simple-calendar'
 import PresenceService from '../../services/PresenceService'
+import DateHelper from '../../helper/DateHelper'
 import moment from 'moment'
 moment.locale('fr')
 require('vue-simple-calendar/dist/static/css/default.css')
@@ -144,6 +146,41 @@ require('vue-simple-calendar/dist/static/css/holidays-us.css')
 
 const ERRORCLASS = 'red lighten-3'
 const DEFAULTCLASS = 'light-green lighten-4'
+const statePresence = {
+  normale: {
+    class: 'green accent-1', type: 'PRESENCE'
+  },
+  anormale: // concerne un retard ou un gouter pris alors qu'on ne devait pas le prendre ou inversement
+    {
+      class: 'yellow lighten-4',
+      type: 'PRESENCE',
+      label: 'Presence anormale',
+      label_class: 'amber--text text--darken-4'
+    },
+  absence_justifee: {class: 'pink darken-1', type: 'ABSENCE',
+    label: 'Absence justififée', label_class: 'red--text text--darken-4'},
+  absence_non_justifiee: {class: 'deep-orange lighten-1', type: 'ABSENCE'},
+  exceptionnelle:
+    {
+      class: 'deep-purple lighten-4',
+      type: 'PRESENCE_EX',
+      label: 'Present exceptionnellement',
+      label_class: 'deep-purple--text text--lighten-1'
+    }
+}
+const NOTE = {
+  presenceExceptionnelle: 'Exceptionnellement présent aujourd\'hui ',
+  arriveeRetard: 'Arrivé(e) en retard, ',
+  arriveeEnAvance: 'Arrivé(e) en avance, ',
+  departEnAvance: 'Parti(e) avant, ',
+  departEnRetard: 'Depart en retard, ',
+  gouterPris: 'Gouter supplementaire, ',
+  gouterNonPris: 'Gouter non pris, ',
+  absenceJustifee: 'Absence justifiee',
+  absenceNonJustifee: 'Absence Non justifiee'
+}
+
+
 export default {
   name: 'Planning',
   components: {
@@ -167,7 +204,7 @@ export default {
       } */
       date: new Date(),
       typeAffichage: 'week',
-      typeAffichageFr: 'semaine'
+      typeAffichageFr: 'Semaine'
     }
   },
   methods: {
@@ -187,10 +224,10 @@ export default {
               let data = {
                 startDate: event.datepresencereelle,
                 endDate: event.datepresencereelle,
-                heureArriveePrevue: event.heureArriveePrevue,
-                heureDepartPrevue: event.heureDepartPrevue,
-                heureArriveeReelle: event.heureArriveeReelle,
-                heureDepartReelle: event.heureDepartReelle,
+                heureArriveePrevue: DateHelper.formatTime(event.heureArriveePrevue),
+                heureDepartPrevue: DateHelper.formatTime(event.heureDepartPrevue),
+                heureArriveeReelle: DateHelper.formatTime(event.heureArriveeReelle),
+                heureDepartReelle: DateHelper.formatTime(event.heureDepartReelle),
                 arriveeRetard: event.arriveeRetard,
                 partieAvant: event.partieAvant,
                 id: i,
@@ -198,17 +235,9 @@ export default {
                 prendsGouterReelle: event.prendsGouterReelle,
                 absence_justifiee: event.absence_justifiee
               }
-
-              if (event.arriveeRetard /* || !event.absence_justifiee */ || event.partieAvant ||
-                event.prendsGouterPrevue !== event.prendsGouterReelle) {
-                // si l'enfant est en retard, partie avant n'a pas justifié sont retard
-                // ou a pris un gouter alors qu'il ne devait ou l'inverse attribue la classe erreur
-                data.classes = ERRORCLASS
-                data.title = 'Présence anormale'
-              } else {
-                data.classes = DEFAULTCLASS
-                data.title = 'Présence normale'
-              }
+              let s = vm.getState(data)
+              data.classes = s.class
+              data.title = s.label
               vm.events.push(data)
             })
           }
@@ -216,15 +245,64 @@ export default {
         .catch(function (err) {
           console.log(err)
         })
+    },
+    getState (enfant) {
+      let s = JSON.parse(JSON.stringify(statePresence.normale))
+      let note = ''
+
+      if (enfant.heureArriveeReelle != null && enfant.heureArriveePrevue == null) {
+        s = statePresence.exceptionnelle
+        note = NOTE.presenceExceptionnelle
+      } else {
+        if (enfant.heureArriveeReelle == null && enfant.absence_justifiee === true) {
+          s = statePresence.absence_justifee
+          note = NOTE.absenceJustifee
+        } else if (enfant.heureArriveeReelle == null) {
+          s = statePresence.absence_non_justifiee
+          note = NOTE.absenceNonJustifee
+        } else {
+          if (DateHelper.formatTime(enfant.heureArriveeReelle) > DateHelper.formatTime(enfant.heureArriveePrevue)) { //arrivée en retard
+            s = statePresence.anormale
+            note = NOTE.arriveeRetard
+          } else if (DateHelper.formatTime(enfant.heureArriveeReelle) < DateHelper.formatTime(enfant.heureArriveePrevue)) {
+            s = statePresence.anormale
+            note = NOTE.arriveeEnAvance
+          }
+
+          if (DateHelper.formatTime(enfant.heureDepartReelle) < DateHelper.formatTime(enfant.heureDepartPrevue)) { // partie avant
+            s = statePresence.anormale
+            note += NOTE.departEnAvance
+          } else if (DateHelper.formatTime(enfant.heureDepartReelle) < DateHelper.formatTime(enfant.heureDepartPrevue)) {
+            s = statePresence.anormale
+            note += NOTE.departEnRetard
+          }
+
+          if (enfant.prend_gouter_r && !enfant.prend_gouter) { // a pris le gouter alors qu'il devait pas le prendre
+            s = statePresence.anormale
+            note += NOTE.gouterPris
+          } else if (!enfant.prend_gouter_r && enfant.prend_gouter) {
+            s = statePresence.anormale
+            note += NOTE.gouterNonPris
+          }
+        }
+      }
+
+      if (note.length > 0) {
+        s.note = note
+      }
+      return s
     }
+
   },
   watch: {
     typeAffichage (val) {
       if (val === 'week') {
         this.typeAffichageFr = 'semaine'
+        // console.log(this.$refs.calendar.$emit('show-date-change', new Date()))
       } else {
         this.typeAffichageFr = 'mois'
       }
+      this.$nextTick()
     } // ,
     /*
     ,

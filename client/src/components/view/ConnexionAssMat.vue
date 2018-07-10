@@ -47,6 +47,14 @@ export default {
           this.$router.push({
             name: 'Accueil'
           })
+          this.$notify({
+            group: 'assistante',
+            title: 'Connexion',
+            text: 'Connexion avec succès',
+            duration: 4000,
+            speed: 500,
+            type: 'success'
+          })
         } else {
           this.showError(response.data.erreur.texte)
           this.progress = false
@@ -55,11 +63,20 @@ export default {
         console.log(error)
         this.showError('Une erreur est survenue')
         this.progress = false
+
       }
     },
     showError (erreur) { // affiche l'erreur
-      this.error = erreur
-      this.alert = true
+      //this.error = erreur
+      //this.alert = true
+      this.$notify({
+        group: 'assistante',
+        title: 'Erreur',
+        type: 'error',
+        text: erreur,
+        duration: 4000,
+        speed: 500
+      });
     }
   }
 }

@@ -26,7 +26,7 @@
         <v-flex xs12>
           <v-fade-transition>
             <Searcher v-if="factures.length > 0 && factureSelectionne == null"
-                      item-attribute="mois" :items="factures" label="Mois ou annee">
+                      :item-attribute="['mois_fr', 'annee']" :items="factures" label="Mois ou annee">
               <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
                 <v-container grid-list-md text-xs-center >
                   <v-layout row wrap v-if="elements.items.length > 0">

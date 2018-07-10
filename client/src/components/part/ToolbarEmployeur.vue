@@ -49,6 +49,14 @@ export default {
     logout () {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('removeEmployeur')
+      this.$notify({
+        group: 'employeur',
+        title: 'Déconnexion',
+        text: 'Vous venez de vous déconnecter',
+        duration: 4000,
+        speed: 500,
+        type: 'warn'
+      })
       this.$router.push({
         name: 'Accueil'
       })

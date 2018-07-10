@@ -44,8 +44,36 @@ export default {
     return format
   },
 
-  formatTime (time) {
+  formatTimeFr (time) {
     let split = time.split(':')
     return split[0] + ' h ' + split[1]
+  },
+
+  formatTime (time) {
+    let split = time.split(':')
+    return split[0] + ':' + split[1]
+  },
+
+  getCurrentTime () {
+    let d = new Date()
+    return d.getHours() + ':' + d.getMinutes()
+  },
+
+  /**
+   * transforme en format temps
+   * @param heure
+   * @param minute
+   */
+  toTime(heure, minute) {
+    let h = '' + heure
+    let m = '' + minute
+
+    if (h.length === 1) {
+      h = '0' + h
+    }
+    if (m.length === 1) {
+      m = '0' + m
+    }
+    return h + ':' + m
   }
 }

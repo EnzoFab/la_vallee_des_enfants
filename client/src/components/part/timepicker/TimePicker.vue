@@ -141,6 +141,23 @@ export default {
       this.menuVisible = true */
       this.pickerVisible = !this.pickerVisible
     },
+    initMinute () {
+      this.minutes = []
+      let ecart = 5
+      if (this.minuteEcart != null) {
+        ecart = this.minuteEcart
+      }
+      for (let i = 0; i * parseInt(ecart) < 60; i++) {
+        this.minutes.push(i * ecart)
+      }
+      this.$nextTick()
+    },
+    initHour () {
+      this.heures = []
+      for (let i = this.heureDebut; i <= this.heureFin; i++) {
+        this.heures.push(i)
+      }
+    }
    /* hover(hour) {
       hour.class = 'white--text upperSize'
       hour.color = 'grey lighten-2'
@@ -192,17 +209,15 @@ export default {
     pickerVisible (v) { // reset des v-model
       this.time_heure = ''
       this.time_minute = ''
+    },
+    minuteEcart (v) {
+      this.initMinute()
     }
+
   },
   mounted() {
-    for (let i = this.heureDebut; i <= this.heureFin; i++) {
-      this.heures.push(i)
-    }
-    for (let i = 0; i * this.minuteEcart < 60; i++) {
-      this.minutes.push(i * this.minuteEcart)
-    }
-    // this.popupItem = this.$el
-    console.log(this.heures)
+    this.initHour()
+    this.initMinute()
   }
 }
 </script>

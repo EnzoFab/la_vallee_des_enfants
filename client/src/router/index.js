@@ -17,7 +17,6 @@ import VisualisationContrat from '@/components/view/VisualisationContrat'
 import store from '../store/store'
 import AssistanteService from '../services/AssistanteService'
 import EmployeurService from '../services/EmployeurService'
-import OneFacture from '@/components/part/VisualisationContratPart/OneFacture'
 import InfosAssMat from '@/components/view/InfosAssMat'
 import Emargement from '@/components/view/Emargement'
 
@@ -76,9 +75,10 @@ const router = new Router({
   mode: 'history',
   routes: [
     { // test
-      path: '/emargement',
+      path: '/assistante/emargement',
       name: 'Emargement',
       component: Emargement,
+      beforeEnter: isAssmat,
       meta: {title: 'Réaliser l\'émargement d\'un enfant'}
     },
     {
@@ -178,13 +178,13 @@ const router = new Router({
       component: VisualisationContrat,
       meta: {title: 'Toute l\'actualité de La Vallée Des Enfants'}
     },
-    {
+    /*{
       path: '/presence/saisir',
       name: 'SaisirPresences',
       component: SaisirPresences,
       meta: {title: 'Effectuer l\'émargement d\'un enfant'},
       beforeEnter: isAssmat
-    },
+    }, */
     { path: '/404',
       name: '404',
       component: NotFound,
