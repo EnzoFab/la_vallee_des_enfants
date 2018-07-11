@@ -292,6 +292,7 @@ let presenceReelle = {
                             partieAvant: res.rows[i].heure_depart_r < res.rows[i].heure_depart
                         })
                     }
+                    console.log('Array', array)
                     retour.resultats = array
                 }
                 callback(retour)

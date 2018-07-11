@@ -4,6 +4,9 @@
       <v-flex xs12>
         <h1 class="headline text-xs-center orange--text text--darken-1 mr-1"><b>{{dateFr}}</b></h1>
       </v-flex>
+      <v-flex xs6 offset-xs3 v-if="!contentLoaded">
+        <Spinner :loading="!contentLoaded" color="#4DB6AC"></Spinner>
+      </v-flex>
       <v-flex xs3 offset-xs8>
         <v-tooltip v-model="showTooltip" top color="blue darken-1">
           <v-btn  slot="activator"
@@ -277,7 +280,7 @@ const statePresence = {
       label_class: 'amber--text text--darken-4'
     },
   absence_justifee: {class: 'pink darken-1', type: 'ABSENCE',
-    label: 'Absence justififée', label_class: 'red--text text--darken-4'},
+    label: 'Absence justifiée', label_class: 'red--text text--darken-4'},
   absence_non_justifiee: {class: 'deep-orange lighten-1', type: 'ABSENCE'},
   exceptionnelle:
     {
@@ -313,7 +316,8 @@ export default {
       heure_fin: 19,
       loading: false,
       showTooltip: false,
-      showText: false
+      showText: false,
+      contentLoaded: false
     }
   },
   methods: {
@@ -461,7 +465,7 @@ export default {
     loadEnfantsPresents () { // charge tous les enfants supposés présents aujourd'hui
       let vm = this
       this.enfants_presents = []
-      PresenceTheoriqueService.getEnfantsDuJour() // recupere tous les enfants présent aujourd'hui
+      return PresenceTheoriqueService.getEnfantsDuJour() // recupere tous les enfants présent aujourd'hui
         .then(function (rst) {
           if (rst.data.erreur == null) {
             let data = rst.data.resultats
@@ -482,7 +486,7 @@ export default {
     loadEnfantsNonPresent () { // charge tous les enfants supposés absent aujourd'hui
       let vm = this
       this.enfants_non_presents = []
-      PresenceTheoriqueService.getEnfantsNonPresentsDujour() // recupere tous les enfants présent aujourd'hui
+      return PresenceTheoriqueService.getEnfantsNonPresentsDujour() // recupere tous les enfants présent aujourd'hui
         .then(function (rst) {
           if (rst.data.erreur == null) {
             let data = rst.data.resultats
@@ -503,7 +507,7 @@ export default {
     loadEnfantsEmarges () { // tous les enfants ayant été pointé
       let vm = this
       this.enfants_emarges = []
-      PresenceTheoriqueService.getEnfantsEmargesDuJour()
+      return PresenceTheoriqueService.getEnfantsEmargesDuJour()
         .then(function (rst) {
           if (rst.data.erreur != null) {
             throw rst.data.erreur
@@ -660,9 +664,14 @@ export default {
     }
   },
   mounted () {
-    this.loadEnfantsPresents() // charge les enfants présent de la BD
-    this.loadEnfantsNonPresent() // chage les enfants non présent
-    this.loadEnfantsEmarges()
+    let vm = this
+    Promise.all([
+      this.loadEnfantsPresents(), // charge les enfants présent de la BD
+      this.loadEnfantsNonPresent(), // chage les enfants non présent
+      this.loadEnfantsEmarges()
+    ]).then(function () {
+      vm.contentLoaded = true
+    })
     /* this.sortArray(this.enfants_presents)
     this.sortArray(this.enfants_non_presents)
     this.sortArray(this.enfants_emarges) */

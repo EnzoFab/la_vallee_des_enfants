@@ -144,8 +144,7 @@ moment.locale('fr')
 require('vue-simple-calendar/dist/static/css/default.css')
 require('vue-simple-calendar/dist/static/css/holidays-us.css')
 
-const ERRORCLASS = 'red lighten-3'
-const DEFAULTCLASS = 'light-green lighten-4'
+
 const statePresence = {
   normale: {
     class: 'green accent-1', type: 'PRESENCE'
@@ -158,8 +157,8 @@ const statePresence = {
       label_class: 'amber--text text--darken-4'
     },
   absence_justifee: {class: 'pink darken-1', type: 'ABSENCE',
-    label: 'Absence justififée', label_class: 'red--text text--darken-4'},
-  absence_non_justifiee: {class: 'deep-orange lighten-1', type: 'ABSENCE'},
+    label: 'Absence justifée', label_class: 'red--text text--darken-4'},
+  absence_non_justifiee: {class: 'deep-orange lighten-1', type: 'ABSENCE', label:'Absence injustifiée'},
   exceptionnelle:
     {
       class: 'deep-purple lighten-4',
@@ -220,17 +219,17 @@ export default {
       PresenceService.getAllPresenceContratBefore(moment(new Date()).format('YYYY-MM-DD HH:MM'), this.numContrat)
         .then(function (rslt) {
           if (rslt.data.erreur == null) {
-            rslt.data.resultats.forEach(function (event, i) {
+            rslt.data.resultats.forEach(function (event) {
               let data = {
                 startDate: event.datepresencereelle,
                 endDate: event.datepresencereelle,
-                heureArriveePrevue: DateHelper.formatTime(event.heureArriveePrevue),
-                heureDepartPrevue: DateHelper.formatTime(event.heureDepartPrevue),
-                heureArriveeReelle: DateHelper.formatTime(event.heureArriveeReelle),
-                heureDepartReelle: DateHelper.formatTime(event.heureDepartReelle),
+                heureArriveePrevue: vm.formatTime(event.heureArriveePrevue),
+                heureDepartPrevue: vm.formatTime(event.heureDepartPrevue),
+                heureArriveeReelle: vm.formatTime(event.heureArriveeReelle),
+                heureDepartReelle: vm.formatTime(event.heureDepartReelle),
                 arriveeRetard: event.arriveeRetard,
                 partieAvant: event.partieAvant,
-                id: i,
+                id: event.id_presence_reelle,
                 prendsGouterPrevue: event.prendsGouterPrevue,
                 prendsGouterReelle: event.prendsGouterReelle,
                 absence_justifiee: event.absence_justifiee
@@ -291,6 +290,14 @@ export default {
         s.note = note
       }
       return s
+    },
+
+    formatTime (time) {
+      if (time != null) {
+        return DateHelper.formatTime(time)
+      } else {
+        return null
+      }
     }
 
   },
