@@ -29,6 +29,15 @@ export default {
   },
 
   createPDF (data) {
-    return Api().post('/pdf/create', data)
+    return axios({
+      method: 'post',
+      url: process.env.BASE_URL + '/pdf/create', // process.env.BASE_URL +'/files/image',
+      data: data,
+      responseType: 'blob',
+      headers: {
+        'Authorization': `Bearer ${store.state.token}`
+      }
+    })
+    // return Api().post('/pdf_generator/create', data)
   }
 }

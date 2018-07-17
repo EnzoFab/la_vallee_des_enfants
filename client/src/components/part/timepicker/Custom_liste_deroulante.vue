@@ -48,14 +48,14 @@ export default {
       item.class = 'white--text upperSize'
       this.$emit('input', '' + item.number)
     },
-    hover(item) {
+    hover (item) {
       if (!item.selected) {
         item.class = 'white--text upperSize'
         item.color = hoverColor
         item.size = 75
       }
     },
-    reset(item) {
+    reset (item) {
       if (!item.selected) {
         item.class = 'headline'
         item.color = 'transparent'

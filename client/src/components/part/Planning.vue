@@ -15,19 +15,21 @@
         item-value="value"
       ></v-select>
     </v-flex>
-    <v-card height="35vw">
-      <calendar-view
-        :events="events"
-        :show-date="date"
-        @show-date-change="setShowDate"
-        class="theme-default holiday-us-traditional holiday-us-official"
-        :displayPeriodUom="typeAffichage"
-        @click-event="eventClick"
-        weekdayNameFormat="long"
-        ref="calendar"
-      >
-      </calendar-view>
-    </v-card>
+    <v-flex xs12>
+      <v-card height="35vw">
+        <calendar-view
+          :events="events"
+          :show-date="date"
+          @show-date-change="setShowDate"
+          class="theme-default holiday-us-traditional holiday-us-official"
+          :displayPeriodUom="typeAffichage"
+          @click-event="eventClick"
+          weekdayNameFormat="long"
+          ref="calendar"
+        >
+        </calendar-view>
+      </v-card>
+    </v-flex>
     <v-dialog v-model="dialog" max-width="800" width="750" v-if="eventInDialog != null">
       <v-card :class="eventInDialog.classes">
         <v-card-title class="headline" >

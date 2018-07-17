@@ -45,7 +45,6 @@
                         single-line
                         item-text="libelle"
                         auto
-                        chips
                         :rules="regleTypeTuteur"
                         required
                       ></v-select>

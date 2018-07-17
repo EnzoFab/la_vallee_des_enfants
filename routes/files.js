@@ -1,9 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const fs = require('fs');
-var cloudinary = require('cloudinary'); // pour stocker des images en lignes
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
+const express = require('express');
+const router = express.Router();
+const cloudinary = require('cloudinary'); // pour stocker des images en lignes
+const multipart = require('connect-multiparty');
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME, //process.env.CLOUD_NAME,
@@ -63,7 +61,6 @@ router.post('/image', function (req, res) {
 /* -----------------------------------------ROUTE DELETE -------------------------------------------------------- */
 router.delete('/image/:publicId', function (req, res) {
     let publicId = req.params.publicId
-    console.log("====Public:", publicId)
     cloudinary.v2.uploader.destroy(publicId, function(error, result){
         let retour = {erreur: null}
         if(error){
@@ -74,6 +71,6 @@ router.delete('/image/:publicId', function (req, res) {
         }
         res.send(retour)
     })
-})
+});
 
 module.exports = router;

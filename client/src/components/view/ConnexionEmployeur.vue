@@ -70,7 +70,7 @@ export default {
         text: erreur,
         duration: 4000,
         speed: 500
-      });
+      })
     }
   }
 }

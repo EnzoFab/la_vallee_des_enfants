@@ -70,7 +70,8 @@
             <v-card-text>
               <h2>Générer une facture</h2>
               <v-bottom-sheet hide-overlay v-model="sheet">
-                <v-btn slot="activator" icon color="light-blue darken-3" dark large>
+                <v-btn slot="activator" v-if="isAssMatConnected"
+                       icon color="light-blue darken-3" dark large>
                   <v-icon large dark>add</v-icon>
                 </v-btn>
                 <v-card>

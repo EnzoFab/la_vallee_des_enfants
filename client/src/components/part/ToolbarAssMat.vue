@@ -18,6 +18,10 @@
         <h4 class="blue--text"> Fil d'actualité </h4>
         <v-icon x-large color="blue">event</v-icon>
       </v-tab>
+      <v-tab to="/contact" class="d-inline-block" ripple>
+        <h4 class="red--text"> Contact </h4>
+        <v-icon x-large color="red lighten-3">mail_outline</v-icon>
+      </v-tab>
       <v-menu offset-y open-on-hover transition="scale-transition"  class="tabs__div">
         <a class="tabs__item" slot="activator" >
           <h4 class="teal--text">Compte</h4>

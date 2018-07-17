@@ -261,7 +261,7 @@
 </template>
 
 <script>
-import Spinner from 'vue-spinner/src/SkewLoader'
+import Spinner from 'vue-spinner/src/RiseLoader'
 import Searcher from '../part/Searcher'
 import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
 import PresenceReelleService from '../../services/PresenceService'

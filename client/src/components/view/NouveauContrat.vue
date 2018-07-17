@@ -310,7 +310,7 @@ export default {
                 estValide = false
               } else {
                 if (tuteurs[i].infoDemandeur != null) { // le tuteurs est demandeur
-                  var login = tuteurs[i].prenom + '_' + tuteurs[i].nomUsage + generator.generate({length: 3, numbers: true})
+                  let login = tuteurs[i].prenom + '_' + tuteurs[i].nomUsage + generator.generate({length: 3, numbers: true})
                   // prenom_nom + 3 charactere random
                   let donneeEmployeur = {
                     nom_naissance_employeur: tuteurs[i].infoDemandeur.nomNaissance,
@@ -353,7 +353,7 @@ export default {
     async saveEmployeur (data) {
       let donneeEmployeur = {}
       if (data.employeur.employeurExistant == null) {
-        var login = data.employeur.prenom + '_' + data.employeur.nomUsage + generator.generate({length: 3, numbers: true})
+        let login = data.employeur.prenom + '_' + data.employeur.nomUsage + generator.generate({length: 3, numbers: true})
         donneeEmployeur = { // a modifier
           nom_naissance_employeur: data.employeur.nomNaissance,
           nom_usage_employeur: data.employeur.nomUsage,

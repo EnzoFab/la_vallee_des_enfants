@@ -170,11 +170,10 @@ import Calendar from '../part/Calendar'
 import PostService from '../../services/PostService'
 import FileService from '../../services/FileService'
 import InfiniteLoading from 'vue-infinite-loading'
-import ParallaxCard from "../part/Parallax-card";
 let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 export default {
   name: 'Evenements',
-  components: {ParallaxCard, Calendar, InfiniteLoading},
+  components: {Calendar, InfiniteLoading},
   data () {
     return {
       posts: [],
@@ -241,7 +240,7 @@ export default {
       })
     },
     onFileChange (e) { // lorsqu'on charge une image dans le v-dialog
-      var files = e.target.files || e.dataTransfer.files
+      let files = e.target.files || e.dataTransfer.files
       if (files.length !== undefined) {
         this.image = files[0]
         if (!this.image.type.includes('image/')) {
@@ -254,8 +253,8 @@ export default {
       }
     },
     createImage (file) {
-      var reader = new FileReader()
-      var vm = this
+      let reader = new FileReader()
+      let vm = this
 
       reader.onload = (e) => {
         vm.imgPath = e.target.result

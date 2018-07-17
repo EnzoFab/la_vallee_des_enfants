@@ -302,14 +302,21 @@
               <v-divider></v-divider>
             </v-card>
           </v-flex>
-          <v-btn
-            color="blue--text"
-            @click="exportPDF"
-            :loading="loadingPdf"
-            ripple>
-            Exporter le contrat au format PDF
-            <span slot="loader" class="custom-loader"><v-icon light>cached</v-icon></span>
-          </v-btn>
+          <v-flex>
+            <v-btn
+              color="blue--text"
+              @click="exportPDF"
+              :loading="loadingPdf"
+              ripple>
+              Exporter le contrat au format PDF
+              <span slot="loader" class="custom-loader"><v-icon light>cached</v-icon></span>
+            </v-btn>
+          </v-flex>
+        </v-flex>
+        <v-flex>
+          <v-slide-y-transition>
+            <span v-if="loadingPdf">Veuillez patienter nous préparons votre pdf</span>
+          </v-slide-y-transition>
         </v-flex>
       </v-flex>
     </v-layout>
@@ -503,6 +510,7 @@
       },
       async exportPDF () {
         this.loadingPdf = true
+        let vm = this
         console.log({employeur: { nomNaissanceEmp: this.nomNaissanceEmp, nomUsageEmp: this.nomUsageEmp, prenomEmp: this.prenomEmp, rueEmp: this.rueEmp, codePEmp: this.codePEmp, villeEmp: this.villeEmp, telephoneEmp: this.telephoneEmp, emailEmp: this.emailEmp, nombreSemSupp: this.nombreSemSupp },
           assmat: {nomNaissanceAssMat: this.nomNaissanceAssMat, nomUsageAssMat: this.nomUsageAssMat, prenomAssMat: this.prenomAssMat, dateNaissanceAssMat: this.dateNaissanceAssMat, villeNaissanceAssMat: this.villeNaissanceAssMat, numeroSS: this.numeroSS, dateAgrement: this.dateAgrement, referenceAgrement: this.referenceAgrement, assurance: this.assurance, numeroPolice: this.numeroPolice, nombreSemaineConges: this.nombreSemaineConges},
           enfant: {nomEnfant: this.nomEnfant, prenomEnfant: this.prenomEnfant, dateNaissanceEnfant: this.dateNaissanceEnfant},
@@ -552,7 +560,9 @@
               modeDePaiementContrat: this.modeDePaiementContrat
             }
         }
-        PDF_creator.contratPdf(data)
+        PDF_creator.contratPdf(data).finally(function () {
+          vm.loadingPdf = false
+        })
         /*try {
 
           if (presences.data.erreur == null) {

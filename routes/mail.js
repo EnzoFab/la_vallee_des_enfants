@@ -9,7 +9,8 @@ router.post('/send', function (req, res) {
     let destinataire = req.body.to
     let sujet = req.body.sujet
     let text = req.body.message
-    var smtpTransport = nodemailer.createTransport({
+    console.log(destinataire)
+    let smtpTransport = nodemailer.createTransport({
         service: 'gmail',//process.env.SERVICE_MAIL,
         auth: {
             user: 'vallee.enfants@gmail.com',// process.env.USER_MAIL,
@@ -17,7 +18,7 @@ router.post('/send', function (req, res) {
         }
     });
 
-    var mail = {
+    let mail = {
         from: "La vallée des enfants <from@gmail.com>",
         to: destinataire,
         subject: sujet,
@@ -25,7 +26,7 @@ router.post('/send', function (req, res) {
         html: `<div style="margin: auto; text-align: center"><img src="cid:unique@kreata.ee"/><p>${text}</p></div>`,
         attachments: [{
             filename: 'image.png',
-            path: 'public/image/logo.png',
+            path: 'public/images/logo.jpg',
             cid: 'unique@kreata.ee' //same cid value as in the html img src
         }]
     }

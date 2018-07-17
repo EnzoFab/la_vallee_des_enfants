@@ -42,7 +42,7 @@ export default new Vuex.Store({
      * @returns {boolean}
      */
     isAssMatConnected (state, getters) {
-      var connectedUser = getters.connectedUser
+      let connectedUser = getters.connectedUser
       return connectedUser != null && connectedUser.rang === 'Assmat'
     },
     /**
@@ -52,7 +52,7 @@ export default new Vuex.Store({
      * @returns {boolean}
      */
     isEmployeurConnected (state, getters) {
-      var connectedUser = getters.connectedUser
+      let connectedUser = getters.connectedUser
       return connectedUser != null && connectedUser.rang === 'Employeur'
     }
   },

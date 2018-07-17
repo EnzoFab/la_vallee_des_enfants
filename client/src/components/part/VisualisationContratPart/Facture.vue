@@ -237,10 +237,10 @@ export default {
     facturePDF () {
       console.log($('#facture').get(0))
       html2canvas($('#facture').get(0).hmtl).then(function (canvas) {
-        let PDF_creator = new jsPDF('p', 'pt', 'a4');
+        let PDF_creator = new jsPDF('p', 'pt', 'a4')
         PDF_creator.addHTML(canvas, function () {
           PDF_creator.save('facture.PDF_creator')
-        });
+        })
       })
       /*html2canvas(document.getElementById('facture'), {
       }).then(function(canvasObj) {
@@ -249,8 +249,6 @@ export default {
         });
         //save this object to the PDF_creator
       }); */
-
-
     }
   },
   mounted () {
@@ -286,8 +284,9 @@ export default {
     },
     indemniteAuForfait () {
       if (this.factureAAfficher != null) {
-        return FonctionMath.arrondi(this.factureAAfficher.jour_semaine * parseInt(this.factureAAfficher.tarif_entretien)
-          * (52 - this.factureAAfficher.nb_semaines_conges - this.factureAAfficher.nb_semaines_conges) / 12, 0)
+        return FonctionMath.arrondi(this.factureAAfficher.jour_semaine *
+          parseInt(this.factureAAfficher.tarif_entretien) *
+          (52 - this.factureAAfficher.nb_semaines_conges - this.factureAAfficher.nb_semaines_conges) / 12, 0)
       } else {
         return 0
       }
@@ -295,9 +294,9 @@ export default {
     nombreGouterPris () {
       let nbGouter = 0
       for (let i = 0; i < this.presenceDumois.length; i++) {
-        if (this.presenceDumois[i].prends_gouter_r !== undefined
-          && this.presenceDumois[i].prends_gouter_r != null
-          && this.presenceDumois[i].prends_gouter_r) {
+        if (this.presenceDumois[i].prends_gouter_r !== undefined &&
+          this.presenceDumois[i].prends_gouter_r != null &&
+          this.presenceDumois[i].prends_gouter_r) {
           nbGouter += 1
         }
       }

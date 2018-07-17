@@ -1,9 +1,22 @@
 // import FileService from "../services/FileService";
-const Grabzit = require('grabzit')
-const client = new Grabzit('Y2FhMTM0MjU5MzFiNDJjZGI3MzY0NDIyNjcwODI2Y2I=',
-  'STISPz8/F3RIPz8MQDw/Hz8/P2kVfD9SGT8/OHJXPx0=');
+import FileService from '../services/FileService'
 
-let PDF_creator = {
+
+function forceDownload(response, name) {
+  if (!window.navigator.msSaveOrOpenBlob){
+    // BLOB NAVIGATOR
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `contrat_${name}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+  }else{
+    // BLOB FOR EXPLORER 11
+    const url = window.navigator.msSaveOrOpenBlob(new Blob([response.data]), `contrat_${name}.pdf`);
+  }
+}
+export default {
   contratPdf (data) {
     let table = ''  // boucle sur les jours
     let html =
@@ -11,31 +24,23 @@ let PDF_creator = {
             <head>
                 <meta charset="UTF-8">
             </head>
-            <body style="font-family: Arial, Helvetica, sans-serif; background-color: 	#FFFFF0;">
+            <body style="font-family: Arial, Helvetica, sans-serif; background-color: white; text-align: center; 
+            margin: 2%; border: solid;">
                 <div style="text-align: center;">
-                    <h1 style=" color:#4B0082;">Contrat de ${data.enfant.nom_complet}</h1>
-                    <img src="/static/logo.jpg" height="200px" />
+                    <h1 style="color:#4B0082;">Contrat de ${data.enfant.nom_complet}</h1>
+                    <img src="images/logo.jpg" style="width: 800px; height: 350px" alt="logo"/>
+                    <h2 style="color:#4B0082;"> N°<br> <i>${data.contrat.num_contrat}</i></h2>
                 </div>
                 <h2 style="text-align: center;">Renseignements personnels</h2>
                 <p>Identifiant de l'employeur: </p>
                 <ul style="list-style-type: none;">
-                    <li>Nom de naissance :</li>
-                    <li>Nom d'usage :</li>
-                    <li>Adresse :</li>
-                    <li>Telephone du domicile :</li>
-                    <li>Couriel :</li>
-                    <li>
-                        <table style="border-collapse: collapse; padding: 15px;">
-                            <tr font-weight: bold;>
-                               <th>Nom</th>
-                               <th>${data.employeur.nom_complet}</th>
-                            </tr>
-                             <tr>
-                               <td>Telephone</td>
-                               <td>${data.employeur.telephoneEmp}</td>
-                            </tr>
-                        </table>
-                    </li>
+                    <li>Nom de naissance : ${data.employeur.nomNaissanceEmp}</li>
+                    <li>Nom d'usage : ${data.employeur.nomUsageEmp}</li>
+                    <li>Adresse : 
+                            ${data.employeur.rueEmp + ', ' + data.employeur.codePEmp + ', ' + data.employeur.villeEmp}
+                     </li>
+                    <li>Telephone du domicile : ${data.employeur.telephoneEmp}</li>
+                    <li>Couriel : ${data.employeur.emailEmp}</li>
                 </ul>
                 <p>Et la salariée: </p>
                  <ul style="list-style-type: none;">
@@ -50,7 +55,7 @@ let PDF_creator = {
                 </ul>
                 <h2>Les termes du contrat</h2>
                 <p>
-                    <div style="text-align: center">
+                    <div>
                       Il est conclu un contrat de travail régi par les dispositions de la convention collective nationale 
                       de travail des assistantes maternelles du particulier employeur. L'employeur s'assure que le salarié
                        possède un exemplaire de cette convention à jour.<br>
@@ -84,11 +89,10 @@ let PDF_creator = {
                 </table>
             </body> 
         </html>` // TODO a finir
-    console.log(client.html_to_pdf(html, {}))
-    client.html_to_pdf(html)
-    client.save(function () {
-      console.log('SAVED')
-    })
+    return FileService.createPDF({html: html, nom: 'contrat_' + data.enfant.nom_complet})
+      .then(function (r) {
+        forceDownload (r, data.enfant.nom_complet)
+      })
   },
 
   facturePdf (numcontrat, mois, annee) {
@@ -96,8 +100,6 @@ let PDF_creator = {
       `<html>
             
         </html>`
-    client.ConvertHTML(html)
   }
 }
 
-module.exports = PDF_creator
