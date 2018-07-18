@@ -518,6 +518,8 @@
         }
       ) // rr
         const presences = await ContratService.getPresencesByContrat(this.numeroContrat)
+        console.log(presences)
+        //
         let data = {
           employeur:
             {nomNaissanceEmp: this.nomNaissanceEmp,
@@ -558,7 +560,8 @@
               taux_majore: this.taux_majore,
               jour_paiement: this.jour_paiement,
               modeDePaiementContrat: this.modeDePaiementContrat
-            }
+            },
+          presences: presences.data.resultats
         }
         PDF_creator.contratPdf(data).finally(function () {
           vm.loadingPdf = false

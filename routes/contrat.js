@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var modelContrat = require('../models/contrat')
+const express = require('express');
+const router = express.Router();
+const modelContrat = require('../models/contrat')
 
 
 /* --------------------------------------- ROUTES GET ----------------------------------------------------------- */

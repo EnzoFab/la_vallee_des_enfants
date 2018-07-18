@@ -256,8 +256,9 @@ let Contrat = {
 
     getPresencesByContrat: function (numeroContrat, callback) {
         db.query(
-            'SELECT * FROM public.contrat as co, public.presencetheorique pt ' +
-            'WHERE co.id_contrat = pt.id_contrat AND co.id_contrat= $1 ' +
+            'SELECT * FROM public.contrat as co, public.presencetheorique pt, public.typejour tj \n' +
+            'WHERE co.id_contrat = pt.id_contrat AND co.id_contrat= $1 \n' +
+            'AND pt.id_type_jour  = tj.id_type \n' +
             'ORDER BY pt.id_type_jour',
             [numeroContrat],
             function (err, rslt){
@@ -270,12 +271,14 @@ let Contrat = {
                 retour.erreur = e.erreur;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    var array = []
-                    for(var i = 0; i < rslt.rows.length; i++){
+                    let array = []
+                    for(let i = 0; i < rslt.rows.length; i++){
                         array.push({
                             heureArrivee: rslt.rows[i].heure_arrivee,
                             heureDepart: rslt.rows[i].heure_depart,
-                            id_type_jour: rslt.rows[i].id_type_jour
+                            id_type_jour: rslt.rows[i].id_type_jour,
+                            libelle_jour: rslt.rows[i].libelle,
+                            gouter: rslt.rows[i].prends_gouter
                         });
                     }
                     retour.resultats = array;
