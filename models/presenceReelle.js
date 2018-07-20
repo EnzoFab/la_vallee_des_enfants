@@ -114,8 +114,8 @@ let presenceReelle = {
 
     // Toutes les presences reelle d'un mois(d'une annee) pour un contrat
     getAllPresencesDuMois: function (annee, mois, numContrat, callback) {
-        let dateDebut = new Date(annee, mois, 1)
-        let dateFin = new Date(annee, mois+1, 0)
+        let dateDebut = new Date(annee, mois-1, 1)
+        let dateFin = new Date(annee, mois, 0)
         db.query(
             'SELECT pr.datepresencereelle, pr.heure_arrivee_r, pr.heure_depart_r, pr.prends_gouter_r, pr.absence_justifiee ' +
             'FROM public.presencereelle pr, public.presencetheorique pt ' +

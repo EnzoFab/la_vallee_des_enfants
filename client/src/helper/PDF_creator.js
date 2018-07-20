@@ -1,6 +1,7 @@
 // import FileService from "../services/FileService";
 import FileService from '../services/FileService'
 import DateHelper from './DateHelper'
+import FonctionMath from './FonctionMath'
 
 function forceDownload(response, name) {
   if (!window.navigator.msSaveOrOpenBlob){
@@ -21,7 +22,8 @@ export default {
     let table = ''  // boucle sur les jours
     let gouter = ''
     let nbSemaineAccueil = 52 - data.assmat.nombreSemaineConges - data.employeur.nombreSemSupp
-    let salaireMensuelNet = (data.contrat.nb_heures_semaine * data.contrat.tarif * nbSemaineAccueil) / 12
+    let salaireMensuelNet =
+      FonctionMath.arrondi((data.contrat.nb_heures_semaine * data.contrat.tarif * nbSemaineAccueil) / 12, 2)
     for (let i = 0; i < data.presences.length; i++) {
       if (data.presences[i].heureArrivee != null) {
         gouter = 'Oui'
@@ -42,9 +44,16 @@ export default {
                 <meta charset="UTF-8">
             </head>
             <style>
+                h2 {
+                 margin-bottom: 3%;
+                 color: #d87c47;
+                 font-weight: bold;
+                 text-decoration: underline;
+                }
                 th {
                   background-color: #d87c47;
                   color: white;
+                  font-weight: bold;
                 }
                 table {
                 margin: 2%;
@@ -69,7 +78,7 @@ export default {
                 <div style="text-align: center; margin-bottom: 3%;">
                     <h1 style="color:#4B0082;">Contrat de ${data.enfant.nom_complet}</h1>
                     <img src="images/logo.jpg" style="width: 800px; height: 500px; margin-bottom: 4%;" alt="logo"/>
-                    <h2 style="color:#4B0082; "> N°<br> <i>${data.contrat.num_contrat}</i></h2>
+                    <h3 style="color:#4B0082; "> N°<br> <i>${data.contrat.num_contrat}</i></h3>
                     <img src="images/maternelle_enfant.png" style="width: 35%" alt="maternelle"/>
                 </div>
                 <h2 style="text-align: center;">Renseignements personnels</h2>
@@ -84,16 +93,17 @@ export default {
                     <li>Couriel : ${data.employeur.emailEmp}</li>
                 </ul>
                 <p>Et la salariée: </p>
-                 <ul style="list-style-type: none; page-break-after: always;">
+                 <ul style="page-break-after: always;">
                     <li>Nom de naissance : ${data.assmat.nomNaissanceAssMat}</li>
                     <li>Nom d'usage : ${data.assmat.nomUsageAssMat}</li>
                     <li>Née le : ${data.assmat.dateNaissanceAssMat}</li>
-                    <li>Lieu de naissance :${data.assmat.villeNaissanceAssMat}</li>
+                    <li>Lieu de naissance : ${data.assmat.villeNaissanceAssMat}</li>
                     <li>Numero de SS : ${data.assmat.numeroSS}</li>
                     <li>Agrément délivré le : ${data.assmat.dateAgrement}</li>
-                    <li>Assurance "Responsabilité Civile Professionnelle" :${data.assmat.assurance}</li>
+                    <li>Assurance "Responsabilité Civile Professionnelle" : ${data.assmat.assurance}</li>
                     <li>Numéro de Police: ${data.assmat.numeroPolice}</li>
                 </ul>
+                <img src="images/plume.png" alt="contrat" style="width: 35%; margin-top: 2%;"/>
                 <h2>Les termes du contrat</h2>
                 <p>
                     <div>
@@ -105,7 +115,7 @@ export default {
                          Né(e) le : ${data.enfant.dateNaissanceEnfant}
                       </span>
                       <p>
-                      <h2 style="font-style: italic;">DATE D'EFFET DU CONTRAT</h2> 
+                      <h3 style="font-style: italic;">DATE D'EFFET DU CONTRAT</h3> 
                       (à compter du premier jour de la période d'essai) : ${data.contrat.dateDebAdapt}
                       </p>
                     </div>
@@ -121,7 +131,7 @@ export default {
                 nombre d'heures : ${data.contrat.nb_heures_semaine} /semaine, selon le planning suivant :
                 </div>
                 <table style="width: 95%;">
-                    <tr style="font-weight: bold;">
+                    <tr>
                         <th>Jour</th>
                         <th>Heure d'arrivée</th>
                         <th>Heure de départ</th>
@@ -130,7 +140,7 @@ export default {
                      ${table}
                 </table>
                  <p> <u> Rémunération : </u> </p>
-    <ul>
+    <ul style="page-break-after: always;">
         <li>Salaire horaire de base </li>
             <p> Salaire horaire net de base : ${data.contrat.tarif} euros </p> 
         <li>Salaire de base : le salaire est mensualisé. </li>
@@ -140,7 +150,7 @@ export default {
         <li> Date de paiement du salaire : <b> le <u>${data.contrat.jour_paiement}</u> de chaque mois </b>
          Mode de paiement du salaire : <u><b>${data.contrat.modeDePaiementContrat}</b></u> </li>
     </ul>
-    <p> <u> Congés payés : </u> </p>
+    <p> <u style="margin-top: 15%"> Congés payés : </u> </p>
     <ul>
         <li> Les parties conviennent que l'assistante maternelle prend des congés avant la fin de la première année </li> de référence. Si l'assistante maternelle prend plus de jours que ceux convenu au contrat. Elle les prend sans rémunération. Il est convenu d'un accord commun pour :
             <p> Le salarié :  ${data.assmat.nombreSemaineConges} semaine de congé annuel </p>
@@ -174,14 +184,14 @@ export default {
     <p> <b> Signature de l'employeur </b> </p> 
     <p>(Précédée de la mention "Lu et approuvé")</p>
     <p> A  : </p>
-    <p> Le : </p>
+    <p style="margin-bottom: 10%"> Le : </p>
     
     <p> <b> Signature du salarié </b> </p> 
     <p>(Précédée de la mention "Lu et approuvé")</p>
     <p> A  : </p>
-    <p> Le : </p>
+    <p style="margin-bottom: 10%"> Le : </p>
             </body> 
-        </html>` // TODO a finir
+        </html>`
     return FileService.createPDF({html: html, nom: 'contrat_' + data.enfant.nom_complet})
       .then(function (r) {
         forceDownload (r, data.enfant.nom_complet)
@@ -192,7 +202,11 @@ export default {
     let html =
       `<html>
             
-        </html>`
+        </html>` // TODO a finir
+    return FileService.createPDF({html: html, nom: 'facture_' + mois + '-' + annee})
+      .then(function (r) {
+        forceDownload (r, data.enfant.nom_complet)
+      })
   }
 }
 

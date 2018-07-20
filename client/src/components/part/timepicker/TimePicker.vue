@@ -13,7 +13,7 @@
     </v-flex>
     <v-flex xs12>
       <v-scale-transition>
-        <v-layout v-if="pickerVisible" row wrap pb-3>
+        <v-layout v-if="pickerVisible" row wrap pb-3 v-click-outside="closeEvent">
           <v-flex xs6>
             <custom_liste_deroulante
               :items="heures" v-if="heures.length > 0"
@@ -47,22 +47,6 @@
           </v-list>
         </v-card-text>
       </v-card>-->
-
-    <v-menu :close-on-content-click="false"
-            min-width="400" min-height="400" bottom left v-model="menuVisible"
-            :position-x="positionX"
-            :position-y="positionY"
-    >
-      <v-card>
-        <v-card-text>
-          <v-layout row wrap>
-            <v-flex xs3 v-for="(h) in heures" :key="h.number">
-              <v-btn fab outline top>{{h.number}}</v-btn>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
-    </v-menu>
   </v-layout>
 </template>
 
@@ -72,39 +56,10 @@ import ClickOutside from 'vue-click-outside'
 
 export default {
   name: 'TimePicker',
-  directives: {
-    'click-outside': {
-      bind: function(el, binding, vNode) {
-        // Provided expression must evaluate to a function.
-        if (typeof binding.value !== 'function') {
-          const compName = vNode.context.name
-          let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`
-          if (compName) { warn += `Found in component '${compName}'` }
-
-          console.warn(warn)
-        }
-        // Define Handler and cache it on the element
-        const bubble = binding.modifiers.bubble
-        const handler = (e) => {
-          if (bubble || (!el.contains(e.target) && el !== e.target)) {
-            binding.value(e)
-          }
-        }
-        el.__vueClickOutside__ = handler
-
-        // add Event Listeners
-        document.addEventListener('click', handler)
-      },
-
-      unbind: function(el, binding) {
-        // Remove Event Listeners
-        document.removeEventListener('click', el.__vueClickOutside__)
-        el.__vueClickOutside__ = null
-
-      }
-    }
-  },
   components: {Custom_liste_deroulante},
+  directives: {
+    ClickOutside
+  },
   props: {
     heureDebut: {type: Number, default: 0},
     heureFin: {type: Number, default: 23},
@@ -132,13 +87,10 @@ export default {
     }
   },
   methods: {
-    outside () {
-      console.log('Outside')
+    closeEvent: function () {
+      this.pickerVisible = false
     },
     tooglePicker(e) {
-      /* this.positionX = e.clientX
-      this.positionY = e.clientY + 40
-      this.menuVisible = true */
       this.pickerVisible = !this.pickerVisible
     },
     initMinute () {
@@ -214,6 +166,8 @@ export default {
       this.initMinute()
     }
 
+  },
+  events: {
   },
   mounted() {
     this.initHour()

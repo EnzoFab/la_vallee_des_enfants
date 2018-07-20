@@ -1,140 +1,144 @@
 <template>
-  <v-flex xs12 class="ma-4">
-    <h3 >
-      Planning des présences de <u>{{nomCompletEnfant}}</u><br>
-      <p style="padding-top: 2%">Affichage: <b>{{typeAffichageFr.toUpperCase()}}</b></p>
-    </h3>
-    <v-flex xs12 style="padding-left: 41%; padding-right: 41%">
-      <v-select
-        flat
-        hide-selected
-        v-model="typeAffichage"
-        auto
-        :items="[{label: 'semaine', value: 'week'}, {label: 'mois', value:'month'}]"
-        item-text="label"
-        item-value="value"
-      ></v-select>
-    </v-flex>
-    <v-flex xs12>
-      <v-card height="35vw">
-        <calendar-view
-          :events="events"
-          :show-date="date"
-          @show-date-change="setShowDate"
-          class="theme-default holiday-us-traditional holiday-us-official"
-          :displayPeriodUom="typeAffichage"
-          @click-event="eventClick"
-          weekdayNameFormat="long"
-          ref="calendar"
-        >
-        </calendar-view>
-      </v-card>
-    </v-flex>
-    <v-dialog v-model="dialog" max-width="800" width="750" v-if="eventInDialog != null">
-      <v-card :class="eventInDialog.classes">
-        <v-card-title class="headline" >
-          {{nomCompletEnfant}}
-          <img src="/static/babyFace.png" style="padding-left: 3%" height="70px"/>
-        </v-card-title>
-        <v-card-text>
-          <v-layout v-if="eventInDialog.absence_justifiee == null || !eventInDialog.absence_justifiee"
-                     row wrap align-center >
-            <v-flex xs7>
-              <v-subheader>Prévu</v-subheader>
-              <v-list :class="eventInDialog.classes">
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/horloge.png" />
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    Heure d'arrivée prévue: {{eventInDialog.heureArriveePrevue}}
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/horloge.png" />
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    Heure de départ prévue: {{eventInDialog.heureDepartPrevue}}
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/petitDej.png" />
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    Gouter <v-checkbox disabled v-model="eventInDialog.prendsGouterPrevue"/>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-              <v-divider></v-divider>
-              <v-subheader>Réel</v-subheader>
-              <v-list :class="eventInDialog.classes">
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/horloge.png" />
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    Heure d'arrivée réelle: {{eventInDialog.heureArriveeReelle}}
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/horloge.png" />
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    Heure de départ réelle: {{eventInDialog.heureDepartReelle}}
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/petitDej.png" />
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    Gouter <v-checkbox disabled v-model="eventInDialog.prendsGouterReelle"/>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-flex>
-            <v-flex xs5>
-              <v-subheader>Observations</v-subheader>
-              <v-list :class="eventInDialog.classes">
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/retard.png"/>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <span v-if="eventInDialog.arriveeRetard" class="text--red">Retard: Oui</span>
-                    <span v-else>Retard: Non</span>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-avatar>
-                    <img src="/static/chocolat.png"/>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
+  <v-card flat :color="color" flat>
+    <v-layout row wrap class="ma-1">
+      <v-flex xs12>
+        <h3 >
+          Planning des présences de <u>{{nomCompletEnfant}}</u><br>
+          <p style="padding-top: 2%">Affichage: <b>{{typeAffichageFr.toUpperCase()}}</b></p>
+        </h3>
+      </v-flex>
+      <v-flex xs12 style="padding-left: 41%; padding-right: 41%">
+        <v-select
+          flat
+          hide-selected
+          v-model="typeAffichage"
+          auto
+          :items="[{label: 'semaine', value: 'week'}, {label: 'mois', value:'month'}]"
+          item-text="label"
+          item-value="value"
+        ></v-select>
+      </v-flex>
+      <v-flex xs12>
+        <v-card height="35vw">
+          <calendar-view
+            :events="events"
+            :show-date="date"
+            @show-date-change="setShowDate"
+            class="theme-default holiday-us-traditional holiday-us-official"
+            :displayPeriodUom="typeAffichage"
+            @click-event="eventClick"
+            weekdayNameFormat="long"
+            ref="calendar"
+          >
+          </calendar-view>
+        </v-card>
+      </v-flex>
+      <v-dialog v-model="dialog" max-width="800" width="750" v-if="eventInDialog != null">
+        <v-card :class="eventInDialog.classes">
+          <v-card-title class="headline" >
+            {{nomCompletEnfant}}
+            <img src="/static/babyFace.png" style="padding-left: 3%" height="70px"/>
+          </v-card-title>
+          <v-card-text>
+            <v-layout v-if="eventInDialog.absence_justifiee == null || !eventInDialog.absence_justifiee"
+                      row wrap align-center >
+              <v-flex xs7>
+                <v-subheader>Prévu</v-subheader>
+                <v-list :class="eventInDialog.classes">
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/horloge.png" />
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      Heure d'arrivée prévue: {{eventInDialog.heureArriveePrevue}}
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/horloge.png" />
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      Heure de départ prévue: {{eventInDialog.heureDepartPrevue}}
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/petitDej.png" />
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      Gouter <v-checkbox disabled v-model="eventInDialog.prendsGouterPrevue"/>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+                <v-divider></v-divider>
+                <v-subheader>Réel</v-subheader>
+                <v-list :class="eventInDialog.classes">
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/horloge.png" />
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      Heure d'arrivée réelle: {{eventInDialog.heureArriveeReelle}}
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/horloge.png" />
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      Heure de départ réelle: {{eventInDialog.heureDepartReelle}}
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/petitDej.png" />
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      Gouter <v-checkbox disabled v-model="eventInDialog.prendsGouterReelle"/>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-flex>
+              <v-flex xs5>
+                <v-subheader>Observations</v-subheader>
+                <v-list :class="eventInDialog.classes">
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/retard.png"/>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <span v-if="eventInDialog.arriveeRetard" class="text--red">Retard: Oui</span>
+                      <span v-else>Retard: Non</span>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-avatar>
+                      <img src="/static/chocolat.png"/>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
                     <span v-if="eventInDialog.prendsGouterReelle && !eventInDialog.prendsGouterPrevue">
                       Gouter supplémentaire
                     </span>
-                    <span v-if="!eventInDialog.prendsGouterReelle && eventInDialog.prendsGouterPrevue">
+                      <span v-if="!eventInDialog.prendsGouterReelle && eventInDialog.prendsGouterPrevue">
                       N'a pas pris son gouter
                     </span>
-                    <span v-else>Regulier</span>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
+                      <span v-else>Regulier</span>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
 
-            </v-flex>
-          </v-layout>
-          <v-layout v-else>
-            <v-flex xs12>
+              </v-flex>
+            </v-layout>
+            <v-layout v-else>
+              <v-flex xs12>
 
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </v-flex>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+  </v-card>
 </template>
 
 <script>
@@ -183,13 +187,14 @@ const NOTE = {
 
 
 export default {
-  name: 'Planning',
+  name: 'RecapitulatifPresence',
   components: {
     CalendarView
   },
   props: {
     nomCompletEnfant: {String, required: true},
-    numContrat: {String, required: true}
+    numContrat: {String, required: true},
+    color: {type: String, default: 'transparent'}
   },
   data () {
     return {

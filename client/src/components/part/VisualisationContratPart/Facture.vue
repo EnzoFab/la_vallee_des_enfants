@@ -84,7 +84,7 @@
                       <td >{{ props.item.heure_arrivee_r }}</td>
                       <td >{{ props.item.heure_depart_r }}</td>
                       <td ><i>{{ formatGouter(props.item.prends_gouter_r) }}</i></td>
-                      <td ><i>{{ formatAbsence(props.item.absence_justifiee) }}</i></td>
+                      <td ><i>{{ formatAbsence(props.item) }}</i></td>
                     </template>
                   </v-data-table>
                 </v-card-text>
@@ -108,12 +108,6 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <!-- {{nbJourActivite}}<br>
-    {{nbHeureNormale}}<br>
-    {{indemniteAuForfait}}
-    {{indemniteAbsence}}
-    {{prixTotalGouter}}
-    {{salaireNet}} -->
   </v-flex>
 </template>
 
@@ -223,9 +217,10 @@ export default {
         return 'Non pris'
       }
     },
-    formatAbsence (absence) {
-      if (absence !== undefined && absence != null) {
-        if (absence) {
+    formatAbsence (item) {
+      if (item.heure_arrivee_r == null && item.absence_justifiee !== undefined ||
+        item.heure_arrivee_r && item.absence_justifiee != null) {
+        if (item.absence_justifiee) {
           return 'Absence justifiée'
         } else {
           return 'Absence non justifiée'
@@ -235,20 +230,8 @@ export default {
       }
     },
     facturePDF () {
-      console.log($('#facture').get(0))
-      html2canvas($('#facture').get(0).hmtl).then(function (canvas) {
-        let PDF_creator = new jsPDF('p', 'pt', 'a4')
-        PDF_creator.addHTML(canvas, function () {
-          PDF_creator.save('facture.PDF_creator')
-        })
-      })
-      /*html2canvas(document.getElementById('facture'), {
-      }).then(function(canvasObj) {
-        startPrintProcess(canvasObj, 'printedPDF',function (){
-          alert('PDF saved');
-        });
-        //save this object to the PDF_creator
-      }); */
+     console.log('under construction')
+      // TODO à finir
     }
   },
   mounted () {
@@ -279,7 +262,11 @@ export default {
     },
     heureSemaine () {
       let h = this.factureAAfficher.heure_semaine
-      let nbHeure = h.hours* 60 + h.minutes
+      let minute = 0
+      if (h.minutes !== undefined) {
+        minute =  h.minutes
+      }
+      let nbHeure = h.hours* 60 + minute
       return FonctionMath.arrondi(nbHeure / 60, 0)
     },
     indemniteAuForfait () {
@@ -296,8 +283,8 @@ export default {
       for (let i = 0; i < this.presenceDumois.length; i++) {
         if (this.presenceDumois[i].prends_gouter_r !== undefined &&
           this.presenceDumois[i].prends_gouter_r != null &&
-          this.presenceDumois[i].prends_gouter_r) {
-          nbGouter += 1
+          this.presenceDumois[i].prends_gouter_r === true) {
+          nbGouter = nbGouter + 1
         }
       }
       return nbGouter
@@ -312,15 +299,14 @@ export default {
     nombreAbsence () {
       let nbAbsence = 0
       for (let i = 0; i < this.presenceDumois.length; i++) {
-        if (this.presenceDumois[i].absence_justifiee !== undefined &&
-          this.presenceDumois[i].absence_justifiee != null) {
+        if (this.presenceDumois[i].heure_arrivee_r === undefined ||
+          this.presenceDumois[i].heure_arrivee_r == null) {
           nbAbsence += 1
         }
       }
       return nbAbsence
     },
     indemniteAbsence () {
-      console.log(this.nombreAbsence)
       if (this.factureAAfficher != null && this.presenceDumois != null) {
         return this.nombreAbsence * parseInt(this.factureAAfficher.tarif_entretien)
       } else {
@@ -364,14 +350,14 @@ export default {
         },
         {
           label: 'Nombre de gouter pris',
-          valeur: this.nombreAbsence,
+          valeur: this.nombreGouterPris,
           devise: 'Qté',
           color: 'blue-grey lighten-4'
         },
         {
           label: 'Prix des gouters',
           valeur: this.prixTotalGouter,
-          devise: 'Euros',
+          devise: `Euros (Prix à l'unité: ${this.factureAAfficher.tarif_gouter} euros)` ,
           color: 'white'
         },
         {

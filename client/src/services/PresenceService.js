@@ -3,7 +3,15 @@ import Api from '../services/Api'
 export default {
 
   /* --------------------------------------- GET ----------------------------------------------------------- */
+// récupérer toutes les présences théo à partir de l'id d'un contrat
+  getAllPresencesTheoriquesByContrat (numContrat) {
+    return Api().get('presencetheo/all/' + numContrat)
+  },
 
+  // récupérer toutes les présences réelles d'un mois (et année)
+  getAllPresencesReellesMoisByContrat (numContrat, mois, annee) {
+    return Api().get('presencereelle/all/' + annee + '/' + mois + '/' + numContrat)
+  },
 
   /* --------------------------------------- POST ----------------------------------------------------------- */
 

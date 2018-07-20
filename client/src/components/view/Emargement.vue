@@ -229,7 +229,7 @@
           <v-layout row wrap class="mb-3" v-if="!loading">
             <v-flex offset-md1  offset-lg1  offset-xl1  offset-sm1
                     md4 lg4 xl4 sm4 xs12
-                    v-if="enfantChoisiAEmarger.prend_gouter != null">
+                    v-if="enfantChoisiAEmarger.heure_arrivee != null">
               <v-btn outline block round
                      color="red lighten-2" @click.stop="emargement(enfantChoisiAEmarger, true)">
                 Absence
@@ -237,7 +237,7 @@
             </v-flex>
             <v-flex offset-md1  offset-lg1  offset-xl1  offset-sm1
                     md4 lg4 xl4 sm4 xs12
-                    v-if="enfantChoisiAEmarger.prend_gouter != null">
+                    v-if="enfantChoisiAEmarger.heure_arrivee != null">
               <v-btn :outline="!button_disabled" block round color="teal lighten-2" :disabled="button_disabled"
                      @click.stop="emargement(enfantChoisiAEmarger)"
               >
