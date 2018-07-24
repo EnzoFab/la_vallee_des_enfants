@@ -77,7 +77,7 @@ export default {
             margin: 2%; border: solid; padding: 6%;">
                 <div style="text-align: center; margin-bottom: 3%;">
                     <h1 style="color:#4B0082;">Contrat de ${data.enfant.nom_complet}</h1>
-                    <img src="images/logo.jpg" style="width: 800px; height: 500px; margin-bottom: 4%;" alt="logo"/>
+                    <img src="images/logo.jpg" style="height: 120vh; width: 100%; margin-bottom: 4%;" alt="logo"/>
                     <h3 style="color:#4B0082; "> N°<br> <i>${data.contrat.num_contrat}</i></h3>
                     <img src="images/maternelle_enfant.png" style="width: 35%" alt="maternelle"/>
                 </div>
