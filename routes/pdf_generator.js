@@ -21,7 +21,7 @@ router.post('/create', function (req, res) {
     pdf.create(req.body.html,
         {
             directory: 'public/pdf/',
-            format: 'A4',
+            format: 'Letter',
             base: 'file:///' + assetPath//path.join(__dirname+ '/../public/images')
         }
     ).toStream(function (err, stream) {
