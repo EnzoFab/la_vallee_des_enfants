@@ -13,6 +13,18 @@ export default {
     return Api().get('presencereelle/all/' + annee + '/' + mois + '/' + numContrat)
   },
 
+  getAllPresenceBefore (date) {
+    return Api().get('/presencereelle/allBefore/' + date)
+  },
+
+  getAllPresenceContratBefore (date, numContrat) {
+    return Api().get('/presencereelle/allBefore/' + date + '/?numContrat=' + numContrat)
+  },
+
+  getAllPresenceContratBetween (dateDebut, dateFin, contrat) {
+    return Api().get(`/presencereelle/between?debut=${dateDebut}&fin=${dateFin}&contrat=${contrat}`)
+  },
+
   /* --------------------------------------- POST ----------------------------------------------------------- */
 
   // creéer une présence réelle
@@ -26,13 +38,5 @@ export default {
 
   supprimerPresent (id_presence) {
     return Api().delete('/presencereelle/supprimer/' + id_presence)
-  },
-
-  getAllPresenceBefore (date) {
-    return Api().get('/presencereelle/allBefore/' + date)
-  },
-
-  getAllPresenceContratBefore (date, numContrat) {
-    return Api().get('/presencereelle/allBefore/' + date + '/?numContrat=' + numContrat)
   }
 }

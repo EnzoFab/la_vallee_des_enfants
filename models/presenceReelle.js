@@ -299,6 +299,44 @@ let presenceReelle = {
             })
     },
 
+    getAllContratBetween (debut, fin, contrat, callback) {
+        console.log(debut)
+        db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
+            'WHERE PR.datepresencereelle BETWEEN $1 AND $2\n' +
+            'AND PR.id_presence_theo = PT.id_presence_theorique AND PT.id_contrat = $3',
+            [debut, fin, contrat],
+            function (er, res) {
+                retour = {
+                    erreur: null,
+                    statut: null
+                };
+                let e = helper.handleError(er, res,'L\'enfant n\'a jamais était présent');
+                retour.erreur = e.erreur;
+                retour.presences = null
+                retour.statut = e.statut;
+                if(retour.erreur == null){
+                    let array = []
+                    for (let i = 0; i<res.rows.length; i++) {
+                        array.push({
+                            datepresencereelle:  res.rows[i].datepresencereelle,
+                            heureArriveeReelle: res.rows[i].heure_arrivee_r,
+                            heureDepartReelle: res.rows[i].heure_depart_r,
+                            prendsGouterReelle: res.rows[i].prends_gouter_r,
+                            id_presence_reelle: res.rows[i].id_presence_reelle,
+                            heureArriveePrevue: res.rows[i].heure_arrivee,
+                            heureDepartPrevue: res.rows[i].heure_depart,
+                            prendsGouterPrevue: res.rows[i].prends_gouter,
+                            arriveeRetard: res.rows[i].heure_arrivee_r > res.rows[i].heure_arrivee,
+                            partieAvant: res.rows[i].heure_depart_r < res.rows[i].heure_depart,
+                            absence_justifiee: res.rows[i].absence_justifiee
+                        })
+                    }
+                    retour.presences = array
+                }
+                callback(retour)
+            })
+    },
+
     getAllForContratbefore (numContrat, date, callback) {
         db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
             ' WHERE PR.datepresencereelle <= $2 ::date\n' +

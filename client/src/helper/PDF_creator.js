@@ -3,18 +3,18 @@ import FileService from '../services/FileService'
 import DateHelper from './DateHelper'
 import FonctionMath from './FonctionMath'
 
-function forceDownload(response, name) {
+function forceDownload(response, name, fileName) {
   if (!window.navigator.msSaveOrOpenBlob){
     // BLOB NAVIGATOR
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `contrat_${name}.pdf`);
+    link.setAttribute('download', `${fileName}${name}.pdf`);
     document.body.appendChild(link);
     link.click();
   }else{
     // BLOB FOR EXPLORER 11
-    const url = window.navigator.msSaveOrOpenBlob(new Blob([response.data]), `contrat_${name}.pdf`);
+    const url = window.navigator.msSaveOrOpenBlob(new Blob([response.data]), `${fileName}${name}.pdf`);
   }
 }
 export default {
@@ -194,7 +194,7 @@ export default {
         </html>`
     return FileService.createPDF({html: html, nom: 'contrat_' + data.enfant.nom_complet})
       .then(function (r) {
-        forceDownload (r, data.enfant.nom_complet)
+        forceDownload (r, data.enfant.nom_complet, 'contrat_')
       })
   },
 
@@ -205,7 +205,29 @@ export default {
         </html>` // TODO a finir
     return FileService.createPDF({html: html, nom: 'facture_' + mois + '-' + annee})
       .then(function (r) {
-        forceDownload (r, data.enfant.nom_complet)
+        forceDownload (r, data.enfant.nom_complet, 'facture_')
+      })
+  },
+
+  presencePdf (presences, nomComplet, dateDebut, dateFin) {
+    let html = `
+        <html>
+              <head>
+                <meta charset="UTF-8">
+              </head>
+              <body style="font-family: Arial, Helvetica, sans-serif; background-color: #f5f5f5; text-align: center; 
+                    margin: 2%; border: solid; padding: 6%;">
+                 <div style="text-align: center; margin-bottom: 3%;">
+                      <h1 style="color:#4B0082;">Historique des présences de ${nomComplet}</h1>
+                      <img src="images/logo.jpg" style="width: 800px; height: 500px; margin-bottom: 4%;" alt="logo"/>
+                      <h3 style="color:#4B0082; "> <i> Du ${dateDebut} au ${dateFin}</i></h3>
+                      <img src="images/maternelle_enfant.png" style="width: 35%" alt="maternelle"/>
+                  </div>
+               </body>
+        </html>`
+    return FileService.createPDF({html: html, nom: 'presences_' + nomComplet})
+      .then(function (r) {
+        forceDownload (r, nomComplet, 'presences_')
       })
   }
 }

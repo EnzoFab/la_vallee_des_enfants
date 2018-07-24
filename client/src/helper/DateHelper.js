@@ -1,5 +1,6 @@
 const JOURSEMAINE = ['Dimanche', 'Lundi','Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 const MOIS = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
+import moment from 'moment'
 export default {
   getWeekDays () {
     return JOURSEMAINE
@@ -42,6 +43,10 @@ export default {
       format += '-' + date.getDate()
     }
     return format
+  },
+
+  formatMomentDate (date) {
+    return moment(date).format().split('T')[0]
   },
 
   formatTimeFr (time) {

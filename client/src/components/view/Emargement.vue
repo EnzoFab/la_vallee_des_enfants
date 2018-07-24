@@ -23,7 +23,7 @@
         <v-slide-y-reverse-transition>
           <span v-if="showText">
             Pour réaliser l'émargement d'un enfant veuillez rentrer l'heure d'arrivée et l'heure de départ.<br>
-            Il sera ensuite possible de le modifier.
+            Il sera ensuite possible de la modifier.
           </span>
         </v-slide-y-reverse-transition>
       </v-flex>
@@ -571,14 +571,14 @@ export default {
     },
 
     triggerNotification (text, type) {
-      this.$notify({
-        group: 'assistante',
-        title: 'Connexion',
-        text: text,
-        duration: 4000,
-        speed: 500,
-        type: type
-      })
+        this.$notify({
+          group: 'assistante',
+          title: 'Connexion',
+          text: text,
+          duration: 4000,
+          speed: 500,
+          type: type
+        })
     },
 
     sortArray (array) { // trie en fonction du nom de l'enfant

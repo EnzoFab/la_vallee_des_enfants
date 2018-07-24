@@ -53,17 +53,17 @@
             >
               <v-btn :color="color" flat>
                 <span>Récapitulatif des présences</span>
-                <v-icon>ondemand_video</v-icon>
+                <v-icon>history</v-icon>
               </v-btn>
 
               <v-btn flat :color="color">
                 <span>Planning</span>
-                <v-icon>music_note</v-icon>
+                <v-icon>schedule</v-icon>
               </v-btn>
 
               <v-btn flat :color="color">
                 <span>Télécharger</span>
-                <v-icon>book</v-icon>
+                <v-icon>get_app</v-icon>
               </v-btn>
             </v-bottom-nav>
             <v-card>
