@@ -41,14 +41,14 @@
         <v-tab-item
           :id="'tab2'"
         >
-          <v-card flat color="transparent">
+          <v-card flat color="indigo lighten-5">
             <v-bottom-nav
               :active.sync="bottomNav"
-              color="transparent"
+              color="red lighten-5"
               :value="true"
               shift
               mandatory
-              style="margin-top: 0.1%"
+              style="margin-top: 0.1%; opacity: 0.7"
               height="65"
             >
               <v-btn :color="color" flat>

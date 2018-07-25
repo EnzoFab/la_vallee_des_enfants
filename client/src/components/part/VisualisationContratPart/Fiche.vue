@@ -1,245 +1,205 @@
 <template>
-  <v-container grid-list-xl>
-    <v-alert v-model="erreur" type="error" dismissible>
-      {{erreurMessage}}
-    </v-alert>
-    <v-layout row wrap>
-      <v-flex md6 lg6 xl6 sm12 xs12>
-        <v-flex md12 lg12 xl12 sm12 xs12> <!-- Enfant -->
-          <v-flex md12 lg12 xl12 sm12 xs12 >
-            <h1 class="blue--text">Enfant</h1>
-          </v-flex>
-          <v-card class="text-md-left">
-            <v-card-title>
-              <h2> {{ prenomEnfant + ' ' + nomEnfant }} </h2>
-            </v-card-title>
-            <v-card-text pt-1>
-              <v-flex pl-3 class="text-sm-left">
-                <v-layout>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">cake</v-icon> Anniversaire :
-                  </h4>
-                  <span>{{ dateNaissanceEnfant }}</span>
-                </v-layout>
-                <v-layout>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">face</v-icon> Sexe :
-                  </h4>
-                  <span>{{ sexeEnfant }}</span>
-                </v-layout>
-              </v-flex>
-
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex md12 lg12 xl12 sm12 xs12> <!-- Contrat -->
-          <v-flex>
-            <h1 class="blue--text">Contrat</h1>
-          </v-flex>
-          <v-card>
-            <v-card-title pt-2 offset-md1 class="text-sm-left">
-              <h2>Contrat n° {{ numeroContrat }} </h2>
-            </v-card-title>
-            <v-card-text >
-              <v-flex pl-2 class="text-sm-left">
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">description</v-icon>
-                    Type de contrat :
-                  </h4>
-                  <span> {{ typeContrat }} </span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">payment</v-icon>
-                    Mode de paiement :
-                  </h4>
-                  <span>{{ modeDePaiementContrat }} </span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">date_range</v-icon>
-                    Période d'adaptation :
-                  </h4>
-                  <span> du {{ dateDebAdapt }} au {{ dateFinAdapt }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">event</v-icon>
-                    Date de début du contrat :
-                  </h4>
-                  <span> {{ dateDebutFr }} </span>
-                </v-layout>
-
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1">
-                    <v-icon class="orange--text text--darken-1">event</v-icon>
-                    Date de fin du contrat :
-                  </h4>
-                  <span> {{ dateFinContrat }} </span>
-                </v-layout>
-                <v-flex offset-md2>
-                  <v-btn color="blue--text" :disabled="dateFinExists" @click.stop="dialogBoxCloturer = true" v-if="isAssMatConnected">Clôturer le contrat</v-btn>
-                </v-flex>
-              </v-flex>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-
-        <v-dialog v-model="dialogBoxCloturer" max-width="500px">
-          <v-card>
-            <v-flex pt-3 class="indigo--text text-md-center">
-              <h2>
-                Êtes-vous sûr de vouloir clôturer le contrat ?
-              </h2>
+  <v-card color="lime lighten-5" style="opacity: 0.8">
+    <v-container grid-list-xl>
+      <v-alert v-model="erreur" type="error" dismissible>
+        {{erreurMessage}}
+      </v-alert>
+      <v-layout row wrap>
+        <v-flex md6 lg6 xl6 sm12 xs12>
+          <v-flex md12 lg12 xl12 sm12 xs12> <!-- Enfant -->
+            <v-flex md12 lg12 xl12 sm12 xs12 >
+              <h1 class="blue--text">Enfant</h1>
             </v-flex>
-            <v-flex pl-2>
-              <v-layout>
-                <v-card-actions>
-                  <v-flex offset-md8>
-                    <v-btn  color="primary" flat @click="cloturer" @click.stop="dialogBoxCloturer = false">OK</v-btn>
-                  </v-flex>
-                </v-card-actions>
-                <v-card-actions>
-                  <v-flex offset-md1>
-                    <v-btn  color="primary" flat @click.stop="dialogBoxCloturer=false">Annuler</v-btn>
-                  </v-flex>
-                </v-card-actions>
-              </v-layout>
-            </v-flex>
-          </v-card>
-        </v-dialog>
-
-        <v-flex md12 lg12 xl12 sm12 xs12>
-          <v-flex>
-            <h1 class="blue--text">Assistante maternelle</h1>
-          </v-flex>
-          <v-card>
-            <v-card-title pt-2 offset-md1 class="text-sm-left">
-              <h2>{{ prenomAssMat + ' ' + nomUsageAssMat }}</h2>
-            </v-card-title>
-            <v-card-text>
-              <v-flex >
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">account_circle</v-icon> Nom de naissance : </h4><span>{{ nomNaissanceAssMat }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">cake</v-icon> date de naissance :</h4><span>{{ dateNaissanceAssMat }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">domain</v-icon> Ville de naissance :</h4><span>{{ villeNaissanceAssMat }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone :</h4><span>{{ telephoneAssMat }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">perm_identity</v-icon> Numéro SS :</h4><span>{{ numeroSS }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date agrément :</h4><span>{{ dateAgrement }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">receipt</v-icon> Référence agrément :</h4><span>{{ referenceAgrement }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">assessment</v-icon> Assurance responsabilité civile :</h4><span>{{ assurance }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">label_outline</v-icon> Numéro de police :</h4><span>{{ numeroPolice }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Nombre de semaines de congés :</h4><span>{{ nombreSemaineConges }}</span>
-                </v-layout>
-              </v-flex>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-flex>
-      <v-flex md6 lg6 xl6 sm12 xs12>
-        <v-flex  md12 lg12 xl12 sm12 xs12>
-          <v-flex>
-            <h1 class="blue--text">Employeur</h1>
-          </v-flex>
-          <v-card>
-            <v-card-title>
-              <h2>{{ prenomEmp + ' ' + nomUsageEmp }}</h2>
-            </v-card-title>
-            <v-card-text>
-              <v-flex >
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">account_circle</v-icon> Nom de naissance : </h4><span>{{ nomNaissanceEmp }}</span>
-                </v-layout>
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">home</v-icon> Adresse : </h4><span>{{ rueEmp + ' ' + codePEmp + ' ' + villeEmp }}</span>
-                </v-layout>
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>{{ telephoneEmp }}</span>
-                </v-layout>
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">local_post_office</v-icon> Email : </h4><span>{{ emailEmp }}</span>
-                </v-layout>
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contacts</v-icon> Identifiant : </h4><span>{{ identifiantEmp }}</span>
-                </v-layout>
-                <v-layout pb-3 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Nombre de semaines de congés supplémentaires :</h4><span>{{ nombreSemSupp }}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <v-flex offset-md3>
-                    <v-btn color="blue--text" @click.stop="dialogBox = true" v-if="isAssMatConnected">
-                      Modifier
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-
-        <v-dialog v-model="dialogBox" max-width="500px">
-          <v-form v-model="estValide" ref="form">
-            <v-card>
+            <v-card class="text-md-left transparent">
               <v-card-title>
-                <span class="headline">Modification des informations</span>
+                <h2> {{ prenomEnfant + ' ' + nomEnfant }} </h2>
+              </v-card-title>
+              <v-card-text pt-1>
+                <v-flex pl-3 class="text-sm-left">
+                  <v-layout>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">cake</v-icon> Anniversaire :
+                    </h4>
+                    <span>{{ dateNaissanceEnfant }}</span>
+                  </v-layout>
+                  <v-layout>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">face</v-icon> Sexe :
+                    </h4>
+                    <span>{{ sexeEnfant }}</span>
+                  </v-layout>
+                </v-flex>
+
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          <v-flex md12 lg12 xl12 sm12 xs12> <!-- Contrat -->
+            <v-flex>
+              <h1 class="blue--text">Contrat</h1>
+            </v-flex>
+            <v-card class="transparent">
+              <v-card-title pt-2 offset-md1 class="text-sm-left">
+                <h2>Contrat n° {{ numeroContrat }} </h2>
+              </v-card-title>
+              <v-card-text >
+                <v-flex pl-2 class="text-sm-left">
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">description</v-icon>
+                      Type de contrat :
+                    </h4>
+                    <span> {{ typeContrat }} </span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">payment</v-icon>
+                      Mode de paiement :
+                    </h4>
+                    <span>{{ modeDePaiementContrat }} </span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">date_range</v-icon>
+                      Période d'adaptation :
+                    </h4>
+                    <span> du {{ dateDebAdapt }} au {{ dateFinAdapt }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">event</v-icon>
+                      Date de début du contrat :
+                    </h4>
+                    <span> {{ dateDebutFr }} </span>
+                  </v-layout>
+
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1">
+                      <v-icon class="orange--text text--darken-1">event</v-icon>
+                      Date de fin du contrat :
+                    </h4>
+                    <span> {{ dateFinContrat }} </span>
+                  </v-layout>
+                  <v-flex offset-md2>
+                    <v-btn color="blue--text" :disabled="dateFinExists" @click.stop="dialogBoxCloturer = true" v-if="isAssMatConnected">Clôturer le contrat</v-btn>
+                  </v-flex>
+                </v-flex>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-dialog v-model="dialogBoxCloturer" max-width="500px">
+            <v-card class="transparent">
+              <v-flex pt-3 class="indigo--text text-md-center">
+                <h2>
+                  Êtes-vous sûr de vouloir clôturer le contrat ?
+                </h2>
+              </v-flex>
+              <v-flex pl-2>
+                <v-layout>
+                  <v-card-actions>
+                    <v-flex offset-md8>
+                      <v-btn  color="primary" flat @click="cloturer" @click.stop="dialogBoxCloturer = false">OK</v-btn>
+                    </v-flex>
+                  </v-card-actions>
+                  <v-card-actions>
+                    <v-flex offset-md1>
+                      <v-btn  color="primary" flat @click.stop="dialogBoxCloturer=false">Annuler</v-btn>
+                    </v-flex>
+                  </v-card-actions>
+                </v-layout>
+              </v-flex>
+            </v-card>
+          </v-dialog>
+
+          <v-flex md12 lg12 xl12 sm12 xs12>
+            <v-flex>
+              <h1 class="blue--text">Assistante maternelle</h1>
+            </v-flex>
+            <v-card class="transparent">
+              <v-card-title pt-2 offset-md1 class="text-sm-left">
+                <h2>{{ prenomAssMat + ' ' + nomUsageAssMat }}</h2>
               </v-card-title>
               <v-card-text>
-                <v-container grid-list-md>
-                  <v-layout wrap>
-                    <v-flex xs12>
-                      <v-text-field label="Rue" :rules="regleRue" v-model="rueEmp" required></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field label="Code Postal" :rules="regleCodeP" v-model="codePEmp" required></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field label="Ville" :rules="regleVille" v-model="villeEmp" required></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-text-field label="Téléphone" :rules="regleTel" v-model="telephoneEmp" required></v-text-field>
+                <v-flex >
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">account_circle</v-icon> Nom de naissance : </h4><span>{{ nomNaissanceAssMat }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">cake</v-icon> date de naissance :</h4><span>{{ dateNaissanceAssMat }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">domain</v-icon> Ville de naissance :</h4><span>{{ villeNaissanceAssMat }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone :</h4><span>{{ telephoneAssMat }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">perm_identity</v-icon> Numéro SS :</h4><span>{{ numeroSS }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">event</v-icon> Date agrément :</h4><span>{{ dateAgrement }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">receipt</v-icon> Référence agrément :</h4><span>{{ referenceAgrement }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">assessment</v-icon> Assurance responsabilité civile :</h4><span>{{ assurance }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">label_outline</v-icon> Numéro de police :</h4><span>{{ numeroPolice }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Nombre de semaines de congés :</h4><span>{{ nombreSemaineConges }}</span>
+                  </v-layout>
+                </v-flex>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-flex>
+        <v-flex md6 lg6 xl6 sm12 xs12>
+          <v-flex  md12 lg12 xl12 sm12 xs12>
+            <v-flex>
+              <h1 class="blue--text">Employeur</h1>
+            </v-flex>
+            <v-card class="transparent">
+              <v-card-title>
+                <h2>{{ prenomEmp + ' ' + nomUsageEmp }}</h2>
+              </v-card-title>
+              <v-card-text>
+                <v-flex >
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">account_circle</v-icon> Nom de naissance : </h4><span>{{ nomNaissanceEmp }}</span>
+                  </v-layout>
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">home</v-icon> Adresse : </h4><span>{{ rueEmp + ' ' + codePEmp + ' ' + villeEmp }}</span>
+                  </v-layout>
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>{{ telephoneEmp }}</span>
+                  </v-layout>
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">local_post_office</v-icon> Email : </h4><span>{{ emailEmp }}</span>
+                  </v-layout>
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contacts</v-icon> Identifiant : </h4><span>{{ identifiantEmp }}</span>
+                  </v-layout>
+                  <v-layout pb-3 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">date_range</v-icon> Nombre de semaines de congés supplémentaires :</h4><span>{{ nombreSemSupp }}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <v-flex offset-md3>
+                      <v-btn color="blue--text" @click.stop="dialogBox = true" v-if="isAssMatConnected">
+                        Modifier
+                      </v-btn>
                     </v-flex>
                   </v-layout>
-                </v-container>
-                <small>*indiquer les champs requis</small>
+                </v-flex>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.native="dialogBox = false">Fermer</v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  flat @click="enregistrer"
-                  :disabled="!estValide"
-                  @click.native="dialogBox = false"
-                  :dark="estValide"
-                >Enregistrer</v-btn>
-              </v-card-actions>
             </v-card>
-          </v-form>
-        </v-dialog>
+          </v-flex>
 
-        <v-flex>
-          <v-dialog v-model="dialogBox2" max-width="500px" v-if="parentForDialog != null">
-            <v-form v-model="estValide" ref="form1">
-              <v-card>
+          <v-dialog v-model="dialogBox" max-width="500px">
+            <v-form v-model="estValide" ref="form">
+              <v-card class="transparent">
                 <v-card-title>
                   <span class="headline">Modification des informations</span>
                 </v-card-title>
@@ -247,13 +207,16 @@
                   <v-container grid-list-md>
                     <v-layout wrap>
                       <v-flex xs12>
-                        <v-text-field label="Téléphone" :rules="regleTel" v-model="parentForDialog.telephone" required></v-text-field>
+                        <v-text-field label="Rue" :rules="regleRue" v-model="rueEmp" required></v-text-field>
                       </v-flex>
                       <v-flex xs12>
-                        <v-text-field label="Profession" :rules="regleProfession" v-model="parentForDialog.profession" required></v-text-field>
+                        <v-text-field label="Code Postal" :rules="regleCodeP" v-model="codePEmp" required></v-text-field>
                       </v-flex>
                       <v-flex xs12>
-                        <v-text-field label="Téléphone professionnel" :rules="regleTel" v-model="parentForDialog.telephone_pro" required></v-text-field>
+                        <v-text-field label="Ville" :rules="regleVille" v-model="villeEmp" required></v-text-field>
+                      </v-flex>
+                      <v-flex xs12>
+                        <v-text-field label="Téléphone" :rules="regleTel" v-model="telephoneEmp" required></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -261,67 +224,105 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click.native="dialogBox2 = false">Fermer</v-btn>
+                  <v-btn color="blue darken-1" flat @click.native="dialogBox = false">Fermer</v-btn>
                   <v-btn
                     color="blue darken-1"
-                    flat @click.prevent="enregistrerParent(parentForDialog)"
+                    flat @click="enregistrer"
                     :disabled="!estValide"
-                    @click.native="dialogBox2 = false"
+                    @click.native="dialogBox = false"
                     :dark="estValide"
                   >Enregistrer</v-btn>
                 </v-card-actions>
               </v-card>
             </v-form>
           </v-dialog>
-          <v-flex v-for="(parent,i) in parents" pt-2 md10 :key="i">
-            <v-flex class="text-md-left">
-              <h1 class="blue--text">Parents</h1>
+
+          <v-flex>
+            <v-dialog v-model="dialogBox2" max-width="500px" v-if="parentForDialog != null">
+              <v-form v-model="estValide" ref="form1">
+                <v-card class="transparent">
+                  <v-card-title>
+                    <span class="headline">Modification des informations</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container grid-list-md>
+                      <v-layout wrap>
+                        <v-flex xs12>
+                          <v-text-field label="Téléphone" :rules="regleTel" v-model="parentForDialog.telephone" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                          <v-text-field label="Profession" :rules="regleProfession" v-model="parentForDialog.profession" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                          <v-text-field label="Téléphone professionnel" :rules="regleTel" v-model="parentForDialog.telephone_pro" required></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                    <small>*indiquer les champs requis</small>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" flat @click.native="dialogBox2 = false">Fermer</v-btn>
+                    <v-btn
+                      color="blue darken-1"
+                      flat @click.prevent="enregistrerParent(parentForDialog)"
+                      :disabled="!estValide"
+                      @click.native="dialogBox2 = false"
+                      :dark="estValide"
+                    >Enregistrer</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-form>
+            </v-dialog>
+            <v-flex v-for="(parent,i) in parents" pt-2 md10 :key="i">
+              <v-flex class="text-md-left">
+                <h1 class="blue--text">Parents</h1>
+              </v-flex>
+              <v-card class="transparent">
+                <v-flex pt-2 offset-md1 class="text-sm-left">
+                  <h2>{{ parent.prenom_tuteur + ' ' + parent.nom_tuteur }}</h2>
+                </v-flex>
+                <v-flex pl-5 class="text-md-left">
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>{{ parent.telephone}}</span>
+                  </v-layout>
+                  <v-layout mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">work</v-icon> Profession : </h4><span> {{ parent.profession}}</span>
+                  </v-layout>
+                  <v-layout pb-3 mt-1>
+                    <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>{{ parent.telephone_pro}}</span>
+                  </v-layout>
+                  <v-layout pb-2 mt-1>
+                    <v-flex offset-md3>
+                      <v-btn color="blue--text" @click.stop="showDialog(parent)" v-if="isAssMatConnected">
+                        Modifier
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+                <v-divider></v-divider>
+              </v-card>
             </v-flex>
-            <v-card>
-              <v-flex pt-2 offset-md1 class="text-sm-left">
-                <h2>{{ parent.prenom_tuteur + ' ' + parent.nom_tuteur }}</h2>
-              </v-flex>
-              <v-flex pl-5 class="text-md-left">
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">phone</v-icon> Téléphone : </h4><span>{{ parent.telephone}}</span>
-                </v-layout>
-                <v-layout mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">work</v-icon> Profession : </h4><span> {{ parent.profession}}</span>
-                </v-layout>
-                <v-layout pb-3 mt-1>
-                  <h4 class="orange--text text--darken-1 mr-1"><v-icon class="orange--text text--darken-1">contact_phone</v-icon> Téléphone professionnel : </h4><span>{{ parent.telephone_pro}}</span>
-                </v-layout>
-                <v-layout pb-2 mt-1>
-                  <v-flex offset-md3>
-                    <v-btn color="blue--text" @click.stop="showDialog(parent)" v-if="isAssMatConnected">
-                      Modifier
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-              <v-divider></v-divider>
-            </v-card>
+            <v-flex>
+              <v-btn
+                color="blue--text"
+                @click="exportPDF"
+                :loading="loadingPdf"
+                ripple>
+                Exporter le contrat au format PDF
+                <span slot="loader" class="custom-loader"><v-icon light>cached</v-icon></span>
+              </v-btn>
+            </v-flex>
           </v-flex>
           <v-flex>
-            <v-btn
-              color="blue--text"
-              @click="exportPDF"
-              :loading="loadingPdf"
-              ripple>
-              Exporter le contrat au format PDF
-              <span slot="loader" class="custom-loader"><v-icon light>cached</v-icon></span>
-            </v-btn>
+            <v-slide-y-transition>
+              <span v-if="loadingPdf">Veuillez patienter nous préparons votre pdf</span>
+            </v-slide-y-transition>
           </v-flex>
         </v-flex>
-        <v-flex>
-          <v-slide-y-transition>
-            <span v-if="loadingPdf">Veuillez patienter nous préparons votre pdf</span>
-          </v-slide-y-transition>
-        </v-flex>
-      </v-flex>
-    </v-layout>
-  </v-container>
-
+      </v-layout>
+    </v-container>
+  </v-card>
 </template>
 
 <script>

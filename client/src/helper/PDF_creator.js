@@ -216,9 +216,9 @@ export default {
                 <meta charset="UTF-8">
               </head>
               <body style="font-family: Arial, Helvetica, sans-serif; background-color: #f5f5f5; text-align: center; 
-                    margin: 2%; border: solid; padding: 6%;">
+                    margin: 2%; border: solid; padding: 6%; font-size: 0.8em">
                  <div style="text-align: center; margin-bottom: 3%;">
-                      <h1 style="color:#4B0082;">Historique des présences de ${nomComplet}</h1>
+                      <h1 style="color:#4B0082; page-break-after: always;"">Historique des présences de ${nomComplet}</h1>
                       <img src="images/logo.jpg" style="height: 120vh; width: 100%; margin-bottom: 4%;" alt="logo"/>
                       <h3 style="color:#4B0082; "> <i> Du ${dateDebut} au ${dateFin}</i></h3>
                       <img src="images/maternelle_enfant.png" style="width: 35%" alt="maternelle"/>

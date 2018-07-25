@@ -1,6 +1,36 @@
 <template>
-    <v-card>
+    <v-card color="brown lighten-5">
       <v-layout row wrap class="ma-1 pa-3" aling-center>
+        <v-flex xs12>
+          <v-fade-transition>
+            <h2 v-if="rangeDebut != null">
+              Du
+              <b style="text-decoration: underline">{{dateDebutFr}}</b>
+              au
+              <b style="text-decoration: underline">{{dateFinFr}}</b>
+            </h2>
+          </v-fade-transition>
+        </v-flex>
+        <v-flex xs3 offset-xs8>
+          <v-tooltip v-model="showTooltip" top color="blue darken-1">
+            <v-btn  slot="activator"
+                    @mouseover="showTooltip = true"
+                    @mouseout.stop="showTooltip = false"
+                    @click="showText = !showText"
+                    icon large color="blue lighten-5">
+              <v-icon x-large color="blue darken-1">help</v-icon>
+            </v-btn>
+            <span>Aide</span>
+          </v-tooltip>
+        </v-flex>
+        <v-flex xs6 offset-xs3>
+          <v-fade-transition>
+          <div v-if="showText" style="border: #00b8d4 solid 2px; padding: 1%; background-color: #E3F2FD" >
+            Pour télécharger un historique des présences, choisissez une période et puis cliquez sur "TELECHARGER" <br>
+            Un PDF sera alors généré avec toutes les présences de l'enfant sur la période.
+          </div>
+          </v-fade-transition>
+        </v-flex>
         <v-flex xs12>
           <ul>
             <li v-for="(b,i) in buttons" :key="i" style="list-style: none; display: inline">
@@ -98,7 +128,8 @@ export default {
           tooltipDisplay: false
         }
       ],
-      isLoading: false
+      isLoading: false,
+      showText: false
     }
   },
   watch: {

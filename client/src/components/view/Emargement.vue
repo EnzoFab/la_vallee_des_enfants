@@ -1,263 +1,266 @@
 <template>
-  <v-container fluid grid-list-md pa-4>
-    <v-layout row wrap>
-      <v-flex xs12>
-        <h1 class="headline text-xs-center orange--text text--darken-1 mr-1"><b>{{dateFr}}</b></h1>
-      </v-flex>
-      <v-flex xs6 offset-xs3 v-if="!contentLoaded">
-        <Spinner :loading="!contentLoaded" color="#4DB6AC"></Spinner>
-      </v-flex>
-      <v-flex xs3 offset-xs8>
-        <v-tooltip v-model="showTooltip" top color="blue darken-1">
-          <v-btn  slot="activator"
-                  @mouseover="showTooltip = true"
-                  @mouseout.stop="showTooltip = false"
-                  @click="showText = !showText"
-                  icon large color="blue lighten-5">
-            <v-icon x-large color="blue darken-1">help</v-icon>
-          </v-btn>
-          <span>Aide</span>
-        </v-tooltip>
-      </v-flex>
-      <v-flex xs6 offset-xs3>
-        <v-slide-y-reverse-transition>
-          <span v-if="showText">
-            Pour réaliser l'émargement d'un enfant veuillez rentrer l'heure d'arrivée et l'heure de départ.<br>
-            Il sera ensuite possible de la modifier.
-          </span>
-        </v-slide-y-reverse-transition>
-      </v-flex>
-      <v-flex md6 lg6 xl6 sm12 xs12 pa-1>
-        <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_presents" label="Prenom ou nom" box>
-          <!--  liste des enfants censés être présents -->
-          <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
-            <v-card-title>
-              <h3 class="orange--text text--darken-1 mr-1">
-                Enfants prevus aujourd'hui
-              </h3>
-            </v-card-title>
-            <v-card-text>
-              <v-list  v-if="elements.items.length > 0" three-line><!-- TODO transformer liste en card-->
-                <v-list-tile  v-for="(el, i) in elements.items" :key="i" @click="showMenu(el)" avatar>
-                  <v-list-tile-avatar>
-                    <img src="/static/boy.png" v-if="el.sexe === 'G'"/>
-                    <img src="/static/fille.png" v-else/>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
+  <v-card color="orange lighten-5">
+    <v-container fluid grid-list-md pa-4>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <h1 class="headline text-xs-center orange--text text--darken-1 mr-1"><b>{{dateFr}}</b></h1>
+        </v-flex>
+        <v-flex xs6 offset-xs3 v-if="!contentLoaded">
+          <Spinner :loading="!contentLoaded" color="#4DB6AC"></Spinner>
+        </v-flex>
+        <v-flex xs3 offset-xs8>
+          <v-tooltip v-model="showTooltip" top color="deep-purple lighten-2">
+            <v-btn  slot="activator"
+                    @mouseover="showTooltip = true"
+                    @mouseout.stop="showTooltip = false"
+                    @click="showText = !showText"
+                    icon large color="deep-purple lighten-5">
+              <v-icon x-large color="deep-purple darken-1">help</v-icon>
+            </v-btn>
+            <span>Aide</span>
+          </v-tooltip>
+        </v-flex>
+        <v-flex xs6 offset-xs3>
+          <v-fade-transition>
+            <div v-if="showText" style="border: #4a148c solid 2px; background-color: #EDE7F6; padding: 1%">
+              Pour réaliser l'émargement d'un enfant veuillez rentrer l'heure d'arrivée et l'heure de départ.<br>
+              Il sera ensuite possible de modifier cette saisie.
+            </div>
+          </v-fade-transition>
+        </v-flex>
+        <v-flex md6 lg6 xl6 sm12 xs12 pa-1>
+          <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_presents"
+                    label="Prenom ou nom" box >
+            <!--  liste des enfants censés être présents -->
+            <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
+              <v-card-title>
+                <h3 class="orange--text text--darken-1 mr-1">
+                  Enfants prevus aujourd'hui
+                </h3>
+              </v-card-title>
+              <v-card-text>
+                <v-list  v-if="elements.items.length > 0" three-line class="transparent">
+                  <v-list-tile  v-for="(el, i) in elements.items" :key="i" @click="showMenu(el)" avatar class="transparent">
+                    <v-list-tile-avatar>
+                      <img src="/static/boy.png" v-if="el.sexe === 'G'"/>
+                      <img src="/static/fille.png" v-else/>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title ><h3>{{el.nomComplet}}</h3></v-list-tile-title>
+                      <v-list-tile-sub-title>
+                        <v-layout row align-center>
+                          <v-flex xs6><h4><u>Heure d'arrivée</u></h4></v-flex>
+                          <v-flex xs6>{{formatDate(el.heure_arrivee)}}</v-flex>
+                          <v-flex xs6><h4><u>Heure de départ </u></h4></v-flex>
+                          <v-flex xs6>{{formatDate(el.heure_depart)}}</v-flex>
+                          <v-flex xs6><h4><u>Prend le goûter  </u></h4></v-flex>
+                          <v-flex xs6>
+                            <span v-if="el.prend_gouter">Oui</span>
+                            <span v-else>Non</span>
+                          </v-flex>
+                        </v-layout>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+                <span v-else>
+                Aucun résultats
+              </span>
+              </v-card-text>
+            </v-card>
+          </Searcher>
+        </v-flex>
+        <v-flex md6 lg6 xl6 sm12 xs12 pa-1>
+          <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_non_presents" label="Prénom ou nom" box>
+            <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
+              <v-card-title>
+                <h3 class="orange--text text--darken-1 mr-1">
+                  Enfants ne venant pas aujourd'hui
+                </h3>
+              </v-card-title>
+              <v-card-text class="transparent">
+                <v-list  v-if="elements.items.length > 0" two-line class="transparent">
+                  <v-list-tile  v-for="(el, i) in elements.items" :key="i" @click="showMenu(el)" avatar class="transparent">
+                    <v-list-tile-avatar>
+                      <img src="/static/boy.png" v-if="el.sexe === 'G'"/>
+                      <img src="/static/fille.png" v-else/>
+                    </v-list-tile-avatar>
                     <v-list-tile-title ><h3>{{el.nomComplet}}</h3></v-list-tile-title>
-                    <v-list-tile-sub-title>
-                      <v-layout row align-center>
-                        <v-flex xs6><h4><u>Heure d'arrivée</u></h4></v-flex>
-                        <v-flex xs6>{{formatDate(el.heure_arrivee)}}</v-flex>
-                        <v-flex xs6><h4><u>Heure de départ </u></h4></v-flex>
-                        <v-flex xs6>{{formatDate(el.heure_depart)}}</v-flex>
-                        <v-flex xs6><h4><u>Prend le goûter  </u></h4></v-flex>
-                        <v-flex xs6>
-                          <span v-if="el.prend_gouter">Oui</span>
-                          <span v-else>Non</span>
-                        </v-flex>
-                      </v-layout>
-                    </v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-              <span v-else>
+                  </v-list-tile>
+                </v-list>
+                <span v-else>
                 Aucun résultats
               </span>
-            </v-card-text>
-          </v-card>
-        </Searcher>
-      </v-flex>
-      <v-flex md6 lg6 xl6 sm12 xs12 pa-1>
-        <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_non_presents" label="Prénom ou nom" box>
-          <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
-            <v-card-title>
-              <h3 class="orange--text text--darken-1 mr-1">
-                Enfants ne venant pas aujourd'hui
-              </h3>
-            </v-card-title>
-            <v-card-text>
-              <v-list  v-if="elements.items.length > 0" two-line>
-                <v-list-tile  v-for="(el, i) in elements.items" :key="i" @click="showMenu(el)" avatar>
-                  <v-list-tile-avatar>
-                    <img src="/static/boy.png" v-if="el.sexe === 'G'"/>
-                    <img src="/static/fille.png" v-else/>
-                  </v-list-tile-avatar>
-                  <v-list-tile-title ><h3>{{el.nomComplet}}</h3></v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-              <span v-else>
-                Aucun résultats
-              </span>
-            </v-card-text>
-          </v-card>
-        </Searcher>
-        <!-- Liste des enfants qui ne sont pas censés être présents-->
-      </v-flex>
-      <v-flex sm12 xs12 pa-1>
-        <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_emarges" label="Prenom ou nom" box>
-          <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
-            <v-card-title>
-              <h3 class="orange--text text--darken-1 mr-1">
-                Enfants emargés
-              </h3>
-            </v-card-title>
-            <v-card-text>
-              <!-- liste des enfants qui ont été pointés-->
-              <v-list  v-if="elements.items.length > 0" three-line><!-- TODO transformer liste en card-->
-                <v-list-tile  v-for="(el, i) in elements.items" :key="i"
-                              @click.stop="showMenu(el)" avatar
-                              :id="'presence' + el.id_presence_theo"
-                              :class="el.state.class">
-                  <v-list-tile-avatar>
-                    <img src="/static/boy.png" v-if="el.sexe === 'G'"/>
-                    <img src="/static/fille.png" v-else/>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title >
-                      <h3 style="font-size: 0.9em;">{{el.nomComplet}}
-                        <span v-if="el.state.label !== undefined" :class="el.state.label_class"
-                              style="float: right; font-size: 0.8em;">
+              </v-card-text>
+            </v-card>
+          </Searcher>
+          <!-- Liste des enfants qui ne sont pas censés être présents-->
+        </v-flex>
+        <v-flex sm12 xs12 pa-1>
+          <Searcher :item-attribute="['nomComplet', 'nom_enfant', 'prenom_enfant']" :items="enfants_emarges" label="Prenom ou nom" box>
+            <v-card slot-scope="elements" class="transparent elevation-0 scroll-y" style="max-height: 15vw">
+              <v-card-title>
+                <h3 class="orange--text text--darken-1 mr-1">
+                  Enfants emargés
+                </h3>
+              </v-card-title>
+              <v-card-text>
+                <!-- liste des enfants qui ont été pointés-->
+                <v-list  v-if="elements.items.length > 0" three-line class="transparent">
+                  <v-list-tile  v-for="(el, i) in elements.items" :key="i"
+                                @click.stop="showMenu(el)" avatar
+                                :id="'presence' + el.id_presence_theo"
+                                :class="el.state.class">
+                    <v-list-tile-avatar>
+                      <img src="/static/boy.png" v-if="el.sexe === 'G'"/>
+                      <img src="/static/fille.png" v-else/>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title >
+                        <h3 style="font-size: 0.9em;">{{el.nomComplet}}
+                          <span v-if="el.state.label !== undefined" :class="el.state.label_class"
+                                style="float: right; font-size: 0.8em;">
                           {{el.state.label}}
                         </span>
-                      </h3>
-                    </v-list-tile-title>
-                    <v-list-tile-sub-title  v-if="el.state === undefined || el.state.type !== 'ABSENCE' ">
-                      <v-layout row align-center>
-                        <v-flex xs6><h4><u>Heure d'arrivée</u></h4></v-flex>
-                        <v-flex xs6>{{formatDate(el.heure_arrivee_r)}}</v-flex>
-                        <v-flex xs6><h4><u>Heure de départ </u></h4></v-flex>
-                        <v-flex xs6>{{formatDate(el.heure_depart_r)}}</v-flex>
-                        <v-flex xs6><h4><u>Prend le goûter  </u></h4></v-flex>
-                        <v-flex xs6>
-                          <span v-if="el.prend_gouter_r">Oui</span>
-                          <span v-else>Non</span>
-                        </v-flex>
-                        <v-flex xs6 v-if="el.state.note !== undefined && el.state.note != null">
-                          Note: <i style="font-size: smaller;">{{el.state.note}}</i>
-                        </v-flex>
-                      </v-layout>
-                    </v-list-tile-sub-title>
-                    <v-list-tile-sub-title  v-if="el.state.type === 'ABSENCE'">
-                      <h2 style="text-align: center">ABSENT</h2>
-                    </v-list-tile-sub-title>
+                        </h3>
+                      </v-list-tile-title>
+                      <v-list-tile-sub-title  v-if="el.state === undefined || el.state.type !== 'ABSENCE' ">
+                        <v-layout row align-center>
+                          <v-flex xs6><h4><u>Heure d'arrivée</u></h4></v-flex>
+                          <v-flex xs6>{{formatDate(el.heure_arrivee_r)}}</v-flex>
+                          <v-flex xs6><h4><u>Heure de départ </u></h4></v-flex>
+                          <v-flex xs6>{{formatDate(el.heure_depart_r)}}</v-flex>
+                          <v-flex xs6><h4><u>Prend le goûter  </u></h4></v-flex>
+                          <v-flex xs6>
+                            <span v-if="el.prend_gouter_r">Oui</span>
+                            <span v-else>Non</span>
+                          </v-flex>
+                          <v-flex xs6 v-if="el.state.note !== undefined && el.state.note != null">
+                            Note: <i style="font-size: smaller;">{{el.state.note}}</i>
+                          </v-flex>
+                        </v-layout>
+                      </v-list-tile-sub-title>
+                      <v-list-tile-sub-title  v-if="el.state.type === 'ABSENCE'">
+                        <h2 style="text-align: center">ABSENT</h2>
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-btn icon @click.stop="supprimerPresence(el)" dark>
+                        <v-icon medium>delete</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                </v-list>
+                <span v-else>
+                Aucun résultats
+              </span>
+              </v-card-text>
+            </v-card>
+          </Searcher>
+          <!-- <v-card class="scroll-y" style="max-height: 15vw">
+            <v-card-title>
+              <h3 class="orange--text text--darken-1 mr-1">
+                List des enfants emargés
+              </h3>
+            </v-card-title>
+            <v-card-text>
+              <v-list>
+
+                <v-list-tile v-for="(e,i) in enfants_emarges" :key="i" @click="showMenu(e)" :color="e.state.class">
+                  <v-list-tile-content>
+                    {{e.nomComplet}}
                   </v-list-tile-content>
                   <v-list-tile-action>
-                    <v-btn icon @click.stop="supprimerPresence(el)" dark>
+                    <v-btn icon @click="removeEnfantEmargeFromList(e)">
                       <v-icon medium>delete</v-icon>
                     </v-btn>
                   </v-list-tile-action>
                 </v-list-tile>
               </v-list>
-              <span v-else>
-                Aucun résultats
-              </span>
             </v-card-text>
-          </v-card>
-        </Searcher>
-        <!-- <v-card class="scroll-y" style="max-height: 15vw">
-          <v-card-title>
-            <h3 class="orange--text text--darken-1 mr-1">
-              List des enfants emargés
-            </h3>
-          </v-card-title>
-          <v-card-text>
-            <v-list>
+          </v-card> -->
 
-              <v-list-tile v-for="(e,i) in enfants_emarges" :key="i" @click="showMenu(e)" :color="e.state.class">
-                <v-list-tile-content>
-                  {{e.nomComplet}}
-                </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-btn icon @click="removeEnfantEmargeFromList(e)">
-                    <v-icon medium>delete</v-icon>
-                  </v-btn>
-                </v-list-tile-action>
-              </v-list-tile>
-            </v-list>
+        </v-flex>
+      </v-layout>
+      <v-dialog
+        v-model="dialogEnfantPresent"
+        scrollable
+        transition="dialog-bottom-transition"
+        v-if="enfantChoisiAEmarger != null"
+        max-width="1000"
+      >
+        <v-card height="450" class="scroll-y grey lighten-4">
+          <v-toolbar card dark color="orange darken-1">
+            <v-spacer></v-spacer>
+            <v-toolbar-title>Emarger {{enfantChoisiAEmarger.nomComplet}}</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-card-text style="height: 100vh;" class="scroll-y" >
+            <v-container justify-center>
+              <v-layout row wrap justify-center>
+                <v-flex xs12>
+                  <!-- <v-text-field :value="enfantChoisiAEmarger.heure_arrivee">
+                   </v-text-field> -->
+                  <TimePicker required
+                              :heureDebut="heure_debut"
+                              :heureFin="heure_fin"  label="Heure d'arrivee"
+                              v-model="enfantChoisiAEmarger.heure_arrivee_r" :minuteEcart="ecart"/>
+                </v-flex>
+                <v-flex xs12>
+                  <TimePicker required
+                              :heureDebut="heure_debut" :heureFin="heure_fin"  label="Heure de départ"
+                              v-model="enfantChoisiAEmarger.heure_depart_r" :minuteEcart="ecart"/>
+                </v-flex>
+                <v-flex xs6 d-inline-flex offset-xs3>
+                  <img src="/static/petitDej.png" style="height: 40px;" v-if="enfantChoisiAEmarger.prend_gouter_r"/>
+                  <v-checkbox v-model="enfantChoisiAEmarger.prend_gouter_r" color="green">
+                    <h4 slot="label" v-if="enfantChoisiAEmarger.prend_gouter_r" class="green--text">Prend le gouter</h4>
+                    <h4 slot="label" v-else class="red--text">Ne prend pas le gouter</h4>
+                  </v-checkbox>
+                </v-flex>
+                <v-flex xs6 offset-xs5>
+                  <v-select :items="[1,5,10,30]" color="blue" hide-selected
+                            v-model="ecart" overflow allow-overflow label="Choisir le délai">
+                  </v-select>
+                  <v-btn flat color="primary"></v-btn>
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card-text>
-        </v-card> -->
-
-      </v-flex>
-    </v-layout>
-    <v-dialog
-      v-model="dialogEnfantPresent"
-      scrollable
-      transition="dialog-bottom-transition"
-      v-if="enfantChoisiAEmarger != null"
-      max-width="1000"
-    >
-      <v-card height="450" class="scroll-y grey lighten-4">
-        <v-toolbar card dark color="orange darken-1">
-          <v-spacer></v-spacer>
-          <v-toolbar-title>Emarger {{enfantChoisiAEmarger.nomComplet}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-        <v-card-text style="height: 100vh;" class="scroll-y" >
-          <v-container justify-center>
-            <v-layout row wrap justify-center>
-              <v-flex xs12>
-                <!-- <v-text-field :value="enfantChoisiAEmarger.heure_arrivee">
-                 </v-text-field> -->
-                <TimePicker required
-                            :heureDebut="heure_debut"
-                            :heureFin="heure_fin"  label="Heure d'arrivee"
-                            v-model="enfantChoisiAEmarger.heure_arrivee_r" :minuteEcart="ecart"/>
+          <v-card-actions>
+            <v-layout row wrap class="mb-3" v-if="!loading">
+              <v-flex offset-md1  offset-lg1  offset-xl1  offset-sm1
+                      md4 lg4 xl4 sm4 xs12
+                      v-if="enfantChoisiAEmarger.heure_arrivee != null">
+                <v-btn outline block round
+                       color="red lighten-2" @click.stop="emargement(enfantChoisiAEmarger, true)">
+                  Absence
+                </v-btn>
               </v-flex>
-              <v-flex xs12>
-                <TimePicker required
-                            :heureDebut="heure_debut" :heureFin="heure_fin"  label="Heure de départ"
-                            v-model="enfantChoisiAEmarger.heure_depart_r" :minuteEcart="ecart"/>
+              <v-flex offset-md1  offset-lg1  offset-xl1  offset-sm1
+                      md4 lg4 xl4 sm4 xs12
+                      v-if="enfantChoisiAEmarger.heure_arrivee != null">
+                <v-btn :outline="!button_disabled" block round color="teal lighten-2" :disabled="button_disabled"
+                       @click.stop="emargement(enfantChoisiAEmarger)"
+                >
+                  Emarger cet enfant
+                </v-btn>
               </v-flex>
-              <v-flex xs6 d-inline-flex offset-xs3>
-                <img src="/static/petitDej.png" style="height: 40px;" v-if="enfantChoisiAEmarger.prend_gouter_r"/>
-                <v-checkbox v-model="enfantChoisiAEmarger.prend_gouter_r" color="green">
-                  <h4 slot="label" v-if="enfantChoisiAEmarger.prend_gouter_r" class="green--text">Prend le gouter</h4>
-                  <h4 slot="label" v-else class="red--text">Ne prend pas le gouter</h4>
-                </v-checkbox>
-              </v-flex>
-              <v-flex xs6 offset-xs5>
-                <v-select :items="[1,5,10,30]" color="blue" hide-selected
-                          v-model="ecart" overflow allow-overflow label="Choisir le délai">
-                </v-select>
-                <v-btn flat color="primary"></v-btn>
+              <v-flex v-else xs6 offset-xs3>
+                <v-btn :outline="!button_disabled" block round color="teal lighten-2" :disabled="button_disabled"
+                       @click.stop="emargement(enfantChoisiAEmarger)">Emarger cet enfant</v-btn>
               </v-flex>
             </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-layout row wrap class="mb-3" v-if="!loading">
-            <v-flex offset-md1  offset-lg1  offset-xl1  offset-sm1
-                    md4 lg4 xl4 sm4 xs12
-                    v-if="enfantChoisiAEmarger.heure_arrivee != null">
-              <v-btn outline block round
-                     color="red lighten-2" @click.stop="emargement(enfantChoisiAEmarger, true)">
-                Absence
-              </v-btn>
-            </v-flex>
-            <v-flex offset-md1  offset-lg1  offset-xl1  offset-sm1
-                    md4 lg4 xl4 sm4 xs12
-                    v-if="enfantChoisiAEmarger.heure_arrivee != null">
-              <v-btn :outline="!button_disabled" block round color="teal lighten-2" :disabled="button_disabled"
-                     @click.stop="emargement(enfantChoisiAEmarger)"
-              >
-                Emarger cet enfant
-              </v-btn>
-            </v-flex>
-            <v-flex v-else xs6 offset-xs3>
-              <v-btn :outline="!button_disabled" block round color="teal lighten-2" :disabled="button_disabled"
-                     @click.stop="emargement(enfantChoisiAEmarger)">Emarger cet enfant</v-btn>
-            </v-flex>
-          </v-layout>
-          <v-layout row wrap class="mb-3" v-else>
-            <v-flex xs6 offset-xs3>
-              <Spinner :loading="loading" color="#FFB74D"></Spinner>
-            </v-flex>
-          </v-layout>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+            <v-layout row wrap class="mb-3" v-else>
+              <v-flex xs6 offset-xs3>
+                <Spinner :loading="loading" color="#FFB74D"></Spinner>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-container>
+  </v-card>
 </template>
 
 <script>

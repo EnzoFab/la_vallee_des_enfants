@@ -54,14 +54,14 @@ let presenceTheorique = {
                         'public.presencereelle PR, public.typejour TJ2\n' +
                     'WHERE E2.id_enfant = C2.id_enfant AND C2.id_contrat = P2.id_contrat\n' +
                         'AND P2.id_type_jour = TJ2.id_type AND TJ2.libelle = $1\n' +
-                        'AND P2.id_presence_theorique = PR.id_presence_theo\n' +
+                        'AND P2.id_presence_theorique = PR.id_presence_theo AND PR.datepresencereelle = $2\n' +
                 ')\n' +
             ') PRESENT, public.enfant Enf, public.contrat C3, public.presencetheorique P3, public.typejour TJ3\n' +
             'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant AND\n' +
                 'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
                 'AND P3.heure_arrivee is not null AND C3.date_fin IS NULL\n' +
             'ORDER BY Enf.prenom_enfant, Enf.nom_enfant',
-            [weekDay],
+            [weekDay, new Date()],
             function (err, result) {
                 console.log(weekDay)
                 retour = {
@@ -112,13 +112,14 @@ let presenceTheorique = {
                 'WHERE E2.id_enfant = C2.id_enfant AND C2.id_contrat = P2.id_contrat\n' +
                 'AND P2.id_type_jour = TJ2.id_type AND TJ2.libelle = $1\n' +
                 'AND P2.id_presence_theorique = PR.id_presence_theo AND PR.heure_arrivee_r IS NOT NULL\n' +
+                'AND PR.datepresencereelle = $2\n' +
                 ')\n' +
                 ') PRESENT, public.enfant Enf, public.contrat C3, public.presencetheorique P3, public.typejour TJ3\n' +
                 'WHERE PRESENT.id_enfant = Enf.id_enfant AND C3.id_enfant = Enf.id_enfant AND\n' +
                 'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
                 'AND C3.date_fin IS NULL\n' +
                 'ORDER BY Enf.prenom_enfant, Enf.nom_enfant',
-                [weekDay],
+                [weekDay, new Date()],
                 function (err, result) {
                     retour = {
                         erreur: null,

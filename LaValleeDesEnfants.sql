@@ -64,7 +64,7 @@ CREATE TABLE public.tuteur
     CONSTRAINT tuteur_id_type_tuteur_fkey FOREIGN KEY (id_type_tuteur)
         REFERENCES public.typetuteur (id_type_tuteur) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
 WITH (
     OIDS = FALSE
@@ -81,11 +81,11 @@ CREATE TABLE public.apourtuteur
     CONSTRAINT apourparent_id_enfant_fkey FOREIGN KEY (id_enfant)
         REFERENCES public.enfant (id_enfant) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
     CONSTRAINT apourtuteur_id_tuteur_fkey FOREIGN KEY (id_tuteur)
         REFERENCES public.tuteur (id_tuteur) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+       ON DELETE CASCADE
 )
 WITH (
     OIDS = FALSE
@@ -173,7 +173,7 @@ create table public."post"
     constraint "post_id_am_fkey" foreign key (id_am)
         references public."assmat" (id_am) match simple
         on update no action
-        on delete no action
+        ON DELETE CASCADE
 )
 with (
     oids = false
@@ -205,11 +205,11 @@ create table public."etreenconges"
     constraint "etreenconges_id_am_fkey" foreign key (id_am)
         references public."assmat" (id_am) match simple
         on update no action
-        on delete no action,
+        ON DELETE CASCADE,
     constraint "etreenconges_id_periode_fkey" foreign key (id_periode)
         references public."periodeconges" (id_periode) match simple
         on update no action
-        on delete no action
+        ON DELETE CASCADE
 )
 with (
     oids = false
@@ -291,23 +291,23 @@ CREATE TABLE public.contrat
     CONSTRAINT contrat_id_am_fkey FOREIGN KEY (id_am)
         REFERENCES public.assmat (id_am) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
     CONSTRAINT employeur_id_employeur_fkey FOREIGN KEY (id_employeur)
         REFERENCES public.employeur (id_employeur) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+       ON DELETE CASCADE,
     CONSTRAINT contrat_id_enfant_fkey FOREIGN KEY (id_enfant)
         REFERENCES public.enfant (id_enfant) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
     CONSTRAINT contrat_id_mode_paiement_fkey FOREIGN KEY (id_mode_paiement)
         REFERENCES public.modedepaiement (id_mode) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT contrat_id_type_contrat_fkey FOREIGN KEY (id_type_contrat)
+       ON DELETE CASCADE,
+    CONSTRAINT contrat_idO_type_contrat_fkey FOREIGN KEY (id_type_contrat)
         REFERENCES public.typecontrat (id_type) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
 WITH (
     OIDS = FALSE
@@ -328,11 +328,11 @@ CREATE TABLE public.presencetheorique
     CONSTRAINT presencetheorique_id_contrat_fkey FOREIGN KEY (id_contrat)
         REFERENCES public.contrat (id_contrat) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
     CONSTRAINT presencetheorique_id_type_jour_fkey FOREIGN KEY (id_type_jour)
         REFERENCES public.typejour (id_type) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
 WITH (
     OIDS = FALSE
@@ -357,7 +357,7 @@ create table public."facturemensuelle"
     constraint "facturemensuelle_id_contrat_fkey" foreign key (id_contrat)
         references public."contrat" (id_contrat) match simple
         on update no action
-        on delete no action
+        ON DELETE CASCADE
 )
 with (
     oids = false
@@ -380,7 +380,7 @@ CREATE TABLE public.presencereelle
     CONSTRAINT presencereelle_id_facture_fkey FOREIGN KEY (id_facture)
         REFERENCES public.facturemensuelle (id_facture) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
 WITH (
     OIDS = FALSE

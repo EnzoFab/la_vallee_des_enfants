@@ -18,7 +18,7 @@
       </v-text-field>
     </v-flex>
     <v-flex xs12>
-      <v-card>
+      <v-card :color="boxColor">
         <v-card-text>
           <slot :items="elements">
             {{elements}}
@@ -41,7 +41,8 @@ export default {
     itemAttribute: {required: true}, // attribut sur lequel on va effectuer la recherche
     label: {type: String},
     box: {type: Boolean, default: false},
-    inverted: {type:Boolean, default: false}
+    inverted: {type:Boolean, default: false},
+    boxColor: {type: String, default:'transparent'}
   },
   data () {
     return {
