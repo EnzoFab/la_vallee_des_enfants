@@ -51,7 +51,7 @@ export default {
   name: 'AllContact',
   data () {
     return {
-      messages: []
+      messages: null
     }
   },
   methods: {
@@ -61,6 +61,7 @@ export default {
      * @param offset: à partir de quel message on veut prendre 'limit' nombre de post
      */
     loadMessages (limit, offset) {
+      this.messages = []
       for (let i = 0; i < 5; i++) {
         this.messages.push({
           mail: 'e@mail.com',
@@ -92,17 +93,17 @@ export default {
     deleteSelectionneMessage () {
       let promises = []
       let vm = this
-      for (let i = 0; i < this.message.length; i++) {
-        if (this.message[i].selectionne) {
+      for (let i = 0; i < this.messages.length; i++) {
+        if (this.messages[i].selectionne) {
           promises.push(
-            this.deleteMessage(this.message[i].message_id).then(function () {
-              vm.messages.splice(vm.messages.indexOf(this.message[i]), 1)
+            this.deleteMessage(this.messages[i].message_id).then(function () {
+              vm.messages.splice(vm.messages.indexOf(this.messages[i]), 1)
             })
           )
         }
       }
       Promise.all(promises).then(function () {
-        // attend que toutes les promises du tableau aient fini pour passer a la suite
+        // attend que toutes les promises du tableau aient finies pour passer a la suite
         vm.$notify({
           group: 'assistante',
           title: 'Suppression',
@@ -115,11 +116,11 @@ export default {
     }
   },
   computed: {
-    canDelete () {
+    canDelete () { // montrer ou non le bouton
       let resultat = false
       let i = 0
-      while (i < this.message.length && !resultat) {
-        if (this.message[i].selectionne) {
+      while (i < this.messages.length && !resultat) {
+        if (this.messages[i].selectionne) {
           resultat = true
         }
         i++
