@@ -131,7 +131,7 @@ export default {
   watch: {
     messages: {
       handler (v) {
-        for (let i = 0; i < v.length; i++) {
+        for (let i = 0; i < this.messages.length; i++) {
           if (this.messages[i].panelOuvert && !this.messages[i].messageOuvert) {
             this.messages[i].messageOuvert = true
           }
