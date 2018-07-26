@@ -51,7 +51,7 @@ export default {
   name: 'AllContact',
   data () {
     return {
-      messages: null
+      messages: []
     }
   },
   methods: {
