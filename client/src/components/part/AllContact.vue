@@ -1,11 +1,16 @@
 <template>
     <v-layout row wrap>
-      <v-flex xs2 offset-xs8>
-        <v-tab-reverse-transition>
-          <v-btn icon large v-if="canDelete" @click="deleteSelectionneMessage">
-            <v-icon>delete</v-icon>
-          </v-btn>
-        </v-tab-reverse-transition>
+      <v-flex xs2 offset-xs9>
+        <v-fade-transition>
+          <div >
+            <v-btn icon large @click="deleteSelectionneMessage" :disabled="!canDelete">
+              <v-icon x-large color="blue-grey darken-1">delete_sweep</v-icon>
+            </v-btn>
+            <span :class="textColor">Supprimer mail(s)</span>
+          </div>
+
+
+        </v-fade-transition>
       </v-flex>
       <v-flex xs12>
         <v-expansion-panel expand popout focusable>
@@ -23,11 +28,19 @@
                   <v-checkbox v-model="message.selectionne"
                               @click.stop="message.selectionne = !message.selectionne"></v-checkbox>
                 </v-flex>
-                <v-flex xs2>{{message.mail}}</v-flex>
+                <v-flex xs1>{{message.mail}}</v-flex>
                 <v-flex xs2>{{message.sujet}}</v-flex>
                 <v-flex xs2>{{message.nom}}</v-flex>
                 <v-flex xs2> {{message.date_envoi}}</v-flex>
                 <v-flex xs3>{{message.truncate_text}}</v-flex>
+                <v-flex xs1>
+                 <v-scale-transition>
+                   <v-avatar v-if="!message.messageOuvert" color="transparent"  style="opacity: 0.8;">
+                     <v-icon large color="indigo darken-4">fiber_new</v-icon>
+                   </v-avatar>
+                 </v-scale-transition>
+
+                </v-flex>
               </v-layout>
             </div>
             <v-card class="grey lighten-4 scroll-y">
@@ -47,6 +60,8 @@
 </template>
 
 <script>
+import DateHelper from "../../helper/DateHelper";
+
 export default {
   name: 'AllContact',
   data () {
@@ -65,7 +80,7 @@ export default {
       for (let i = 0; i < 5; i++) {
         this.messages.push({
           mail: 'e@mail.com',
-          date_envoi: new Date (),
+          date_envoi: DateHelper.getDateFr(new Date ()),
           nom: 'Kevin',
           message_id: i,
           texte: 'Je suis un texte bien sympa qui est le meme partout',
@@ -126,6 +141,21 @@ export default {
         i++
       }
       return resultat
+    },
+    textColor () {
+      let resultat = false
+      let i = 0
+      while (i < this.messages.length && !resultat) {
+        if (this.messages[i].selectionne) {
+          resultat = true
+        }
+        i++
+      }
+      if (resultat) {
+        return 'black--text text-xs-center'
+      } else {
+        return 'grey--text'
+      }
     }
   },
   watch: {

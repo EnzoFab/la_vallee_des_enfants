@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pink lighten-5">
     <v-container align-start fluid>
       <v-alert type="error" dismissible v-model="alert">
         {{error}}

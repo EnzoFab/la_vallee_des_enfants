@@ -1,12 +1,14 @@
 <template>
- <v-container>
-   <v-container fluid grid-list-md v-if="isAssMatConnected">
-     <AllContact />
-   </v-container>
-   <v-container v-else row wrap>
-     <SendContact /> <!-- Envoyer des message etant employeur ou non connecté -->
-   </v-container>
- </v-container>
+  <div class="grey lighten-5">
+    <v-container>
+      <v-container fluid grid-list-md v-if="isAssMatConnected">
+        <AllContact />
+      </v-container>
+      <v-container v-else row wrap>
+        <SendContact /> <!-- Envoyer des message etant employeur ou non connecté -->
+      </v-container>
+    </v-container>
+  </div>
 </template>
 
 <script>

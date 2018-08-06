@@ -56,11 +56,11 @@ export default {
                   font-weight: bold;
                 }
                 table {
-                margin: 2%;
-                text-align: center;
-                border-collapse: collapse;
-                border-radius: 4px;
-                border: 2px solid black;
+                  margin: 2%;
+                  text-align: center;
+                  border-collapse: collapse;
+                  border-radius: 4px;
+                  border: 2px solid black;
                 }
                 th, td {
                     border-bottom: 1px solid black;
@@ -70,11 +70,15 @@ export default {
                    background-color: whitesmoke;
                 }
                 ul {
-                list-style-type: none;
+                    list-style-type: none;
                 }
+               
             </style>
-            <body style="font-family: Arial, Helvetica, sans-serif; background-color: white; text-align: center; 
-            margin: 2%; border: solid; padding: 6%; font-size: 0.8em">
+            <body style="font-family: Arial, Helvetica, sans-serif; 
+                  background-color: #f5f5f5; 
+                  text-align: center; 
+                      margin: 2%; 
+                      border: solid; padding: 6%; font-size: 0.8em">
                 <div style="text-align: center; margin-bottom: 3%;">
                     <h1 style="color:#4B0082;">Contrat de ${data.enfant.nom_complet}</h1>
                     <img src="images/logo.jpg" style="height: 120vh; width: 100%; margin-bottom: 4%;" alt="logo"/>
@@ -210,19 +214,66 @@ export default {
   },
 
   presencePdf (presences, nomComplet, dateDebut, dateFin) {
+    let table = `<table style="width: 95%;"><tr>
+            <th>Date</th>
+            <th>Heure d'arrivée</th>
+            <th>Heure de départ</th>
+            <th>Gouter</th>
+</tr>`
+    let gouter = ''
+    for (let i = 0; i < presences.length; i++) {
+      if (presences[i].prendsGouterReel) {
+        gouter ='Oui'
+      } else {
+        gouter = 'Non'
+      }
+      table += `<tr>
+                <td>${DateHelper.getDateFr(new Date(presences[i].datepresencereelle))}</td>
+                <td>${DateHelper.formatTimeFr(presences[i].heureArriveeReelle)}</td>
+                <td>${DateHelper.formatTimeFr(presences[i].heureDepartReelle)}</td>
+                <td>${gouter}</td>
+            </tr>`
+    }
+    table += '</table>'
     let html = `
         <html>
               <head>
                 <meta charset="UTF-8">
               </head>
-              <body style="font-family: Arial, Helvetica, sans-serif; background-color: #f5f5f5; text-align: center; 
-                    margin: 2%; border: solid; padding: 6%; font-size: 0.8em">
+              <style>
+                table {
+                   margin: 2%;
+                  text-align: center;
+                  border-collapse: collapse;
+                  border-radius: 4px;
+                  border: 2px solid black;
+                }
+       
+                th, td {
+                    border-bottom: 1px solid black;
+                    padding: 1%;
+                }
+                td{
+                   background-color: #e6ffff;
+                },
+                 th {
+                  background-color: #00ffff;
+                  color: white;
+                  font-weight: bold;
+                }
+               </style>
+              <body style="font-family: Arial, Helvetica, sans-serif; 
+                  background-color: #f5f5f5; 
+                  text-align: center; 
+                      margin: 2%; 
+                      border: solid; padding: 6%; font-size: 0.8em">
                  <div style="text-align: center; margin-bottom: 3%;">
-                      <h1 style="color:#4B0082; page-break-after: always;"">Historique des présences de ${nomComplet}</h1>
+                      <h1 style="color:#4B0082;"">Historique des présences de ${nomComplet}</h1>
                       <img src="images/logo.jpg" style="height: 120vh; width: 100%; margin-bottom: 4%;" alt="logo"/>
-                      <h3 style="color:#4B0082; "> <i> Du ${dateDebut} au ${dateFin}</i></h3>
-                      <img src="images/maternelle_enfant.png" style="width: 35%" alt="maternelle"/>
+                      <h3 style="color:#4B0082; page-break-after: always;"> <i> Du ${dateDebut} au ${dateFin}</i></h3>
+                      <img src="images/maternelle_enfant.png" style="width: 35%;" alt="maternelle"/>
                   </div>
+                  ${table}
                </body>
         </html>`
     return FileService.createPDF({html: html, nom: 'presences_' + nomComplet})

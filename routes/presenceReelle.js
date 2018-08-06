@@ -35,11 +35,10 @@ router.get('/all/:annee/:numMois/:numC', function (req, res, next) {
 });
 
 router.get('/between', function (req, res, next) {
-    let dateDebut = req.query.debut
-    let dateFin = req.query.fin
-    let numContrat = req.query.contrat
+    let dateDebut = req.query.debut;
+    let dateFin = req.query.fin;
+    let numContrat = req.query.contrat;
     modelPresenceReelle.getAllContratBetween(dateDebut, dateFin, numContrat, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });

@@ -2,8 +2,8 @@
   <v-layout row wrap>
     <v-flex  xs12 md6 offset-md3 class="my-5" @keyup.enter="envoyer">
       <v-fade-transition>
-        <v-card v-if="!progress">
-          <v-toolbar :color="toolbarColor" dark card>
+        <v-card v-if="!progress" class="transparent elevation-0">
+          <v-toolbar :color="toolbarColor" class="elevation-0"  style="opacity: 0.8" dark card>
             <v-spacer></v-spacer>
             <v-toolbar-title>{{titre}}</v-toolbar-title>
             <v-spacer></v-spacer>

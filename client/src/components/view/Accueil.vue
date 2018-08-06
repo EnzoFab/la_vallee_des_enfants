@@ -1,5 +1,5 @@
 <template>
- <div>
+ <div class="lime lighten-5">
    <section>
      <v-flex md12 lg12 xs12>
      <Carousel id="carous"></Carousel>
@@ -8,7 +8,7 @@
 
    <section>
      <v-container>
-       <img src="/static/logo.jpg"/>
+       <img src="/static/logo2.png"/>
      </v-container>
 
      <v-layout column wrap class="my-5" align-center>
@@ -63,7 +63,7 @@
      </v-layout>
    </section>
    <section>
-     <v-parallax src="/static/toy.jpg" height="400">
+     <v-parallax src="/static/toy.jpg" height="200">
        <v-layout column align-center justify-center>
          <div class="headline white--text mb-3 text-xs-center">J'essaie un contrat</div>
          <v-btn class="blue-grey darken-1" dark large to="/contrat/Simulation">
@@ -85,7 +85,7 @@
      </v-layout>
    </section>
    <v-container fluid>
-     <Map></Map>
+     <Map style="opacity: 0.8"></Map>
    </v-container>
  </div>
 </template>

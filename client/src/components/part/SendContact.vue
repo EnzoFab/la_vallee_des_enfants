@@ -1,8 +1,8 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12 md6 offset-md3 class="my-5">
-      <v-card>
-        <v-toolbar color="blue-grey lighten-3" dark>
+      <v-card class="transparent elevation-0">
+        <v-toolbar color="blue-grey lighten-3" class="elevation-0" style="opacity: 0.8" dark>
           <v-spacer></v-spacer>
           <v-toolbar-title>Nous contacter</v-toolbar-title>
           <v-spacer></v-spacer>

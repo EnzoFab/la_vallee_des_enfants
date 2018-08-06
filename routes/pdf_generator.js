@@ -22,7 +22,8 @@ router.post('/create', function (req, res) {
         {
             directory: 'public/pdf/',
             format: 'Letter',
-            base: 'file:///' + assetPath//path.join(__dirname+ '/../public/images')
+            base: 'file:///' + assetPath,//path.join(__dirname+ '/../public/images')
+            orentation: req.body.orentation || 'portrait'
         }
     ).toStream(function (err, stream) {
         if (!err) {

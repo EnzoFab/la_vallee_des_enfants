@@ -312,10 +312,10 @@ let presenceReelle = {
                 };
                 let e = helper.handleError(er, res,'L\'enfant n\'a jamais était présent');
                 retour.erreur = e.erreur;
-                retour.presences = null
+                retour.presences = null;
                 retour.statut = e.statut;
                 if(retour.erreur == null){
-                    let array = []
+                    let array = [];
                     for (let i = 0; i<res.rows.length; i++) {
                         array.push({
                             datepresencereelle:  res.rows[i].datepresencereelle,
@@ -326,6 +326,7 @@ let presenceReelle = {
                             heureArriveePrevue: res.rows[i].heure_arrivee,
                             heureDepartPrevue: res.rows[i].heure_depart,
                             prendsGouterPrevue: res.rows[i].prends_gouter,
+                            prendsGouterReel: res.rows[i].prends_gouter_r,
                             arriveeRetard: res.rows[i].heure_arrivee_r > res.rows[i].heure_arrivee,
                             partieAvant: res.rows[i].heure_depart_r < res.rows[i].heure_depart,
                             absence_justifiee: res.rows[i].absence_justifiee

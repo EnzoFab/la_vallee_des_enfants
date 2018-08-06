@@ -1,6 +1,6 @@
 <template>
-  <v-carousel hide-controls hide-delimiters>
-    <v-carousel-item v-for="(item,i) in items" :src="item.src" :key="i">
+  <v-carousel hide-controls hide-delimiters lazy>
+    <v-carousel-item v-for="(item,i) in items" :src="item.src" :key="i" >
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -22,9 +22,6 @@ export default {
         },
         {
           src: '/static/carousel_image/4.jpg'
-        },
-        {
-          src: '/static/carousel_image/8.jpg'
         }
       ]
     }

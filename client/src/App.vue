@@ -51,9 +51,6 @@ export default {
     employeurConnecte () {
       return this.$store.getters.connectedUser !== null && this.$store.getters.connectedUser.rang === 'Employeur'
     }
-  },
-  mounted () {
-    console.log(this.$store.state)
   }
 }
 </script>
@@ -66,6 +63,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
 /* Custom scrollbar */
 body::-webkit-scrollbar {
   width: 9px;
