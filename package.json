@@ -37,6 +37,7 @@
     "socket.io": "^2.1.0",
     "socketio-jwt": "^4.5.0",
     "stream-rename": "^1.0.1",
+    "vue": "^2.5.17",
     "vue-schedule": "^2.0.4",
     "wkhtmltopdf": "^0.3.4"
   },

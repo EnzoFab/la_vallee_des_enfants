@@ -1,5 +1,5 @@
 <template>
-  <v-card flat :color="color" flat>
+  <v-card flat :color="color">
     <v-layout row wrap class="ma-1">
       <v-flex xs12>
         <h3 >
@@ -150,7 +150,6 @@ moment.locale('fr')
 require('vue-simple-calendar/dist/static/css/default.css')
 require('vue-simple-calendar/dist/static/css/holidays-us.css')
 
-
 const statePresence = {
   normale: {
     class: 'green accent-1', type: 'PRESENCE'
@@ -162,9 +161,11 @@ const statePresence = {
       label: 'Presence anormale',
       label_class: 'amber--text text--darken-4'
     },
-  absence_justifee: {class: 'pink darken-1', type: 'ABSENCE',
-    label: 'Absence justifée', label_class: 'red--text text--darken-4'},
-  absence_non_justifiee: {class: 'deep-orange lighten-1', type: 'ABSENCE', label:'Absence injustifiée'},
+  absence_justifee: {class: 'pink darken-1',
+    type: 'ABSENCE',
+    label: 'Absence justifée',
+    label_class: 'red--text text--darken-4'},
+  absence_non_justifiee: {class: 'deep-orange lighten-1', type: 'ABSENCE', label: 'Absence injustifiée'},
   exceptionnelle:
     {
       class: 'deep-purple lighten-4',
@@ -184,7 +185,6 @@ const NOTE = {
   absenceJustifee: 'Absence justifiee',
   absenceNonJustifee: 'Absence Non justifiee'
 }
-
 
 export default {
   name: 'RecapitulatifPresence',
@@ -267,7 +267,8 @@ export default {
           s = statePresence.absence_non_justifiee
           note = NOTE.absenceNonJustifee
         } else {
-          if (DateHelper.formatTime(enfant.heureArriveeReelle) > DateHelper.formatTime(enfant.heureArriveePrevue)) { //arrivée en retard
+          if (DateHelper.formatTime(enfant.heureArriveeReelle) > DateHelper.formatTime(enfant.heureArriveePrevue)) {
+            //arrivée en retard
             s = statePresence.anormale
             note = NOTE.arriveeRetard
           } else if (DateHelper.formatTime(enfant.heureArriveeReelle) < DateHelper.formatTime(enfant.heureArriveePrevue)) {

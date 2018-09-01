@@ -135,12 +135,12 @@ function startPrintProcess(canvasObj, fileName, callback) {
   document.body.appendChild(canvasObj); //appendChild is required for html to add page in PDF_creator
   PDF_creator.addHTML(canvasObj.text(), 0, 0, pdfConf).then(function() {
     document.body.removeChild(canvasObj);
-    PDF_creator.addPage();
+    PDF_creator.addPage()
     setTimeout(function(){
       PDF_creator.save(fileName + '.PDF_creator');
-    },2000)
-    callback();
-  });
+    }, 2000)
+    callback()
+  })
 }
 
 export default {
@@ -162,10 +162,10 @@ export default {
           sortable: true,
           value: 'datepresencereelle'
         },
-        { text: 'heure d\'arrivee', value: 'heure_arrivee_r', sortable: true},
-        { text: 'heure de depart', value: 'heure_depart_r' },
-        { text: 'gouter pris', value: 'prends_gouter_r' },
-        { text: 'absence', value: 'absence_justifiee' }
+        {text: 'heure d\'arrivee', value: 'heure_arrivee_r', sortable: true},
+        {text: 'heure de depart', value: 'heure_depart_r'},
+        {text: 'gouter pris', value: 'prends_gouter_r' },
+        {text: 'absence', value: 'absence_justifiee' }
       ]
     }
   },
@@ -218,8 +218,8 @@ export default {
       }
     },
     formatAbsence (item) {
-      if (item.heure_arrivee_r == null && item.absence_justifiee !== undefined ||
-        item.heure_arrivee_r && item.absence_justifiee != null) {
+      if ((item.heure_arrivee_r == null && item.absence_justifiee !== undefined) ||
+        (item.heure_arrivee_r && item.absence_justifiee != null)) {
         if (item.absence_justifiee) {
           return 'Absence justifiée'
         } else {
@@ -230,7 +230,7 @@ export default {
       }
     },
     facturePDF () {
-     console.log('under construction')
+      console.log('under construction')
       // TODO à finir
     }
   },
@@ -264,9 +264,9 @@ export default {
       let h = this.factureAAfficher.heure_semaine
       let minute = 0
       if (h.minutes !== undefined) {
-        minute =  h.minutes
+        minute = h.minutes
       }
-      let nbHeure = h.hours* 60 + minute
+      let nbHeure = h.hours * 60 + minute
       return FonctionMath.arrondi(nbHeure / 60, 0)
     },
     indemniteAuForfait () {
@@ -357,7 +357,7 @@ export default {
         {
           label: 'Prix des gouters',
           valeur: this.prixTotalGouter,
-          devise: `Euros (Prix à l'unité: ${this.factureAAfficher.tarif_gouter} euros)` ,
+          devise: `Euros (Prix à l'unité: ${this.factureAAfficher.tarif_gouter} euros)`,
           color: 'white'
         },
         {

@@ -17,5 +17,9 @@ export default {
 
   getEnfantsEmargesDuJour () {
     return Api().get('/presencetheo/enfantEmargeDuJour')
+  },
+
+  getPlanningEnfant (id_contrat) {
+    return Api().get(`/presencetheo/all/${id_contrat}`)
   }
 }

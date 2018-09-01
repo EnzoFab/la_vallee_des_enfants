@@ -74,6 +74,13 @@
                        color="cyan lighten-5"
                 />
               </v-scale-transition>
+              <v-scale-transition>
+                <Planning :nomCompletEnfant="nomCompletEnfant"
+                       v-if="bottomNav === 1"
+                       :numContrat="$route.params.numC"
+
+                />
+              </v-scale-transition>
               <DateRangePresence
                 :nomCompletEnfant="nomCompletEnfant"
                 v-if="bottomNav === 2"
@@ -105,10 +112,11 @@ import Calendar from '../part/Calendar'
 import Recap from '../part/RecapitulatifPresence'
 import ContratService from '../../services/ContratService'
 import AllFacture from '../part/VisualisationContratPart/AllFacture'
-import DateRangePresence from "../part/DateRangePresence";
+import DateRangePresence from '../part/DateRangePresence'
+import Planning from '../part/Planning'
 export default {
   name: 'VisualisationContrat',
-  components: {DateRangePresence, Recap, Fiche, Calendar, AllFacture},
+  components: {DateRangePresence, Recap, Fiche, Calendar, AllFacture, Planning},
   data () {
     return {
       model: 'tab-2',

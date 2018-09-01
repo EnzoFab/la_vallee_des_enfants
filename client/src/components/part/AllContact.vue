@@ -28,9 +28,8 @@
                   <v-checkbox v-model="message.selectionne"
                               @click.stop="message.selectionne = !message.selectionne"></v-checkbox>
                 </v-flex>
-                <v-flex xs1>{{message.mail}}</v-flex>
-                <v-flex xs2>{{message.sujet}}</v-flex>
-                <v-flex xs2>{{message.nom}}</v-flex>
+                <v-flex xs2>{{message.mail}}</v-flex>
+                <v-flex xs3>{{message.sujet}}</v-flex>
                 <v-flex xs2> {{message.date_envoi}}</v-flex>
                 <v-flex xs3>{{message.truncate_text}}</v-flex>
                 <v-flex xs1>
@@ -60,7 +59,9 @@
 </template>
 
 <script>
-import DateHelper from "../../helper/DateHelper";
+import DateHelper from '../../helper/DateHelper'
+import ContactService from '../../services/ContactService'
+
 
 export default {
   name: 'AllContact',
@@ -77,20 +78,37 @@ export default {
      */
     loadMessages (limit, offset) {
       this.messages = []
-      for (let i = 0; i < 5; i++) {
-        this.messages.push({
-          mail: 'e@mail.com',
-          date_envoi: DateHelper.getDateFr(new Date ()),
-          nom: 'Kevin',
-          message_id: i,
-          texte: 'Je suis un texte bien sympa qui est le meme partout',
-          sujet: 'Un petit message',
-          selectionne: false,
-          messageOuvert: false,
-          panelOuvert: false,
-          truncate_text: 'Je suis un texte bien sympa...'
+      let vm = this
+      ContactService.getAll()
+        .then(function (r) {
+          if (r.data.erreur == null) {
+            let contacts = r.data.contacts
+            let truncateText = ''
+            for (let i = 0; i < contacts.length; i++) {
+              truncateText = contacts[i].message
+              if (truncateText.length > 12) {
+                truncateText = truncateText.substr(0, 12) + '...'
+              }
+              vm.messages.push({
+                mail: contacts[i].mail,
+                date_envoi: DateHelper.getDateFr(new Date (contacts[i].date_envoi)),
+                message_id: contacts[i].contact_id,
+                texte: contacts[i].message,
+                sujet: contacts[i].sujet,
+                selectionne: false,
+                messageOuvert: contacts[i].ouvert,
+                panelOuvert: false,
+                truncate_text: truncateText
+              })
+            }
+          } else {
+            throw r.data.erreur
+          }
         })
-      }
+        .catch(function (e) {
+        console.error(e.toString())
+      })
+
     },
     deleteMessage (id) {
       //

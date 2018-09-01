@@ -3,23 +3,23 @@ import FileService from '../services/FileService'
 import DateHelper from './DateHelper'
 import FonctionMath from './FonctionMath'
 
-function forceDownload(response, name, fileName) {
-  if (!window.navigator.msSaveOrOpenBlob){
+function forceDownload (response, name, fileName) {
+  if (!window.navigator.msSaveOrOpenBlob) {
     // BLOB NAVIGATOR
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${fileName}${name}.pdf`);
-    document.body.appendChild(link);
-    link.click();
-  }else{
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `${fileName}${name}.pdf`)
+    document.body.appendChild(link)
+    link.click()
+  } else {
     // BLOB FOR EXPLORER 11
-    const url = window.navigator.msSaveOrOpenBlob(new Blob([response.data]), `${fileName}${name}.pdf`);
+    window.navigator.msSaveOrOpenBlob(new Blob([response.data]), `${fileName}${name}.pdf`)
   }
 }
 export default {
   contratPdf (data) {
-    let table = ''  // boucle sur les jours
+    let table = '' // boucle sur les jours
     let gouter = ''
     let nbSemaineAccueil = 52 - data.assmat.nombreSemaineConges - data.employeur.nombreSemSupp
     let salaireMensuelNet =
@@ -209,7 +209,7 @@ export default {
         </html>` // TODO a finir
     return FileService.createPDF({html: html, nom: 'facture_' + mois + '-' + annee})
       .then(function (r) {
-        forceDownload (r, data.enfant.nom_complet, 'facture_')
+        forceDownload(r, `${mois}_${annee}`, 'facture_')
       })
   },
 
@@ -223,7 +223,7 @@ export default {
     let gouter = ''
     for (let i = 0; i < presences.length; i++) {
       if (presences[i].prendsGouterReel) {
-        gouter ='Oui'
+        gouter = 'Oui'
       } else {
         gouter = 'Non'
       }
@@ -278,8 +278,7 @@ export default {
         </html>`
     return FileService.createPDF({html: html, nom: 'presences_' + nomComplet})
       .then(function (r) {
-        forceDownload (r, nomComplet, 'presences_')
+        forceDownload(r, nomComplet, 'presences_')
       })
   }
 }
-

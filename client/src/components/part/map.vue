@@ -51,7 +51,7 @@ export default {
           lng: this.currentPlace.geometry.location.lng()
         }
         this.markers.push({ position: marker })
-        for (var i = 0; i < this.markers.length; i++) {
+        for (let i = 0; i < this.markers.length; i++) {
           console.log('Mark', this.markers[i].position)
         }
         this.places.push(this.currentPlace)
