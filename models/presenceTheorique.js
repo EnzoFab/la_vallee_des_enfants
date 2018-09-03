@@ -163,7 +163,7 @@ let presenceTheorique = {
             'P.id_type_jour = TJ.id_type AND TJ.libelle = $1 AND P.id_presence_theorique = PR.id_presence_theo\n' +
             'AND PR.datepresencereelle = $2 AND C.date_fin IS NULL\n' +
             'ORDER BY E.prenom_enfant, E.nom_enfant',
-            [weekDay, new Date(dateDujour)],
+            [weekDay, dateDujour],
             function (err, result) {
                 retour = {
                     erreur: null,

@@ -395,7 +395,8 @@ export default {
         e.heure_arrivee_r = null
         e.prend_gouter_r = null
       }
-      if (e.id_presence_reelle === undefined) {
+     console.log(presence)
+     if (e.id_presence_reelle === undefined) {
         presence.absence_justifiee = null
         presence.id_facture = null
         this.save(presence).then(function (id_presence) {
@@ -455,7 +456,6 @@ export default {
           vm.triggerNotification(message, 'error')
         })
       }
-
     },
 
     supprimerPresence (enfant) {

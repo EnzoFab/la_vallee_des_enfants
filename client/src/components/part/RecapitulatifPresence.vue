@@ -27,8 +27,8 @@
             class="theme-default holiday-us-traditional holiday-us-official"
             :displayPeriodUom="typeAffichage"
             @click-event="eventClick"
-            weekdayNameFormat="long"
             ref="calendar"
+            weekdayNameFormat="long"
           >
           </calendar-view>
         </v-card>
@@ -209,8 +209,8 @@ export default {
         classes: 'green darken-1'
       } */
       date: new Date(),
-      typeAffichage: 'week',
-      typeAffichageFr: 'Semaine'
+      typeAffichage: 'month',
+      typeAffichageFr: 'Mois'
     }
   },
   methods: {
@@ -226,7 +226,9 @@ export default {
       PresenceService.getAllPresenceContratBefore(moment(new Date()).format('YYYY-MM-DD HH:MM'), this.numContrat)
         .then(function (rslt) {
           if (rslt.data.erreur == null) {
-            rslt.data.resultats.forEach(function (event) {
+            let event = null
+            for (let i = 0; i <  rslt.data.resultats.length; i++) {
+              event = rslt.data.resultats[i]
               let data = {
                 startDate: event.datepresencereelle,
                 endDate: event.datepresencereelle,
@@ -245,6 +247,9 @@ export default {
               data.classes = s.class
               data.title = s.label
               vm.events.push(data)
+            }
+            rslt.data.resultats.forEach(function (event) {
+
             })
           }
         })
