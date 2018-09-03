@@ -59,9 +59,14 @@ export default {
     return split[0] + ':' + split[1]
   },
 
-  getCurrentTime () {
-    let d = new Date()
-    return d.getHours() + ':' + d.getMinutes()
+  getCurrentTime (date) {
+    if (!date) {
+      let d = new Date()
+      return d.getHours() + ':' + d.getMinutes()
+    } else {
+      return date.getHours() + ':' + date.getMinutes()
+    }
+
   },
 
   /**

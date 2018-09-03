@@ -8,15 +8,15 @@ export default {
     return Api().post('/presencetheo/create', credential)
   },
   // recupere tous les enfants présent aujourd'hui
-  getEnfantsDuJour () {
-    return Api().get('/presencetheo/enfantDuJour')
+  getEnfantsDuJour (date) {
+    return Api().get(`/presencetheo/enfantDuJour?date=${date}`)
   },
-  getEnfantsNonPresentsDujour () {
-    return Api().get('/presencetheo/enfantNonPresentDuJour')
+  getEnfantsNonPresentsDujour (date) {
+    return Api().get(`/presencetheo/enfantNonPresentDuJour?date=${date}`)
   },
 
-  getEnfantsEmargesDuJour () {
-    return Api().get('/presencetheo/enfantEmargeDuJour')
+  getEnfantsEmargesDuJour (date) {
+    return Api().get(`/presencetheo/enfantEmargeDuJour?date=${date}`)
   },
 
   getPlanningEnfant (id_contrat) {

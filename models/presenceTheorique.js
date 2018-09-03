@@ -40,7 +40,7 @@ let presenceTheorique = {
      * @param weekDay :jour de la semaine, est une chaine de caractere
      * @param callback: callback qui sera executer
      */
-    getEnfantsDuJour (weekDay, callback) {
+    getEnfantsDuJour (weekDay, dateDujour, callback) {
         db.query(
             'SELECT *\n' +
             'FROM (\n' +
@@ -61,7 +61,7 @@ let presenceTheorique = {
                 'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
                 'AND P3.heure_arrivee is not null AND C3.date_fin IS NULL\n' +
             'ORDER BY Enf.prenom_enfant, Enf.nom_enfant',
-            [weekDay, new Date()],
+            [weekDay, new Date(dateDujour)],
             function (err, result) {
                 console.log(weekDay)
                 retour = {
@@ -97,7 +97,7 @@ let presenceTheorique = {
         )
     },
 
-    getEnfantsNonPresentsDuJour (weekDay, callback) { // TODO ne pas compter les enfants dont le contrat est cloturé
+    getEnfantsNonPresentsDuJour (weekDay, dateDujour, callback) { // TODO ne pas compter les enfants dont le contrat est cloturé
             db.query(
                 'SELECT *\n' +
                 'FROM (\n' +
@@ -119,7 +119,7 @@ let presenceTheorique = {
                 'P3.id_contrat = C3.id_contrat AND P3.id_type_jour = TJ3.id_type AND TJ3.libelle = $1\n' +
                 'AND C3.date_fin IS NULL\n' +
                 'ORDER BY Enf.prenom_enfant, Enf.nom_enfant',
-                [weekDay, new Date()],
+                [weekDay, new Date(dateDujour)],
                 function (err, result) {
                     retour = {
                         erreur: null,
@@ -155,7 +155,7 @@ let presenceTheorique = {
         },
 
 
-    getEnfantsEmargesDuJour (weekDay, callback) {
+    getEnfantsEmargesDuJour (weekDay, dateDujour, callback) {
         db.query('SELECT * \n' +
             'FROM public.enfant E, public.contrat C, public.presencereelle PR, public.presencetheorique P,\n' +
             'public.typejour TJ \n' +
@@ -163,7 +163,7 @@ let presenceTheorique = {
             'P.id_type_jour = TJ.id_type AND TJ.libelle = $1 AND P.id_presence_theorique = PR.id_presence_theo\n' +
             'AND PR.datepresencereelle = $2 AND C.date_fin IS NULL\n' +
             'ORDER BY E.prenom_enfant, E.nom_enfant',
-            [weekDay, new Date()],
+            [weekDay, new Date(dateDujour)],
             function (err, result) {
                 retour = {
                     erreur: null,

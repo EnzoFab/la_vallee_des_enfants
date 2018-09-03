@@ -152,7 +152,7 @@ require('vue-simple-calendar/dist/static/css/holidays-us.css')
 
 const statePresence = {
   normale: {
-    class: 'green accent-1', type: 'PRESENCE'
+    class: 'green accent-1', type: 'PRESENCE', label: 'Présent'
   },
   anormale: // concerne un retard ou un gouter pris alors qu'on ne devait pas le prendre ou inversement
     {
@@ -249,7 +249,7 @@ export default {
           }
         })
         .catch(function (err) {
-          console.log(err)
+          console.error(err)
         })
     },
     getState (enfant) {

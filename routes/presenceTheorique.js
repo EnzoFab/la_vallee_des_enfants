@@ -5,23 +5,22 @@ const jour = ['Dimanche', 'Lundi','Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Sam
 
 /* ------------------------------------------ ROUTES GET ------------------------------------------------------ */
 router.get('/enfantDuJour', function (req, res) {
-    let dateDujour = new Date();
-    modelPresenceTheorique.getEnfantsDuJour(jour[dateDujour.getDay()], function (retour) {
+    let dateDujour = new Date(req.query.date);
+    modelPresenceTheorique.getEnfantsDuJour(jour[dateDujour.getDay()], dateDujour, function (retour) {
         res.send(retour);
     })
 });
 
 router.get('/enfantNonPresentDuJour', function (req, res) {
-    let dateDujour = new Date();
-    modelPresenceTheorique.getEnfantsNonPresentsDuJour(jour[dateDujour.getDay()], function (retour) {
+    let dateDujour = new Date(req.query.date);
+    modelPresenceTheorique.getEnfantsNonPresentsDuJour(jour[dateDujour.getDay()], dateDujour, function (retour) {
         res.send(retour);
     })
 });
 
 router.get('/enfantEmargeDuJour', function (req, res) {
-    let dateDujour = new Date();
-    modelPresenceTheorique.getEnfantsEmargesDuJour(jour[dateDujour.getDay()], function (retour) {
-        console.log(retour)
+    let dateDujour = new Date(req.query.date);
+    modelPresenceTheorique.getEnfantsEmargesDuJour(jour[dateDujour.getDay()], dateDujour,  function (retour) {
         res.send(retour);
     })
 });
@@ -67,7 +66,6 @@ router.get('/:e/:n', function (req, res, next) {
 router.post('/create', function (req, res, next) {
     var presenceTheorique = req.body.presenceTheorique
     modelPresenceTheorique.create(presenceTheorique, function (retour) {
-        console.log(retour)
         res.send(retour)
     })
 });

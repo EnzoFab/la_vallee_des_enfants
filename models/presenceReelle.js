@@ -19,7 +19,6 @@ let presenceReelle = {
                 } else {
                     retour.resultat = r.rows[0]
                 }
-                console.log(r.rows[0])
                 callback(retour)
             });
     },
@@ -300,7 +299,6 @@ let presenceReelle = {
     },
 
     getAllContratBetween (debut, fin, contrat, callback) {
-        console.log(debut)
         db.query('SELECT * FROM public.presencereelle PR, public.presencetheorique PT\n' +
             'WHERE PR.datepresencereelle BETWEEN $1 AND $2\n' +
             'AND PR.id_presence_theo = PT.id_presence_theorique AND PT.id_contrat = $3',

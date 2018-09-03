@@ -2,8 +2,43 @@
   <v-card color="orange lighten-5">
     <v-container fluid grid-list-md pa-4>
       <v-layout row wrap>
-        <v-flex xs12>
-          <h1 class="headline text-xs-center orange--text text--darken-1 mr-1"><b>{{dateFr}}</b></h1>
+        <v-flex xs1 offset-xs1>
+          <v-tooltip v-model="showTooltipBtnBack" top color="deep-purple lighten-2">
+            <v-btn  slot="activator"
+                    @mouseover="showTooltipBtnBack = true"
+                    @mouseout.stop="showTooltipBtnBack = false"
+                    @click="previous_date()"
+                    icon large color="transparent"
+            >
+              <v-icon x-large color="deep-purple darken-1">keyboard_arrow_left</v-icon>
+            </v-btn>
+            <span>Date précédente</span>
+          </v-tooltip>
+        </v-flex>
+        <v-flex xs6 offset-xs1>
+          <h1 class="headline text-xs-center orange--text text--darken-1 mr-1"><b>{{dateFr()}}</b></h1>
+        </v-flex>
+        <v-flex xs1 offset-xs1>
+          <v-tooltip v-model="showTooltipBtnNext" top color="deep-purple lighten-2">
+            <v-btn  slot="activator"
+                    @mouseover="showTooltipBtnNext = true"
+                    @mouseout.stop="showTooltipBtnNext = false"
+                    @click="next_date()"
+                    icon large color="transparent"
+                    :disabled="over_today()"
+            >
+              <v-icon x-large color="deep-purple darken-1">keyboard_arrow_right</v-icon>
+            </v-btn>
+            <span>Date suivante</span>
+          </v-tooltip>
+        </v-flex>
+        <v-flex xs6 offset-xs3>
+          <v-btn large outline
+                 :disabled="over_today()"
+                 @click="setDate_Today()"
+                 color="deep-purple darken-1">
+            Aujourd hui
+          </v-btn>
         </v-flex>
         <v-flex xs6 offset-xs3 v-if="!contentLoaded">
           <Spinner :loading="!contentLoaded" color="#4DB6AC"></Spinner>
@@ -24,7 +59,9 @@
           <v-fade-transition>
             <div v-if="showText" style="border: #4a148c solid 2px; background-color: #EDE7F6; padding: 1%">
               Pour réaliser l'émargement d'un enfant veuillez rentrer l'heure d'arrivée et l'heure de départ.<br>
-              Il sera ensuite possible de modifier cette saisie.
+              Il sera ensuite possible de modifier cette saisie.<br>
+              Il est aussi possible de modifier l'émargement des jours précédents.
+              Pour cela il suffit de cliquer sur les flèches droite ou gauche pour choisir la date.
             </div>
           </v-fade-transition>
         </v-flex>
@@ -264,14 +301,14 @@
 </template>
 
 <script>
-import Spinner from 'vue-spinner/src/RiseLoader'
-import Searcher from '../part/Searcher'
-import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
-import PresenceReelleService from '../../services/PresenceService'
-import DateHelper from '../../helper/DateHelper'
-import TimePicker from '../part/timepicker/TimePicker'
+  import Spinner from 'vue-spinner/src/RiseLoader'
+  import Searcher from '../part/Searcher'
+  import PresenceTheoriqueService from '../../services/PresenceTheoriqueService'
+  import PresenceReelleService from '../../services/PresenceService'
+  import DateHelper from '../../helper/DateHelper'
+  import TimePicker from '../part/timepicker/TimePicker'
 
-const statePresence = {
+  const statePresence = {
   normale: {
     class: 'green accent-1', type: 'PRESENCE'
   },
@@ -320,7 +357,10 @@ export default {
       loading: false,
       showTooltip: false,
       showText: false,
-      contentLoaded: false
+      contentLoaded: false,
+      dateEmargement: new Date(),
+      showTooltipBtnBack: false,
+      showTooltipBtnNext: false
     }
   },
   methods: {
@@ -334,17 +374,16 @@ export default {
       let e = enfant
       let vm = this
       let presence = {
-        datepresencereelle: new Date(),
+        datepresencereelle: new Date(this.dateEmargement),
         heure_arrivee: e.heure_arrivee_r,
         heure_depart: e.heure_depart_r,
         prend_gouter: e.prend_gouter_r,
         id_presence_theo: e.id_presence_theo
       }
-      console.log(presence)
 
       if (absence !== undefined) {
         presence = {
-          datepresencereelle: new Date(),
+          datepresencereelle: new Date(this.dateEmargement),
           heure_arrivee: null,
           heure_depart: null,
           prend_gouter: null,
@@ -444,9 +483,7 @@ export default {
       let itemIsRemoved = false
       for (let i = 0; i <  this.enfants_presents.length; i++) {
         if (this.enfants_presents[i].id_enfant === enfant.id_enfant) {
-          console.log('Present', this.enfants_presents[i])
           this.enfants_presents.splice(i, 1)
-          console.log(this.enfants_presents)
           itemIsRemoved = true
         }
       }
@@ -468,7 +505,7 @@ export default {
     loadEnfantsPresents () { // charge tous les enfants supposés présents aujourd'hui
       let vm = this
       this.enfants_presents = []
-      return PresenceTheoriqueService.getEnfantsDuJour() // recupere tous les enfants présent aujourd'hui
+      return PresenceTheoriqueService.getEnfantsDuJour(this.dateEmargement) // recupere tous les enfants présent aujourd'hui
         .then(function (rst) {
           if (rst.data.erreur == null) {
             let data = rst.data.resultats
@@ -482,14 +519,14 @@ export default {
           }
         })
         .catch(function (err) {
-          console.log('Erreur', err)
+          console.error('Erreur', err)
         })
     },
 
     loadEnfantsNonPresent () { // charge tous les enfants supposés absent aujourd'hui
       let vm = this
       this.enfants_non_presents = []
-      return PresenceTheoriqueService.getEnfantsNonPresentsDujour() // recupere tous les enfants présent aujourd'hui
+      return PresenceTheoriqueService.getEnfantsNonPresentsDujour(this.dateEmargement) // recupere tous les enfants présent aujourd'hui
         .then(function (rst) {
           if (rst.data.erreur == null) {
             let data = rst.data.resultats
@@ -510,7 +547,7 @@ export default {
     loadEnfantsEmarges () { // tous les enfants ayant été pointé
       let vm = this
       this.enfants_emarges = []
-      return PresenceTheoriqueService.getEnfantsEmargesDuJour()
+      return PresenceTheoriqueService.getEnfantsEmargesDuJour(this.dateEmargement)
         .then(function (rst) {
           if (rst.data.erreur != null) {
             throw rst.data.erreur
@@ -519,9 +556,9 @@ export default {
             for (let i = 0; i < data.length; i++) {
               data[i].state = vm.getState(data[i])
               if (data[i].heure_depart_r == null) {
-                if (DateHelper.getCurrentTime() >= vm.heure_debut && DateHelper.getCurrentTime() <= vm.heure_fin) {
-                  data[i].heure_depart_r = DateHelper.getCurrentTime()
-                  data[i].heure_arrivee_r = DateHelper.getCurrentTime()
+                if (DateHelper.getCurrentTime(this.dateEmargement) >= vm.heure_debut && DateHelper.getCurrentTime(this.dateEmargement) <= vm.heure_fin) {
+                  data[i].heure_depart_r = DateHelper.getCurrentTime(this.dateEmargement)
+                  data[i].heure_arrivee_r = DateHelper.getCurrentTime(this.dateEmargement)
                 } else {
                   data[i].heure_depart_r = DateHelper.toTime(vm.heure_fin, 0)
                   data[i].heure_arrivee_r = DateHelper.toTime(vm.heure_debut, 0)
@@ -532,8 +569,8 @@ export default {
             vm.sortArray(vm.enfants_emarges)
           }
         }) .catch(function (err) {
-        console.log('Erreur', err)
-      })
+          console.log('Erreur', err)
+        })
     },
 
     save (presenceReelle) {
@@ -571,6 +608,21 @@ export default {
         }).catch(function (e) {
           throw e
         })
+    },
+
+    previous_date () {
+      this.dateEmargement.setDate(this.dateEmargement.getDate() - 1)
+      this.loadComponent()
+    },
+
+    next_date () {
+      this.dateEmargement.setDate(this.dateEmargement.getDate() + 1)
+      this.loadComponent()
+    },
+
+    setDate_Today () {
+      this.dateEmargement = new Date()
+      this.loadComponent()
     },
 
     triggerNotification (text, type) {
@@ -649,12 +701,29 @@ export default {
         s.note = note
       }
       return s
+    },
+    loadComponent () {
+      let vm = this
+      Promise.all([
+        this.loadEnfantsPresents(), // charge les enfants présent de la BD
+        this.loadEnfantsNonPresent(), // chage les enfants non présent
+        this.loadEnfantsEmarges()
+      ]).then(function () {
+        vm.contentLoaded = true
+      })
+    },
+    dateFr () {
+      return DateHelper.getDateFrExplicit(this.dateEmargement) + ', ' +
+        DateHelper.formatTimeFr(DateHelper.getCurrentTime(this.dateEmargement))
+    },
+    over_today () {
+      let d = new Date()
+      let dateEmargement = new Date(this.dateEmargement)
+      return dateEmargement.getFullYear() >= d.getFullYear() &&
+        dateEmargement.getMonth() >= d.getMonth() && dateEmargement.getDate() >= d.getDate()
     }
   },
   computed: {
-    dateFr () {
-      return DateHelper.getDateFrExplicit(new Date()) + ', ' + DateHelper.formatTimeFr(DateHelper.getCurrentTime())
-    },
     button_disabled () {
       return this.enfantChoisiAEmarger.heure_arrivee_r == null ||this.enfantChoisiAEmarger.heure_depart_r == null
     },
@@ -667,17 +736,7 @@ export default {
     }
   },
   mounted () {
-    let vm = this
-    Promise.all([
-      this.loadEnfantsPresents(), // charge les enfants présent de la BD
-      this.loadEnfantsNonPresent(), // chage les enfants non présent
-      this.loadEnfantsEmarges()
-    ]).then(function () {
-      vm.contentLoaded = true
-    })
-    /* this.sortArray(this.enfants_presents)
-    this.sortArray(this.enfants_non_presents)
-    this.sortArray(this.enfants_emarges) */
+   this.loadComponent()
   }
 }
 </script>
