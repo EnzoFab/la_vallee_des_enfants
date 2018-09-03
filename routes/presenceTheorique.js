@@ -13,7 +13,7 @@ router.get('/enfantDuJour', function (req, res) {
 
 router.get('/enfantNonPresentDuJour', function (req, res) {
     let dateDujour = new Date(req.query.date);
-    modelPresenceTheorique.getEnfantsNonPresentsDuJour(jour[dateDujour.getDay()], dateDujour, function (retour) {
+    modelPresenceTheorique.getEnfantsNonPresentsDuJour(jour[dateDujour.getDay()], req.query.date, function (retour) {
         res.send(retour);
     })
 });

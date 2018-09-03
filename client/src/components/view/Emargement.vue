@@ -374,7 +374,7 @@ export default {
       let e = enfant
       let vm = this
       let presence = {
-        datepresencereelle: new Date(this.dateEmargement),
+        datepresencereelle: this.dateEmargement,
         heure_arrivee: e.heure_arrivee_r,
         heure_depart: e.heure_depart_r,
         prend_gouter: e.prend_gouter_r,
@@ -383,7 +383,7 @@ export default {
 
       if (absence !== undefined) {
         presence = {
-          datepresencereelle: new Date(this.dateEmargement),
+          datepresencereelle: this.dateEmargement,
           heure_arrivee: null,
           heure_depart: null,
           prend_gouter: null,
@@ -399,6 +399,7 @@ export default {
      if (e.id_presence_reelle === undefined) {
         presence.absence_justifiee = null
         presence.id_facture = null
+
         this.save(presence).then(function (id_presence) {
           vm.removeAbsentsFromList(enfant)
           vm.removeEnfantPresentsFromList(enfant)
@@ -414,15 +415,18 @@ export default {
             '.<br> Vous pouvez toujours modifier cette présence ou la supprimer'
           vm.triggerNotification(message, 'success')
           return e
-        }).then(function (e) {
+        })
+          .then(function (e) {
           vm.$vuetify.goTo(`#presence${e.id_presence_theo}`, vm.options)
-        }).catch(function (e) {
+        })
+          .catch(function (e) {
           vm.loading = false
           vm.dialogEnfantPresent = false
           let message = 'Une erreur est survenue, impossible d\' émarger cet enfant' + e
           vm.triggerNotification(message, 'error')
           console.log(e)
         })
+
       } else {
         if (absence === undefined) {
           presence.absence_justifiee = e.absence_justifee
@@ -574,6 +578,7 @@ export default {
     },
 
     save (presenceReelle) {
+      console.log(presenceReelle)
       return PresenceReelleService.enregistrerPresence({presence: presenceReelle})
         .then(function (r) {
           if (r.data.erreur != null) {
