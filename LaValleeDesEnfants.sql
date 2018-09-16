@@ -20,6 +20,7 @@ drop table if exists public."typetuteur" cascade;
 drop table if exists public."compte" cascade;
 drop table if exists public."modedepaiement" cascade;
 drop table if exists public."frais" cascade;
+drop table if exists public."contact" cascade;
 
 create table public."enfant"
 (
@@ -386,6 +387,18 @@ WITH (
     OIDS = FALSE
 );
 
+CREATE TABLE public.contact (
+    id_contact SERIAL NOT NULL primary key,
+    mail character varying,
+    sujet character varying,
+    message character varying,
+    date_envoi date,
+    ouvert boolean
+)
+WITH (
+    OIDS = FALSE
+);
+
 INSERT INTO public.typetuteur(nom_type_tuteur)
 	VALUES ('Père'),('Mère'),('Tuteur');
 INSERT INTO public.typejour(libelle)
@@ -396,3 +409,11 @@ INSERT INTO public.modedepaiement(nom_mode)
 	VALUES ('Virement'), ('Chèque'), ('Espèces');
 INSERT INTO public.frais(nom_frais, tarif)
     VALUES ('gouter', 1), ('entretien', 4);
+
+insert into public.assmat
+(nom_naissance_am, nom_usage_am, prenom_am, tel_am, nb_semaines_conges, date_naissance_am, ville_naissance_am,
+numero_ss, date_agrement, reference_agrement, assurance_resp_civile, num_police, login, mot_de_passe_am, rue_am,
+ cp_am, ville_am)
+values ('PERNELLE','PERNELLE','Leo','0635480137','5','1995-01-09','Creil','45','2018-05-01','gktlm','MEP','17',
+'leopernelle','$2b$08$v2uhaaDUVzJW5gWFvfWGteHln1unc8FF2E6m3jQq8tmjUDXoKQjAi',
+'18 rue Saint Firmin','34000','Montpellier');

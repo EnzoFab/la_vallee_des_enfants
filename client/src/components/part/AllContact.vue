@@ -43,7 +43,14 @@
               </v-layout>
             </div>
             <v-card class="grey lighten-4 scroll-y">
-              <v-card-text>{{message.texte}}</v-card-text>
+              <v-card-text>
+                <v-layout row wrap>
+                  <v-flex offset-xs2 xs8>{{message.texte}}</v-flex>
+                  <v-flex offset-xs9 xs3>
+                    <v-btn large outline>Répondre</v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -86,13 +93,14 @@ export default {
             let truncateText = ''
             for (let i = 0; i < contacts.length; i++) {
               truncateText = contacts[i].message
+              console.log(contacts[i])
               if (truncateText.length > 12) {
                 truncateText = truncateText.substr(0, 12) + '...'
               }
               vm.messages.push({
                 mail: contacts[i].mail,
                 date_envoi: DateHelper.getDateFr(new Date (contacts[i].date_envoi)),
-                message_id: contacts[i].contact_id,
+                message_id: contacts[i].id_contact,
                 texte: contacts[i].message,
                 sujet: contacts[i].sujet,
                 selectionne: false,
@@ -111,7 +119,7 @@ export default {
 
     },
     deleteMessage (id) {
-      //
+      return ContactService.delete(id)
     },
     infiniteHandler ($state) {
       // load more mails
@@ -129,8 +137,8 @@ export default {
       for (let i = 0; i < this.messages.length; i++) {
         if (this.messages[i].selectionne) {
           promises.push(
-            this.deleteMessage(this.messages[i].message_id).then(function () {
-              vm.messages.splice(vm.messages.indexOf(this.messages[i]), 1)
+            vm.deleteMessage(vm.messages[i].message_id).then(function () {
+              vm.messages.splice(vm.messages.indexOf(vm.messages[i]), 1)
             })
           )
         }
@@ -179,9 +187,25 @@ export default {
   watch: {
     messages: {
       handler (v) {
+        let vm = this
         for (let i = 0; i < this.messages.length; i++) {
           if (this.messages[i].panelOuvert && !this.messages[i].messageOuvert) {
-            this.messages[i].messageOuvert = true
+            ContactService.update(vm.messages[i].message_id).then((r) => {
+              if (r.data.erreur == null) {
+                vm.messages[i].messageOuvert = true
+              } else {
+                throw r.data.erreur
+              }
+            }).catch(() => {
+              vm.$notify({
+                group: 'assistante',
+                title: 'Erreur',
+                text: 'Une erreur est survenue',
+                duration: 4000,
+                speed: 500,
+                type: 'error'
+              })
+            })
           }
         }
       },

@@ -9,8 +9,8 @@ export default {
     return Api().post('/contact/create', data)
   },
 
-  update (id_contact, data) {
-    return Api().put('/contact/update', {id_contact: id_contact, new_contact: data})
+  update (id_contact) {
+    return Api().put('/contact/update/' + id_contact)
   },
 
   delete (id_contact) {

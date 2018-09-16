@@ -10,19 +10,17 @@
         <v-card-text>
           <v-form v-model="estValide" ref="form">
             <v-text-field
-              label="Nom"
-              color="light-blue darken-4"
-              v-model.trim="name"
-              :rules="nameRules"
-              :counter="nameLenght"
-              :readonly="isEmployeurConnected"
-              required
-            ></v-text-field>
-            <v-text-field
               label="E-mail"
               v-model.trim="email"
               :rules="emailRules"
               :readonly="isEmployeurConnected"
+              required
+            ></v-text-field>
+            <v-text-field
+              label="sujet"
+              color="light-blue darken-4"
+              v-model.trim="sujet"
+              :rules="sujetRules"
               required
             ></v-text-field>
             <v-text-field
@@ -50,14 +48,16 @@
 </template>
 
 <script>
+  import ContactService from "../../services/ContactService";
+
   const nameLength = 20
   export default {
     name: 'SendContact',
     data () {
       const defaultForm = Object.freeze({
-        name: '',
+        sujet: '',
         email: '',
-        msg: ''
+        message: ''
       })
       return {
         form: Object.assign({}, defaultForm),
@@ -65,10 +65,10 @@
         snackbarMessage: '',
         snackBarColor: '',
         estValide: false, // permet de savoir si le formulaire est valide
-        name: '',
+        sujet: '',
         nameLenght: 20, // au maximum 20 characters pour le nom
-        nameRules: [
-          v => !!v || 'Name is required',
+        sujetRules: [
+          v => !!v || 'Sujet requis',
           v => v.length <= nameLength || 'Il ne peut pas y avoir plus de 20 characteres'
         ],
         email: '',
@@ -85,14 +85,37 @@
     },
     methods: {
       envoyer () {
-        this.$notify({
-          group: 'assistante',
-          title: 'Message envoyé',
-          text: 'Votre message a bien été envoyé',
-          duration: 4000,
-          speed: 500,
-          type: 'success'
-        })
+        let contact = {
+          mail: this.email,
+          message: this.message,
+          sujet: this.sujet,
+          date_envoi: new Date()
+        }
+        let vm = this
+        ContactService.insert(contact).then(function (r) {
+          if (r.data.erreur == null) {
+            vm.$notify({
+              group: 'assistante',
+              title: 'Message envoyé',
+              text: 'Votre message a bien été envoyé',
+              duration: 4000,
+              speed: 500,
+              type: 'success'
+            })
+          } else {
+            throw r.data.erreur
+          }
+        }).catch(e => {
+          vm.$notify({
+            group: 'assistante',
+            title: 'Erreur',
+            text: 'Votre message n\'a pas pu être envoyé',
+            duration: 4000,
+            speed: 500,
+            type: 'error'
+          })
+          console.error(e)
+        }).finally(vm.clearFields)
       },
       clearFields () {
         this.form = Object.assign({}, this.defaultForm)

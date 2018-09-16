@@ -150,11 +150,10 @@ export default {
             } else {
               vm.factures[i].dateComplete = vm.factures[i].annee + '-0' + vm.factures[i].mois
             }
-            console.log(vm.factures[i].dateComplete)
           }
         }
       }).catch(function (err) {
-        console.log(err)
+        console.error(err)
       })
     },
     changeFactureSelectionne (facture) {
@@ -229,8 +228,12 @@ export default {
     dateDebut () {
       return DateHelper.formatDate(new Date((this.dateDebutContrat)), true)
     },
-    dateFin () { //
-      return DateHelper.formatDate(new Date(), true)
+    dateFin () {
+      if (this.factureSelectionne == null ||this.factureSelectionne.dateFin == null) {
+        return DateHelper.formatDate(new Date(), true)
+      } else {
+        return DateHelper.formatDate(new Date(this.factureSelectionne.dateFin), true)
+      }
     },
     dateFactureAGenererFr () {
       return DateHelper.getDateFr(new Date(this.date_facture))
