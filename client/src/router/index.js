@@ -43,7 +43,8 @@ const isConnected = function (to, from, next) {
  * @param next
  */
 const isAssmat = function (to, from, next) {
-  if (store.getters.connectedUser.rang === 'Assmat') {
+  if (store.getters.connectedUser !== undefined && store.getters.connectedUser != null &&
+    store.getters.connectedUser.rang === 'Assmat') {
     next()
   } else {
     next('/employeur/connexion')
@@ -51,7 +52,8 @@ const isAssmat = function (to, from, next) {
 }
 
 const isEmployeur = function (to, from, next) {
-  if (store.getters.connectedUser.rang === 'Employeur') {
+  if (store.getters.connectedUser !== undefined && store.getters.connectedUser != null && 
+    store.getters.connectedUser.rang === 'Employeur') {
     next()
   } else {
     next('/employeur/connexion')
@@ -59,7 +61,7 @@ const isEmployeur = function (to, from, next) {
 }
 
 /**
- * utile si jamais un personne deja connectée essaie de se reconnecter
+ * utile si jamais une personne deja connectée essaie de se reconnecter
  * @param to
  * @param from
  * @param next
@@ -74,18 +76,18 @@ const isNotConnected = function (to, from, next) {
 const router = new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/',
+      name: 'index',
+      component: Accueil,
+      meta: {title: 'la vallée des enfants'}
+    },
     { // test
       path: '/assistante/emargement',
       name: 'Emargement',
       component: Emargement,
       beforeEnter: isAssmat,
       meta: {title: 'Réaliser l\'émargement d\'un enfant'}
-    },
-    {
-      path: '/',
-      name: 'index',
-      component: Accueil,
-      meta: {title: 'la vallée des enfants'}
     },
     {
       path: '/assistante/parametres',

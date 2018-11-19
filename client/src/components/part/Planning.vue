@@ -33,7 +33,7 @@
             >
             <v-card color="transparent" v-if="rowSpan(h, presence) > 1" flat>
               <v-card-title>
-                <span v-if="presence.prend_gouter">Prends gouter</span>
+                <span v-if="presence.prend_gouter">Prend gouter</span>
                 <span v-else>Ne prend pas le gouter</span>
               </v-card-title>
             </v-card>
@@ -59,7 +59,7 @@
             <v-flex xs12>
               <span v-if="presenceDialog.prend_gouter" class="green--text">
                 <img src="/static/petitDej.png" style="height: 40px;"/>
-                <span class="title">Prends le gouter</span>
+                <span class="title">Prend le gouter</span>
               </span>
               <span v-else class="title red--text">Ne prend pas le gouter</span>
             </v-flex>
@@ -86,10 +86,10 @@ export default {
     return {
       jours: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
       presences: [],
-      precision:  {duree: 10, label: 'toutes les 10 minutes'},
-      precisions: [{duree: 1, label: 'toutes les 1 minute'},
-        {duree: 5, label: 'toutes les 5 minutes'},
+      precision:  {duree: 30, label: 'toutes les 30 minutes'},
+      precisions: [
         {duree: 10, label: 'toutes les 10 minutes'},
+        {duree: 10, label: 'toutes les 15 minutes'},
         {duree: 20, label: 'toutes les 20 minutes'},
         {duree: 30, label: 'toutes les 30 minutes'},
         {duree: 60, label: 'toutes les 1 heure'}],

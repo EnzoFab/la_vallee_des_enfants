@@ -51,7 +51,9 @@ export default {
 
   formatTimeFr (time) {
     let split = time.split(':')
-    return split[0] + ' h ' + split[1]
+    let minutes = split[1]
+    if (minutes.length < 2) minutes = '0' + minutes
+    return split[0] + ' h ' + minutes
   },
 
   formatTime (time) {
